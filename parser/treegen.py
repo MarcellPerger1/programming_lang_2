@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import bisect
 import itertools
+import traceback
 from dataclasses import dataclass, field
 from typing import (TypeVar, Iterable, cast, TypeAlias, Sequence, overload,
                     Callable, TYPE_CHECKING)
@@ -33,12 +34,26 @@ class LocatedParseError(ParseError):
     def __init__(self, msg: str, region: StrRegion, src: str):
         super().__init__(msg)
         self.msg = msg
+        self._src_text = src
         self.region = region
-        self.add_note(self.display_region(src, region))
+
+    def compute_location(self):
+        # noinspection PyBroadException
+        try:
+            self.add_note(self.display_region(self._src_text, self.region))
+        except Exception:
+            short_loc = f'{self.region.start} to {self.region.end - 1}'
+            self.add_note(
+                '\nAn error occurred while trying to display the location '
+                f'of the ParseError ({short_loc}):\n{traceback.format_exc()}')
+
+    def __str__(self):
+        self.compute_location()
+        return super().__str__()
 
     @classmethod
     def display_region(cls, src: str, region: StrRegion) -> str:
-        lines = src.splitlines()
+        lines = src.splitlines(keepends=True)
         lengths = tuple(map(len, lines))
         cum_lengths = tuple(itertools.accumulate(lengths))
         start_idx = region.start
@@ -87,18 +102,18 @@ class LocatedParseError(ParseError):
         end_spaces = ' ' * (len(lines[line]) - end_col)
         if lineno_w is None:
             lineno_w = len(str(line + 1))
-        return (f'{line + 1:>{lineno_w}}| {lines[line]}\n'
+        (line_str,) = lines[line].splitlines()  # remove \n on end
+        return (f'{line + 1:>{lineno_w}}| {line_str}\n'
                 f'{""      :>{lineno_w}}| {start_spaces}{carets}{end_spaces}')
 
     @classmethod
     def idx_to_coord(cls, cum_lengths: Sequence[int], idx: int) -> tuple[int, int]:
         """Converts an index to a **0-based** (line, column) tuple"""
-        line = bisect.bisect_right(cum_lengths, idx) - 1
+        line = bisect.bisect_right(cum_lengths, idx)
         if line == 0:
             return line, idx
         # -1 to convert to idx, +1 to for char after last char on prev line
-        # add amount of newlines skipped back on i.e. line idx
-        line_start_idx = cum_lengths[line - 1] + line  # - 1 + 1
+        line_start_idx = cum_lengths[line - 1]  # - 1 + 1
         col = idx - line_start_idx
         return line, col
 
@@ -196,7 +211,8 @@ class TreeGen:
             #  and instead do a post-processing step
             smt, idx, brk_reason = self._parse_expr(idx)
             if not self.matches(idx, SemicolonToken):
-                raise ParseError("Statements must end with a semicolon") from brk_reason
+                raise self.err("Statements must end with a semicolon",
+                               self[idx - 1]) from brk_reason
             idx += 1
         return smt, idx
 

@@ -2,6 +2,6 @@ let a = 3*3+4**-2;
 a /= abc.4[8].b._fn_call(ident1, a**-1**2,);
 if 1>=2-1+fn("what\t\"'ever")-fn() {
 
-} else if {
-innerfn();
+} else if a{
++innerfn()
 }
