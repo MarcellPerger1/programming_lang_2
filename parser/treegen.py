@@ -103,8 +103,8 @@ class LocatedParseError(ParseError):
         if lineno_w is None:
             lineno_w = len(str(line + 1))
         (line_str,) = lines[line].splitlines()  # remove \n on end
-        return (f'{line + 1:>{lineno_w}}| {line_str}\n'
-                f'{""      :>{lineno_w}}| {start_spaces}{carets}{end_spaces}')
+        return (f'{line + 1:>{lineno_w}} |  {line_str}\n'
+                f'{""      :>{lineno_w}} |  {start_spaces}{carets}{end_spaces}')
 
     @classmethod
     def idx_to_coord(cls, cum_lengths: Sequence[int], idx: int) -> tuple[int, int]:
