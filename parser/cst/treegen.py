@@ -1,12 +1,10 @@
 from __future__ import annotations
 
-import bisect
-import itertools
-import traceback
 from dataclasses import dataclass, field
 from typing import (TypeVar, Iterable, cast, TypeAlias, Sequence, overload,
                     Callable)
 
+from parser.error import BaseParseError, LocatedCstError
 from parser.operators import UNARY_OPS, OPS_SET, COMPARISONS, ASSIGN_OPS
 from parser.str_region import StrRegion
 from parser.tokenizer import Tokenizer
@@ -21,102 +19,6 @@ ET = TypeVar('ET')
 MISSING = object()
 
 KEYWORDS = ['def', 'if', 'else', 'while', 'repeat', 'global', 'let']
-
-
-class ParseError(SyntaxError):
-    pass
-
-
-class LocatedParseError(ParseError):
-    def __init__(self, msg: str, region: StrRegion, src: str):
-        super().__init__(msg)
-        self.msg = msg
-        self._src_text = src
-        self.region = region
-
-    def compute_location(self):
-        # noinspection PyBroadException
-        try:
-            self.add_note(self.display_region(self._src_text, self.region))
-        except Exception:
-            short_loc = f'{self.region.start} to {self.region.end - 1}'
-            self.add_note(
-                '\nAn error occurred while trying to display the location '
-                f'of the ParseError ({short_loc}):\n{traceback.format_exc()}')
-
-    def __str__(self):
-        self.compute_location()
-        return super().__str__()
-
-    @classmethod
-    def display_region(cls, src: str, region: StrRegion) -> str:
-        lines = src.splitlines(keepends=True)
-        lengths = tuple(map(len, lines))
-        cum_lengths = tuple(itertools.accumulate(lengths))
-        start_idx = region.start
-        end_idx = region.end - 1  # its inclusive here
-        start_line, start_col = cls.idx_to_coord(cum_lengths, start_idx)
-        end_line, end_col = cls.idx_to_coord(cum_lengths, end_idx)
-        if start_line == end_line:
-            return cls._display_single_line(lines, start_line, start_col, end_col)
-        assert start_line < end_line
-        return cls._display_multi_line(lines, start_line, start_col, end_line, end_col)
-
-    @classmethod
-    def _display_multi_line(cls, lines: Sequence[str], start_line: int, start_col: int,
-                            end_line: int, end_col: int):
-        if end_line - start_line + 1 > 5:
-            # just print start and end lines
-            lineno_w = len(str(end_line + 1))  # last will always be biggest
-            start_repr = cls._display_single_line(
-                lines, start_line, start_col, len(lines[start_line]) - 1, lineno_w)
-            end_repr = cls._display_single_line(
-                lines, end_line, 0, end_col, lineno_w)
-            return (f'{start_repr}\n'
-                    f'...\n'
-                    f'{end_repr}')
-        lines_repr = []
-        lineno_w = len(str(end_line + 1))
-        for line in range(start_line, end_line + 1):
-            if line == start_line:
-                start_col_inner = start_col
-            else:
-                start_col_inner = 0
-            if line == end_line:
-                end_col_inner = end_col
-            else:
-                end_col_inner = len(lines[line]) - 1
-            line_repr = cls._display_single_line(
-                lines, line, start_col_inner, end_col_inner, lineno_w)
-            lines_repr.append(f'{line_repr}')
-        return '\n'.join(lines_repr)
-
-    @classmethod
-    def _display_single_line(cls, lines: Sequence[str], line: int, start_col: int,
-                             end_col: int, lineno_w: int = None):
-        start_spaces = ' ' * start_col
-        carets = '^' * (end_col - start_col + 1)
-        end_spaces = ' ' * (len(lines[line]) - end_col)
-        if lineno_w is None:
-            lineno_w = len(str(line + 1))
-        (line_str,) = lines[line].splitlines()  # remove \n on end
-        return (f'{line + 1:>{lineno_w}} |  {line_str}\n'
-                f'{""      :>{lineno_w}} |  {start_spaces}{carets}{end_spaces}')
-
-    @classmethod
-    def idx_to_coord(cls, cum_lengths: Sequence[int], idx: int) -> tuple[int, int]:
-        """Converts an index to a **0-based** (line, column) tuple"""
-        line = bisect.bisect_right(cum_lengths, idx)
-        if line == 0:
-            return line, idx
-        # -1 to convert to idx, +1 to for char after last char on prev line
-        line_start_idx = cum_lengths[line - 1]  # - 1 + 1
-        col = idx - line_start_idx
-        return line, col
-
-    def add_note(self, param: str):
-        # noinspection PyUnresolvedReferences
-        super().add_note(param)
 
 
 class TreeGen:
@@ -556,7 +458,7 @@ class TreeGen:
         return Node('paren', self.tok_region(start, idx), None, [expr]), idx
 
     def _parse_expr(self, start: int, partial: AnyNode = None,
-                    partial_end: int = None) -> tuple[AnyNode, int, ParseError | None]:
+                    partial_end: int = None) -> tuple[AnyNode, int, BaseParseError | None]:
         curr, end, brk_reason = self._parse_expr_pass_0(start, partial, partial_end)
         curr = self._parse_expr_binary_op_level(
             curr, ('**', '**<unary>'),
@@ -779,7 +681,7 @@ class TreeGen:
 
     def _parse_expr_pass_0(
             self, start: int, partial: AnyNode, partial_end: int
-    ) -> tuple[TokensPass0_T, int, ParseError | None]:
+    ) -> tuple[TokensPass0_T, int, BaseParseError | None]:
         """Parses precedence levels 1-3 and determines end of expr
 
         Parses precedence levels 1-3:
@@ -936,7 +838,7 @@ class TreeGen:
             region = StrRegion.including(*regs)
         else:
             region = loc
-        return LocatedParseError(msg, region, self.src)
+        return LocatedCstError(msg, region, self.src)
 
 
 CstGen = TreeGen
