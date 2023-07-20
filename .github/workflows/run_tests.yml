@@ -1,0 +1,23 @@
+on:
+  push:
+    branches: [ main, "**workflow**" ]
+  pull_request:
+    branches: [ main, "**workflow**" ]
+
+  workflow_dispatch:
+
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+      - name: Setup python 3.11
+        uses: actions/setup-python@v4.6.1
+        with:
+          python-version: "3.11"
+      - name: Run tests
+        run: |
+          chmod +x ./run_tests.sh
+          ./run_tests.sh
