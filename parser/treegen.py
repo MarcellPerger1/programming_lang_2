@@ -268,8 +268,8 @@ class TreeGen:
             if self.matches(idx, DotToken):
                 idx += 1
                 if not self.matches(idx, AttrNameToken):
-                    raise ParseError("Expected attr_name after '.', "
-                                     f"got {self[idx].name}")
+                    raise self.err("Expected attr_name after '.', "
+                                   f"got {self[idx].name}", self[idx])
                 attr = Leaf.of(self[idx])
                 idx += 1
                 curr = Node('getattr', StrRegion(curr.region.start, attr.region.end),
@@ -287,12 +287,15 @@ class TreeGen:
         assert self.matches(idx, LSqBracket)
         idx += 1
         if self.matches(idx, RSqBracket):
-            raise ParseError("Square brackets must not be empty")
+            raise self.err("Square brackets must not be empty",
+                           self[idx - 1: idx + 1])
         expr, idx, brk_reason = self._parse_expr(idx)
         if not self.matches(idx, RSqBracket):
-            raise ParseError(
+            raise self.err(
                 f"Expected lsqb, got {self[idx].name}. (missing lsqb "
-                f"or incomplete expression in square brackets)") from brk_reason
+                f"or incomplete expression in square brackets)",
+                self[idx]
+            ) from brk_reason
         idx += 1
         return expr, idx
 
@@ -527,8 +530,8 @@ class TreeGen:
         args = [arg1]
         while not self.matches(idx, RParToken):
             if not self.matches(idx, CommaToken):
-                raise ParseError(f"Expected ',' or ')' after arg, "
-                                 f"got {self[idx].name}") from brk_reason
+                raise self.err(f"Expected ',' or ')' after arg, got "
+                               f"{self[idx].name}", self[idx]) from brk_reason
             idx += 1
             if self.matches(idx, RParToken):
                 # f(arg1, arg2,)
@@ -551,7 +554,7 @@ class TreeGen:
         idx += 1
         expr, idx, brk_reason = self._parse_expr(idx)
         if not self.matches(idx, RParToken):
-            raise ParseError("Expected ')' at end of expr") from brk_reason
+            raise self.err("Expected ')' at end of expr", self[idx]) from brk_reason
         idx += 1
         return Node('paren', self.tok_region(start, idx), None, [expr]), idx
 
@@ -814,16 +817,19 @@ class TreeGen:
                 if (tok_str := self[idx].region.resolve(self.src)) in KEYWORDS:
                     # e.g. `for x of y`: `of` is keyword so stop paring expr
                     # and could still be a valid parse
-                    brk_reason = ParseError(
+                    brk_reason = self.err(
                         f"Unexpected keyword {tok_str!r} "
-                        f"in expr after {self.get(idx - 1).name}")
+                        f"in expr after {self.get(idx - 1).name}",
+                        self.get(idx))
                     break
                 if isinstance(lookbehind(idx - 1), IdentNameToken):
                     # e.g. `for x of y`: while paring 'x of y' @ `of`:
                     #  `of` is ident/soft keyword so
                     #  stop paring expr and could still be a valid parse
-                    brk_reason = ParseError(
-                        f"Expected operator-oid after ident, got ident")
+                    brk_reason = self.err(
+                        f"Expected operator-oid after ident, got ident",
+                        self[idx - 1]
+                    )
                     break
                 complex_ident, idx = self._parse_chained_gets(idx)
                 tokens.append(complex_ident)
@@ -831,16 +837,19 @@ class TreeGen:
                 if lookbehind(idx - 1) not in GETATTR_VALID_AFTER_CLS:
                     # we just raise an error - there is no way this
                     # is a valid parse eg `[.abc]` is a syntax error
-                    raise ParseError(f"Unexpected '.' after {self.get(idx - 1).name}")
+                    raise self.err(f"Unexpected '.' after "
+                                   f"{self.get(idx - 1).name}", self[idx])
                 tokens[-1], idx = self._parse_get_chain_contd(idx, tokens[-1])
             elif self.matches(idx, LSqBracket):
                 if lookbehind(idx - 1) not in GETATTR_VALID_AFTER_CLS:
-                    raise ParseError(f"Unexpected '[' after {self.get(idx - 1).name}")
+                    raise self.err(f"Unexpected '[' after "
+                                   f"{self.get(idx - 1).name}", self[idx])
                 tokens[-1], idx = self._parse_get_chain_contd(idx, tokens[-1])
             elif self.matches(idx, NumberToken):
                 if not isinstance(lookbehind(idx - 1), NUMBER_VALID_AFTER):
                     # not valid for now but could be later
-                    raise ParseError(f"Unexpected number after {self.get(idx - 1).name}")
+                    raise self.err(f"Unexpected number after"
+                                   f" {self.get(idx - 1).name}", self[idx])
                 tokens.append(Leaf.of(self[idx]))
                 idx += 1
             elif self.matches(idx, StringToken):
@@ -856,7 +865,8 @@ class TreeGen:
                 elif isinstance(prev_sym, (OpToken, NullToken)):
                     tokens.append(Leaf.of(self[idx]))
                 else:
-                    raise ParseError(f"Unexpected string after {self.get(idx - 1).name}")
+                    raise self.err(f"Unexpected string after "
+                                   f"{self.get(idx - 1).name}", self[idx])
                 idx += 1
             elif self.matches(idx, LParToken):
                 if isinstance(lookbehind(idx - 1), LPAR_CALL_AFTER):
@@ -872,14 +882,15 @@ class TreeGen:
                 else:
                     # probably doesn't produce a valid parse as '(' is
                     # only used for grouping expressions
-                    raise ParseError(f"Unexpected '(' after {self.get(idx - 1).name}")
+                    raise self.err(f"Unexpected '(' after "
+                                   f"{self.get(idx - 1).name}", self[idx])
             elif self.matches(idx, AttrNameToken):
                 assert 0, "AttrNameToken should follow and be consumed by DotToken"
             elif self.matches(idx, OpToken):
                 token = cast(OpToken, self[idx])
                 if token.op_str == '=':
-                    raise ParseError("Unexpected '=' in expression ("
-                                     "assignment is only valid in statements)")
+                    raise self.err("Unexpected '=' in expression (assignment "
+                                   "is only valid in statements)", token)
                 if token.op_str == '**':
                     token, idx = self._handle_pow_pass_0(idx, token)
                 else:
