@@ -1,6 +1,6 @@
 import time
 
-from parser.treegen import TreeGen
+from parser.cst.treegen import TreeGen
 from parser.tokenizer import Tokenizer, print_tokens
 from parser.cst.tree_print import tprint
 
