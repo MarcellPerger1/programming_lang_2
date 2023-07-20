@@ -2,7 +2,7 @@ import time
 
 from parser.treegen import TreeGen
 from parser.tokenizer import Tokenizer, print_tokens
-from parser.tree_print import tprint
+from parser.cst.tree_print import tprint
 
 
 def make_tree(src: str):

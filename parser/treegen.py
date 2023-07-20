@@ -12,7 +12,7 @@ from parser.str_region import StrRegion
 from parser.tokenizer import Tokenizer
 from parser.tokens import *
 from parser.tree_node import Node, Leaf, AnyNode
-from parser.tree_print import tformat
+from parser.cst.tree_print import tformat
 from parser.treegen_matcher import OpM, KwdM, Matcher
 
 if TYPE_CHECKING:

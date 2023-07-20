@@ -6,8 +6,6 @@ from typing import IO, Sequence
 
 from parser.tree_node import Node, Leaf
 
-StringIO()
-
 
 class TreePrinter:
     def __init__(self, stream: IO[str] = None, indent=2):
