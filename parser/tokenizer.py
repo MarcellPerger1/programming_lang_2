@@ -145,7 +145,7 @@ class Tokenizer(SrcHandler):
         idx = start
         if not self[idx].isspace():
             return start
-        while self[idx].isspace():
+        while self.get(idx).isspace():
             idx += 1
         return self.add_token(
             WhitespaceToken(StrRegion(start, idx)), whitespace=True)
