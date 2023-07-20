@@ -21,9 +21,9 @@ class MyTestCase(unittest.TestCase):
         return (t.name, )
 
     def assert_tokens_match(self, a: list[Token], b: list[Token]):
-        a_tuples = map(self._token_as_tuple, a)
-        b_tuples = map(self._token_as_tuple, b)
-        self.assertEqual(a, b)
+        a_tuples = tuple(map(self._token_as_tuple, a))
+        b_tuples = tuple(map(self._token_as_tuple, b))
+        self.assertEqual(b_tuples, a_tuples)
 
     def test_ws_at_end(self):
         t = Tokenizer(load_example()).tokenize()
@@ -31,10 +31,12 @@ class MyTestCase(unittest.TestCase):
             IdentNameToken(),
             WhitespaceToken(),
             IdentNameToken(),
+            WhitespaceToken(),
             OpToken(op_str='='),
             NumberToken(),
             SemicolonToken(),
-            WhitespaceToken()
+            WhitespaceToken(),
+            EofToken()
         ])
 
 
