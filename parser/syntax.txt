@@ -1,0 +1,94 @@
+tokens {
+    [whitespace]
+    [line_comment]
+    [block_comment]
+
+    number
+    string
+    comma
+    dot
+    semi
+
+    op: operators
+
+    lpar
+    rpar
+    lsqb
+    rsqb
+    lbrace
+    rbrace
+
+    ident = ident_name
+    attr = attr_name
+
+    eof
+}
+operators {
+    binary {
+        permute ($; $ '=') {
+            + - * / % ** && ^^
+            exclude bitwise {
+                & | ^ >> <<
+            }
+        }
+        pseudo operators {
+            # internal; only to help w/ parsing
+            **+ **- **!
+        }
+        == != <= >= < >
+        =
+    }
+    unary {
+        + - !
+        exclude bitwise {
+            ~
+        }
+    }
+}
+
+valid_at_expr_start = (
+    # 12 + 6
+    number |
+    # "abc" + "xyz"
+    string | ...
+
+)
+# valid in token (excluding things in parens)
+valid_in_token = (
+    number | string |
+    dot |
+    op: operators - { = } |
+    lpar | rpar |
+    lsqb | rsqb |
+    ident | attr
+)
+
+
+funcdef = 'def' ident args_decl block
+args_decl = lpar arg_decl (',' arg_decl)* ','? rpar
+arg_decl = ident ident
+
+if_smt = if_part elseif_part* else_part?
+if_part = 'if' expr block
+elseif_part = 'else' 'if' expr block
+else_part = 'else' block
+
+while_smt = 'while' expr block
+repeat_smt = 'repeat' expr block
+
+global_decl = 'global' decl_item_list ';'
+let_decl = 'let' decl_item_list ';'
+decl_item_list = decl_item (',' decl_item)*
+decl_item = ident '=' expr
+
+
+
+simple = literal | ident
+paren_expr = lpar expr rpar
+paren_level = paren_expr | simple
+...
+pow_level = (paren_level '**')+ paren_level
+mul_level = pow_level ($[*/] pow_level)+
+add_level = mul_level ($[+-] mul_level)+
+cat_level = add_level ('..' add_level)+
+...
