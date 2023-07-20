@@ -9,8 +9,8 @@ from typing import (TypeVar, Iterable, cast, TypeAlias, Sequence, overload,
 
 from parser.operators import UNARY_OPS, OPS_SET, COMPARISONS, ASSIGN_OPS
 from parser.str_region import StrRegion
-from parser.tokens import *
 from parser.tokenizer import Tokenizer
+from parser.tokens import *
 from parser.tree_node import Node, Leaf, AnyNode
 from parser.tree_print import tformat
 from parser.treegen_matcher import OpM, KwdM, Matcher
@@ -576,27 +576,30 @@ class TreeGen:
         (node,) = curr
         return node, end, brk_reason
 
-    def _handle_chained_comp(self, _chain: list[AnyNode | OpToken]) -> AnyNode:
-        raise ParseError("Can't chain comparison operators")
+    def _handle_chained_comp(
+            self, chain: list[AnyNode | OpToken]
+    ) -> AnyNode:  # type: ignore
+        assert len(chain) >= 5
+        assert len(chain) % 2 == 1
+        raise self.err("Can't chain comparison operators", chain[3])
 
     def _parse_ltr_op_level(self, tokens: list[AnyNode | OpToken],
                             ops: str | Iterable[str]):
         return self._parse_expr_binary_op_level(tokens, ops, self._chained_ltr_grouping)
 
-    # noinspection PyMethodMayBeStatic
     def _chained_ltr_grouping(self, chain: list[AnyNode | OpToken]) -> AnyNode:
         assert len(chain) >= 3
         assert len(chain) % 2 == 1
         # functools.reduce() would be perfect for this
         left = chain[0]
         if isinstance(left, OpToken):
-            raise ParseError(f"Unexpected {left.op_str} at start of expr")
+            raise self.err(f"Unexpected {left.op_str} at start of expr", left)
         for op_idx in range(1, len(chain), 2):
             op = chain[op_idx]
             assert isinstance(op, OpToken)
             right = chain[op_idx + 1]
             if isinstance(right, OpToken):
-                raise ParseError(f"Unexpected {right.op_str} after {op.op_str}")
+                raise self.err(f"Unexpected {right.op_str} after {op.op_str}", right)
             left = Node(op.op_str, left.region | right.region, None, [left, right])
         return left
 
@@ -615,7 +618,7 @@ class TreeGen:
                 continue
             if idx + 1 >= len(tokens):
                 # last item
-                raise ParseError(f"Unexpected end of expr after {token.op_str}")
+                raise self.err(f"Unexpected end of expr after {token.op_str}", token)
             arg = tokens[idx + 1]
             node = Node(token.op_str, token.region | arg.region, None, [arg])
             new.append(node)
@@ -655,7 +658,7 @@ class TreeGen:
         assert len(chained) % 2 == 1
         curr = chained[-1]
         if isinstance(curr, OpToken):
-            raise ParseError(f"Unexpected {curr.op_str} after **")
+            raise self.err(f"Unexpected {curr.op_str} after **", curr)
         # start at 2nd last elem (last op)
         for op_idx in range(len(chained) - 2, -1, -2):
             op = chained[op_idx]
@@ -714,7 +717,7 @@ class TreeGen:
                 try:
                     arg_1 = tokens[idx + 1]
                 except IndexError:
-                    raise ParseError(f"Unexpected end of expression after {op.op_str}")
+                    raise self.err(f"Unexpected end of expression after {op.op_str}", op)
                 assert isinstance(arg_0, AnyNode)
                 assert isinstance(arg_1, AnyNode)
                 if call_if_single:
@@ -736,7 +739,9 @@ class TreeGen:
                 try:
                     op_seq.append(tokens[last_idx + 1])
                 except IndexError:
-                    raise ParseError(f"Unexpected end of expression after {item[-1][1]}")
+                    last_token = item[-1][1]
+                    raise self.err(f"Unexpected end of expression after"
+                                   f" {last_token.op_str}", last_token)
                 node = handle_chained(op_seq)
                 next_idx = (last_idx + 1) + 1
             new.append(node)
@@ -744,7 +749,6 @@ class TreeGen:
         new += tokens[next_idx:]
         return new
 
-    # noinspection PyMethodMayBeStatic
     def _group_chained_ops(self, op_indices: list[tuple[int, OpToken]]):
         grouped_indices = []
         for ii, item in enumerate(op_indices):
@@ -757,7 +761,7 @@ class TreeGen:
             prev1, prev1_op = prev1_tuple
 
             if idx == prev1 + 1:
-                raise ParseError(f"Unexpected {op.op_str!r} after {prev1_op.op_str!r}")
+                raise self.err(f"Unexpected {op.op_str!r} after {prev1_op.op_str!r}", op)
             if idx == prev1 + 2:
                 if isinstance(grouped_indices[-1], tuple):
                     # tuple *not list* means its single value
