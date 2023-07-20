@@ -1,5 +1,7 @@
 _exclude/
 
+*.prof
+
 # Created by https://www.toptal.com/developers/gitignore/api/python,pycharm,windows,linux
 # Edit at https://www.toptal.com/developers/gitignore?templates=python,pycharm,windows,linux
 
