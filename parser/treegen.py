@@ -5,7 +5,7 @@ import itertools
 import traceback
 from dataclasses import dataclass, field
 from typing import (TypeVar, Iterable, cast, TypeAlias, Sequence, overload,
-                    Callable, TYPE_CHECKING)
+                    Callable)
 
 from parser.operators import UNARY_OPS, OPS_SET, COMPARISONS, ASSIGN_OPS
 from parser.str_region import StrRegion
@@ -13,10 +13,7 @@ from parser.tokenizer import Tokenizer
 from parser.tokens import *
 from parser.tree_node import Node, Leaf, AnyNode
 from parser.cst.tree_print import tformat
-from parser.treegen_matcher import OpM, KwdM, Matcher
-
-if TYPE_CHECKING:
-    from parser.treegen_matcher import PatternT
+from parser.cst.token_matcher import OpM, KwdM, Matcher, PatternT
 
 DT = TypeVar('DT')
 ET = TypeVar('ET')

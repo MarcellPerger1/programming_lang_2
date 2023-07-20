@@ -3,7 +3,7 @@ from __future__ import annotations
 import inspect
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
-from typing import cast, Iterable, Any, TypeGuard, TypeAlias, TYPE_CHECKING
+from typing import cast, Iterable, Any, TypeGuard, TypeAlias
 
 from parser.tokens import Token, OpToken, IdentNameToken
 
@@ -165,6 +165,4 @@ def isiterable(o: Any) -> TypeGuard[Iterable]:
     return True
 
 
-if TYPE_CHECKING:
-    # noinspection PyCompatibility
-    PatternT: TypeAlias = Iterable['PatternT'] | type[Token] | Token | BaseMatcher
+PatternT: TypeAlias = Iterable['PatternT'] | type[Token] | Token | BaseMatcher
