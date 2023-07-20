@@ -7,7 +7,7 @@ from typing import IO, Sequence
 from parser.tree_node import Node, Leaf
 
 __all__ = [
-    'TreePrinter', 'tprint', 'tformat'
+    'TreePrinter', 'tree_print', 'tree_format', 'tprint', 'tformat'
 ]
 
 
@@ -84,13 +84,17 @@ class TreePrinter:
         self.stream.write(f'{indent}{obj!r}')
 
 
-def tprint(obj: object, stream: IO[str] = None, indent: int = 2):
+def tree_print(obj: object, stream: IO[str] = None, indent: int = 2):
     if stream is None:
         stream = sys.stdout
     TreePrinter(stream, indent).print(obj)
 
 
-def tformat(obj: object, indent: int = 2):
+def tree_format(obj: object, indent: int = 2):
     out = StringIO()
-    tprint(obj, out, indent)
+    tree_print(obj, out, indent)
     return out.getvalue()
+
+
+tprint = tree_print
+tformat = tree_format
