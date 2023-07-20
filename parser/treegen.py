@@ -227,7 +227,7 @@ class TreeGen:
         # it's just an expr here
         expr, idx, brk_reason = self._parse_expr(start, maybe_lvalue, idx)
         if not self.matches(idx, SemicolonToken):
-            raise ParseError("Expected ';' at end of expr") from brk_reason
+            raise self.err("Expected ';' at end of expr", self[idx]) from brk_reason
         idx += 1
         return expr, idx
 
@@ -240,7 +240,8 @@ class TreeGen:
         idx += 1
         expr, idx, brk_reason = self._parse_expr(idx)
         if not self.matches(idx, SemicolonToken):
-            raise ParseError("Expected ';' at end of expr in assign") from brk_reason
+            raise self.err("Expected ';' at end of expr in assign",
+                           self[idx]) from brk_reason
         idx += 1
         return Node(assign_token.op_str, self.tok_region(smt_start, idx),
                     None, [lvalue, expr]), idx
@@ -301,8 +302,8 @@ class TreeGen:
         idx += 1
         items, idx = self._parse_decl_item_list(idx)
         if not self.matches(idx, SemicolonToken):
-            raise ParseError(f"Expected ';' or ',' after decl_item,"
-                             f" got {self[idx].name}")
+            raise self.err(f"Expected ';' or ',' after decl_item,"
+                           f" got {self[idx].name}", self[idx])
         idx += 1
         return Node('let_decl', self.tok_region(start, idx),
                     None, items), idx
@@ -323,8 +324,8 @@ class TreeGen:
         idx += 1
         items, idx = self._parse_decl_item_list(idx)
         if not self.matches(idx, SemicolonToken):
-            raise ParseError(f"Expected ';' or ',' after decl_item,"
-                             f" got {self[idx].name}")
+            raise self.err(f"Expected ';' or ',' after decl_item,"
+                           f" got {self[idx].name}", self[idx])
         idx += 1
         return Node('global_decl', self.tok_region(start, idx),
                     None, items), idx
@@ -332,8 +333,8 @@ class TreeGen:
     def _parse_decl_item(self, start: int) -> tuple[AnyNode, int]:
         idx = start
         if not self.matches(idx, IdentNameToken):
-            raise ParseError(f"Expected identifier in decl_item, "
-                             f"got {self[idx].name}")
+            raise self.err(f"Expected identifier in decl_item, "
+                           f"got {self[idx].name}", self[idx])
         ident = Leaf.of(self[idx])
         idx += 1
         # 1. global x, y = ...;
@@ -346,8 +347,8 @@ class TreeGen:
             idx += 1
             value, idx, brk_reason = self._parse_expr(idx)
             if not isinstance(self.get(idx), (SemicolonToken, CommaToken)):
-                raise ParseError(f"Expected ';' or ',' after decl_item,"
-                                 f" got {self[idx].name}") from brk_reason
+                raise self.err(f"Expected ';' or ',' after decl_item,"
+                               f" got {self[idx].name}", self[idx]) from brk_reason
         glob = Node('decl_item', self.tok_region(start, idx),
                     None, [ident, value])
         return glob, idx
@@ -369,7 +370,7 @@ class TreeGen:
     def _parse_args_decl(self, start: int) -> tuple[AnyNode, int]:
         idx = start
         if not self.matches(idx, LParToken):
-            raise ParseError("Expected '(' after 'def name'")
+            raise self.err("Expected '(' after 'def name'", self[idx])
         idx += 1
         if self.matches(idx, RParToken):
             # simple case, no args
@@ -379,7 +380,8 @@ class TreeGen:
         arg_declares = [arg1]
         while not self.matches(idx, RParToken):
             if not self.matches(idx, CommaToken):
-                raise ParseError(f"Expected ',' or ')' after arg_decl, got {self[idx].name}")
+                raise self.err(f"Expected ',' or ')' after arg_decl, "
+                               f"got {self[idx].name}", self[idx])
             idx += 1
             if self.matches(idx, RParToken):
                 # def f(t1 arg1, t2 arg2,)
@@ -399,13 +401,13 @@ class TreeGen:
     def _parse_arg_decl(self, start: int) -> tuple[AnyNode, int]:
         idx = start
         if not self.matches(idx, IdentNameToken):
-            raise ParseError(f"Error: expected type name, got {self[idx].name}."
-                             f"Did you forget a ')'?")
+            raise self.err(f"Error: expected type name, got {self[idx].name}."
+                           f"Did you forget a ')'?", self[idx])
         tp_name = Leaf.of(self[idx])
         idx += 1
         if not self.matches(idx, IdentNameToken):
-            raise ParseError(f"Error: expected arg name, got {self[idx].name}."
-                             f"Did you forget the type name?")
+            raise self.err(f"Error: expected arg name, got {self[idx].name}."
+                           f"Did you forget the type name?", self[idx])
         arg_name = Leaf.of(self[idx])
         idx += 1
         arg_decl = Node('arg_decl', self.tok_region(start, idx), None, [tp_name, arg_name])
@@ -420,14 +422,16 @@ class TreeGen:
     def _parse_block(self, start: int) -> tuple[AnyNode, int]:
         idx = start
         if not self.matches(idx, LBrace):
-            raise ParseError(f"Expected '{{' to start block, got {self[idx]}")
+            raise self.err(f"Expected '{{' to start block, "
+                           f"got {self[idx].name}", self[idx])
         idx += 1
         smts: list[AnyNode] = []
         while not self.matches(idx, RBrace):
             smt, idx = self._parse_smt(idx)
             smts.append(smt)
         if not self.matches(idx, RBrace):
-            raise ParseError("Expected '}' to close block, got ")
+            raise self.err(f"Expected '}}' to close block, "
+                           f"got {self[idx].name}", self[idx])
         idx += 1
         return Node('block', self.tok_region(start, idx), None, smts), idx
 
@@ -437,7 +441,7 @@ class TreeGen:
         idx += 1
         cond, idx, brk_reason = self._parse_expr(idx)
         if not self.matches(idx, LBrace):
-            raise ParseError("Expected '{' after expr in while") from brk_reason
+            raise self.err("Expected '{' after expr in while", self[idx]) from brk_reason
         block, idx = self._parse_block(idx)
         return Node('while', self.tok_region(start, idx),
                     None, [cond, block]), idx
@@ -448,7 +452,7 @@ class TreeGen:
         idx += 1
         amount, idx, brk_reason = self._parse_expr(idx)
         if not self.matches(idx, LBrace):
-            raise ParseError("Expected '{' after expr in repeat") from brk_reason
+            raise self.err("Expected '{' after expr in repeat", self[idx]) from brk_reason
         block, idx = self._parse_block(idx)
         return Node('repeat', self.tok_region(start, idx),
                     None, [amount, block]), idx
@@ -466,8 +470,8 @@ class TreeGen:
                 else_part, idx = self._parse_else(idx)
                 break
             else:
-                raise ParseError(f"Expected '{{' or 'if' after 'else', "
-                                 f"got {self[idx + 1].name}")
+                raise self.err(f"Expected '{{' or 'if' after 'else', "
+                               f"got {self[idx + 1].name}", self[idx + 1])
         if else_part is None:
             else_part = Node('else_cond_NULL', self.tok_region(idx - 1, idx - 1))
         return Node('if', self.tok_region(start, idx),
@@ -479,7 +483,7 @@ class TreeGen:
         idx += 1
         cond, idx, brk_reason = self._parse_expr(idx)
         if not self.matches(idx, LBrace):
-            raise ParseError("Expected '{' after expr in if") from brk_reason
+            raise self.err("Expected '{' after expr in if", self[idx]) from brk_reason
         block, idx = self._parse_block(idx)
         return Node('if_cond', self.tok_region(start, idx),
                     None, [cond, block]), idx
@@ -490,7 +494,8 @@ class TreeGen:
         idx += 2
         cond, idx, brk_reason = self._parse_expr(idx)
         if not self.matches(idx, LBrace):
-            raise ParseError("Expected '{' after expr in else if") from brk_reason
+            raise self.err("Expected '{' after expr in else if",
+                           self[idx]) from brk_reason
         block, idx = self._parse_block(idx)
         return Node('elseif_cond', self.tok_region(start, idx),
                     None, [cond, block]), idx
