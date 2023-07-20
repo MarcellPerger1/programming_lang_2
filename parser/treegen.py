@@ -714,7 +714,6 @@ class TreeGen:
                 try:
                     arg_1 = tokens[idx + 1]
                 except IndexError:
-                    # todo from None maybe (once its definitely free of bugs)
                     raise ParseError(f"Unexpected end of expression after {op.op_str}")
                 assert isinstance(arg_0, AnyNode)
                 assert isinstance(arg_1, AnyNode)

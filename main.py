@@ -30,6 +30,7 @@ def run(src: str):
 
 
 def main():
+    run('let a=9;  \n  ')
     run(read_file('main_example_0.txt'))
 
 
