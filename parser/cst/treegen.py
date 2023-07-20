@@ -939,6 +939,9 @@ class TreeGen:
         return LocatedParseError(msg, region, self.src)
 
 
+CstGen = TreeGen
+
+
 def _is_unary_token(t: Token):
     return isinstance(t, OpToken) and t.op_str in UNARY_OPS
 
