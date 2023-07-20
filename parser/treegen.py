@@ -853,35 +853,19 @@ class TreeGen:
                 tokens.append(Leaf.of(self[idx]))
                 idx += 1
             elif self.matches(idx, StringToken):
-                prev_sym = _seq_get(tokens, -1, NullToken())
-                if isinstance(prev_sym, StringToken):
-                    # string literal auto-concatenation
-                    region = StrRegion(prev_sym.region.start, self[idx].region.end)
-                    tokens[-1] = Node('auto_concat', region,
-                                      None, [prev_sym, Leaf.of(self[idx])])
-                elif isinstance(prev_sym, Node) and prev_sym.name == 'auto_concat':
-                    # string literal auto-concatenation 2
-                    prev_sym.add(Leaf.of(self[idx]), update_end=True)
-                elif isinstance(prev_sym, (OpToken, NullToken)):
-                    tokens.append(Leaf.of(self[idx]))
-                else:
-                    raise self.err(f"Unexpected string after "
-                                   f"{self.get(idx - 1).name}", self[idx])
-                idx += 1
+                idx = self._parse_string_token(idx, tokens)
             elif self.matches(idx, LParToken):
                 if isinstance(lookbehind(idx - 1), LPAR_CALL_AFTER):
-                    # fn call
                     # fn_call has same precedence as everything else handled
                     # here so it is fine to just use prev token here
                     # as more binding stuff have already been processed
                     tokens[-1], idx = self._parse_call(tokens[-1], idx)
                 elif isinstance(lookbehind(idx - 1), LPAR_GROUPING_AFTER):
-                    # grouping paren
                     inner, idx = self._parse_grouping_parens(idx)
                     tokens.append(inner)
                 else:
                     # probably doesn't produce a valid parse as '(' is
-                    # only used for grouping expressions
+                    # only used for grouping expressions and fn calls
                     raise self.err(f"Unexpected '(' after "
                                    f"{self.get(idx - 1).name}", self[idx])
             elif self.matches(idx, AttrNameToken):
@@ -906,6 +890,24 @@ class TreeGen:
                            ".tokens is being used instead of .content_tokens?")
         end = idx
         return tokens, end, brk_reason
+
+    def _parse_string_token(self, idx: int, tokens: TokensPass0_T):
+        prev_sym = _seq_get(tokens, -1, NullToken())
+        if isinstance(prev_sym, StringToken):
+            # string literal auto-concatenation
+            region = StrRegion(prev_sym.region.start, self[idx].region.end)
+            tokens[-1] = Node('auto_concat', region,
+                              None, [prev_sym, Leaf.of(self[idx])])
+        elif isinstance(prev_sym, Node) and prev_sym.name == 'auto_concat':
+            # string literal auto-concatenation 2
+            prev_sym.add(Leaf.of(self[idx]), update_end=True)
+        elif isinstance(prev_sym, (OpToken, NullToken)):
+            tokens.append(Leaf.of(self[idx]))
+        else:
+            raise self.err(f"Unexpected string after "
+                           f"{self.get(idx - 1).name}", self[idx])
+        idx += 1
+        return idx
 
     def _handle_pow_pass_0(self, idx: int, token: OpToken) -> tuple[AnyNode | OpToken, int]:
         assert self[idx] == token
