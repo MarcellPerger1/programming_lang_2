@@ -1,0 +1,38 @@
+global stack = list();
+global COUNT_REFS = false;
+
+// opcodes from: https://unpyc.sourceforge.net/Opcodes.html
+
+def POP_TOP() {
+    if COUNT_REFS {
+        decref(stack[len(stack)]);
+    }
+    delitem(stack, len(stack));
+}
+
+def ROT_TWO() {
+    let tos_idx = len(stack);
+    let tos0 = stack[tos_idx];
+    stack[tos_idx] = stack[tos_idx - 1];
+    stack[tos_idx - 1] = tos0;
+}
+
+def ROT_THREE() {
+    // top   = top-1
+    // top-1 = top-2
+    // top-2 = top
+    // i.e. move 2nd and 3rd up and move top to 3rd
+    let tos_idx = len(stack);
+    let tos0 = stack[tos_idx];
+    stack[tos_idx] = stack[tos_idx - 1];
+    stack[tos_idx - 1] = stack[tos_idx - 2];
+    stack[tos_idx - 2] = tos0;
+}
+
+def DUP_TOP() {
+    let value = stack[len(stack)];
+    stack.append(value);
+    if COUNT_REFS {
+        incref(value);
+    }
+}

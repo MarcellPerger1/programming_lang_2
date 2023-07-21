@@ -31,6 +31,7 @@ def run(src: str):
 
 def main():
     run(read_file('main_example_0.txt'))
+    run(read_file('main_example_1.txt'))
 
 
 if __name__ == '__main__':
