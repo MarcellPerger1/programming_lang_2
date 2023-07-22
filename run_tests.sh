@@ -1,1 +1,1 @@
-python -m unittest discover -s ./test/ -t ./
+python -m unittest discover -s ./test/ -t ./ "$@"
