@@ -123,7 +123,6 @@ class Matcher:
 
     def match(self, want_full=False):
         self._match()
-        self.result = MatchResult(self.success, self.next_idx)
         if want_full and self.next_idx != len(self.tokens):
             raise ValueError("Matcher dod not reach end")
         return self
