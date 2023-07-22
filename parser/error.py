@@ -13,6 +13,8 @@ class BaseParseError(Exception):
 
 
 class BaseLocatedError(BaseParseError):
+    __notes__: list[str]  # but might not exist
+
     def __init__(self, msg: str, region: StrRegion, src: str):
         super().__init__(msg)
         self.msg = msg
