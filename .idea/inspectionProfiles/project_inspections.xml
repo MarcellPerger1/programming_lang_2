@@ -13,6 +13,9 @@
         </value>
       </option>
     </inspection_tool>
+    <inspection_tool class="PyUnusedLocalInspection" enabled="true" level="WEAK WARNING" enabled_by_default="true">
+      <option name="ignoreTupleUnpacking" value="false" />
+    </inspection_tool>
     <inspection_tool class="SpellCheckingInspection" enabled="true" level="TYPO" enabled_by_default="true">
       <scope name="license-scope" level="TYPO" enabled="false">
         <option name="processCode" value="true" />

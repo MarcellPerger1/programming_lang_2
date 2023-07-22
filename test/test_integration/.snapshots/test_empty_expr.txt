@@ -1,0 +1,22 @@
+"2"
+"MyTestCase::test_empty_expr_issue_04:0"
+Node(name='program',
+     region=StrRegion(start=0, end=9),
+     parent=None,
+     children=[Node(name='let_decl',
+                    region=StrRegion(start=0, end=8),
+                    parent=...,
+                    children=[Node(name='decl_item',
+                                   region=StrRegion(start=4, end=7),
+                                   parent=...,
+                                   children=[Leaf(name='ident_name',
+                                                  region=StrRegion(start=4,
+                                                                   end=5),
+                                                  parent=...),
+                                             Leaf(name='number',
+                                                  region=StrRegion(start=6,
+                                                                   end=7),
+                                                  parent=...)])]),
+               Leaf(name='nop_smt',
+                    region=StrRegion(start=8, end=9),
+                    parent=...)])
