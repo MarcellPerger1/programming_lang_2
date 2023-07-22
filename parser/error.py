@@ -20,8 +20,11 @@ class BaseLocatedError(BaseParseError):
         self.msg = msg
         self._src_text = src
         self.region = region
+        self._has_added_note = False
 
     def compute_location(self):
+        if self._has_added_note:
+            return
         # noinspection PyBroadException
         try:
             self.add_note(self.display_region(self._src_text, self.region))
@@ -30,6 +33,7 @@ class BaseLocatedError(BaseParseError):
             self.add_note(
                 '\nAn error occurred while trying to display the location '
                 f'of the ParseError ({short_loc}):\n{traceback.format_exc()}')
+        self._has_added_note = True
 
     def __str__(self):
         self.compute_location()
