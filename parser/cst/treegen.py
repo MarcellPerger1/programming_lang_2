@@ -102,6 +102,9 @@ class TreeGen:
             smt, idx = self._parse_let(idx)
         elif self.matches(idx, IdentNameToken):
             smt, idx = self._parse_ident_at_start(idx)
+        elif self.matches(idx, SemicolonToken):
+            smt = Leaf('nop_smt', self.tok_region(idx, idx + 1))
+            idx += 1
         else:
             # can only be an expr
             # todo for now we are assuming that a smt can contain any expr
