@@ -1,0 +1,1 @@
+PY_SNAPSHOTTEST_UPDATE=1 python -m unittest discover -s ./test/ -t ./ "$@"

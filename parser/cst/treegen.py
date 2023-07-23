@@ -736,14 +736,14 @@ class TreeGen:
                 complex_ident, idx = self._parse_chained_gets(idx)
                 tokens.append(complex_ident)
             elif self.matches(idx, DotToken):
-                if lookbehind(idx - 1) not in GETATTR_VALID_AFTER_CLS:
+                if not isinstance(lookbehind(idx - 1), GETATTR_VALID_AFTER_CLS):
                     # we just raise an error - there is no way this
                     # is a valid parse eg `[.abc]` is a syntax error
                     raise self.err(f"Unexpected '.' after "
                                    f"{self.get(idx - 1).name}", self[idx])
                 tokens[-1], idx = self._parse_get_chain_contd(idx, tokens[-1])
             elif self.matches(idx, LSqBracket):
-                if lookbehind(idx - 1) not in GETATTR_VALID_AFTER_CLS:
+                if not isinstance(lookbehind(idx - 1), GETATTR_VALID_AFTER_CLS):
                     raise self.err(f"Unexpected '[' after "
                                    f"{self.get(idx - 1).name}", self[idx])
                 tokens[-1], idx = self._parse_get_chain_contd(idx, tokens[-1])

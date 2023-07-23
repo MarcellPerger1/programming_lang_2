@@ -5,3 +5,4 @@ if 1>=2-1+fn("what\t\"'ever")-fn() {
 } else if a{
 +innerfn();
 }
+other().fnattr;
