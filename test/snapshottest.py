@@ -32,6 +32,15 @@ def _safe_cls_name(o: type):
         return o.__name__
 
 
+_SNAPS_NOT_FOUND_MSG = (
+    'Snapshots not found, execute this with PY_SNAPSHOTTEST_UPDATE=1 to write \n'
+    'the following as the snapshot for {full_name}:')
+_SNAPS_DONT_MATCH_MSG = (
+    'Snapshots dont match actual value, execute this with PY_SNAPSHOTTEST_UPDATE=1 \n'
+    'to write the following as the snapshot for {full_name}:'
+)
+
+
 class SnapshotTestCase(unittest.TestCase):
     snap_filename: str | None = None
     _src_file: str
@@ -73,10 +82,8 @@ class SnapshotTestCase(unittest.TestCase):
         try:
             with open(cls._snap_file) as f:
                 return f.read()
-        except FileNotFoundError:
-            raise SnapshotsNotFound(
-                "Snapshot file not found; execute with "
-                "PY_SNAPSHOTTEST_UPDATE=1 to update snapshots")
+        except FileNotFoundError as orig_err:
+            raise SnapshotsNotFound("Snapshot file not found") from orig_err
 
     @classmethod
     def _read_snapshot_file(cls):
@@ -115,6 +122,9 @@ class SnapshotTestCase(unittest.TestCase):
         except SnapshotsNotFound:
             if self.update_snapshots:
                 return self.queue_write_snapshot(full_name, actual)
+            print(_SNAPS_NOT_FOUND_MSG.format(full_name=full_name),
+                  file=sys.stderr, end='\n\n')
+            print(actual, file=sys.stderr)
             raise
 
         if expected == actual:
@@ -122,6 +132,9 @@ class SnapshotTestCase(unittest.TestCase):
         if self.update_snapshots:
             return self.queue_write_snapshot(full_name, actual)
         if self.longMessage:
+            print(_SNAPS_DONT_MATCH_MSG.format(full_name=full_name),
+                  file=sys.stderr, end='\n\n')
+            print(actual, file=sys.stderr)
             standard_msg = "Expected (from snapshot file) != Actual"
             self.assertEqual(expected, actual,
                              self._formatMessage(msg, standard_msg))
