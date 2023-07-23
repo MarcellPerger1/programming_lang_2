@@ -6,6 +6,8 @@ from test.snapshottest import SnapshotTestCase
 
 
 class MyTestCase(SnapshotTestCase):
+    maxDiff = 2000
+
     def test_issue_09__dot(self):
         t = Tokenizer('fn(call_arg).a;').tokenize()
         node = CstGen(t).parse()
