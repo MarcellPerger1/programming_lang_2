@@ -74,7 +74,9 @@ class SnapshotTestCase(unittest.TestCase):
             with open(cls._snap_file) as f:
                 return f.read()
         except FileNotFoundError:
-            raise SnapshotsNotFound("Snapshot file not found")
+            raise SnapshotsNotFound(
+                "Snapshot file not found; execute with "
+                "PY_SNAPSHOTTEST_UPDATE=1 to update snapshots")
 
     @classmethod
     def _read_snapshot_file(cls):
@@ -106,6 +108,27 @@ class SnapshotTestCase(unittest.TestCase):
 
     def assertMatchesSnapshot(self, obj: object, name: str | None = None,
                               msg: str | None = None):
+        full_name = self._get_full_name(name)
+        actual = format_obj(obj)
+        try:
+            expected = self._read_snapshot(full_name)
+        except SnapshotsNotFound:
+            if self.update_snapshots:
+                return self.queue_write_snapshot(full_name, actual)
+            raise
+
+        if expected == actual:
+            return
+        if self.update_snapshots:
+            return self.queue_write_snapshot(full_name, actual)
+        if self.longMessage:
+            standard_msg = "Expected (from snapshot file) != Actual"
+            self.assertEqual(expected, actual,
+                             self._formatMessage(msg, standard_msg))
+        else:
+            self.assertEqual(expected, actual, msg)
+
+    def _get_full_name(self, name: str | None):
         if name is None:
             name = str(self.next_idx)
             self.next_idx += 1
@@ -117,24 +140,7 @@ class SnapshotTestCase(unittest.TestCase):
             else:
                 raise ValueError("Custom name can't be a number")
         full_name = f'{self.cls_name}::{self.method_name}:{name}'
-        actual = format_obj(obj)
-        try:
-            expected = self._read_snapshot(full_name)
-        except SnapshotsNotFound:
-            self.queue_write_snapshot(full_name, actual)
-            return
-
-        if expected == actual:
-            return
-        if self.update_snapshots:
-            self.queue_write_snapshot(full_name, actual)
-        else:
-            if self.longMessage:
-                standard_msg = "Expected (from snapshot file) != Actual"
-                self.assertEqual(expected, actual,
-                                 self._formatMessage(msg, standard_msg))
-            else:
-                self.assertEqual(expected, actual, msg)
+        return full_name
 
     def queue_write_snapshot(self, full_name: str, new_value: str):
         print(f'Queueing write for snapshot {full_name}', file=sys.stderr)
