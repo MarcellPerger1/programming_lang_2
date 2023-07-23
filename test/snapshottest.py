@@ -135,9 +135,7 @@ class SnapshotTestCase(unittest.TestCase):
             print(_SNAPS_DONT_MATCH_MSG.format(full_name=full_name),
                   file=sys.stderr, end='\n\n')
             print(actual, file=sys.stderr)
-            standard_msg = "Expected (from snapshot file) != Actual"
-            self.assertEqual(expected, actual,
-                             self._formatMessage(msg, standard_msg))
+            self.assertEqual(expected, actual, msg)
         else:
             self.assertEqual(expected, actual, msg)
 
@@ -234,6 +232,6 @@ class SnapFormatter:
             names.append(name)
             start_line += n_lines
             body_list.append(src)
-        body = ''.join(body_list)
+        body = '\n'.join(body_list)
         csv.writer(file, 'unix').writerows([line_idx_strs, names])
         file.write(body)
