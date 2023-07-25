@@ -231,8 +231,12 @@ class Tokenizer(SrcHandler):
 
     def _t_op(self, start: int) -> int | None:
         idx = start
-        # optimisation...
-        for length in range(MAX_OP_LEN, 0, -1):
+        # optimisation... only look at next `length`
+        # chars so == can be used (-1 startswith() method call)
+        # this also means that we can check for the first `length`
+        # chars in the set, turning this into a O(number of unique lengths)
+        # operation, instead of O(number of operators)
+        for length in range(MAX_OP_LEN, 0, -1):  # check longest first
             next_op = self[idx: idx+length]
             if next_op in OPS_SET:
                 idx += length

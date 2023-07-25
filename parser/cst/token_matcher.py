@@ -20,6 +20,18 @@ class BaseMatcher(ABC):
         ...
 
 
+class _FastTokenClsMatcher(BaseMatcher):
+    def __init__(self, pattern: type[Token]):
+        self.pattern = pattern
+
+    def matches(self, tokens: list[Token], start: int, src: str) -> MatchResult:
+        matched = isinstance(tokens[start], self.pattern)
+        # could be written as `return MatchResult(matched, start + matched)`
+        if matched:
+            return MatchResult(True, start + 1)
+        return MatchResult(False, start)
+
+
 class TokenMatcher(BaseMatcher):
     def __init__(self, pattern: type[Token] | Token):
         self.pattern = pattern
@@ -136,7 +148,12 @@ class Matcher:
         return self.result.next_idx
 
     def _match(self):
-        if isinstance(self.pattern, Token) or _issubclass(self.pattern, Token):
+        if (isinstance(self.pattern, type)
+                and issubclass(self.pattern, Token)
+                and self.pattern != Token):
+            # optimize the common case of `matches(..., <TokenCls>)`
+            self.pattern = _FastTokenClsMatcher(self.pattern)
+        elif isinstance(self.pattern, Token) or _issubclass(self.pattern, Token):
             self.pattern = TokenMatcher(self.pattern)
         elif isiterable(self.pattern):
             self.pattern = SeqMatcher(*cast(Iterable[BaseMatcher], self.pattern))
