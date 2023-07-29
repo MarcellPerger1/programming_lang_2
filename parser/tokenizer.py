@@ -5,7 +5,7 @@ from io import StringIO
 from string import ascii_letters, digits
 from typing import TYPE_CHECKING, IO
 
-from parser.error import BaseParseError
+from parser.error import BaseParseError, BaseLocatedError
 from parser.operators import OPS_SET, MAX_OP_LEN, OP_FIRST_CHARS
 from parser.str_region import StrRegion
 from parser.tokens import (
@@ -25,7 +25,15 @@ class TokenizerError(BaseParseError):
     ...
 
 
+class LocatedTokenizerError(BaseLocatedError, TokenizerError):
+    ...
+
+
 class MalformedNumberError(TokenizerError):
+    ...
+
+
+class LocatedMalformedNumberError(LocatedTokenizerError, MalformedNumberError):
     ...
 
 
