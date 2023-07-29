@@ -1,10 +1,23 @@
 import unittest
-from enum import IntFlag, FlagBoundary, IntEnum
+from enum import IntFlag, Enum
 from typing import Sequence, TypeVar, Union
 
 from parser.str_region import StrRegion
 from parser.tokenizer import Tokenizer
 from parser.tokens import IdentNameToken, Token, DotToken, AttrNameToken
+
+try:
+    from enum import FlagBoundary
+except ImportError:
+    # won't actually do anything but the kwargs will be ignored
+    # and this is only used so that 'errors never pass silently'
+    # and the bugs will be detected in 3.11 tests anyway so we just
+    # provide the expected attributes but they won't do anything
+    class FlagBoundary(Enum):
+        STRICT = 1
+        CONFORM = 2
+        EJECT = 3
+        KEEP = 4
 
 
 class TokenStreamFlag(IntFlag, boundary=FlagBoundary.STRICT):
