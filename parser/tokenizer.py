@@ -53,6 +53,27 @@ class SrcHandler:
         except IndexError:
             return eof
 
+    def err(self, msg: str,
+            loc: int | Token | StrRegion | Sequence[int | Token | StrRegion],
+            tp: type[BaseLocatedError] = None):
+        try:
+            seq: tuple[int | Token | StrRegion, ...] = tuple(loc)
+        except TypeError:
+            seq = (loc,)
+        regs = []
+        for o in seq:
+            if isinstance(o, int):
+                reg = StrRegion(o, o + 1)
+            elif isinstance(o, Token):
+                reg = o.region
+            else:
+                reg = o
+            regs.append(reg)
+        region = StrRegion.including(*regs)
+        if tp is None:
+            tp = LocatedTokenizerError
+        return tp(msg, region, self.src)
+
 
 class Tokenizer(SrcHandler):
     def __init__(self, src: str):
@@ -149,27 +170,6 @@ class Tokenizer(SrcHandler):
 
     def startswith(self, start: int, s: str):
         return self[start: start + len(s)].startswith(s)
-
-    def err(self, msg: str,
-            loc: int | Token | StrRegion | Sequence[int | Token | StrRegion],
-            tp: type[BaseLocatedError] = None):
-        try:
-            seq: tuple[int | Token | StrRegion, ...] = tuple(loc)
-        except TypeError:
-            seq = (loc,)
-        regs = []
-        for o in seq:
-            if isinstance(o, int):
-                reg = StrRegion(o, o + 1)
-            elif isinstance(o, Token):
-                reg = o.region
-            else:
-                reg = o
-            regs.append(reg)
-        region = StrRegion.including(*regs)
-        if tp is None:
-            tp = LocatedTokenizerError
-        return tp(msg, region, self.src)
 
     def _t_space(self, start: int):
         idx = start
