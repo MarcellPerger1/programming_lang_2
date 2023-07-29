@@ -4,7 +4,7 @@ from dataclasses import dataclass, field
 from typing import (TypeVar, Iterable, cast, TypeAlias, Sequence, overload,
                     Callable)
 
-from parser.error import BaseParseError, LocatedCstError
+from parser.error import BaseParseError, BaseLocatedError
 from parser.operators import UNARY_OPS, OPS_SET, COMPARISONS, ASSIGN_OPS
 from parser.str_region import StrRegion
 from parser.tokenizer import Tokenizer
@@ -19,6 +19,14 @@ ET = TypeVar('ET')
 MISSING = object()
 
 KEYWORDS = ['def', 'if', 'else', 'while', 'repeat', 'global', 'let']
+
+
+class CstParseError(BaseParseError):
+    pass
+
+
+class LocatedCstError(BaseLocatedError, CstParseError):
+    pass
 
 
 class TreeGen:

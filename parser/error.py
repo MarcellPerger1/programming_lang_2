@@ -116,11 +116,3 @@ class BaseLocatedError(BaseParseError):
     def add_note(self, param: str):
         # noinspection PyUnresolvedReferences
         super().add_note(param)
-
-
-class CstParseError(BaseParseError):
-    pass
-
-
-class LocatedCstError(BaseLocatedError, CstParseError):
-    pass
