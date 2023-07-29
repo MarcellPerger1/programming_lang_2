@@ -1,5 +1,5 @@
 import unittest
-from enum import IntFlag, FlagBoundary, IntEnum
+from enum import IntFlag
 from typing import Sequence, TypeVar, Union
 
 from parser.str_region import StrRegion
@@ -7,7 +7,15 @@ from parser.tokenizer import Tokenizer
 from parser.tokens import IdentNameToken, Token, DotToken, AttrNameToken
 
 
-class TokenStreamFlag(IntFlag, boundary=FlagBoundary.STRICT):
+def _strict_boundary_kwargs():
+    try:
+        from enum import FlagBoundary
+        return {'boundary': FlagBoundary.STRICT}
+    except ImportError:
+        return {}  # Python 3.10
+
+
+class TokenStreamFlag(IntFlag, **_strict_boundary_kwargs()):
     CONTENT = 1
     FULL = 2
     BOTH = CONTENT | FULL
