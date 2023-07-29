@@ -3,6 +3,7 @@ from __future__ import annotations
 import bisect
 import itertools
 import traceback
+from dataclasses import replace as d_replace
 from typing import Sequence
 
 from parser.str_region import StrRegion
@@ -41,6 +42,13 @@ class BaseLocatedError(BaseParseError):
 
     @classmethod
     def display_region(cls, src: str, region: StrRegion) -> str:
+        if region.end > len(src):  # end exc so ok if 1 beyond string
+            region = d_replace(region, end=len(src))
+        if region.start >= len(src):
+            region = d_replace(region, start=len(src) - 1)
+        if region.is_epsilon():
+            # length=0 but still try to do something
+            region = d_replace(region, end=region.start + 1)
         lines = src.splitlines(keepends=True)
         lengths = tuple(map(len, lines))
         cum_lengths = tuple(itertools.accumulate(lengths))
@@ -76,7 +84,7 @@ class BaseLocatedError(BaseParseError):
             if line == end_line:
                 end_col_inner = end_col
             else:
-                end_col_inner = len(lines[line]) - 1
+                end_col_inner = len(lines[line]) - 2  # another for the \n at end
             line_repr = cls._display_single_line(
                 lines, line, start_col_inner, end_col_inner, lineno_w)
             lines_repr.append(f'{line_repr}')
