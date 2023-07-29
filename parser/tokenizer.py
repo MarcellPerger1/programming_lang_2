@@ -53,6 +53,8 @@ class SrcHandler:
         except IndexError:
             return eof
 
+    default_err_type = LocatedTokenizerError
+
     def err(self, msg: str,
             loc: int | Token | StrRegion | Sequence[int | Token | StrRegion],
             tp: type[BaseLocatedError] = None):
@@ -71,7 +73,7 @@ class SrcHandler:
             regs.append(reg)
         region = StrRegion.including(*regs)
         if tp is None:
-            tp = LocatedTokenizerError
+            tp = self.default_err_type
         return tp(msg, region, self.src)
 
 
@@ -290,24 +292,25 @@ class Tokenizer(SrcHandler):
 
 
 class _IncrementalNumberParser(SrcHandler):
+    default_err_type = LocatedMalformedNumberError
+
     # todo 0x, 0b
     def _parse_digit_seq(self, start: int) -> int | None:
         idx = start
         if self[idx] not in digits:
             if self[idx] == '_':
-                raise MalformedNumberError(
-                    "Can't have '_' at the start of a number")
+                raise self.err("Can't have '_' at the start of a number", idx)
             return None
         idx += 1
         while True:
             if self.get(idx) == '_':
                 if self.get(idx + 1) in digits:
                     idx += 2  # '_' and digit
-                if self.get(idx + 1) == '_':
-                    raise MalformedNumberError(
-                        "Can only have one consecutive '_' in a number ")
-                raise MalformedNumberError(
-                    "Can't have '_' at the end of a number")
+                elif self.get(idx + 1) == '_':
+                    raise self.err(
+                        "Can only have one consecutive '_' in a number", idx + 1)
+                raise self.err(
+                    "Can't have '_' at the end of a number", idx)
             elif self.get(idx) in digits:
                 idx += 1
             else:
@@ -356,7 +359,7 @@ class _IncrementalNumberParser(SrcHandler):
         new_idx = self._parse_digit_seq(idx)  # no dot after the 'e'
         if not new_idx:
             # eg: 1.2eC, 8e-Q which is always an error
-            raise MalformedNumberError("Expected integer after <number>e")
+            raise self.err("Expected integer after <number>e", idx)
         idx = new_idx
         return idx
 
