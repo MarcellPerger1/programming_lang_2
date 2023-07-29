@@ -9,7 +9,32 @@ from typing import Sequence
 from parser.str_region import StrRegion
 
 
-class BaseParseError(Exception):
+# don't check for feature required, not version number
+if getattr(BaseException(), 'add_note', None) is None:
+    class _PolyfillAddNoteMixin:
+        """Usage: class MyError(_PolyfillAddNoteMixin, Exception): ...
+        (**The order is important!**)"""
+        __notes__: list[str]
+
+        def add_note(self, note: str, /):
+            if not hasattr(self, '__notes__'):
+                self.__notes__ = []
+            assert isinstance(note, str)
+            self.__notes__.append(note)
+
+        def __str__(self):
+            # here super() refers to the next thing in MRO,
+            # meaning the class after this in the bases
+            if notes := getattr(self, '__notes__', []):
+                return super().__str__() + '\n' + '\n'.join(notes)
+            return super().__str__()
+else:
+    class _PolyfillAddNoteMixin:
+        """Usage: class MyError(_PolyfillAddNoteMixin, Exception): ...
+        (**The order is important!**)"""
+
+
+class BaseParseError(_PolyfillAddNoteMixin, Exception):
     pass
 
 
@@ -112,7 +137,3 @@ class BaseLocatedError(BaseParseError):
         line_start_idx = cum_lengths[line - 1]  # - 1 + 1
         col = idx - line_start_idx
         return line, col
-
-    def add_note(self, param: str):
-        # noinspection PyUnresolvedReferences
-        super().add_note(param)
