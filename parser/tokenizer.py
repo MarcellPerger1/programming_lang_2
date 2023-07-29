@@ -74,7 +74,7 @@ class Tokenizer(SrcHandler):
             if idx == last_idx:
                 raise RuntimeError(
                     f"No progress made after one tokenizer iteration at {idx=}."
-                    f" This is an error in the tokenizer.")
+                    f" This is a bug in the tokenizer.")
             else:
                 last_idx = idx
             # order fastest ones first
@@ -132,7 +132,7 @@ class Tokenizer(SrcHandler):
                   and (new_idx := self._t_op(idx)) is not None):
                 idx = new_idx
             else:
-                raise TokenizerError(f"No token matches source from {idx=}")
+                raise self.err(f"No token matches source from {idx=}", idx)
         self.add_token(EofToken(StrRegion(idx, idx)))
         self.is_done = True
         return self
@@ -214,8 +214,8 @@ class Tokenizer(SrcHandler):
         idx += 1
         while True:
             if self.eof(idx):
-                raise TokenizerError(f"Unexpected EOF in string "
-                                     f"(expected {q_type} to close string)")
+                raise self.err(f"Unexpected EOF in string "
+                               f"(expected {q_type} to close string)", idx)
             if self[idx] == q_type:
                 idx += 1
                 return self.add_token(StringToken(StrRegion(start, idx)))
