@@ -5,6 +5,7 @@ from io import StringIO
 from string import ascii_letters, digits
 from typing import TYPE_CHECKING, IO
 
+from parser.error import BaseParseError
 from parser.operators import OPS_SET, MAX_OP_LEN, OP_FIRST_CHARS
 from parser.str_region import StrRegion
 from parser.tokens import (
@@ -20,7 +21,7 @@ IDENT_START = ascii_letters + '_'
 IDENT_CONT = IDENT_START + digits
 
 
-class TokenizerError(SyntaxError):
+class TokenizerError(BaseParseError):
     ...
 
 
