@@ -3,7 +3,7 @@ from __future__ import annotations
 import sys
 from io import StringIO
 from string import ascii_letters, digits
-from typing import TYPE_CHECKING, IO
+from typing import TYPE_CHECKING, IO, Sequence
 
 from parser.error import BaseParseError, BaseLocatedError
 from parser.operators import OPS_SET, MAX_OP_LEN, OP_FIRST_CHARS
@@ -149,6 +149,27 @@ class Tokenizer(SrcHandler):
 
     def startswith(self, start: int, s: str):
         return self[start: start + len(s)].startswith(s)
+
+    def err(self, msg: str,
+            loc: int | Token | StrRegion | Sequence[int | Token | StrRegion],
+            tp: type[BaseLocatedError] = None):
+        try:
+            seq: tuple[int | Token | StrRegion, ...] = tuple(loc)
+        except TypeError:
+            seq = (loc,)
+        regs = []
+        for o in seq:
+            if isinstance(o, int):
+                reg = StrRegion(o, o + 1)
+            elif isinstance(o, Token):
+                reg = o.region
+            else:
+                reg = o
+            regs.append(reg)
+        region = StrRegion.including(*regs)
+        if tp is None:
+            tp = LocatedTokenizerError
+        return tp(msg, region, self.src)
 
     def _t_space(self, start: int):
         idx = start
