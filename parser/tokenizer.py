@@ -246,7 +246,7 @@ class Tokenizer(SrcHandler):
     def _t_attr_name(self, start: int) -> int:
         idx = start
         assert self[idx] in IDENT_CONT
-        while self[idx] in IDENT_CONT:
+        while self.get(idx) in IDENT_CONT:
             idx += 1
         return self.add_token(AttrNameToken(StrRegion(start, idx)))
 
@@ -254,7 +254,7 @@ class Tokenizer(SrcHandler):
         idx = start
         assert self[idx] in IDENT_START
         idx += 1
-        while self[idx] in IDENT_CONT:
+        while self.get(idx) in IDENT_CONT:
             idx += 1
         return self.add_token(IdentNameToken(StrRegion(start, idx)))
 
