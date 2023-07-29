@@ -18,6 +18,8 @@ class StrRegion:
     @classmethod
     def including(cls, *regions: StrRegion):
         """Returns smallest region that fits regions"""
+        if len(regions) == 0:
+            raise ValueError("Union of 0 regions")
         return StrRegion(min([r.start for r in regions]),
                          max([r.end for r in regions]))
 

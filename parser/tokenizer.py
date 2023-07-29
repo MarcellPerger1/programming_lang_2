@@ -3,8 +3,9 @@ from __future__ import annotations
 import sys
 from io import StringIO
 from string import ascii_letters, digits
-from typing import TYPE_CHECKING, IO
+from typing import TYPE_CHECKING, IO, Sequence
 
+from parser.error import BaseParseError, BaseLocatedError
 from parser.operators import OPS_SET, MAX_OP_LEN, OP_FIRST_CHARS
 from parser.str_region import StrRegion
 from parser.tokens import (
@@ -20,11 +21,19 @@ IDENT_START = ascii_letters + '_'
 IDENT_CONT = IDENT_START + digits
 
 
-class TokenizerError(SyntaxError):
+class TokenizerError(BaseParseError):
+    ...
+
+
+class LocatedTokenizerError(BaseLocatedError, TokenizerError):
     ...
 
 
 class MalformedNumberError(TokenizerError):
+    ...
+
+
+class LocatedMalformedNumberError(LocatedTokenizerError, MalformedNumberError):
     ...
 
 
@@ -43,6 +52,29 @@ class SrcHandler:
             return self.src[idx]
         except IndexError:
             return eof
+
+    default_err_type = LocatedTokenizerError
+
+    def err(self, msg: str,
+            loc: int | Token | StrRegion | Sequence[int | Token | StrRegion],
+            tp: type[BaseLocatedError] = None):
+        try:
+            seq: tuple[int | Token | StrRegion, ...] = tuple(loc)
+        except TypeError:
+            seq = (loc,)
+        regs = []
+        for o in seq:
+            if isinstance(o, int):
+                reg = StrRegion(o, o + 1)
+            elif isinstance(o, Token):
+                reg = o.region
+            else:
+                reg = o
+            regs.append(reg)
+        region = StrRegion.including(*regs)
+        if tp is None:
+            tp = self.default_err_type
+        return tp(msg, region, self.src)
 
 
 class Tokenizer(SrcHandler):
@@ -65,7 +97,7 @@ class Tokenizer(SrcHandler):
             if idx == last_idx:
                 raise RuntimeError(
                     f"No progress made after one tokenizer iteration at {idx=}."
-                    f" This is an error in the tokenizer.")
+                    f" This is a bug in the tokenizer.")
             else:
                 last_idx = idx
             # order fastest ones first
@@ -123,7 +155,7 @@ class Tokenizer(SrcHandler):
                   and (new_idx := self._t_op(idx)) is not None):
                 idx = new_idx
             else:
-                raise TokenizerError(f"No token matches source from {idx=}")
+                raise self.err(f"No token matches source from {idx=}", idx)
         self.add_token(EofToken(StrRegion(idx, idx)))
         self.is_done = True
         return self
@@ -184,8 +216,8 @@ class Tokenizer(SrcHandler):
         idx += 1
         while True:
             if self.eof(idx):
-                raise TokenizerError(f"Unexpected EOF in string "
-                                     f"(expected {q_type} to close string)")
+                raise self.err(f"Unexpected EOF in string "
+                               f"(expected {q_type} to close string)", idx)
             if self[idx] == q_type:
                 idx += 1
                 return self.add_token(StringToken(StrRegion(start, idx)))
@@ -260,24 +292,25 @@ class Tokenizer(SrcHandler):
 
 
 class _IncrementalNumberParser(SrcHandler):
+    default_err_type = LocatedMalformedNumberError
+
     # todo 0x, 0b
     def _parse_digit_seq(self, start: int) -> int | None:
         idx = start
         if self[idx] not in digits:
             if self[idx] == '_':
-                raise MalformedNumberError(
-                    "Can't have '_' at the start of a number")
+                raise self.err("Can't have '_' at the start of a number", idx)
             return None
         idx += 1
         while True:
             if self.get(idx) == '_':
                 if self.get(idx + 1) in digits:
                     idx += 2  # '_' and digit
-                if self.get(idx + 1) == '_':
-                    raise MalformedNumberError(
-                        "Can only have one consecutive '_' in a number ")
-                raise MalformedNumberError(
-                    "Can't have '_' at the end of a number")
+                elif self.get(idx + 1) == '_':
+                    raise self.err(
+                        "Can only have one consecutive '_' in a number", idx + 1)
+                raise self.err(
+                    "Can't have '_' at the end of a number", idx)
             elif self.get(idx) in digits:
                 idx += 1
             else:
@@ -326,7 +359,7 @@ class _IncrementalNumberParser(SrcHandler):
         new_idx = self._parse_digit_seq(idx)  # no dot after the 'e'
         if not new_idx:
             # eg: 1.2eC, 8e-Q which is always an error
-            raise MalformedNumberError("Expected integer after <number>e")
+            raise self.err("Expected integer after <number>e", idx)
         idx = new_idx
         return idx
 

@@ -3,8 +3,7 @@ from typing import Iterable, Container, Any
 
 from test.snapshottest import SnapshotTestCase
 from parser.tokenizer import Tokenizer
-from parser.cst.treegen import CstGen
-from parser.error import CstParseError
+from parser.cst.treegen import CstGen, CstParseError
 
 
 class MyTestCase(SnapshotTestCase):
