@@ -129,7 +129,7 @@ class TreeGen:
         # it's just an expr here
         expr, idx, brk_reason = self._parse_expr(start, maybe_lvalue, idx)
         if not self.matches(idx, SemicolonToken):
-            raise self.err("Expected ';' at end of expr", self[idx]) from brk_reason
+            raise self.err("Expected ';' at end of expr", self[idx - 1]) from brk_reason
         idx += 1
         return expr, idx
 

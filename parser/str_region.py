@@ -26,3 +26,7 @@ class StrRegion:
 
     def __or__(self, other: StrRegion):
         return self.union(other)
+
+    def is_epsilon(self):
+        """Return true if the length of the region is 0"""
+        return self.end <= self.start
