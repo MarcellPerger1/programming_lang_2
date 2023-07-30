@@ -3,7 +3,7 @@ from enum import IntFlag
 from typing import Sequence, TypeVar, Union
 
 from parser.str_region import StrRegion
-from parser.lexer.tokenizer import Tokenizer
+from parser.lexer import Tokenizer
 from parser.tokens import IdentNameToken, Token, DotToken, AttrNameToken
 
 
