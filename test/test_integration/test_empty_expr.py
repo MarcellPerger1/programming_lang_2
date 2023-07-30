@@ -2,7 +2,7 @@ import unittest
 from typing import Iterable, Container, Any
 
 from test.snapshottest import SnapshotTestCase
-from parser.tokenizer import Tokenizer
+from parser.lexer import Tokenizer
 from parser.cst.treegen import CstGen, CstParseError
 
 

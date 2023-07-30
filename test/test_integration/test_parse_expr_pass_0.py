@@ -1,7 +1,7 @@
 import unittest
 
 from parser.cst.treegen import CstGen
-from parser.tokenizer import Tokenizer
+from parser.lexer import Tokenizer
 from test.snapshottest import SnapshotTestCase
 
 

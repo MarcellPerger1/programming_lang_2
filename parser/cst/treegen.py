@@ -7,7 +7,7 @@ from typing import (TypeVar, Iterable, cast, TypeAlias, Sequence, overload,
 from parser.error import BaseParseError, BaseLocatedError
 from parser.operators import UNARY_OPS, OPS_SET, COMPARISONS, ASSIGN_OPS
 from parser.str_region import StrRegion
-from parser.tokenizer import Tokenizer
+from parser.lexer import Tokenizer
 from parser.tokens import *
 from parser.tree_node import Node, Leaf, AnyNode
 from parser.cst.tree_print import tformat

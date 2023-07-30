@@ -1,7 +1,7 @@
 import unittest
 from pathlib import Path
 
-from parser.tokenizer import Tokenizer
+from parser.lexer import Tokenizer
 from parser.tokens import *
 
 filepath = Path(__file__)
