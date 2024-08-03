@@ -494,6 +494,130 @@ class TreeGen:
         (node,) = curr
         return node, end, brk_reason
 
+    def _token_str(self, idx: int):
+        return self[idx].get_str(self.src)
+
+    def _expect_cls_consume(
+            self, idx: int, cls_or_list: type | tuple[type, ...],
+            msg: Exception | str = None, reason: Exception = None) -> int:  # [[nodiscard]]
+        if isinstance(self[idx], cls_or_list):
+            return idx + 1
+        if msg is None:
+            msg = self.err(f"Unexpected {self[idx].name}", self[idx])
+        elif isinstance(msg, str):
+            msg = self.err(msg, self[idx])
+        raise msg from reason
+
+    r"""
+    Basic grammar:
+    '(' = LPAR
+    ')' = RPAR
+    '[' = LSQB
+    ']' = RSQB
+    
+    '.' = DOT
+    ',' = COMMA
+    
+    '+' < OP
+    '-' < OP
+    '*' < OP
+    '/' < OP
+    '%' < OP
+    '**' < OP
+    
+    '!' < OP
+    '&&' < OP
+    '||' < OP
+    
+    '..' < OP
+    
+    '<' < OP
+    '>' < OP
+    '<=' < OP
+    '>=' < OP
+    '==' < OP
+    '!=' < OP
+    
+    Unary = '+' | '-' | '!'
+    Mul_Div = '*' | '/'
+    Add_Sub = '+' | '-'
+    Comp = '<' | '>' | '<=' | '>=' | '==' | '!='
+    
+    # -- Expressions --
+    atom := STRING | NUMBER | IDENT
+    
+    autocat := (STRING)+
+    atom_or_autocat := atom | autocat                                  # level 2
+       # \- implemented as NUMBER | IDENT | (STRING | STRING+)
+    
+    parens_or := '(' expr ')' | atom_or_autocat                        # level 1
+    
+    basic_item := parens_or (basic_item_chain)*                        # level 3
+    basic_item_chain := fn_call_chain | getattr_chain | getitem_chain
+    fn_call_chain := '(' fn_args ')'
+    getattr_chain := '.' ATTR_NAME
+    getitem_chain := '[' expr ']'
+       # \ - could be:
+       #   basic_item := fn_call | getattr | getitem | basic_item
+       #   fn_call := basic_item '(' fn_args ')'
+       #   getattr := basic_item '.' ATTR_NAME
+       #   getitem := basic_item '[' expr ']'
+       # But that could be trapped in infinite loop due to left-recursion:
+       #  parse basic_item -> try fn_call -> parse basic_item -> ...
+    fn_args := expr (',' expr)* (',')?
+    
+    unary_pow_rhs := (Unary)* basic_item             # level 4.1
+    @grouping:rtl
+    pow_or := basic_item ('**' unary_pow_rhs)*       # level 4.2
+    unary_or := (Unary)* pow_or                      # level 5
+    mul_div_or := unary_or (Mul_Div unary_or)*       # level 6
+    add_sub_or := mul_div_or (Add_Sub mul_div_or)*   # level 7
+    cat_or := add_sub_or ('..' add_sub_or)*          # level 8
+    @grouping:special
+    comp_or := cat_or (Comp cat_or)*                 # level 9
+    and_bool_or := comp_or ('&&' comp_or)*           # level 10
+    or_bool_or := and_bool_or ('||' and_bool_or)*    # level 11
+    
+    expr := or_bool_or
+    
+    ...  # (smt, etc.)
+    
+    """
+    def _parse_atom(self, idx: int) -> tuple[AnyNode, int]:
+        """Parses literal/ident ('atom' as in can't be broken down further, like 'atomic')"""
+        tok = self[idx]
+        if isinstance(tok, (StringToken, NumberToken, IdentNameToken)):
+            return Leaf.of(tok), idx + 1
+        raise self.err(f"Unexpected {tok.name} token {tok.get_str(self.src)!r}", tok)
+
+    def _parse_autocat_or_string(self, idx: int) -> tuple[AnyNode, int]:
+        start = idx
+        strings = []
+        while isinstance(self[idx], StringToken):
+            strings.append(Leaf.of(self[idx]))
+            idx += 1
+        assert strings, "_parse_autocat_or_string requires current token to be string"
+        if len(strings) == 1:
+            return strings[0], idx
+        return Node('autocat', self.tok_region(start, idx), None, strings), idx
+
+    def _parse_atom_or_autocat(self, idx: int) -> tuple[AnyNode, int]:
+        tok = self[idx]
+        if isinstance(tok, (NumberToken, IdentNameToken)):
+            return Leaf.of(tok), idx + 1
+        if isinstance(tok, StringToken):
+            return self._parse_autocat_or_string(idx)
+        raise self.err(f"Unexpected {tok.name} token {tok.get_str(self.src)!r}", tok)
+
+    def _parse_parens_or(self, idx: int) -> tuple[AnyNode, int]:
+        start = idx
+        if isinstance(self[idx], LParToken):
+            inner, idx, brk_reason_outdated = self._parse_expr(idx + 1)
+            idx = self._expect_cls_consume(
+                idx, RParToken, "Expected ')' at end of expr", brk_reason_outdated)
+            return Node('paren', self.tok_region(start, idx), None, [inner]), idx
+        return self._parse_atom_or_autocat(idx)
+
     def _handle_chained_comp(
             self, chain: list[AnyNode | OpToken]
     ) -> AnyNode:  # type: ignore
@@ -860,7 +984,7 @@ def _is_unary_token(t: Token):
 
 
 @dataclass
-class PseudoOpToken(OpToken):
+class PseudoOpToken(OpToken):  # TODO this won't be needed
     inner_ops: list[OpToken] = field(default_factory=list)
 
 
@@ -898,6 +1022,8 @@ UNARY_VALID_AFTER = (
 #  9. == != < > <= >=
 # 10. &&
 # 11. ||
+
+# Note: level 1 and 2 may be swapped
 
 
 EXPR_TERMINAL_TOKENS = (
