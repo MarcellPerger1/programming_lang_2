@@ -645,12 +645,15 @@ class TreeGen:
             return self.node_from_children('call', [left, args]), idx
         return left, idx
 
+    def matches_ops(self, idx: int, *ops: str):
+        tok = self[idx]
+        return isinstance(tok, OpToken) and tok.op_str in ops
+
     def _parse_unaries_into_tok_list(self, idx: int) -> tuple[list[OpToken], int]:
         ls = []
-        while (isinstance(tok := cast(OpToken, self[idx]), OpToken)
-               and tok.op_str in UNARY_OPS):
+        while self.matches_ops(idx, UNARY_OPS):
+            ls.append(cast(OpToken, self[idx]))
             idx += 1
-            ls.append(tok)
         return ls, idx
 
     def _apply_unaries_list(self, unaries_list: list[OpToken], inner: AnyNode):
@@ -661,7 +664,7 @@ class TreeGen:
 
     def _parse_pow_or(self, idx: int) -> tuple[AnyNode, int]:
         leftmost, idx = self._parse_basic_item(idx)
-        if not self.matches(idx, OpM('**')):
+        if not self.matches_ops(idx, '**'):
             return leftmost, idx
         idx += 1
         return self._parse_pow_rhs_item(idx)
@@ -676,6 +679,66 @@ class TreeGen:
         unaries, idx = self._parse_unaries_into_tok_list(idx)
         inner, idx = self._parse_pow_or(idx)
         return self._apply_unaries_list(unaries, inner), idx
+
+    # TODO these are very similar - unify them?
+    def _parse_mul_div(self, idx: int) -> tuple[AnyNode, int]:
+        curr, idx = self._parse_unary_or(idx)
+        while self.matches_ops(idx, '*', '/'):
+            op = cast(OpToken, self[idx]).op_str
+            idx += 1
+            right, idx = self._parse_unary_or(idx)
+            curr = self.node_from_children(op, [curr, right])
+        return curr, idx
+
+    def _parse_add_sub(self, idx: int) -> tuple[AnyNode, int]:
+        curr, idx = self._parse_mul_div(idx)
+        while self.matches_ops(idx, '+', '-'):
+            op = cast(OpToken, self[idx]).op_str
+            idx += 1
+            right, idx = self._parse_mul_div(idx)
+            curr = self.node_from_children(op, [curr, right])
+        return curr, idx
+
+    def _parse_cat(self, idx: int) -> tuple[AnyNode, int]:
+        curr, idx = self._parse_add_sub(idx)
+        while self.matches_ops(idx, '..'):
+            idx += 1
+            right, idx = self._parse_add_sub(idx)
+            curr = self.node_from_children('..', [curr, right])
+        return curr, idx
+
+    def _parse_comp(self, idx: int) -> tuple[AnyNode, int]:
+        first, idx = self._parse_cat(idx)
+        parts = [first]
+        while self.matches_ops(idx, COMPARISONS):
+            op = cast(OpToken, self[idx]).op_str
+            idx += 1
+            curr, idx = self._parse_cat(idx)
+            parts += [op, curr]
+        if len(parts) == 1:
+            return parts[0], idx
+        assert len(parts) % 1 == 1
+        if len(parts) > 3:
+            # TODO: chained comparisons
+            raise self.err("Chaining comparisons is not yet supported", parts[3])
+        left, op, right = parts
+        return self.node_from_children(cast(OpToken, op).op_str, [left, right]), idx
+
+    def _parse_and_bool(self, idx: int):
+        curr, idx = self._parse_comp(idx)
+        while self.matches_ops(idx, '&&'):
+            idx += 1
+            right, idx = self._parse_comp(idx)
+            curr = self.node_from_children('&&', [curr, right])
+        return curr, idx
+
+    def _parse_or_bool(self, idx: int):
+        curr, idx = self._parse_and_bool(idx)
+        while self.matches_ops(idx, '||'):
+            idx += 1
+            right, idx = self._parse_and_bool(idx)
+            curr = self.node_from_children('||', [curr, right])
+        return curr, idx
 
     def _handle_chained_comp(
             self, chain: list[AnyNode | OpToken]
