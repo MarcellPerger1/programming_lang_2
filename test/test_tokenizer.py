@@ -2,9 +2,10 @@ import unittest
 from enum import IntFlag
 from typing import Sequence, TypeVar, Union
 
+from parser.lexer.tokens import WhitespaceToken, StringToken, EofToken
 from parser.str_region import StrRegion
 from parser.lexer import Tokenizer
-from parser.tokens import IdentNameToken, Token, DotToken, AttrNameToken
+from parser.tokens import IdentNameToken, Token, DotToken, AttrNameToken, OpToken
 
 
 def _strict_boundary_kwargs():
@@ -86,6 +87,24 @@ class MyTestCase(unittest.TestCase):
         end = t._t_attr_name(5)
         self.assertTokensEqual(t, [AttrNameToken(StrRegion(5, 6))])
         self.assertEqual(end, 6)
+
+    def test_tokenize_concat_works(self):
+        t = Tokenizer('ab .. "s"')
+        t.tokenize()
+        self.assertTokensEqual(t, [
+            IdentNameToken(StrRegion(0, 2)),
+            WhitespaceToken(StrRegion(2, 3)),
+            OpToken(StrRegion(3, 5), '..'),
+            WhitespaceToken(StrRegion(5, 6)),
+            StringToken(StrRegion(6, 9)),
+            EofToken(StrRegion(9, 9)),
+        ], TokenStreamFlag.FULL)
+        self.assertTokensEqual(t, [
+            IdentNameToken(StrRegion(0, 2)),
+            OpToken(StrRegion(3, 5), '..'),
+            StringToken(StrRegion(6, 9)),
+            EofToken(StrRegion(9, 9)),
+        ], TokenStreamFlag.CONTENT)
 
 
 if __name__ == '__main__':

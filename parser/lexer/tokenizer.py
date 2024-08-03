@@ -101,7 +101,6 @@ class Tokenizer(SrcHandler):
             else:
                 last_idx = idx
             # order fastest ones first
-            # noinspection GrazieInspection
             if self[idx] == ',':
                 idx = self._t_comma(idx)
             elif self[idx] == '.':

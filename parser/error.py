@@ -9,7 +9,7 @@ from typing import Sequence
 from parser.str_region import StrRegion
 
 
-# don't check for feature required, not version number
+# check for feature required, not version number
 if getattr(BaseException(), 'add_note', None) is None:
     class _PolyfillAddNoteMixin:
         """Usage: class MyError(_PolyfillAddNoteMixin, Exception): ...
