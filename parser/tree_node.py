@@ -33,6 +33,11 @@ class Node(Leaf):
         children = children or []
         return cls(name or token.name, token.region, parent, children)
 
+    @classmethod  # Better args order
+    def new(cls, name: str, region: StrRegion,
+            children: list[AnyNode], parent: Node = None):
+        return cls(name, region, parent, children)
+
     def __post_init__(self):
         children = self.children
         self.children = []

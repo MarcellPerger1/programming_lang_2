@@ -618,6 +618,65 @@ class TreeGen:
             return Node('paren', self.tok_region(start, idx), None, [inner]), idx
         return self._parse_atom_or_autocat(idx)
 
+    def _parse_basic_item(self, idx: int):
+        old_idx = -999  # to start the loop
+        left, idx = self._parse_parens_or(idx)
+        while idx != old_idx:
+            old_idx = idx
+            left, idx = self._parse_basic_item_chain_once(idx, left)
+        return left, idx
+
+    def _parse_basic_item_chain_once(self, idx: int, left: AnyNode) -> tuple[AnyNode, int]:
+        if isinstance(self[idx], DotToken):
+            idx += 1
+            if not isinstance(self[idx], AttrNameToken):
+                raise self.err("Expected attribute name after '.'", self[idx])
+            right = Leaf.of(self[idx])
+            idx += 1
+            return self.node_from_children('getattr', [left, right]), idx
+        elif isinstance(self[idx], RParToken):
+            idx += 1
+            inner, idx, legacy_brk_reason = self._parse_expr(idx)
+            idx = self._expect_cls_consume(
+                idx, RSqBracket, f"Expected rsqb, got {self[idx].name}", legacy_brk_reason)
+            return Node.new('getitem', StrRegion(left.region.start, idx), [left, inner]), idx
+        elif isinstance(self[idx], LParToken):
+            args, idx = self._parse_call_args(idx)
+            return self.node_from_children('call', [left, args]), idx
+        return left, idx
+
+    def _parse_unaries_into_tok_list(self, idx: int) -> tuple[list[OpToken], int]:
+        ls = []
+        while (isinstance(tok := cast(OpToken, self[idx]), OpToken)
+               and tok.op_str in UNARY_OPS):
+            idx += 1
+            ls.append(tok)
+        return ls, idx
+
+    def _apply_unaries_list(self, unaries_list: list[OpToken], inner: AnyNode):
+        curr = inner
+        for tok in reversed(unaries_list):
+            curr = self.node_from_children(tok.op_str, [curr], region=[tok, curr])
+        return curr
+
+    def _parse_pow_or(self, idx: int) -> tuple[AnyNode, int]:
+        leftmost, idx = self._parse_basic_item(idx)
+        if not self.matches(idx, OpM('**')):
+            return leftmost, idx
+        idx += 1
+        return self._parse_pow_rhs_item(idx)
+
+    def _parse_pow_rhs_item(self, idx: int) -> tuple[AnyNode, int]:
+        unaries, idx = self._parse_unaries_into_tok_list(idx)
+        # This is right-recursion so is fine as progress will be made each call to get here
+        inner, idx = self._parse_pow_or(idx)
+        return self._apply_unaries_list(unaries, inner), idx
+
+    def _parse_unary_or(self, idx: int) -> tuple[AnyNode, int]:
+        unaries, idx = self._parse_unaries_into_tok_list(idx)
+        inner, idx = self._parse_pow_or(idx)
+        return self._apply_unaries_list(unaries, inner), idx
+
     def _handle_chained_comp(
             self, chain: list[AnyNode | OpToken]
     ) -> AnyNode:  # type: ignore
@@ -960,20 +1019,26 @@ class TreeGen:
             tokens)
         return res, idx
 
-    def err(self, msg: str, loc: (
-            Token | AnyNode | Sequence[Token] | Sequence[AnyNode] | StrRegion)):
-        if not isinstance(loc, StrRegion):
-            try:
-                seq: tuple[Token | AnyNode, ...] = tuple(loc)
-            except TypeError:
-                seq = (loc,)
-            regs: list[StrRegion] = []
-            for o in seq:
-                regs.append(o.region)
-            region = StrRegion.including(*regs)
-        else:
-            region = loc
-        return LocatedCstError(msg, region, self.src)
+    def err(self, msg: str, loc: RegionUnionArgT):
+        return LocatedCstError(msg, self.region_union(loc), self.src)
+
+    @classmethod
+    def region_union(cls, *args: RegionUnionArgT):
+        regs = []
+        for loc in args:
+            if isinstance(loc, (Token, AnyNode)):
+                loc = loc.region  # Token and AnyNode, both have `.region`
+            if isinstance(loc, StrRegion):
+                regs.append(loc)
+            else:
+                regs.append(cls.region_union(*loc))
+        return StrRegion.union(*regs)
+
+    @classmethod
+    def node_from_children(cls, name: str, children: list[AnyNode],
+                           region: RegionUnionArgT = None, parent: Node = None):
+        region = cls.region_union(region if region is not None else children)
+        return Node(name, region, parent, children)
 
 
 CstGen = TreeGen
@@ -989,6 +1054,8 @@ class PseudoOpToken(OpToken):  # TODO this won't be needed
 
 
 TokensPass0_T: TypeAlias = 'list[AnyNode | OpToken]'
+RegionUnionFlatT: TypeAlias = 'Token | AnyNode | StrRegion'
+RegionUnionArgT: TypeAlias = 'RegionUnionFlatT | Sequence[RegionUnionFlatT]'
 
 EXPR_BEGIN = (
     CommaToken,
