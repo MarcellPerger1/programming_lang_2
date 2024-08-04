@@ -1,3 +1,4 @@
+import cProfile
 import time
 
 from parser.cst.treegen import TreeGen
@@ -18,12 +19,13 @@ PROFILER = True
 
 
 def run(src: str, idx: int = -1):
-    import cProfile
     tn0 = time.perf_counter()
     tn = Tokenizer(src).tokenize()
     tn1 = time.perf_counter()
     print('Tokens:')
+    tpr_tk0 = time.perf_counter()
     print_tokens(tn.src, tn.tokens)
+    tpr_tk1 = time.perf_counter()
     tp0 = time.perf_counter()
     if PROFILER:
         with cProfile.Profile() as p:
@@ -34,9 +36,13 @@ def run(src: str, idx: int = -1):
         node = TreeGen(tn).parse()
         tp1 = time.perf_counter()
     print('CST:')
+    tpr_cst0 = time.perf_counter()
     tprint(node)
-    print(f'Tokens done in {(tn1 - tn0) * 1000:.2f}ms')
-    print(f'CST    done in {(tp1 - tp0) * 1000:.2f}ms')
+    tpr_cst1 = time.perf_counter()
+    print(rf'Tokens            done in {(tn1 - tn0) * 1000:.2f}ms')
+    print(rf'Tokens_print      done in {(tpr_tk1 - tpr_tk0) * 1000:.2f}ms')
+    print(rf'CST               done in {(tp1 - tp0) * 1000:.2f}ms')
+    print(rf'CST_print         done in {(tpr_cst1 - tpr_cst0) * 1000:.2f}ms')
 
 
 def main():
