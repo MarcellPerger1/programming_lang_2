@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-from dataclasses import dataclass, field
 from typing import (TypeVar, cast, TypeAlias, Sequence, overload)
 
 from parser.cst.token_matcher import OpM, KwdM, Matcher, PatternT
@@ -140,52 +139,6 @@ class TreeGen:
             idx += 1
             return self.node_from_children(op, [lvalue, rvalue]), idx
         raise self.err("Expected semicolon at end of expr", self[idx])
-
-    def _parse_chained_gets(self, start: int) -> tuple[AnyNode, int]:
-        idx = start
-        assert self.matches(idx, IdentNameToken)
-        curr = Leaf.of(self[idx])
-        idx += 1
-        return self._parse_get_chain_contd(idx, curr)
-
-    def _parse_get_chain_contd(self, start: int, curr: AnyNode) -> tuple[AnyNode, int]:
-        idx = start
-        while True:
-            if self.matches(idx, DotToken):
-                idx += 1
-                if not self.matches(idx, AttrNameToken):
-                    raise self.err("Expected attr_name after '.', "
-                                   f"got {self[idx].name}", self[idx])
-                attr = Leaf.of(self[idx])
-                idx += 1
-                curr = Node('getattr', StrRegion(curr.region.start, attr.region.end),
-                            None, [curr, attr])
-            elif self.matches(idx, LSqBracket):
-                sqb, idx = self._parse_sqb(idx)
-                # TODO this is WRONG! region should include the ']' which may
-                #  be arbitrarily far ahead (in terms of chars)
-                curr = Node('getitem', StrRegion(curr.region.start, sqb.region.end),
-                            None, [curr, sqb])
-            else:
-                return curr, idx
-
-    def _parse_sqb(self, start: int) -> tuple[AnyNode, int]:
-        """Just returns the expr inside, idx=after end of sqb"""
-        idx = start
-        assert self.matches(idx, LSqBracket)
-        idx += 1
-        if self.matches(idx, RSqBracket):
-            raise self.err("Square brackets must not be empty",
-                           self[idx - 1: idx + 1])
-        expr, idx, brk_reason = self._parse_expr(idx)
-        if not self.matches(idx, RSqBracket):
-            raise self.err(
-                f"Expected lsqb, got {self[idx].name}. (missing lsqb "
-                f"or incomplete expression in square brackets)",
-                self[idx]
-            ) from brk_reason
-        idx += 1
-        return expr, idx
 
     def _parse_let(self, start: int) -> tuple[AnyNode, int]:
         idx = start
@@ -398,14 +351,6 @@ class TreeGen:
         block, idx = self._parse_block(idx)
         return Node('else_cond', self.tok_region(start, idx), None, [block]), idx
 
-    def _parse_call(self, left: AnyNode | Token, call_start: int) -> tuple[AnyNode, int]:
-        if isinstance(left, Token):
-            left = Leaf.of(left)
-        idx = call_start
-        args, idx = self._parse_call_args(idx)
-        return Node('call', StrRegion(left.region.start, self[idx - 1].region.end),
-                    None, [left, args]), idx
-
     def _parse_call_args(self, start: int) -> tuple[AnyNode, int]:
         idx = start
         assert self.matches(idx, LParToken)
@@ -435,16 +380,6 @@ class TreeGen:
         idx += 1
         call_args = Node('call_args', self.tok_region(start, idx), None, args)
         return call_args, idx
-
-    def _parse_grouping_parens(self, start: int) -> tuple[AnyNode, int]:
-        idx = start
-        assert self.matches(idx, LParToken)
-        idx += 1
-        expr, idx, brk_reason = self._parse_expr(idx)
-        if not self.matches(idx, RParToken):
-            raise self.err("Expected ')' at end of expr", self[idx]) from brk_reason
-        idx += 1
-        return Node('paren', self.tok_region(start, idx), None, [expr]), idx
 
     def _parse_expr(self, start: int, partial: AnyNode = None,
                     partial_end: int = None) -> tuple[AnyNode, int, BaseParseError | None]:
@@ -736,17 +671,6 @@ class TreeGen:
 
 CstGen = TreeGen
 
-
-def _is_unary_token(t: Token):
-    return isinstance(t, OpToken) and t.op_str in UNARY_OPS
-
-
-@dataclass
-class PseudoOpToken(OpToken):  # TODO this won't be needed
-    inner_ops: list[OpToken] = field(default_factory=list)
-
-
-TokensPass0_T: TypeAlias = 'list[AnyNode | OpToken]'
 RegionUnionFlatT: TypeAlias = 'Token | AnyNode | StrRegion'
 RegionUnionArgT: TypeAlias = 'RegionUnionFlatT | Sequence[RegionUnionFlatT]'
 
@@ -784,57 +708,6 @@ UNARY_VALID_AFTER = (
 # 11. ||
 
 # Note: level 1 and 2 may be swapped
-
-
-EXPR_TERMINAL_TOKENS = (
-    EofToken,
-    CommaToken,  # fn_args(<expr>, ...)
-    SemicolonToken,  # smt: <expr>;
-    RParToken,  # in parens: 9*(<expr>)*...
-    RSqBracket,  # in computed getitem: list[<expr>]
-    LBrace,  # in block start: if <expr>{...}
-    # not sure if RBrace is terminal and not just an error:
-    # if true{<expr>} is an error (no ';' after expr)
-    # (need ';' at end of smt but...)
-    # It's probably best to say that it is terminal and let the caller
-    # (e.g. _parse_smt) deal with it as it can be more elegantly handled there,
-    # perhaps with better and more specialized error messages.
-    RBrace,
-)
-NUMBER_VALID_AFTER = (
-    NullToken,
-    OpToken
-)
-# NOTE: use isinstance() with these NOT `in`
-LSQB_VALID_AFTER = (
-    AnyNameToken,
-    NumberToken,
-    StringToken,
-    RParToken,
-    RSqBracket
-)
-LPAR_CALL_AFTER = (
-    RParToken,
-    AnyNameToken,
-    RSqBracket
-)
-LPAR_GROUPING_AFTER = (
-    CommaToken,
-    SemicolonToken,
-    OpToken,
-    LParToken,
-    LSqBracket,
-    LBrace,
-    RBrace,
-    NullToken
-)
-
-
-INVALID_AFTER_IDENT = (
-    IdentNameToken,
-    NumberToken,
-    StringToken
-)
 
 
 def _seq_get(self: Sequence[ET], item: int, default: DT) -> ET | DT:

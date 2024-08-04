@@ -9,7 +9,6 @@ NamedTokenCls(Token)
     CommaToken 'comma'
     DotToken 'dot'
     OpToken 'op'
-        [PseudoOpToken]
     ParenToken
         LParToken 'lpar'
         RParToken 'rpar'
