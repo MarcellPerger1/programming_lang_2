@@ -123,6 +123,8 @@ class TreeGen:
             #  although it may be better not to deal with it here
             #  and instead do a post-processing step
             if USE_NEW:
+                # TODO: maybe include ';' in the inner - but why?
+                #  Need an smt type which also includes the ';'
                 smt, idx = self._parse_expr_or_assign(idx)
             else:
                 smt, idx, brk_reason = self._parse_expr(idx)
@@ -150,7 +152,7 @@ class TreeGen:
             if not isinstance(self[idx], SemicolonToken):
                 raise self.err("Expected semicolon at end of expr", self[idx])
             idx += 1
-            return self.node_from_children('=', [lvalue, rvalue]), idx
+            return self.node_from_children('=', [lvalue, rvalue]), idx  # TODO might be +=, **=, etc.
         raise self.err("Expected semicolon at end of expr", self[idx])
 
     def _parse_ident_at_start(self, start: int) -> tuple[AnyNode, int]:
@@ -180,7 +182,7 @@ class TreeGen:
             raise self.err("Expected ';' at end of expr in assign",
                            self[idx]) from brk_reason
         idx += 1
-        return Node(assign_token.op_str, self.tok_region(smt_start, idx),
+        return Node(assign_token.op_str, self.tok_region(smt_start, idx),  # TODO is it a good idea to include the ';'?
                     None, [lvalue, expr]), idx
 
     def _parse_maybe_lvalue(self, start: int) -> tuple[AnyNode, int]:

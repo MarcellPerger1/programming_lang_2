@@ -111,7 +111,7 @@ class SnapshotTestCase(unittest.TestCase):
         try:
             return cls._read_snapshot_file()[full_name]
         except KeyError:
-            raise SnapshotsNotFound(f"Snapshot for {full_name} not found")
+            raise SnapshotsNotFound(f"Snapshot for {full_name} not found") from None
 
     def assertMatchesSnapshot(self, obj: object, name: str | None = None,
                               msg: str | None = None):

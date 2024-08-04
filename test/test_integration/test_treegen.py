@@ -7,10 +7,10 @@ from parser.cst.tree_print import tprint
 from test.snapshottest import SnapshotTestCase
 
 
-class MyTestCase(SnapshotTestCase):
+class TreeGenTest(SnapshotTestCase):
     maxDiff = None
 
-    def test_something(self):
+    def test_item_chain(self):
         # TODO support func/method calls in lvalues?
         #  tk = Tokenizer('a(7).b.fn()["c" .. 2] = fn(9).k[7 + r](3,);')
         tk = Tokenizer('a[7].b.0.fn["c" .. 2] = fn(9).k[7 + r](3,);')
