@@ -116,7 +116,6 @@ class TreeGen:
             smt, idx = self._parse_expr_or_assign(idx)
         return smt, idx
 
-    # TODO: recheck all self[idx] stuff as we may get trouble with eofs
     def _parse_expr_or_assign(self, idx: int) -> tuple[AnyNode, int]:
         expr_or_lvalue, idx = self._parse_expr(idx)
         if isinstance(self[idx], SemicolonToken):
@@ -699,10 +698,3 @@ UNARY_VALID_AFTER = (
 # 11. ||
 
 # Note: level 1 and 2 may be swapped
-
-
-def _seq_get(self: Sequence[ET], item: int, default: DT) -> ET | DT:
-    try:
-        return self[item]
-    except IndexError:
-        return default
