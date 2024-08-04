@@ -40,8 +40,8 @@ def run(src: str, idx: int = -1):
 
 
 def main():
-    run(read_file('main_example_0.txt'), 0)
-    run(read_file('main_example_1.txt'), 1)
+    run(read_file('main_example_0.st'), 0)
+    run(read_file('main_example_1.st'), 1)
 
 
 if __name__ == '__main__':
