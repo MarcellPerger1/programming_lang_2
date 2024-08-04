@@ -24,6 +24,13 @@ class TreeGenTest(SnapshotTestCase):
         tprint(t.result)
         self.assertMatchesSnapshot(t.result)
 
+    def test_aug_assign(self):
+        tk = Tokenizer('a[1] += a.2;')
+        t = TreeGen(tk)
+        t.parse()
+        tprint(t.result)
+        self.assertMatchesSnapshot(t.result)
+
 
 if __name__ == '__main__':
     unittest.main()

@@ -141,18 +141,18 @@ class TreeGen:
         if isinstance(self[idx], SemicolonToken):
             idx += 1
             return expr_or_lvalue, idx  # TODO: maybe have a smt node?
-        elif self.matches_ops(idx, ASSIGN_OPS):
+        elif op := self.match_ops(idx, ASSIGN_OPS):
             # TODO multiple assignment?
             idx += 1
             lvalue = expr_or_lvalue
             rvalue, idx, legacy_brk_reason = self._parse_expr(idx)
             assert not legacy_brk_reason
-            if self.matches_ops(idx, ASSIGN_OPS):
+            if self.match_ops(idx, ASSIGN_OPS):
                 raise self.err("Multiple assignment is not supported (yet)", self[idx])
             if not isinstance(self[idx], SemicolonToken):
                 raise self.err("Expected semicolon at end of expr", self[idx])
             idx += 1
-            return self.node_from_children('=', [lvalue, rvalue]), idx  # TODO might be +=, **=, etc.
+            return self.node_from_children(op, [lvalue, rvalue]), idx
         raise self.err("Expected semicolon at end of expr", self[idx])
 
     def _parse_ident_at_start(self, start: int) -> tuple[AnyNode, int]:
@@ -685,21 +685,22 @@ class TreeGen:
             return self.node_from_children('call', [left, args]), idx
         return left, idx
 
-    def matches_ops(self, idx: int, *ops: str | Sequence[str]):
+    def match_ops(self, idx: int, *ops: str | Sequence[str]):
         tok = self[idx]
-        if not isinstance(tok, OpToken): return False
+        if not isinstance(tok, OpToken):
+            return False
         for op in ops:
             if isinstance(op, str):
                 if tok.op_str == op:
-                    return True
+                    return op
             else:
-                if self.matches_ops(idx, *op):
-                    return True
-        return False
+                if value := self.match_ops(idx, *op):
+                    return value
+        return None
 
     def _parse_unaries_into_tok_list(self, idx: int) -> tuple[list[OpToken], int]:
         ls = []
-        while self.matches_ops(idx, UNARY_OPS):
+        while self.match_ops(idx, UNARY_OPS):
             ls.append(cast(OpToken, self[idx]))
             idx += 1
         return ls, idx
@@ -712,7 +713,7 @@ class TreeGen:
 
     def _parse_pow_or(self, idx: int) -> tuple[AnyNode, int]:
         leftmost, idx = self._parse_basic_item(idx)
-        if not self.matches_ops(idx, '**'):
+        if not self.match_ops(idx, '**'):
             return leftmost, idx
         idx += 1
         return self._parse_pow_rhs_item(idx)
@@ -731,7 +732,7 @@ class TreeGen:
     # TODO these are very similar - unify them?
     def _parse_mul_div(self, idx: int) -> tuple[AnyNode, int]:
         curr, idx = self._parse_unary_or(idx)
-        while self.matches_ops(idx, '*', '/'):
+        while self.match_ops(idx, '*', '/'):
             op = cast(OpToken, self[idx]).op_str
             idx += 1
             right, idx = self._parse_unary_or(idx)
@@ -740,7 +741,7 @@ class TreeGen:
 
     def _parse_add_sub(self, idx: int) -> tuple[AnyNode, int]:
         curr, idx = self._parse_mul_div(idx)
-        while self.matches_ops(idx, '+', '-'):
+        while self.match_ops(idx, '+', '-'):
             op = cast(OpToken, self[idx]).op_str
             idx += 1
             right, idx = self._parse_mul_div(idx)
@@ -749,7 +750,7 @@ class TreeGen:
 
     def _parse_cat(self, idx: int) -> tuple[AnyNode, int]:
         curr, idx = self._parse_add_sub(idx)
-        while self.matches_ops(idx, '..'):
+        while self.match_ops(idx, '..'):
             idx += 1
             right, idx = self._parse_add_sub(idx)
             curr = self.node_from_children('..', [curr, right])
@@ -758,7 +759,7 @@ class TreeGen:
     def _parse_comp(self, idx: int) -> tuple[AnyNode, int]:
         first, idx = self._parse_cat(idx)
         parts = [first]
-        while self.matches_ops(idx, COMPARISONS):
+        while self.match_ops(idx, COMPARISONS):
             op = cast(OpToken, self[idx]).op_str
             idx += 1
             curr, idx = self._parse_cat(idx)
@@ -774,7 +775,7 @@ class TreeGen:
 
     def _parse_and_bool(self, idx: int):
         curr, idx = self._parse_comp(idx)
-        while self.matches_ops(idx, '&&'):
+        while self.match_ops(idx, '&&'):
             idx += 1
             right, idx = self._parse_comp(idx)
             curr = self.node_from_children('&&', [curr, right])
@@ -782,7 +783,7 @@ class TreeGen:
 
     def _parse_or_bool(self, idx: int) -> tuple[AnyNode, int]:
         curr, idx = self._parse_and_bool(idx)
-        while self.matches_ops(idx, '||'):
+        while self.match_ops(idx, '||'):
             idx += 1
             right, idx = self._parse_and_bool(idx)
             curr = self.node_from_children('||', [curr, right])
