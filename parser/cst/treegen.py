@@ -21,6 +21,9 @@ MISSING = object()
 KEYWORDS = ['def', 'if', 'else', 'while', 'repeat', 'global', 'let']
 
 
+USE_NEW = True
+
+
 class CstParseError(BaseParseError):
     pass
 
@@ -108,7 +111,7 @@ class TreeGen:
             smt, idx = self._parse_global(idx)
         elif self.matches(idx, (KwdM('let'), IdentNameToken)):
             smt, idx = self._parse_let(idx)
-        elif self.matches(idx, IdentNameToken):
+        elif self.matches(idx, IdentNameToken) and not USE_NEW:
             smt, idx = self._parse_ident_at_start(idx)
         elif self.matches(idx, SemicolonToken):
             smt = Leaf('nop_smt', self.tok_region(idx, idx + 1))
@@ -119,12 +122,36 @@ class TreeGen:
             #  but this could/will change in the future
             #  although it may be better not to deal with it here
             #  and instead do a post-processing step
-            smt, idx, brk_reason = self._parse_expr(idx)
-            if not self.matches(idx, SemicolonToken):
-                raise self.err("Statements must end with a semicolon",
-                               self[idx - 1]) from brk_reason
-            idx += 1
+            if USE_NEW:
+                smt, idx = self._parse_expr_or_assign(idx)
+            else:
+                smt, idx, brk_reason = self._parse_expr(idx)
+                if not self.matches(idx, SemicolonToken):
+                    raise self.err("Statements must end with a semicolon",
+                                   self[idx - 1]) from brk_reason
+                idx += 1
         return smt, idx
+
+    # TODO: recheck all self[idx] stuff as we may get trouble with eofs
+    def _parse_expr_or_assign(self, idx: int) -> tuple[AnyNode, int]:
+        expr_or_lvalue, idx, legacy_brk_reason = self._parse_expr(idx)
+        assert not legacy_brk_reason
+        if isinstance(self[idx], SemicolonToken):
+            idx += 1
+            return expr_or_lvalue, idx  # TODO: maybe have a smt node?
+        elif self.matches_ops(idx, ASSIGN_OPS):
+            # TODO multiple assignment?
+            idx += 1
+            lvalue = expr_or_lvalue
+            rvalue, idx, legacy_brk_reason = self._parse_expr(idx)
+            assert not legacy_brk_reason
+            if self.matches_ops(idx, ASSIGN_OPS):
+                raise self.err("Multiple assignment is not supported (yet)", self[idx])
+            if not isinstance(self[idx], SemicolonToken):
+                raise self.err("Expected semicolon at end of expr", self[idx])
+            idx += 1
+            return self.node_from_children('=', [lvalue, rvalue]), idx
+        raise self.err("Expected semicolon at end of expr", self[idx])
 
     def _parse_ident_at_start(self, start: int) -> tuple[AnyNode, int]:
         idx = start
@@ -186,6 +213,8 @@ class TreeGen:
                             None, [curr, attr])
             elif self.matches(idx, LSqBracket):
                 sqb, idx = self._parse_sqb(idx)
+                # TODO this is WRONG! region should include the ']' which may
+                #  be arbitrarily far ahead (in terms of chars)
                 curr = Node('getitem', StrRegion(curr.region.start, sqb.region.end),
                             None, [curr, sqb])
             else:
@@ -470,6 +499,11 @@ class TreeGen:
 
     def _parse_expr(self, start: int, partial: AnyNode = None,
                     partial_end: int = None) -> tuple[AnyNode, int, BaseParseError | None]:
+        if USE_NEW:
+            if partial or partial_end:
+                raise NotImplementedError
+            expr, idx = self._parse_or_bool(start)
+            return expr, idx, None
         curr, end, brk_reason = self._parse_expr_pass_0(start, partial, partial_end)
         curr = self._parse_expr_binary_op_level(
             curr, ('**', '**<unary>'),
@@ -634,20 +668,32 @@ class TreeGen:
             right = Leaf.of(self[idx])
             idx += 1
             return self.node_from_children('getattr', [left, right]), idx
-        elif isinstance(self[idx], RParToken):
+        elif isinstance(self[idx], LSqBracket):
             idx += 1
             inner, idx, legacy_brk_reason = self._parse_expr(idx)
-            idx = self._expect_cls_consume(
-                idx, RSqBracket, f"Expected rsqb, got {self[idx].name}", legacy_brk_reason)
-            return Node.new('getitem', StrRegion(left.region.start, idx), [left, inner]), idx
+            if not isinstance(self[idx], RSqBracket):
+                raise self.err(f"Expected rsqb, got {self[idx].name}",
+                               self[idx]) from legacy_brk_reason
+            node = self.node_from_children('getitem', [left, inner],
+                                           region=[left, inner, self[idx]])
+            idx += 1
+            return node, idx
         elif isinstance(self[idx], LParToken):
             args, idx = self._parse_call_args(idx)
             return self.node_from_children('call', [left, args]), idx
         return left, idx
 
-    def matches_ops(self, idx: int, *ops: str):
+    def matches_ops(self, idx: int, *ops: str | Sequence[str]):
         tok = self[idx]
-        return isinstance(tok, OpToken) and tok.op_str in ops
+        if not isinstance(tok, OpToken): return False
+        for op in ops:
+            if isinstance(op, str):
+                if tok.op_str == op:
+                    return True
+            else:
+                if self.matches_ops(idx, *op):
+                    return True
+        return False
 
     def _parse_unaries_into_tok_list(self, idx: int) -> tuple[list[OpToken], int]:
         ls = []
@@ -732,7 +778,7 @@ class TreeGen:
             curr = self.node_from_children('&&', [curr, right])
         return curr, idx
 
-    def _parse_or_bool(self, idx: int):
+    def _parse_or_bool(self, idx: int) -> tuple[AnyNode, int]:
         curr, idx = self._parse_and_bool(idx)
         while self.matches_ops(idx, '||'):
             idx += 1

@@ -29,6 +29,8 @@ if getattr(BaseException(), 'add_note', None) is None:
                 return super().__str__() + '\n' + '\n'.join(notes)
             return super().__str__()
 else:
+    # TODO: this is inconsistent! In polyfill (<3.11), notes are part of str(exc)
+    #  but in 3.12+, the notes arent part of str(exc)!
     class _PolyfillAddNoteMixin:
         """Usage: class MyError(_PolyfillAddNoteMixin, Exception): ...
         (**The order is important!**)"""
