@@ -375,10 +375,7 @@ class TreeGen:
         call_args = Node('call_args', self.tok_region(start, idx), None, args)
         return call_args, idx
 
-    def _parse_expr(self, start: int, partial: AnyNode = None,
-                    partial_end: int = None) -> tuple[AnyNode, int]:
-        if partial or partial_end:
-            raise NotImplementedError
+    def _parse_expr(self, start: int) -> tuple[AnyNode, int]:
         expr, idx = self._parse_or_bool(start)
         return expr, idx
 
