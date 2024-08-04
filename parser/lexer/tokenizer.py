@@ -308,8 +308,9 @@ class _IncrementalNumberParser(SrcHandler):
                 elif self.get(idx + 1) == '_':
                     raise self.err(
                         "Can only have one consecutive '_' in a number", idx + 1)
-                raise self.err(
-                    "Can't have '_' at the end of a number", idx)
+                else:
+                    raise self.err(
+                        "Can't have '_' at the end of a number", idx)
             elif self.get(idx) in digits:
                 idx += 1
             else:

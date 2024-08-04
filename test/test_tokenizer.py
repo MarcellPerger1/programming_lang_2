@@ -2,7 +2,7 @@ import unittest
 from enum import IntFlag
 from typing import Sequence, TypeVar, Union
 
-from parser.lexer.tokens import WhitespaceToken, StringToken, EofToken
+from parser.lexer.tokens import WhitespaceToken, StringToken, EofToken, NumberToken
 from parser.str_region import StrRegion
 from parser.lexer import Tokenizer
 from parser.tokens import IdentNameToken, Token, DotToken, AttrNameToken, OpToken
@@ -87,6 +87,12 @@ class MyTestCase(unittest.TestCase):
         end = t._t_attr_name(5)
         self.assertTokensEqual(t, [AttrNameToken(StrRegion(5, 6))])
         self.assertEqual(end, 6)
+
+    def test__t_number(self):
+        t = Tokenizer('a+432_123+e')
+        end = t._t_number(2)
+        self.assertTokensEqual(t, [NumberToken(StrRegion(2, 9))])
+        self.assertEqual(end, 9)
 
     def test_tokenize_concat_works(self):
         t = Tokenizer('ab .. "s"')
