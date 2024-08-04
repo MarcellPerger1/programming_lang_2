@@ -133,7 +133,7 @@ class TreeGen:
                 raise self.err("Expected semicolon at end of expr", self[idx])
             idx += 1
             return self.node_from_children(op, [lvalue, rvalue]), idx
-        raise self.err("Expected semicolon at end of expr", self[idx])
+        raise self.err("Expected semicolon at end of expr", self[idx])  # TODO say what we did get
 
     def _parse_let(self, start: int) -> tuple[AnyNode, int]:
         idx = start
@@ -274,6 +274,7 @@ class TreeGen:
         idx += 1
         return Node('block', self.tok_region(start, idx), None, smts), idx
 
+    # TODO: while, repeat, if_cond are (almost) the same
     def _parse_while(self, start: int) -> tuple[AnyNode, int]:
         idx = start
         assert self.matches(idx, KwdM('while'))
