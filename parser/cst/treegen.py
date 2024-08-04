@@ -765,12 +765,12 @@ class TreeGen:
             parts += [op, curr]
         if len(parts) == 1:
             return parts[0], idx
-        assert len(parts) % 1 == 1
+        assert len(parts) % 2 == 1
         if len(parts) > 3:
             # TODO: chained comparisons
             raise self.err("Chaining comparisons is not yet supported", parts[3])
         left, op, right = parts
-        return self.node_from_children(cast(OpToken, op).op_str, [left, right]), idx
+        return self.node_from_children(op, [left, right]), idx
 
     def _parse_and_bool(self, idx: int):
         curr, idx = self._parse_comp(idx)
