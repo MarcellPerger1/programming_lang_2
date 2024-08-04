@@ -41,12 +41,9 @@ class TreeGen:
         return self.tokenizer.content_tokens
 
     @overload
-    def __getitem__(self, item: int) -> Token:
-        ...
-
+    def __getitem__(self, item: int) -> Token: ...
     @overload
-    def __getitem__(self, item: slice) -> list[Token]:
-        ...
+    def __getitem__(self, item: slice) -> list[Token]: ...
 
     def __getitem__(self, item: int | slice):
         return self.tokens[item]
@@ -121,8 +118,7 @@ class TreeGen:
 
     # TODO: recheck all self[idx] stuff as we may get trouble with eofs
     def _parse_expr_or_assign(self, idx: int) -> tuple[AnyNode, int]:
-        expr_or_lvalue, idx, legacy_brk_reason = self._parse_expr(idx)
-        assert not legacy_brk_reason
+        expr_or_lvalue, idx = self._parse_expr(idx)
         if isinstance(self[idx], SemicolonToken):
             idx += 1
             return expr_or_lvalue, idx  # TODO: maybe have a smt node?
@@ -130,8 +126,7 @@ class TreeGen:
             # TODO multiple assignment?
             idx += 1
             lvalue = expr_or_lvalue
-            rvalue, idx, legacy_brk_reason = self._parse_expr(idx)
-            assert not legacy_brk_reason
+            rvalue, idx = self._parse_expr(idx)
             if self.match_ops(idx, ASSIGN_OPS):
                 raise self.err("Multiple assignment is not supported (yet)", self[idx])
             if not isinstance(self[idx], SemicolonToken):
@@ -189,10 +184,10 @@ class TreeGen:
         if self.matches(idx, OpM('=')):
             # case 2
             idx += 1
-            value, idx, brk_reason = self._parse_expr(idx)
+            value, idx = self._parse_expr(idx)
             if not isinstance(self.get(idx), (SemicolonToken, CommaToken)):
                 raise self.err(f"Expected ';' or ',' after decl_item,"
-                               f" got {self[idx].name}", self[idx]) from brk_reason
+                               f" got {self[idx].name}", self[idx])
         glob = Node('decl_item', self.tok_region(start, idx),
                     None, [ident, value])
         return glob, idx
@@ -283,9 +278,9 @@ class TreeGen:
         idx = start
         assert self.matches(idx, KwdM('while'))
         idx += 1
-        cond, idx, brk_reason = self._parse_expr(idx)
+        cond, idx = self._parse_expr(idx)
         if not self.matches(idx, LBrace):
-            raise self.err("Expected '{' after expr in while", self[idx]) from brk_reason
+            raise self.err("Expected '{' after expr in while", self[idx])
         block, idx = self._parse_block(idx)
         return Node('while', self.tok_region(start, idx),
                     None, [cond, block]), idx
@@ -294,9 +289,9 @@ class TreeGen:
         idx = start
         assert self.matches(idx, KwdM('repeat'))
         idx += 1
-        amount, idx, brk_reason = self._parse_expr(idx)
+        amount, idx = self._parse_expr(idx)
         if not self.matches(idx, LBrace):
-            raise self.err("Expected '{' after expr in repeat", self[idx]) from brk_reason
+            raise self.err("Expected '{' after expr in repeat", self[idx])
         block, idx = self._parse_block(idx)
         return Node('repeat', self.tok_region(start, idx),
                     None, [amount, block]), idx
@@ -325,9 +320,9 @@ class TreeGen:
         idx = start
         assert self.matches(idx, KwdM('if'))
         idx += 1
-        cond, idx, brk_reason = self._parse_expr(idx)
+        cond, idx = self._parse_expr(idx)
         if not self.matches(idx, LBrace):
-            raise self.err("Expected '{' after expr in if", self[idx]) from brk_reason
+            raise self.err("Expected '{' after expr in if", self[idx])
         block, idx = self._parse_block(idx)
         return Node('if_cond', self.tok_region(start, idx),
                     None, [cond, block]), idx
@@ -336,10 +331,9 @@ class TreeGen:
         idx = start
         assert self.matches(idx, (KwdM('else'), KwdM('if')))
         idx += 2
-        cond, idx, brk_reason = self._parse_expr(idx)
+        cond, idx = self._parse_expr(idx)
         if not self.matches(idx, LBrace):
-            raise self.err("Expected '{' after expr in else if",
-                           self[idx]) from brk_reason
+            raise self.err("Expected '{' after expr in else if", self[idx])
         block, idx = self._parse_block(idx)
         return Node('elseif_cond', self.tok_region(start, idx),
                     None, [cond, block]), idx
@@ -359,12 +353,12 @@ class TreeGen:
             # simple case, no args
             idx += 1
             return Node('call_args', self.tok_region(start, idx)), idx
-        arg1, idx, brk_reason = self._parse_expr(idx)
+        arg1, idx = self._parse_expr(idx)
         args = [arg1]
         while not self.matches(idx, RParToken):
             if not self.matches(idx, CommaToken):
                 raise self.err(f"Expected ',' or ')' after arg, got "
-                               f"{self[idx].name}", self[idx]) from brk_reason
+                               f"{self[idx].name}", self[idx])
             idx += 1
             if self.matches(idx, RParToken):
                 # f(arg1, arg2,)
@@ -372,7 +366,7 @@ class TreeGen:
                 break
             # f(arg1, arg2)
             #       ~~^
-            arg, idx, brk_reason = self._parse_expr(idx)
+            arg, idx = self._parse_expr(idx)
             args.append(arg)
         # f(t1, t2)
         #         ^
@@ -382,11 +376,11 @@ class TreeGen:
         return call_args, idx
 
     def _parse_expr(self, start: int, partial: AnyNode = None,
-                    partial_end: int = None) -> tuple[AnyNode, int, BaseParseError | None]:
+                    partial_end: int = None) -> tuple[AnyNode, int]:
         if partial or partial_end:
             raise NotImplementedError
         expr, idx = self._parse_or_bool(start)
-        return expr, idx, None
+        return expr, idx
 
     def _token_str(self, idx: int):
         return self[idx].get_str(self.src)
@@ -506,9 +500,9 @@ class TreeGen:
     def _parse_parens_or(self, idx: int) -> tuple[AnyNode, int]:
         start = idx
         if isinstance(self[idx], LParToken):
-            inner, idx, brk_reason_outdated = self._parse_expr(idx + 1)
+            inner, idx = self._parse_expr(idx + 1)
             idx = self._expect_cls_consume(
-                idx, RParToken, "Expected ')' at end of expr", brk_reason_outdated)
+                idx, RParToken, "Expected ')' at end of expr")
             return Node('paren', self.tok_region(start, idx), None, [inner]), idx
         return self._parse_atom_or_autocat(idx)
 
@@ -530,10 +524,9 @@ class TreeGen:
             return self.node_from_children('getattr', [left, right]), idx
         elif isinstance(self[idx], LSqBracket):
             idx += 1
-            inner, idx, legacy_brk_reason = self._parse_expr(idx)
+            inner, idx = self._parse_expr(idx)
             if not isinstance(self[idx], RSqBracket):
-                raise self.err(f"Expected rsqb, got {self[idx].name}",
-                               self[idx]) from legacy_brk_reason
+                raise self.err(f"Expected rsqb, got {self[idx].name}", self[idx])
             node = self.node_from_children('getitem', [left, inner],
                                            region=[left, inner, self[idx]])
             idx += 1
