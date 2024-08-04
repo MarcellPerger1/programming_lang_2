@@ -21,9 +21,6 @@ MISSING = object()
 KEYWORDS = ['def', 'if', 'else', 'while', 'repeat', 'global', 'let']
 
 
-USE_NEW = True
-
-
 class CstParseError(BaseParseError):
     pass
 
@@ -111,8 +108,6 @@ class TreeGen:
             smt, idx = self._parse_global(idx)
         elif self.matches(idx, (KwdM('let'), IdentNameToken)):
             smt, idx = self._parse_let(idx)
-        elif self.matches(idx, IdentNameToken) and not USE_NEW:
-            smt, idx = self._parse_ident_at_start(idx)
         elif self.matches(idx, SemicolonToken):
             smt = Leaf('nop_smt', self.tok_region(idx, idx + 1))
             idx += 1
@@ -122,16 +117,9 @@ class TreeGen:
             #  but this could/will change in the future
             #  although it may be better not to deal with it here
             #  and instead do a post-processing step
-            if USE_NEW:
-                # TODO: maybe include ';' in the inner - but why?
-                #  Need an smt type which also includes the ';'
-                smt, idx = self._parse_expr_or_assign(idx)
-            else:
-                smt, idx, brk_reason = self._parse_expr(idx)
-                if not self.matches(idx, SemicolonToken):
-                    raise self.err("Statements must end with a semicolon",
-                                   self[idx - 1]) from brk_reason
-                idx += 1
+            # TODO: maybe include ';' in the inner - but why?
+            #  Need an smt type which also includes the ';'
+            smt, idx = self._parse_expr_or_assign(idx)
         return smt, idx
 
     # TODO: recheck all self[idx] stuff as we may get trouble with eofs
@@ -501,34 +489,10 @@ class TreeGen:
 
     def _parse_expr(self, start: int, partial: AnyNode = None,
                     partial_end: int = None) -> tuple[AnyNode, int, BaseParseError | None]:
-        if USE_NEW:
-            if partial or partial_end:
-                raise NotImplementedError
-            expr, idx = self._parse_or_bool(start)
-            return expr, idx, None
-        curr, end, brk_reason = self._parse_expr_pass_0(start, partial, partial_end)
-        curr = self._parse_expr_binary_op_level(
-            curr, ('**', '**<unary>'),
-            self._chained_pow_to_node, call_if_single=True)
-        assert all(not isinstance(t, PseudoOpToken) for t in curr)
-        curr = self._parse_expr_unary_ops(curr)
-        curr = self._parse_ltr_op_level(curr, '*/')
-        curr = self._parse_ltr_op_level(curr, '+-')
-        curr = self._parse_ltr_op_level(curr, ['..'])
-        curr = self._parse_expr_binary_op_level(
-            curr, COMPARISONS, self._handle_chained_comp, call_if_single=False)
-        curr = self._parse_ltr_op_level(curr, ['&&'])
-        curr = self._parse_ltr_op_level(curr, ['||'])
-        if len(curr) == 0:
-            raise self.err(f"Expected expr, got no expr", self[start])
-        if len(curr) != 1:
-            raise self.err(
-                f"Invalid expr (expected 1 node to be produced, "
-                f"got {len(curr)} nodes). Debug: nodes={tformat(curr)}",
-                curr
-            ) from brk_reason
-        (node,) = curr
-        return node, end, brk_reason
+        if partial or partial_end:
+            raise NotImplementedError
+        expr, idx = self._parse_or_bool(start)
+        return expr, idx, None
 
     def _token_str(self, idx: int):
         return self[idx].get_str(self.src)
