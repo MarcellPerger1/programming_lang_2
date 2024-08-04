@@ -11,9 +11,14 @@ class TreeGenTest(SnapshotTestCase):
     maxDiff = None
 
     def test_item_chain(self):
-        # TODO support func/method calls in lvalues?
-        #  tk = Tokenizer('a(7).b.fn()["c" .. 2] = fn(9).k[7 + r](3,);')
         tk = Tokenizer('a[7].b.0.fn["c" .. 2] = fn(9).k[7 + r](3,);')
+        t = TreeGen(tk)
+        t.parse()
+        tprint(t.result)
+        self.assertMatchesSnapshot(t.result)
+
+    def test_fn_call_in_lvalue(self):
+        tk = Tokenizer('a(7).b.0.fn()["c" .. 2] = fn(9).k[7 + r](3,);')
         t = TreeGen(tk)
         t.parse()
         tprint(t.result)
