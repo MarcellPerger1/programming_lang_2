@@ -129,10 +129,12 @@ class TreeGen:
             if self.match_ops(idx, ASSIGN_OPS):
                 raise self.err("Multiple assignment is not supported (yet)", self[idx])
             if not isinstance(self[idx], SemicolonToken):
-                raise self.err("Expected semicolon at end of expr", self[idx])
+                raise self.err(f"Expected semicolon at end of expr, "
+                               f"got {self[idx].name}", self[idx])
             idx += 1
             return self.node_from_children(op, [lvalue, rvalue]), idx
-        raise self.err("Expected semicolon at end of expr", self[idx])  # TODO say what we did get
+        raise self.err(f"Expected semicolon at end of expr, "
+                       f"got {self[idx].name}", self[idx])
 
     def _parse_let(self, start: int) -> tuple[AnyNode, int]:
         idx = start
@@ -208,7 +210,8 @@ class TreeGen:
     def _parse_args_decl(self, start: int) -> tuple[AnyNode, int]:
         idx = start
         if not self.matches(idx, LParToken):
-            raise self.err("Expected '(' after 'def name'", self[idx])
+            raise self.err(f"Expected '(' after 'def name', "
+                           f"got {self[idx].name}", self[idx])
         idx += 1
         if self.matches(idx, RParToken):
             # simple case, no args
@@ -280,7 +283,8 @@ class TreeGen:
         idx += 1
         cond, idx = self._parse_expr(idx)
         if not self.matches(idx, LBrace):
-            raise self.err("Expected '{' after expr in while", self[idx])
+            raise self.err(f"Expected '{{' after expr in while, "
+                           f"got {self[idx].name}", self[idx])
         block, idx = self._parse_block(idx)
         return Node('while', self.tok_region(start, idx),
                     None, [cond, block]), idx
@@ -291,7 +295,8 @@ class TreeGen:
         idx += 1
         amount, idx = self._parse_expr(idx)
         if not self.matches(idx, LBrace):
-            raise self.err("Expected '{' after expr in repeat", self[idx])
+            raise self.err(f"Expected '{{' after expr in repeat, "
+                           f"got {self[idx].name}", self[idx])
         block, idx = self._parse_block(idx)
         return Node('repeat', self.tok_region(start, idx),
                     None, [amount, block]), idx
@@ -322,7 +327,8 @@ class TreeGen:
         idx += 1
         cond, idx = self._parse_expr(idx)
         if not self.matches(idx, LBrace):
-            raise self.err("Expected '{' after expr in if", self[idx])
+            raise self.err(f"Expected '{{' after expr in if, "
+                           f"got {self[idx].name}", self[idx])
         block, idx = self._parse_block(idx)
         return Node('if_cond', self.tok_region(start, idx),
                     None, [cond, block]), idx
@@ -333,7 +339,8 @@ class TreeGen:
         idx += 2
         cond, idx = self._parse_expr(idx)
         if not self.matches(idx, LBrace):
-            raise self.err("Expected '{' after expr in else if", self[idx])
+            raise self.err(f"Expected '{{' after expr in else if, "
+                           f"got {self[idx].name}", self[idx])
         block, idx = self._parse_block(idx)
         return Node('elseif_cond', self.tok_region(start, idx),
                     None, [cond, block]), idx
@@ -499,7 +506,7 @@ class TreeGen:
         if isinstance(self[idx], LParToken):
             inner, idx = self._parse_expr(idx + 1)
             idx = self._expect_cls_consume(
-                idx, RParToken, "Expected ')' at end of expr")
+                idx, RParToken, f"Expected ')' at end of expr, got {self[idx].name}")
             return Node('paren', self.tok_region(start, idx), None, [inner]), idx
         return self._parse_atom_or_autocat(idx)
 
@@ -515,7 +522,8 @@ class TreeGen:
         if isinstance(self[idx], DotToken):
             idx += 1
             if not isinstance(self[idx], AttrNameToken):
-                raise self.err("Expected attribute name after '.'", self[idx])
+                raise self.err(f"Expected attribute name after '.', "
+                               f"got {self[idx].name}", self[idx])
             right = Leaf.of(self[idx])
             idx += 1
             return self.node_from_children('getattr', [left, right]), idx
