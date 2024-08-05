@@ -93,6 +93,10 @@ class MyTestCase(unittest.TestCase):
         end = t._t_number(2)
         self.assertTokensEqual(t, [NumberToken(StrRegion(2, 9))])
         self.assertEqual(end, 9)
+        t = Tokenizer('2.')
+        end = t._t_number(0)
+        self.assertTokensEqual(t, [NumberToken(StrRegion(0, 2))])
+        self.assertEqual(end, 2)
 
     def test_tokenize_concat_works(self):
         t = Tokenizer('ab .. "s"')

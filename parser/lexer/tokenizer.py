@@ -296,8 +296,8 @@ class _IncrementalNumberParser(SrcHandler):
     # todo 0x, 0b
     def _parse_digit_seq(self, start: int) -> int | None:
         idx = start
-        if self[idx] not in digits:
-            if self[idx] == '_':
+        if self.get(idx) not in digits:
+            if self.get(idx) == '_':
                 raise self.err("Can't have '_' at the start of a number", idx)
             return None
         idx += 1
