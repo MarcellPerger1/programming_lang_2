@@ -38,9 +38,12 @@ class TreeGenTest(SnapshotTestCase):
         t.parse()
 
     @unittest.expectedFailure  # # TODO!!!!!!!!! I have forgotten about '%' !!!
-    def test__mode_supported(self):
+    def test__mod_supported(self):
         # TODO: check output
-        self.assertValidParse(f'c=a%b;')
+        self.assertValidParse('c=a%b;')
+
+    def test_decl_no_value(self):
+        self.assertValidParse('let b;')
 
 
 class TreeGenEofTest(SnapshotTestCase):
@@ -69,7 +72,6 @@ class TreeGenEofTest(SnapshotTestCase):
     def test__at_decl_item_begin(self):
         self.assertFailsGracefully('let')
 
-    @unittest.expectedFailure  # TODO fix this
     def test__at_decl_item_could_be_eq(self):
         self.assertFailsGracefully('let a')
 

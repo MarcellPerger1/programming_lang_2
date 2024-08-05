@@ -181,7 +181,6 @@ class TreeGen:
         #            ^
         # 2. global a=..., b;
         #            ^
-        value: AnyNode | None = None
         if self.matches(idx, OpM('=')):
             # case 2
             idx += 1
@@ -189,8 +188,10 @@ class TreeGen:
             if not isinstance(self.get(idx), (SemicolonToken, CommaToken)):
                 raise self.err(f"Expected ';' or ',' after decl_item,"
                                f" got {self[idx].name}", self[idx])
-        glob = Node('decl_item', self.tok_region(start, idx),
-                    None, [ident, value])
+            children = [ident, value]
+        else:
+            children = [ident]
+        glob = Node('decl_item', self.tok_region(start, idx), None, children)
         return glob, idx
 
     def _parse_define(self, start: int) -> tuple[AnyNode, int]:
@@ -399,6 +400,8 @@ class TreeGen:
         elif isinstance(msg, str):
             msg = self.err(msg, self[idx])
         raise msg from reason
+
+    # TODO: maybe add a brk_reason to _parse_expr like 'unrecognized token %'
 
     r"""
     Basic grammar:
