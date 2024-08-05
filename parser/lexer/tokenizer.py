@@ -341,7 +341,9 @@ class _IncrementalNumberParser(SrcHandler):
             # or maybe raise an error?
             # abc.e definitely doesn't contain a number
             # but it *could* reach here to check if it's a number
-            return None
+            #   \- Note from later: it doesn't.
+            # return None
+            raise self.err("Number cannot be a single '.' (expected digits before or after", idx)
         return idx
 
     def _parse_number(self, start: int):
