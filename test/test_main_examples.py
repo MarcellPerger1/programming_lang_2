@@ -13,6 +13,7 @@ class TestMain(unittest.TestCase):
             self.addCleanup(lambda : os.chdir(self.old_dir))
 
     def test(self):
+        # TODO: main really shouldn't print the entire CST of a 70+ line file to stout
         main()  # TODO: add some sort of snapshot for main?
 
 

@@ -50,6 +50,12 @@ class BaseLocatedError(BaseParseError):
         self.region = region
         self._has_added_note = False
 
+    def __getnewargs__(self):
+        # TODO: maybe also send the traceback (Although Python displays it anyway)
+        # Pickle is a bit stupid, dunno why? so need to tell it the new args.
+        # But multiprocessing pickle is INSANE! Bro can send over sockets!
+        return self.msg, self.region, self._src_text
+
     def compute_location(self):
         if self._has_added_note:
             return
