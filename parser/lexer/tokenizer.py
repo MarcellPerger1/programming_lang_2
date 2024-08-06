@@ -170,6 +170,7 @@ class Tokenizer(SrcHandler):
         return tokens[-1].region.end
 
     def startswith(self, start: int, s: str):
+        assert not self.eof(start), "You probably shouldn't try to startswith after EOF"
         return self[start: start + len(s)].startswith(s)
 
     def _t_space(self, start: int):
@@ -195,8 +196,10 @@ class Tokenizer(SrcHandler):
         if not self.startswith(idx, '/*'):
             return start
         idx += 2
-        while not self.startswith(idx, '*/'):
+        while not self.eof(idx) and not self.startswith(idx, '*/'):
             idx += 1
+        if self.eof(idx):
+            raise self.err("Unterminated block comment", StrRegion(start, idx))
         idx += 2  # include '*/' in comment
         return self.add_token(BlockCommentToken(StrRegion(start, idx)))
 
