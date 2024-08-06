@@ -46,6 +46,14 @@ class FuzzerTimeoutTestCase(unittest.TestCase):
     def test_a32460d584fd8a20d1e62007db570eaf41342f248e42c21a33780fd976e45290(self):
         self.inner_a32460d584fd8a20d1e62007db570eaf41342f248e42c21a33780fd976e45290()
 
+    @staticmethod
+    @timeout_decor(5, debug=0)
+    def inner_ed988ae940f54542ec54fd3c402a009fe2fdb660bd558d76a3612781a5ef6aa2():
+        return FuzzerTimeoutTestCase.raiseInternalErrorOrNone('a<//')
+
+    def test_ed988ae940f54542ec54fd3c402a009fe2fdb660bd558d76a3612781a5ef6aa2(self):
+        self.inner_ed988ae940f54542ec54fd3c402a009fe2fdb660bd558d76a3612781a5ef6aa2()
+
 
 if __name__ == '__main__':
     unittest.main()
