@@ -187,7 +187,7 @@ class Tokenizer(SrcHandler):
         if not self.startswith(idx, '//'):
             return start
         idx += 2
-        while self.get(idx) != '\n':
+        while not self.eof(idx) and self.get(idx) != '\n':
             idx += 1
         return self.add_token(LineCommentToken(StrRegion(start, idx)))
 

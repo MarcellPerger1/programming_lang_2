@@ -49,6 +49,7 @@ class FuzzerTimeoutTestCase(unittest.TestCase):
     @staticmethod
     @timeout_decor(5, debug=0)
     def inner_ed988ae940f54542ec54fd3c402a009fe2fdb660bd558d76a3612781a5ef6aa2():
+        TreeGen(Tokenizer('a;//')).parse()
         return FuzzerTimeoutTestCase.raiseInternalErrorOrNone('a<//')
 
     def test_ed988ae940f54542ec54fd3c402a009fe2fdb660bd558d76a3612781a5ef6aa2(self):
