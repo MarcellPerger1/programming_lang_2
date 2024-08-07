@@ -17,7 +17,7 @@ multiprocessing.set_start_method = new_ssm  # Monkey-patch
 # to
 # execs_per_second = int(self._executions_in_sample / (endTime - self._last_sample_time or 0.000001))
 
-from pythonfuzz.main import PythonFuzz
+from pythonfuzz.fuzzer import Fuzzer
 
 from parser.lexer.tokenizer import Tokenizer
 from parser.cst.treegen import TreeGen
@@ -36,8 +36,8 @@ def fuzz(buf):
 
 
 # pickling errors... (old func would be inaccessible using decorator)
-fuzz2 = PythonFuzz(fuzz)
+fuzzer = Fuzzer(fuzz, dirs=['./pythonfuzz_corpus'], timeout=30)
 
 
 if __name__ == '__main__':
-    fuzz2()
+    fuzzer.start()

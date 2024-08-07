@@ -4,6 +4,9 @@ _exclude/
 
 # pythonfuzz output
 crashes/
+# Not sure if it's a good idea to include this - useful to use in CI (nut generated)
+# so include in .gitattributes as linguist-generated
+# pythonfuzz_corpus/
 
 # Created by https://www.toptal.com/developers/gitignore/api/python,pycharm,windows,linux
 # Edit at https://www.toptal.com/developers/gitignore?templates=python,pycharm,windows,linux
