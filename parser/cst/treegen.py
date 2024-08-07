@@ -619,18 +619,18 @@ class TreeGen:
         first, idx = self._parse_cat(idx)
         parts = [first]
         while self.match_ops(idx, COMPARISONS):
-            op = cast(OpToken, self[idx]).op_str
+            op_tok = cast(OpToken, self[idx])
             idx += 1
             curr, idx = self._parse_cat(idx)
-            parts += [op, curr]
+            parts += [op_tok, curr]
         if len(parts) == 1:
             return parts[0], idx
         assert len(parts) % 2 == 1
         if len(parts) > 3:
             # TODO: chained comparisons
             raise self.err("Chaining comparisons is not yet supported", parts[3])
-        left, op, right = parts
-        return self.node_from_children(op, [left, right]), idx
+        left, op_tok, right = parts
+        return self.node_from_children(op_tok.op_str, [left, right]), idx
 
     def _parse_and_bool(self, idx: int):
         curr, idx = self._parse_comp(idx)
@@ -660,6 +660,7 @@ class TreeGen:
             if isinstance(loc, StrRegion):
                 regs.append(loc)
             else:
+                assert not isinstance(loc, str)
                 regs.append(cls.region_union(*loc))
         return StrRegion.union(*regs)
 

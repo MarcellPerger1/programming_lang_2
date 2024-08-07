@@ -20,6 +20,10 @@ class FuzzerCrashTestCase(unittest.TestCase):
         self.assertNotInternalError('. ')
         self.assertNotInternalError('.')
 
+    def test_62428fae4dba4c7722b8d7e1b8ad7bbe7a01ac1603e4421d42df7e0c0ad70f85(self):
+        self.assertNotInternalError('!W>W>W9Jd')
+        self.assertNotInternalError('!W>W>W9Jd\x1e')
+
 
 class FuzzerTimeoutTestCase(unittest.TestCase):
     def assertNotInternalError(self, src: str):
