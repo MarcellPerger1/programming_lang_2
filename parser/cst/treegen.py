@@ -75,7 +75,6 @@ class TreeGen:
         idx = 0
         smts = []
         while not self.eof(idx) and not self.matches(idx, EofToken):
-            # todo what if eof in a _parse_* function?
             smt, idx = self._parse_smt(idx)
             smts.append(smt)
         node = Node('program', self.tok_region(0, idx), None, smts)

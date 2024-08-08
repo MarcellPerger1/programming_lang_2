@@ -208,7 +208,7 @@ class TreeGenEofTest(SnapshotTestCase):
         self.assertFailsGracefully('a[b]')
 
     def test__basic_chain_rsqb_empty(self):
-        self.assertFailsGracefully('a[]')  # TODO: check that expt '[]' give syntax error
+        self.assertFailsGracefully('a[]')
 
     def test__basic_chain_call_lpar(self):
         self.assertFailsGracefully('a(')
