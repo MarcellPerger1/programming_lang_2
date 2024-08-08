@@ -298,7 +298,7 @@ class Tokenizer(SrcHandler):
 class _IncrementalNumberParser(SrcHandler):
     default_err_type = LocatedMalformedNumberError
 
-    # todo 0x, 0b
+    # todo 0x, 0b (I refuse to add octal literals) - also hex floats???
     def _parse_digit_seq(self, start: int) -> int | None:
         idx = start
         if self.get(idx) not in digits:

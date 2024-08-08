@@ -274,30 +274,26 @@ class TreeGen:
         idx += 1
         return Node('block', self.tok_region(start, idx), None, smts), idx
 
-    # TODO: while, repeat, if_cond are (almost) the same
-    def _parse_while(self, start: int) -> tuple[AnyNode, int]:
+    def _parse_block_with_header(self, start: int, name: str,
+                                 display: str = None, kwd: str = None) -> tuple[AnyNode, int]:
+        display = display or name  # default to same as node name
+        kwd = kwd or name
         idx = start
-        assert self.matches(idx, KwdM('while'))
+        assert self.matches(idx, KwdM(kwd))
         idx += 1
-        cond, idx = self._parse_expr(idx)
+        expr, idx = self._parse_expr(idx)
         if not self.matches(idx, LBrace):
-            raise self.err(f"Expected '{{' after expr in while, "
+            raise self.err(f"Expected '{{' after expr in {display}, "
                            f"got {self[idx].name}", self[idx])
         block, idx = self._parse_block(idx)
-        return Node('while', self.tok_region(start, idx),
-                    None, [cond, block]), idx
+        return Node(name, self.tok_region(start, idx),
+                    None, [expr, block]), idx
+
+    def _parse_while(self, start: int) -> tuple[AnyNode, int]:
+        return self._parse_block_with_header(start, 'while')
 
     def _parse_repeat(self, start: int) -> tuple[AnyNode, int]:
-        idx = start
-        assert self.matches(idx, KwdM('repeat'))
-        idx += 1
-        amount, idx = self._parse_expr(idx)
-        if not self.matches(idx, LBrace):
-            raise self.err(f"Expected '{{' after expr in repeat, "
-                           f"got {self[idx].name}", self[idx])
-        block, idx = self._parse_block(idx)
-        return Node('repeat', self.tok_region(start, idx),
-                    None, [amount, block]), idx
+        return self._parse_block_with_header(start, 'repeat')
 
     def _parse_if(self, start: int) -> tuple[AnyNode, int]:
         idx = start
@@ -320,16 +316,7 @@ class TreeGen:
                     None, [if_part, *elseif_parts, else_part]), idx
 
     def _parse_if_cond(self, start: int) -> tuple[AnyNode, int]:
-        idx = start
-        assert self.matches(idx, KwdM('if'))
-        idx += 1
-        cond, idx = self._parse_expr(idx)
-        if not self.matches(idx, LBrace):
-            raise self.err(f"Expected '{{' after expr in if, "
-                           f"got {self[idx].name}", self[idx])
-        block, idx = self._parse_block(idx)
-        return Node('if_cond', self.tok_region(start, idx),
-                    None, [cond, block]), idx
+        return self._parse_block_with_header(start, name='if_cond', display='if', kwd='if')
 
     def _parse_elseif(self, start: int) -> tuple[AnyNode, int]:
         idx = start
