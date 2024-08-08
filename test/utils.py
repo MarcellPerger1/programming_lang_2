@@ -2,8 +2,10 @@ from __future__ import annotations
 
 import functools
 import multiprocessing as mp
+import os
 import time
 import unittest
+from pathlib import Path
 from typing import overload, TYPE_CHECKING, TypeVar, Protocol
 from unittest.util import safe_repr
 
@@ -132,3 +134,20 @@ class TestCaseUtils(unittest.TestCase):
         standard_msg = (f'{safe_repr(value)} is not between'
                         f' {safe_repr(lo)} and {safe_repr(hi)}')
         self.fail(self._formatMessage(msg, standard_msg))
+
+    @staticmethod
+    def isProperCwdSet():
+        return Path('./.github/workflows').exists()
+
+    def setProperCwd(self):
+        """Sets the working directory to the project root (if it isn't set already)"""
+        if self.isProperCwdSet():
+            return
+        self._old_cwd = os.getcwd()
+        dirname = Path(__file__).parent
+        os.chdir(dirname.parent)
+        assert self.isProperCwdSet()
+        self.addCleanup(self.resetCwd)
+
+    def resetCwd(self):
+        os.chdir(self._old_cwd)
