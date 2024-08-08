@@ -7,14 +7,17 @@ from parser.error import BaseParseError
 from test.utils import timeout_decor
 
 
-class FuzzerCrashTestCase(unittest.TestCase):
-    """Tests for crashes caught by pythonfuzz"""
-
+class BaseFuzzerTestCase(unittest.TestCase):
     def assertNotInternalError(self, src: str):
         try:
             TreeGen(Tokenizer(src)).parse()
         except BaseParseError:
-            pass
+            self.assertTrue(True)
+        self.assertTrue(True)
+
+
+class FuzzerCrashTestCase(BaseFuzzerTestCase):
+    """Tests for crashes caught by pythonfuzz"""
 
     def test_3610f59833246958fff7d5cbc5b23f8c99496c3c8fda3f5606f5b198713cbb95(self):
         self.assertNotInternalError('. ')
@@ -25,12 +28,8 @@ class FuzzerCrashTestCase(unittest.TestCase):
         self.assertNotInternalError('!W>W>W9Jd\x1e')
 
 
-class FuzzerTimeoutTestCase(unittest.TestCase):
-    def assertNotInternalError(self, src: str):
-        try:
-            TreeGen(Tokenizer(src)).parse()
-        except BaseParseError:
-            pass
+class FuzzerTimeoutTestCase(BaseFuzzerTestCase):
+    """Tests for timeouts caught by pythonfuzz"""
 
     @staticmethod
     def raiseInternalErrorOrNone(src: str):
@@ -42,6 +41,8 @@ class FuzzerTimeoutTestCase(unittest.TestCase):
             raise ex
         return None
 
+    # We need extra inner methods that MUST be static so that the unpicklable
+    # TestCase object isn't passed to the other process as the self value
     @staticmethod
     @timeout_decor(5, debug=0)
     def inner_a32460d584fd8a20d1e62007db570eaf41342f248e42c21a33780fd976e45290():

@@ -3,9 +3,9 @@ import unittest
 from parser.lexer.tokenizer import Tokenizer
 from parser.operators import BINARY_OPS
 from parser.cst.treegen import TreeGen, CstParseError, LocatedCstError
-from parser.cst.tree_print import tprint
 
 from test.snapshottest import SnapshotTestCase
+from test.utils import TestCaseUtils
 
 
 class TreeGenTest(SnapshotTestCase):
@@ -31,13 +31,7 @@ class TreeGenTest(SnapshotTestCase):
         self.assertTreeMatchesSnapshot('let b;')
 
 
-class TestTreeGenErrors(SnapshotTestCase):
-    # Typing this would be way too complex (a:LE | b:GE) & (b:LE | c: GE) if incl
-    # TODO: extract into own separate utils class
-    def assertBetweenIncl(self, lo, hi, value):
-        self.assertGreaterEqual(value, lo, f"{value} is not between {lo} and {hi} (incl.)")
-        self.assertLessEqual(value, hi, f"{value} is not between {lo} and {hi} (incl.)")
-
+class TestTreeGenErrors(SnapshotTestCase, TestCaseUtils):
     def test_empty_sqb_error(self):
         with self.assertRaises(LocatedCstError) as err:
             TreeGen(Tokenizer('v=a[]+b')).parse()

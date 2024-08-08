@@ -4,16 +4,12 @@ from typing import Iterable, Container, Any
 from test.snapshottest import SnapshotTestCase
 from parser.lexer import Tokenizer
 from parser.cst.treegen import CstGen, LocatedCstError
+from test.utils import TestCaseUtils
 
 
-class MyTestCase(SnapshotTestCase):
+class MyTestCase(SnapshotTestCase, TestCaseUtils):
     def assertContains(self, container: Iterable | Container, member: Any, msg=None):
         self.assertIn(member, container, msg)
-
-    # Typing this would be way too complex (a:LE | b:GE) & (b:LE | c: GE) if incl
-    def assertBetweenIncl(self, lo, hi, value):
-        self.assertGreaterEqual(value, lo)
-        self.assertLessEqual(value, hi)
 
     def test_error_empty_assign_source(self):
         t = Tokenizer('let a= ;').tokenize()
