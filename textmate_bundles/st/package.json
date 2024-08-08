@@ -1,0 +1,29 @@
+{
+  "name": "st",
+  "version": "1.0.0",
+  "description": "A Textmate bundle?",
+  "license": "MIT",
+  "contributes": {
+    "languages": [
+      {
+        "id": "st",
+        "extensions": [
+          ".st"
+        ],
+        "aliases": [
+          "st",
+          "ST",
+          "ScratchText"
+        ],
+        "configuration": "./language-configuration.json"
+      }
+    ],
+    "grammars": [
+      {
+        "language": "st",
+        "scopeName": "source.st",
+        "path": "./syntaxes/st.tmLanguage.json"
+      }
+    ]
+  }
+}
