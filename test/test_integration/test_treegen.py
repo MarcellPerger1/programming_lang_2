@@ -1,4 +1,3 @@
-import traceback
 import unittest
 
 from parser.lexer.tokenizer import Tokenizer
@@ -16,14 +15,12 @@ class TreeGenTest(SnapshotTestCase):
         tk = Tokenizer('a[7].b.0.fn["c" .. 2] = fn(9).k[7 + r](3,);')
         t = TreeGen(tk)
         t.parse()
-        tprint(t.result)
         self.assertMatchesSnapshot(t.result)
 
     def test_fn_call_in_lvalue(self):
         tk = Tokenizer('a(7).b.0.fn()["c" .. 2] = fn(9).k[7 + r](3,);')
         t = TreeGen(tk)
         t.parse()
-        tprint(t.result)
         self.assertMatchesSnapshot(t.result)
 
     def test_aug_assign(self):
@@ -38,7 +35,6 @@ class TreeGenTest(SnapshotTestCase):
         t = TreeGen(Tokenizer(src))
         t.parse()
 
-    @unittest.expectedFailure  # # TODO!!!!!!!!! I have forgotten about '%' !!!
     def test__mod_supported(self):
         # TODO: check output
         self.assertValidParse('c=a%b;')
@@ -58,7 +54,6 @@ class TestTreeGenErrors(SnapshotTestCase):
         with self.assertRaises(LocatedCstError) as err:
             TreeGen(Tokenizer('v=a[]+b')).parse()
         exc = err.exception
-        traceback.print_exception(None, value=exc, tb=None)
         self.assertBetweenIncl(3, 4, exc.region.start)
         self.assertEqual(4, exc.region.end - 1)
 

@@ -432,7 +432,7 @@ class TreeGen:
     '!=' < OP
     
     Unary = '+' | '-' | '!'
-    Mul_Div = '*' | '/'
+    Mul_Div_Mod = '*' | '/' | '%'
     Add_Sub = '+' | '-'
     Comp = '<' | '>' | '<=' | '>=' | '==' | '!='
     
@@ -463,7 +463,7 @@ class TreeGen:
     @grouping:rtl
     pow_or := basic_item ('**' unary_pow_rhs)*       # level 4.2
     unary_or := (Unary)* pow_or                      # level 5
-    mul_div_or := unary_or (Mul_Div unary_or)*       # level 6
+    mul_div_or := unary_or (Mul_Div_Mod unary_or)*   # level 6
     add_sub_or := mul_div_or (Add_Sub mul_div_or)*   # level 7
     cat_or := add_sub_or ('..' add_sub_or)*          # level 8
     @grouping:special
@@ -589,7 +589,7 @@ class TreeGen:
     # TODO these are very similar - unify them?
     def _parse_mul_div(self, idx: int) -> tuple[AnyNode, int]:
         curr, idx = self._parse_unary_or(idx)
-        while self.match_ops(idx, '*', '/'):
+        while self.match_ops(idx, '*', '/', '%'):
             op = cast(OpToken, self[idx]).op_str
             idx += 1
             right, idx = self._parse_unary_or(idx)
@@ -700,7 +700,7 @@ UNARY_VALID_AFTER = (
 #  4.1 **-
 #  4.2 ** (bare)
 #  5. + - ! (unary)
-#  6. * /
+#  6. * / %
 #  7. + -
 #  8. ..
 #  9. == != < > <= >=

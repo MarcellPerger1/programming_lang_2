@@ -98,6 +98,18 @@ class MyTestCase(unittest.TestCase):
         self.assertTokensEqual(t, [NumberToken(StrRegion(0, 2))])
         self.assertEqual(end, 2)
 
+    def test_mod_supported(self):
+        t = Tokenizer('a+b%2')
+        t.tokenize()
+        self.assertTokensEqual(t, [
+            IdentNameToken(StrRegion(0, 1)),
+            OpToken(StrRegion(1, 2), '+'),
+            IdentNameToken(StrRegion(2, 3)),
+            OpToken(StrRegion(3, 4), '%'),
+            NumberToken(StrRegion(4, 5)),
+            EofToken(StrRegion(5, 5))
+        ])
+
     def test_tokenize_concat_works(self):
         t = Tokenizer('ab .. "s"')
         t.tokenize()
