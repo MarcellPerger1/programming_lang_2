@@ -254,7 +254,7 @@ class TreeGenEofTest(SnapshotTestCase):
                 self.assertFailsGracefully(f'a{op}b')
 
     def test__bin_op__success(self):
-        for op in set(BINARY_OPS) - {'%'}:  # TODO: '%' failing
+        for op in set(BINARY_OPS):
             with self.subTest(op=op):
                 self.assertValidParse(f'a{op}b;')
 
