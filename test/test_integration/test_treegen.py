@@ -11,36 +11,24 @@ from test.snapshottest import SnapshotTestCase
 class TreeGenTest(SnapshotTestCase):
     maxDiff = None
 
+    def assertTreeMatchesSnapshot(self, src: str):
+        t = TreeGen(Tokenizer(src))
+        self.assertMatchesSnapshot(t.parse())
+
     def test_item_chain(self):
-        tk = Tokenizer('a[7].b.0.fn["c" .. 2] = fn(9).k[7 + r](3,);')
-        t = TreeGen(tk)
-        t.parse()
-        self.assertMatchesSnapshot(t.result)
+        self.assertTreeMatchesSnapshot('a[7].b.0.fn["c" .. 2] = fn(9).k[7 + r](3,);')
 
     def test_fn_call_in_lvalue(self):
-        tk = Tokenizer('a(7).b.0.fn()["c" .. 2] = fn(9).k[7 + r](3,);')
-        t = TreeGen(tk)
-        t.parse()
-        self.assertMatchesSnapshot(t.result)
+        self.assertTreeMatchesSnapshot('a(7).b.0.fn()["c" .. 2] = fn(9).k[7 + r](3,);')
 
     def test_aug_assign(self):
-        tk = Tokenizer('a[1] += a.2;')
-        t = TreeGen(tk)
-        t.parse()
-        tprint(t.result)
-        self.assertMatchesSnapshot(t.result)
-
-    # noinspection PyMethodMayBeStatic
-    def assertValidParse(self, src: str):
-        t = TreeGen(Tokenizer(src))
-        t.parse()
+        self.assertTreeMatchesSnapshot('a[1] += a.2;')
 
     def test__mod_supported(self):
-        # TODO: check output
-        self.assertValidParse('c=a%b;')
+        self.assertTreeMatchesSnapshot('c=a%b;')
 
     def test_decl_no_value(self):
-        self.assertValidParse('let b;')
+        self.assertTreeMatchesSnapshot('let b;')
 
 
 class TestTreeGenErrors(SnapshotTestCase):
