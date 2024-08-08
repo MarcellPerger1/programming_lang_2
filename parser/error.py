@@ -77,10 +77,13 @@ class BaseLocatedError(BaseParseError):
         self.region = region
         self._has_added_note = False
 
+    # Don't need to send over traceback (for now) as Python prints
+    # all the errors from other processes as well .
+    # (But it would be a nice challenge for when I have time)
+    # (Then again so would a lot of other projects I want to do)
     def __getnewargs__(self):
-        # TODO: maybe also send the traceback (Although Python displays it anyway)
-        # Pickle is a bit stupid, dunno why? so need to tell it the new args.
-        # But multiprocessing pickle is INSANE! Bro can send over sockets!
+        # This function is needed here because pickle is a bit stupid
+        # (dunno why?) so need to tell it the new args.
         return self.msg, self.region, self._src_text
 
     def compute_location(self):
