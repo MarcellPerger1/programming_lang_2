@@ -223,6 +223,8 @@ class Tokenizer(SrcHandler):
             if self[idx] == q_type:
                 idx += 1
                 return self.add_token(StringToken(StrRegion(start, idx)))
+            # TODO: maybe somehow attach the escapes to the Token
+            #  so it doesn't need to be parsed again
             if self[idx] == '\\':
                 # 1 for the '\', 1 for the next char
                 idx += 2

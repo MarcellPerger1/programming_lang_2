@@ -111,8 +111,6 @@ class TreeGen:
             #  but this could/will change in the future
             #  although it may be better not to deal with it here
             #  and instead do a post-processing step
-            # TODO: maybe include ';' in the inner - but why?
-            #  Need an smt type which also includes the ';'
             smt, idx = self._parse_expr_or_assign(idx)
         return smt, idx
 
@@ -120,7 +118,7 @@ class TreeGen:
         expr_or_lvalue, idx = self._parse_expr(idx)
         if isinstance(self[idx], SemicolonToken):
             idx += 1
-            return expr_or_lvalue, idx  # TODO: maybe have a smt node?
+            return expr_or_lvalue, idx
         elif op := self.match_ops(idx, ASSIGN_OPS):
             # TODO multiple assignment?
             idx += 1
