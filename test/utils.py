@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import asyncio
 import functools
 import multiprocessing as mp
 import os
@@ -74,6 +75,40 @@ def run_with_timeout(timeout_sec: int, fn, args, kwargs, debug=0):
     return dest.get()
 
 
+async def join_async(p, timeout: float, interval: float = 0.005, join_timeout: float = 0.0):
+    start = time.perf_counter()
+    while p.is_alive() and time.perf_counter() < start + timeout:
+        await asyncio.sleep(interval)
+        p.join(join_timeout)
+
+
+async def run_with_timeout_async(timeout_sec: int, fn, args, kwargs,
+                                 debug=0, interval=0.005):
+    """fn must be pickleable and a regular function **not** coroutine!
+
+    debug:
+      - 0: normal
+      - 1: print pid on start
+      - 2: also wait 15s in process to allow time to 'Attach to Process' in Pycharm """
+    dest = mp.Queue()
+    # The daemon's main purpose is to stop ourselves accidentally creating a fork-bomb
+    #  by running run_with_timeout in the worker recursively
+    #  (we do weird stuff to get pickle to work which might break?).
+    # This is because daemonic processes cannot spawn more processes (even daemonic ones).
+    # The worker exiting when we get a Ctrl+C is just an added (but necessary) bonus.
+    p = mp.Process(target=_worker, args=(fn, dest, args, kwargs, debug), daemon=True)
+    p.start()
+    if debug >= 1:
+        print(f'Worker process running on pid={p.pid}.')
+    await join_async(p, timeout_sec, interval)
+    if p.is_alive():
+        p.kill()  # Die!
+        raise TestTimeout(f"Function took too long (exceeded timeout of {timeout_sec}s)")
+    if p.exitcode != 0:
+        raise mp.ProcessError("Error in process") from dest.get()
+    return dest.get()
+
+
 def timeout_decor(timeout_sec: int, debug=0):
     def decor(fn):
         # This will be used as a decorator e.g.
@@ -85,6 +120,24 @@ def timeout_decor(timeout_sec: int, debug=0):
         def new_fn(*args, **kwargs):
             return run_with_timeout(
                 timeout_sec, _PickleWrapper(outer_func=new_fn), args, kwargs, debug)
+        new_fn._timeout_sec_ = timeout_sec
+        new_fn._orig_fn_ = fn
+        return new_fn
+    return decor
+
+
+def timeout_decor_async(timeout_sec: int, debug=0, interval=0.005):
+    def decor(fn):
+        # This will be used as a decorator e.g.
+        # @timeout_decor(10)
+        # def foo(): ...
+        # Let's call the actual inner function `foo:orig` and the wrapped one `foo:new`.
+        # So if we try to pickle `foo:orig`, it will try to save_global
+        @functools.wraps(fn)
+        async def new_fn(*args, **kwargs):
+            return await run_with_timeout_async(
+                timeout_sec, _PickleWrapper(outer_func=new_fn), args, kwargs,
+                debug, interval)
         new_fn._timeout_sec_ = timeout_sec
         new_fn._orig_fn_ = fn
         return new_fn
