@@ -1,5 +1,9 @@
 import multiprocessing
 
+from parser.lexer.tokenizer import Tokenizer
+from parser.cst.treegen import TreeGen
+from parser.error import BaseParseError
+
 orig_ssm = multiprocessing._set_start_method = multiprocessing.set_start_method
 
 
@@ -8,20 +12,16 @@ def new_ssm(m: str):
         orig_ssm(m)
 
 
-multiprocessing.set_start_method = new_ssm  # Monkey-patch
+multiprocessing.set_start_method = new_ssm  # Monkey-patch it to make pythonfuzz work
 
 
 # TODO: make this work on CI?
 # To get ths to work (Win11): Change
 # execs_per_second = int(self._executions_in_sample / (endTime - self._last_sample_time))
 # to
-# execs_per_second = int(self._executions_in_sample / (endTime - self._last_sample_time or 0.000001))
+# execs_per_second = int(self._executions_in_sample / (endTime - self._last_sample_time or 0.000001))  # noqa (line length)
 
-from pythonfuzz.fuzzer import Fuzzer
-
-from parser.lexer.tokenizer import Tokenizer
-from parser.cst.treegen import TreeGen
-from parser.error import BaseParseError
+from pythonfuzz.fuzzer import Fuzzer  # noqa (import too low down)
 
 
 def fuzz(buf):
