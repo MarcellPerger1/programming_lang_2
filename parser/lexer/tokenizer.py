@@ -5,17 +5,18 @@ from io import StringIO
 from string import ascii_letters, digits
 from typing import TYPE_CHECKING, IO, Sequence
 
-from parser.error import BaseParseError, BaseLocatedError
-from parser.operators import OPS_SET, MAX_OP_LEN, OP_FIRST_CHARS
-from parser.str_region import StrRegion
-from parser.tokens import (
+from .tokens import (
     Token, WhitespaceToken, LineCommentToken, BlockCommentToken, NumberToken,
     StringToken, CommaToken, DotToken, OpToken, PAREN_TYPES,
     SemicolonToken, AttrNameToken, IdentNameToken,
     GETATTR_VALID_AFTER_CLS, EofToken
 )
+from ..error import BaseParseError, BaseLocatedError
+from ..operators import OPS_SET, MAX_OP_LEN, OP_FIRST_CHARS
+from ..str_region import StrRegion
+
 if TYPE_CHECKING:
-    from parser.tokens import ParenTokenT
+    from .tokens import ParenTokenT
 
 IDENT_START = ascii_letters + '_'
 IDENT_CONT = IDENT_START + digits

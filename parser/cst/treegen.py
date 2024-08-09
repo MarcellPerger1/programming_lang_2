@@ -2,13 +2,13 @@ from __future__ import annotations
 
 from typing import (TypeVar, cast, TypeAlias, Sequence, overload)
 
-from parser.cst.token_matcher import OpM, KwdM, Matcher, PatternT
 from parser.error import BaseParseError, BaseLocatedError
 from parser.lexer import Tokenizer
 from parser.operators import UNARY_OPS, COMPARISONS, ASSIGN_OPS
 from parser.str_region import StrRegion
 from parser.tokens import *
 from parser.tree_node import Node, Leaf, AnyNode
+from .token_matcher import OpM, KwdM, Matcher, PatternT
 
 DT = TypeVar('DT')
 ET = TypeVar('ET')
