@@ -4,7 +4,7 @@ from dataclasses import dataclass, field
 from enum import Enum
 from typing import Union, Callable, TYPE_CHECKING
 
-from parser.str_region import StrRegion
+from ..str_region import StrRegion
 
 __all__ = [
     'AnyCommentToken', 'AnyNameToken', 'AttrNameToken', 'BlockCommentToken',

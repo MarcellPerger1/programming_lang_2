@@ -6,7 +6,7 @@ import traceback
 from dataclasses import replace as d_replace
 from typing import Sequence
 
-from parser.str_region import StrRegion
+from .str_region import StrRegion
 
 
 # We unconditionally add this polyfill to ensure that

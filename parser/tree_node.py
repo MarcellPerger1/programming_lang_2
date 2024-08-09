@@ -3,10 +3,10 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 from typing import TYPE_CHECKING
 
-from parser.str_region import StrRegion
+from .str_region import StrRegion
 
 if TYPE_CHECKING:
-    from parser.tokens import Token
+    from .tokens import Token
 
 
 @dataclass
