@@ -1,5 +1,4 @@
 import asyncio
-import time
 import unittest
 from pathlib import Path
 
@@ -45,7 +44,8 @@ class FuzzerCorpusTestCases(unittest.IsolatedAsyncioTestCase, TestCaseUtils):
         with self.subTest(corp=p.name):
             with open(p, encoding='cp1252') as f:
                 src = f.read()
-            await self._inner_once(src)
+            # noinspection PyUnresolvedReferences
+            await self._inner_once(src)  # Pycharm doesn't understand decorators
 
     async def test(self):
         import cProfile
