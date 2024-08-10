@@ -37,60 +37,22 @@ class FuzzerCorpusTestCases(unittest.IsolatedAsyncioTestCase, TestCaseUtils):
     # We need extra inner methods that MUST be static so that the unpicklable
     # TestCase object isn't passed to the other process as the self value
     @staticmethod
-    @timeout_decor_async(5, debug=0)
+    @timeout_decor_async(5, debug=0, pool=True)
     def _inner_once(src: str):
         return FuzzerTimeoutTestCase.raiseInternalErrorOrNone(src)
 
-    async def _test_once_inner(self, corp: Path):
-        with open(corp) as f:
-            src = f.read()
-        await self._inner_once(src)  # TODO: Pycharm!!!!
-
     async def _test_once(self, p: Path):
         with self.subTest(corp=p.name):
-            await self._test_once_inner(p)
+            with open(p) as f:
+                src = f.read()
+            await self._inner_once(src)
 
     async def test(self):
-        await asyncio.gather(*[
-            self._test_once(p) for p in Path('./pythonfuzz_corpus').iterdir()])
-
-
-# class FuzzerCorpusTestCasesSync(TestCaseUtils):
-#     def setUp(self):
-#         self.setProperCwd()
-#
-#     @staticmethod
-#     def raiseInternalErrorOrNone(src: str):
-#         try:
-#             TreeGen(Tokenizer(src)).parse()
-#         except BaseParseError:
-#             return None
-#         except Exception as ex:
-#             raise ex
-#         return None
-#
-#     # We need extra inner methods that MUST be static so that the unpicklable
-#     # TestCase object isn't passed to the other process as the self value
-#     @staticmethod
-#     @timeout_decor(5, debug=0)
-#     def _inner_once(src: str):
-#         return FuzzerTimeoutTestCase.raiseInternalErrorOrNone(src)
-#
-#     def _test_once_inner(self, corp: Path):
-#         t0 = time.perf_counter()
-#         with open(corp) as f:
-#             src = f.read()
-#         self._inner_once(src)
-#         t1 = time.perf_counter()
-#         print(f'{1000 * (t1 - t0):.1f}ms')
-#
-#     def _test_once(self, p: Path):
-#         with self.subTest(corp=p.name):
-#             self._test_once_inner(p)
-#
-#     def test(self):
-#         for p in Path('./pythonfuzz_corpus').iterdir():
-#             self._test_once(p)
+        import cProfile
+        with cProfile.Profile() as p:
+            await asyncio.gather(*[
+                self._test_once(p) for p in Path('./pythonfuzz_corpus').iterdir()])
+        p.dump_stats('./prof_mp_slow_test.prof')
 
 
 class FuzzerCrashTestCase(BaseFuzzerTestCase):
