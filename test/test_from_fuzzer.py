@@ -43,7 +43,7 @@ class FuzzerCorpusTestCases(unittest.IsolatedAsyncioTestCase, TestCaseUtils):
 
     async def _test_once(self, p: Path):
         with self.subTest(corp=p.name):
-            with open(p) as f:
+            with open(p, encoding='cp1252') as f:
                 src = f.read()
             await self._inner_once(src)
 

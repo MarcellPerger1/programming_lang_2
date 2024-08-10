@@ -1,16 +1,12 @@
 from __future__ import annotations
 
 import asyncio
-import concurrent.futures as cf
-import ctypes
 import functools
 import multiprocessing as mp
 import multiprocessing.pool
 import multiprocessing.managers
 import os
 import queue
-import signal
-import threading
 import time
 import unittest
 from dataclasses import dataclass
@@ -90,111 +86,10 @@ async def join_async(p, timeout: float, interval: float = 0.005, join_timeout: f
         p.join(join_timeout)
 
 
-# TODO: make class for this async stuff
-# async def _run_in_new_process(target, args, timeout: float, interval: float = 0.005):
-#     # The daemon's main purpose is to stop ourselves accidentally creating a fork-bomb
-#     #  by running run_with_timeout in the worker recursively
-#     #  (we do weird stuff to get pickle to work which might break?).
-#     # This is because daemonic processes cannot spawn more processes (even daemonic ones).
-#     # The worker exiting when we get a Ctrl+C is just an added (but necessary) bonus.
-#     p = mp.Process(target=target, args=args, daemon=True)
-#     p.start()
-#     await join_async(p, timeout, interval)
-#     if p.is_alive():
-#         p.kill()  # Die!
-#         raise TestTimeout(f"Function took too long (exceeded timeout of {timeout}s)")
-#     return p
-
-
-# class _OutcomeType(StrEnum):
-#     RUNNING = 'running'
-#     SUCCESS = 'success'
-#     ERROR = 'error'
-#     TIMEOUT = 'timeout'
-#
-#     def is_finished(self):
-#         return self != _OutcomeType.RUNNING
-
-
-# @dataclass
-# class _Outcome:
-#     _outcome_type: _OutcomeType = d_field(init=False, default=_OutcomeType.RUNNING)
-#     _exc: BaseException | None = d_field(init=False, default=None)
-#     _value: object | None = d_field(init=False, default=None)
-#
-#     def is_finished(self):
-#         return self._outcome_type.is_finished()
-#
-#     @property
-#     def value(self):
-#         assert self._outcome_type == _OutcomeType.SUCCESS
-#         return self._value
-#
-#     @value.setter
-#     def value(self, value: object):
-#         assert self._outcome_type == _OutcomeType.RUNNING
-#         self._value = value
-#         self._outcome_type = _OutcomeType.SUCCESS
-#
-#     def set_value(self, value: object):
-#         self.value = value
-#
-#     @property
-#     def exc(self):
-#         assert self._outcome_type == _OutcomeType.ERROR
-#         return self._exc
-#
-#     @exc.setter
-#     def exc(self, exc: BaseException):
-#         assert self._outcome_type == _OutcomeType.RUNNING
-#         self._exc = exc
-#         self._outcome_type = _OutcomeType.SUCCESS
-#
-#     def set_exc(self, exc: BaseException):
-#         self.exc = exc
-#
-#     @property
-#     def state(self):
-#         return self._outcome_type
-#
-#     def set_timed_out(self):
-#         assert self._outcome_type == _OutcomeType.RUNNING
-#         self._outcome_type = _OutcomeType.TIMEOUT
-#
-#     @classmethod
-#     def from_exc(cls, exc: BaseException):
-#         self = cls()
-#         self.set_exc(exc)
-#         return self
-#
-#     @classmethod
-#     def from_value(cls, value: object):
-#         self = cls()
-#         self.set_value(value)
-#         return self
-
-
 def _pool_worker(send_my_pid: mp.managers.ValueProxy[int], fn, args, kwargs, debug):
     send_my_pid.set(os.getpid())  # Send it so main process knows what to kill
     return fn(*args, **kwargs)  # No exception handling - pool does it for us
 
-
-# async def _run_with_timeout_async_pool(pool: mp.pool.Pool, timeout: float, target,
-#                                        args=(), kwargs=None, debug=0):
-#     m: mp.managers.SyncManager = mp.Manager()
-#     send_your_pid = m.Value(ctypes.c_uint64, 0)
-#     fut = cf.Future()  # We aren't meant to use this apparently but we NEED to be thread-safe
-#     pool.apply_async(
-#         _pool_worker, (send_your_pid, target, args, kwargs or {}, debug), {},
-#         fut.set_result, fut.set_exception)
-#     try:
-#         return await asyncio.wait_for(asyncio.wrap_future(fut), timeout)
-#     except asyncio.TimeoutError:
-#         child_pid = send_your_pid.get()
-#         os.kill(child_pid, signal.SIGTERM)
-#         raise TestTimeout(f"Function took too long (exceeded timeout of {timeout}s)")
-#     except Exception as e:
-#         raise mp.ProcessError("Error in process") from e
 
 def _pool_worker_2(fn, args, kwargs, debug=0):
     if debug >= 1:
@@ -235,7 +130,6 @@ class SimpleProcessPool:
                 for i in range(self.n_processes)]
 
     def _kill_and_restart(self, i: int):
-        print(f'Killing and restarting dead worker {i}')
         self.processes[i].p.kill()
         self.processes[i] = _ProcessWrapper(self, i)
 
@@ -245,7 +139,6 @@ class SimpleProcessPool:
                 self._update_process(i)
                 if p.is_waiting():
                     return i, p
-            print(f'Waiting for empty worker')
             await asyncio.sleep(interval)
 
     def _update_process(self, i: int):
@@ -297,7 +190,6 @@ class _ProcessWrapper:
         self.p.start()
 
     def submit(self, task: _Task):
-        print(f'Submitted {task} to pool {self.i}')
         self.waiting = False
         self.tasks_in.put(task.inputs)
 
@@ -320,12 +212,10 @@ class _ProcessWrapper:
     @classmethod
     def _worker(cls, tasks_in: mp.Queue, results_out: mp.Queue):
         while True:
-            print(f'{mp.current_process().name}: Waiting for tasks')
             try:
                 task = tasks_in.get()
             except (EOFError, ValueError):
                 return
-            print(f'{mp.current_process().name}: Received task {task}')
             if task is None:
                 return  # Sentinel value, stop
             key, fn, args, kwargs = task
