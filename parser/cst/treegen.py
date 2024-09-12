@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import (TypeVar, cast, TypeAlias, Sequence, overload)
+from typing import (TypeVar, cast, TypeAlias, Sequence, overload, Iterable, Callable)
 
 from .token_matcher import OpM, KwdM, Matcher, PatternT
 from ..error import BaseParseError, BaseLocatedError
@@ -572,32 +572,25 @@ class TreeGen:
         inner, idx = self._parse_pow_or(idx)
         return self._apply_unaries_list(unaries, inner), idx
 
-    # TODO these are very similar - unify them?
-    def _parse_mul_div(self, idx: int) -> tuple[AnyNode, int]:
-        curr, idx = self._parse_unary_or(idx)
-        while self.match_ops(idx, '*', '/', '%'):
+    def _parse_ltr_operator_level(
+            self, idx: int, ops: Iterable[str],
+            inner_level: Callable[[int], tuple[AnyNode, int]]) -> tuple[AnyNode, int]:
+        curr, idx = inner_level(idx)
+        while self.match_ops(idx, *ops):
             op = cast(OpToken, self[idx]).op_str
             idx += 1
-            right, idx = self._parse_unary_or(idx)
+            right, idx = inner_level(idx)
             curr = self.node_from_children(op, [curr, right])
         return curr, idx
+
+    def _parse_mul_div(self, idx: int) -> tuple[AnyNode, int]:
+        return self._parse_ltr_operator_level(idx, ('*', '/', '%'), self._parse_unary_or)
 
     def _parse_add_sub(self, idx: int) -> tuple[AnyNode, int]:
-        curr, idx = self._parse_mul_div(idx)
-        while self.match_ops(idx, '+', '-'):
-            op = cast(OpToken, self[idx]).op_str
-            idx += 1
-            right, idx = self._parse_mul_div(idx)
-            curr = self.node_from_children(op, [curr, right])
-        return curr, idx
+        return self._parse_ltr_operator_level(idx, ('+', '-'), self._parse_mul_div)
 
     def _parse_cat(self, idx: int) -> tuple[AnyNode, int]:
-        curr, idx = self._parse_add_sub(idx)
-        while self.match_ops(idx, '..'):
-            idx += 1
-            right, idx = self._parse_add_sub(idx)
-            curr = self.node_from_children('..', [curr, right])
-        return curr, idx
+        return self._parse_ltr_operator_level(idx, ('..',), self._parse_add_sub)
 
     def _parse_comp(self, idx: int) -> tuple[AnyNode, int]:
         first, idx = self._parse_cat(idx)
@@ -617,20 +610,10 @@ class TreeGen:
         return self.node_from_children(op_tok.op_str, [left, right]), idx
 
     def _parse_and_bool(self, idx: int):
-        curr, idx = self._parse_comp(idx)
-        while self.match_ops(idx, '&&'):
-            idx += 1
-            right, idx = self._parse_comp(idx)
-            curr = self.node_from_children('&&', [curr, right])
-        return curr, idx
+        return self._parse_ltr_operator_level(idx, ('&&',), self._parse_comp)
 
     def _parse_or_bool(self, idx: int) -> tuple[AnyNode, int]:
-        curr, idx = self._parse_and_bool(idx)
-        while self.match_ops(idx, '||'):
-            idx += 1
-            right, idx = self._parse_and_bool(idx)
-            curr = self.node_from_children('||', [curr, right])
-        return curr, idx
+        return self._parse_ltr_operator_level(idx, ('||',), self._parse_and_bool)
 
     def err(self, msg: str, loc: RegionUnionArgT):
         return LocatedCstError(msg, self.region_union(loc), self.src)
