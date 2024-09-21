@@ -1,23 +1,11 @@
-import multiprocessing
 import time
 
 from parser.lexer.tokenizer import Tokenizer
 from parser.cst.treegen import TreeGen
 from parser.error import BaseParseError
 
-orig_ssm = multiprocessing._set_start_method = multiprocessing.set_start_method
-
-
-def new_ssm(m: str):
-    if m != 'fork':
-        orig_ssm(m)
-
-
-multiprocessing.set_start_method = new_ssm  # Monkey-patch it to make pythonfuzz work
-
-
-from pythonfuzz.fuzzer import Fuzzer  # noqa (import too low down)
-import pythonfuzz.fuzzer as fuzzer_ns  # noqa (import too low down)
+from pythonfuzz.fuzzer import Fuzzer
+import pythonfuzz.fuzzer as fuzzer_ns  # For patching pythonfuzz
 
 
 class UsePerfCounterInsteadOfTime:
@@ -48,11 +36,10 @@ def fuzz(buf):
         pass
 
 
-# pickling errors... (old func would be inaccessible using decorator)
 if __name__ == '__main__':
     import argparse
     ap = argparse.ArgumentParser("fuzz.py", description="Runs a fuzzer for n iterations")
-    ap.add_argument('-n', '--iterations', default=1_000_000,
+    ap.add_argument('-n', '--iterations', default=-1,
                     type=int, help="Number of iterations to run pythonfuzz for")
     ap.add_argument('-i', '--infinite',
                     action='store_const', const=-1, dest='iterations')
