@@ -452,10 +452,10 @@ class TreeGen:
             return self.node_from_children('call', [left, args]), idx
         return left, idx
 
-    def match_ops(self, idx: int, *ops: str | Sequence[str]):
+    def match_ops(self, idx: int, *ops: str | Sequence[str]) -> str | None:
         tok = self[idx]
         if not isinstance(tok, OpToken):
-            return False
+            return None
         for op in ops:
             if isinstance(op, str):
                 if tok.op_str == op:
