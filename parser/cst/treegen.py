@@ -422,12 +422,10 @@ class TreeGen:
         return self._parse_atom_or_autocat(idx)
 
     def _parse_basic_item(self, idx: int):
-        old_idx = -999  # to start the loop
-        left, idx = self._parse_parens_or(idx)
-        while idx != old_idx:
-            old_idx = idx
-            left, idx = self._parse_basic_item_chain_once(idx, left)
-        return left, idx
+        left, new_idx = self._parse_parens_or(idx)
+        while idx != (idx := new_idx):  # If progress made, set old to current and loop again
+            left, new_idx = self._parse_basic_item_chain_once(idx, left)
+        return left, new_idx
 
     def _parse_basic_item_chain_once(self, idx: int, left: AnyNode) -> tuple[AnyNode, int]:
         if isinstance(self[idx], DotToken):
