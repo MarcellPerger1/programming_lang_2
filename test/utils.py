@@ -43,6 +43,9 @@ def _worker_process(fn, dest, args, kwargs, debug):
     if debug >= 2:
         time.sleep(15)
         print('After sleep')
+    if dest is None:
+        # No error handling channel - let caller handle it (e.g. the pool can handle it)
+        return fn(*args, **kwargs)
     # noinspection PyBroadException
     try:
         result = fn(*args, *kwargs)
@@ -85,19 +88,10 @@ async def join_async(p, timeout: float, interval: float = 0.005, join_timeout: f
         p.join(join_timeout)
 
 
-def _pool_worker_2(fn, args, kwargs, debug=0):
-    if debug >= 1:
-        print(f"Worker process running on pid={os.getpid()}")
-    if debug >= 2:
-        time.sleep(15)
-        print('After sleep')
-    return fn(*args, **kwargs)  # No exception handling - pool does it for us
-
-
 async def _run_with_timeout_async_pool(pool: SimpleProcessPool, timeout: float, target,
                                        args=(), kwargs=None, debug=0):
     try:
-        return await pool.apply(_pool_worker_2, (target, args, kwargs, debug),
+        return await pool.apply(_worker_process, (target, None, args, kwargs, debug),
                                 {}, timeout)
     except TimeoutError as e:
         raise TimeoutError(f"Function took too long "
