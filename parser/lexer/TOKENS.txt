@@ -21,4 +21,3 @@ NamedTokenCls(Token)
         AttrNameToken 'attr_name'
         IdentNameToken 'ident_name'
     EofToken 'eof'
-    NullToken 'null'

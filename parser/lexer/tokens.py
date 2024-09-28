@@ -13,7 +13,6 @@ __all__ = [
     'NamedTokenCls', 'NumberToken', 'OpToken', 'PAREN_TYPES', 'ParenSide',
     'ParenToken', 'ParenType', 'RBrace', 'RParToken', 'RSqBracket',
     'SemicolonToken',  'StringToken', 'Token', 'WhitespaceToken',
-    'NullToken'
 ]
 
 
@@ -184,10 +183,6 @@ class IdentNameToken(AnyNameToken):
 
 class EofToken(NamedTokenCls):
     name = 'eof'
-
-
-class NullToken(NamedTokenCls):
-    name = 'null'
 
 
 GETATTR_VALID_AFTER_CLS = (

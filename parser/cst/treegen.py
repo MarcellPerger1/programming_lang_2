@@ -568,7 +568,6 @@ EXPR_BEGIN = (
     LSqBracket,
     LBrace,
     RBrace,
-    NullToken
 )
 UNARY_VALID_AFTER = (
     OpToken,
