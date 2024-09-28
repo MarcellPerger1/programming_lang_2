@@ -302,7 +302,16 @@ async def run_with_timeout_async(timeout: float, fn, args, kwargs,
       - 0: normal
       - 1: print pid on start
       - 2: also wait 15s in process to allow time to 'Attach to Process' in Pycharm
-    Note: don't use debug=2 with low timeouts unless you want to get terminate()d"""
+    Note: don't use debug=2 with low timeouts unless you want to get terminate()d
+
+    pool:
+     Use this if you're going to call this in a loop (with pool=False,
+     this function is rather expensive on Windows as it creates an entire new
+     process).
+     If you're only calling this once, pool is rather useless as the first time
+     it is called, it creates all n processes.
+     You can pass your own pool, or True to use the default one with 4 workers.
+    """
     if not pool:
         return await _run_with_timeout_async_process(
             timeout, fn, args, kwargs, debug, interval)
