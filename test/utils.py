@@ -327,14 +327,9 @@ run_with_timeout_async.default_pool = None
 
 def timeout_decor(timeout_sec: int, debug=0):
     def decor(fn):
-        # This will be used as a decorator e.g.
-        # @timeout_decor(10)
-        # def foo(): ...
-        # Let's call the actual inner function `foo:orig` and the wrapped one `foo:new`.
-        # So if we try to pickle `foo:orig`, it will try to save_global
         @functools.wraps(fn)
         def new_fn(*args, **kwargs):
-            return run_with_timeout(
+            return run_with_timeout(  # See explanation below for _PickleWrapper
                 timeout_sec, _PickleWrapper(outer_func=new_fn), args, kwargs, debug)
         new_fn._timeout_sec_ = timeout_sec
         new_fn._orig_fn_ = fn
@@ -344,14 +339,9 @@ def timeout_decor(timeout_sec: int, debug=0):
 
 def timeout_decor_async(timeout_sec: int, debug=0, interval=0, pool=False):
     def decor(fn):
-        # This will be used as a decorator e.g.
-        # @timeout_decor(10)
-        # def foo(): ...
-        # Let's call the actual inner function `foo:orig` and the wrapped one `foo:new`.
-        # So if we try to pickle `foo:orig`, it will try to save_global
         @functools.wraps(fn)
         async def new_fn(*args, **kwargs):
-            return await run_with_timeout_async(
+            return await run_with_timeout_async(  # See explanation below for _PickleWrapper
                 timeout_sec, _PickleWrapper(outer_func=new_fn), args, kwargs,
                 debug, interval, pool)
         new_fn._timeout_sec_ = timeout_sec
@@ -361,6 +351,15 @@ def timeout_decor_async(timeout_sec: int, debug=0, interval=0, pool=False):
 
 
 class _PickleWrapper:
+    # timeout_decor will be used as a decorator e.g.
+    # @timeout_decor(10)
+    # def foo(): ...
+    # Let's call the actual inner function `foo:orig` and the wrapped one `foo:new`.
+    # So if we try to pickle `foo:orig`, it will try to save_global
+    # but fail as it sees that the function doesn't match!
+    # So we pass _PickleWrapper, and when it is pickled, it does
+    # save_global on `foo:new` which does match the function at global scope.
+    # However, when the _PickleWrapper object is called, it simply calls `foo:orig`.
     def __init__(self, outer_func):
         """We store the outer func as that is the one that pickle
         will get when it does a load_global"""
