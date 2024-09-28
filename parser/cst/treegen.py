@@ -11,7 +11,6 @@ from ..tokens import *
 from ..tree_node import Node, Leaf, AnyNode
 
 DT = TypeVar('DT')
-ET = TypeVar('ET')
 
 MISSING = object()
 
@@ -561,22 +560,6 @@ CstGen = TreeGen
 RegionUnionFlatT: TypeAlias = 'Token | AnyNode | StrRegion'
 RegionUnionArgT: TypeAlias = 'RegionUnionFlatT | Sequence[RegionUnionFlatT]'
 
-EXPR_BEGIN = (
-    CommaToken,
-    SemicolonToken,
-    LParToken,
-    LSqBracket,
-    LBrace,
-    RBrace,
-)
-UNARY_VALID_AFTER = (
-    OpToken,
-    *EXPR_BEGIN
-)
-
-
-# concat (..) precedence?!: least binding:
-#  "a" .. 8 - 6 .. "b"  =>  "a" .. (8 - 6) .. "b"
 
 # operator precedence (most to least binding):
 #  1. () [] {}  (parens)
