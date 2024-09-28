@@ -86,11 +86,6 @@ async def join_async(p, timeout: float, interval: float = 0.005, join_timeout: f
         p.join(join_timeout)
 
 
-def _pool_worker(send_my_pid: mp.managers.ValueProxy[int], fn, args, kwargs, debug):
-    send_my_pid.set(os.getpid())  # Send it so main process knows what to kill
-    return fn(*args, **kwargs)  # No exception handling - pool does it for us
-
-
 def _pool_worker_2(fn, args, kwargs, debug=0):
     if debug >= 1:
         print(f"Worker process running on pid={os.getpid()}")
