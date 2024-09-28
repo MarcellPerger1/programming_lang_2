@@ -142,7 +142,7 @@ class SimpleProcessPool:
                 for i in range(self.n_processes)]
 
     def _kill_and_restart(self, i: int):
-        self.processes[i].p.kill()
+        self.processes[i].kill()
         self.processes[i] = _ProcessWrapper(self, i)
 
     async def _wait_for_empty_process(
@@ -222,6 +222,11 @@ class _ProcessWrapper:
     def submit(self, task: _Task):
         self.waiting = False
         self.tasks_in.put(task.inputs)
+
+    def kill(self):
+        self.p.kill()
+        self.tasks_in.close()
+        self.results_out.close()
 
     def is_dead(self):
         return not self.p.is_alive()
