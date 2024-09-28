@@ -169,9 +169,7 @@ class SimpleProcessPool:
                     interval: float = 0, timeout_includes_waiting=False):
         args = args or ()
         kwargs = kwargs or {}
-        key = self.key
-        self.key += 1
-        task = self.tasks[key] = _Task((key, fn, args, kwargs))
+        key, task = self._create_task(fn, args, kwargs)
         timeout_ctx = _PoolApplyTimeoutContext(timeout, timeout_includes_waiting)
         # Only submit one task at a time, avoids being killed
         # because something else timed out, etc. Also, a worker can only
@@ -191,6 +189,12 @@ class SimpleProcessPool:
             return value_or_err
         else:
             raise value_or_err
+
+    def _create_task(self, fn, args, kwargs):
+        key = self.key
+        self.key += 1
+        task = self.tasks[key] = _Task((key, fn, args, kwargs))
+        return key, task
 
 
 class _ProcessWrapper:
