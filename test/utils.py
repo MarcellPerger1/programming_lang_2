@@ -151,7 +151,6 @@ class SimpleProcessPool:
         while self.tasks[key].output is None:
             if timeout and time.perf_counter() > start + timeout:
                 self._kill_and_restart(idx)
-                del p  # I don't feel the need to keep that in tb_frame.f_locals forever
                 raise TimeoutError
             await asyncio.sleep(interval)
             self._update_all_processes()
