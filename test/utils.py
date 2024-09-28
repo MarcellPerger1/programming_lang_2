@@ -204,6 +204,11 @@ class SimpleProcessPool:
         task = self.tasks[key] = _Task((key, fn, args, kwargs))
         return key, task
 
+    def put_task_result(self, result):
+        """Internal!"""
+        key, _success, _v = result
+        self.tasks[key].output = result
+
 
 class _ProcessWrapper:
     def __init__(self, parent: SimpleProcessPool, idx: int):
@@ -236,12 +241,11 @@ class _ProcessWrapper:
 
     def update_output_status(self):
         try:
-            result = self.results_out.get(False)
+            result = self.results_out.get(block=False)
         except queue.Empty:
             return
         self.waiting = True
-        key, *_ = result
-        self.pool.tasks[key].output = result
+        self.pool.put_task_result(result)
 
     @classmethod
     def _worker(cls, tasks_in: mp.Queue, results_out: mp.Queue):
