@@ -123,18 +123,13 @@ class Tokenizer(SrcHandler):
             elif self[idx] in '\'"':
                 idx = self._t_string(idx)
             elif self[idx] in digits:
-                # need to decide between number and attr_name here...
-                # except if a number can take the pace of an attr name.
-                # No, that wouldn't work:
-                # abc.12.3e9 => abc.(12.3e9) which is bad, needs to be
-                # abc.12.3e9 => (abc.12).3e9
-                # BAD:  abc.91.7 => abc.(91.7)
-                # GOOD: abc.91.7 => (abc.91).7
-                # meaning if last 'real' token is a DOT,
-                # this should be treated as an attr
+                # Can only be an attribute if prev 'real' token is a dot.
                 if self.prev_content_token_type is DotToken:
+                    # If prev token is a dot, it MUST be an attribute as
+                    # numbers aren't valid after '.'
                     idx = self._t_attr_name(idx)
                 else:
+                    # Otherwise, it can only be a number
                     idx = self._t_number(idx)
             elif self[idx] in IDENT_START:
                 # decide whether its attr_name or ident_name
