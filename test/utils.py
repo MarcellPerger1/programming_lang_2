@@ -175,6 +175,9 @@ class SimpleProcessPool:
         timeout_ctx = _PoolApplyTimeoutContext(timeout, timeout_includes_waiting)
         proc_idx = await self._submit_to_empty_process(task, timeout_ctx, interval)
         await self._wait_for_task_result(key, proc_idx, timeout_ctx, interval)
+        return self._handle_task_result(key)
+
+    def _handle_task_result(self, key):
         # pop is so that we don't leak memory by keeping the result forever
         _, success, value_or_err = self.tasks.pop(key).output
         if success:
