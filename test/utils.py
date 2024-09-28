@@ -81,7 +81,7 @@ def run_with_timeout(timeout_sec: int, fn, args, kwargs, debug=0):
     return dest.get()
 
 
-async def join_async(p, timeout: float, interval: float = 0.005, join_timeout: float = 0.0):
+async def join_async(p, timeout: float, interval: float = 0, join_timeout: float = 0.0):
     start = time.perf_counter()
     while p.is_alive() and time.perf_counter() < start + timeout:
         await asyncio.sleep(interval)
@@ -269,7 +269,7 @@ class _ProcessWrapper:
 
 
 async def _run_with_timeout_async_process(timeout: float, fn, args, kwargs,
-                                          debug=0, interval=0.005):
+                                          debug=0, interval: float = 0):
     """fn must be pickleable and a regular function **not** coroutine!
 
     debug:
@@ -295,7 +295,7 @@ async def _run_with_timeout_async_process(timeout: float, fn, args, kwargs,
 
 
 async def run_with_timeout_async(timeout: float, fn, args, kwargs,
-                                 debug=0, interval=0.005, pool: bool | mp.pool.Pool = None):
+                                 debug=0, interval=0, pool: bool | mp.pool.Pool = None):
     """fn must be pickleable and a regular function **not** coroutine!
 
     debug:
@@ -333,7 +333,7 @@ def timeout_decor(timeout_sec: int, debug=0):
     return decor
 
 
-def timeout_decor_async(timeout_sec: int, debug=0, interval=0.005, pool=False):
+def timeout_decor_async(timeout_sec: int, debug=0, interval=0, pool=False):
     def decor(fn):
         # This will be used as a decorator e.g.
         # @timeout_decor(10)
