@@ -8,7 +8,7 @@ import os
 import queue
 import time
 import unittest
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from pathlib import Path
 from typing import overload, TYPE_CHECKING, TypeVar, Protocol, Callable
 from unittest.util import safe_repr
@@ -106,6 +106,30 @@ class _Task:
     output: tuple[int, bool, object | Exception] = None
 
 
+@dataclass
+class _PoolApplyTimeoutContext:
+    timeout: float | None = None
+    timeout_includes_waiting: bool = False
+    start: float = field(default_factory=time.perf_counter)
+
+    def is_timed_out(self, has_task_started: bool):
+        return (self.timeout
+                and (has_task_started or self.timeout_includes_waiting)
+                and time.perf_counter() > self.start + self.timeout)
+
+    def check_timeout(self, has_task_started: bool):
+        if self.is_timed_out(has_task_started):
+            raise TimeoutError(self.get_timeout_msg(has_task_started))
+
+    def get_timeout_msg(self, has_task_started: bool):
+        return ("While running task" if has_task_started
+                else "While waiting for empty process in pool")
+
+    def on_start_task(self):
+        if self.timeout and not self.timeout_includes_waiting:
+            self.start = time.perf_counter()
+
+
 class SimpleProcessPool:
     def __init__(self, processes: int = None):
         self.n_processes = processes or os.cpu_count() or 4
@@ -121,12 +145,14 @@ class SimpleProcessPool:
         self.processes[i].p.kill()
         self.processes[i] = _ProcessWrapper(self, i)
 
-    async def _wait_for_empty_process(self, interval: float = 0):
+    async def _wait_for_empty_process(
+            self, timeout_ctx: _PoolApplyTimeoutContext, interval: float = 0):
         while True:
             for i, p in enumerate(self.processes):
                 self._update_process(i)
                 if p.is_waiting():
                     return i, p
+            timeout_ctx.check_timeout(has_task_started=False)
             await asyncio.sleep(interval)
 
     def _update_process(self, i: int):
@@ -139,19 +165,24 @@ class SimpleProcessPool:
         for i, _ in enumerate(self.processes):
             self._update_process(i)
 
-    async def apply(self, fn, args, kwargs, timeout: float = None, interval: float = 0):
+    async def apply(self, fn, args=None, kwargs=None, timeout: float = None,
+                    interval: float = 0, timeout_includes_waiting=False):
+        args = args or ()
+        kwargs = kwargs or {}
         key = self.key
         self.key += 1
         task = self.tasks[key] = _Task((key, fn, args, kwargs))
+        timeout_ctx = _PoolApplyTimeoutContext(timeout, timeout_includes_waiting)
         # Only submit one task at a time, avoids being killed
-        # because something else timed out, etc.
-        idx, p = await self._wait_for_empty_process(interval)
+        # because something else timed out, etc. Also, a worker can only
+        # do one thing at a time so no loss of efficiency.
+        idx, p = await self._wait_for_empty_process(timeout_ctx, interval)
         p.submit(task)
-        start = time.perf_counter()
+        timeout_ctx.on_start_task()
         while self.tasks[key].output is None:
-            if timeout and time.perf_counter() > start + timeout:
+            if timeout_ctx.is_timed_out(has_task_started=True):
                 self._kill_and_restart(idx)
-                raise TimeoutError
+                raise TimeoutError("While running task")
             await asyncio.sleep(interval)
             self._update_all_processes()
         # pop is so that we don't leak memory by keeping the result forever
@@ -251,7 +282,8 @@ async def run_with_timeout_async(timeout: float, fn, args, kwargs,
       - 2: also wait 15s in process to allow time to 'Attach to Process' in Pycharm
     Note: don't use debug=2 with low timeouts unless you want to get terminate()d"""
     if not pool:
-        return await _run_with_timeout_async_process(timeout, fn, args, kwargs, debug, interval)
+        return await _run_with_timeout_async_process(
+            timeout, fn, args, kwargs, debug, interval)
     if pool is True:
         if run_with_timeout_async.default_pool is None:
             run_with_timeout_async.default_pool = SimpleProcessPool(4)
