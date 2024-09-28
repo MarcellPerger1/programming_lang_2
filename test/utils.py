@@ -154,9 +154,8 @@ class SimpleProcessPool:
                 raise TimeoutError
             await asyncio.sleep(interval)
             self._update_all_processes()
-        output = self.tasks[key].output
-        del self.tasks[key]  # Don't leak memory
-        _, success, value_or_err = output
+        # pop is so that we don't leak memory by keeping the result forever
+        _, success, value_or_err = self.tasks.pop(key).output
         if success:
             return value_or_err
         else:
