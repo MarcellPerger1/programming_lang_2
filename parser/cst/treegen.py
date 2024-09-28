@@ -481,13 +481,9 @@ class TreeGen:
         if not self.match_ops(idx, '**'):
             return leftmost, idx
         idx += 1
-        return self._parse_pow_rhs_item(idx)
-
-    def _parse_pow_rhs_item(self, idx: int) -> tuple[AnyNode, int]:
-        unaries, idx = self._parse_unaries_into_tok_list(idx)
+        # parse_unary_or -> parse_pow_or -> parse_unary_or -> parse_pow_or
         # This is right-recursion so is fine as progress will be made each call to get here
-        inner, idx = self._parse_pow_or(idx)
-        return self._apply_unaries_list(unaries, inner), idx
+        return self._parse_unary_or(idx)
 
     def _parse_unary_or(self, idx: int) -> tuple[AnyNode, int]:
         unaries, idx = self._parse_unaries_into_tok_list(idx)
