@@ -165,30 +165,36 @@ class SimpleProcessPool:
         for i, _ in enumerate(self.processes):
             self._update_process(i)
 
+    # We only submit one task at a time, avoids being killed
+    # just because something else timed out, etc.
+    # so easier to support cancelling, on timeout or otherwise.
+    # Also, a worker can only do one thing at a time so no loss of efficiency.
     async def apply(self, fn, args=None, kwargs=None, timeout: float = None,
                     interval: float = 0, timeout_includes_waiting=False):
-        args = args or ()
-        kwargs = kwargs or {}
-        key, task = self._create_task(fn, args, kwargs)
+        key, task = self._create_task(fn, args or (), kwargs or {})
         timeout_ctx = _PoolApplyTimeoutContext(timeout, timeout_includes_waiting)
-        # Only submit one task at a time, avoids being killed
-        # because something else timed out, etc. Also, a worker can only
-        # do one thing at a time so no loss of efficiency.
-        idx, p = await self._wait_for_empty_process(timeout_ctx, interval)
-        p.submit(task)
-        timeout_ctx.on_start_task()
-        while self.tasks[key].output is None:
-            if timeout_ctx.is_timed_out(has_task_started=True):
-                self._kill_and_restart(idx)
-                raise TimeoutError("While running task")
-            await asyncio.sleep(interval)
-            self._update_all_processes()
+        proc_idx = await self._submit_to_empty_process(task, timeout_ctx, interval)
+        await self._wait_for_task_result(key, proc_idx, timeout_ctx, interval)
         # pop is so that we don't leak memory by keeping the result forever
         _, success, value_or_err = self.tasks.pop(key).output
         if success:
             return value_or_err
         else:
             raise value_or_err
+
+    async def _wait_for_task_result(self, key, proc_idx, timeout_ctx, interval):
+        while self.tasks[key].output is None:
+            if timeout_ctx.is_timed_out(has_task_started=True):
+                self._kill_and_restart(proc_idx)
+                raise TimeoutError("While running task")
+            await asyncio.sleep(interval)
+            self._update_all_processes()
+
+    async def _submit_to_empty_process(self, task, timeout_ctx, interval):
+        idx, p = await self._wait_for_empty_process(timeout_ctx, interval)
+        p.submit(task)
+        timeout_ctx.on_start_task()
+        return idx
 
     def _create_task(self, fn, args, kwargs):
         key = self.key
