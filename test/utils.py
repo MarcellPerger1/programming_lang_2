@@ -149,7 +149,7 @@ class SimpleProcessPool:
         while True:
             for i, p in enumerate(self.processes):
                 self._update_process(i)
-                if p.is_waiting():
+                if p.is_waiting_for_task():
                     return i, p
             timeout_ctx.check_timeout(has_task_started=False)
             await asyncio.sleep(interval)
@@ -158,7 +158,8 @@ class SimpleProcessPool:
         p = self.processes[i]
         if p.is_dead():
             self._kill_and_restart(i)
-        p.update_output_status()
+        else:
+            p.update_output_status()
 
     def _update_all_processes(self):
         for i, _ in enumerate(self.processes):
@@ -220,11 +221,11 @@ class _ProcessWrapper:
                             target=self._worker,
                             args=(self.tasks_in, self.results_out),
                             daemon=True)
-        self.waiting = True
+        self.waiting_for_task = True
         self.p.start()
 
     def submit(self, task: _Task):
-        self.waiting = False
+        self.waiting_for_task = False
         self.tasks_in.put(task.inputs)
 
     def kill(self):
@@ -235,16 +236,16 @@ class _ProcessWrapper:
     def is_dead(self):
         return not self.p.is_alive()
 
-    def is_waiting(self):
+    def is_waiting_for_task(self):
         self.update_output_status()
-        return self.p.is_alive() and self.waiting
+        return self.p.is_alive() and self.waiting_for_task
 
     def update_output_status(self):
         try:
             result = self.results_out.get(block=False)
         except queue.Empty:
             return
-        self.waiting = True
+        self.waiting_for_task = True
         self.pool.put_task_result(result)
 
     @classmethod
