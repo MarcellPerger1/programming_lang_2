@@ -1,6 +1,7 @@
 import cProfile
 import time
 
+from parser.util import readfile
 from parser.cst.treegen import TreeGen
 from parser.lexer import Tokenizer, print_tokens
 from parser.cst.tree_print import tprint
@@ -8,11 +9,6 @@ from parser.cst.tree_print import tprint
 
 def make_tree(src: str):
     return TreeGen(Tokenizer(src)).parse()
-
-
-def read_file(path: str):
-    with open(path) as f:
-        return f.read()
 
 
 PROFILER = True
@@ -46,8 +42,8 @@ def run(src: str, idx: int = -1):
 
 
 def main():
-    run(read_file('main_example_0.st'), 0)
-    run(read_file('main_example_1.st'), 1)
+    run(readfile('main_example_0.st'), 0)
+    run(readfile('main_example_1.st'), 1)
 
 
 if __name__ == '__main__':

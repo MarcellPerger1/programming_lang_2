@@ -1,14 +1,10 @@
 import unittest
 
+from parser.util import readfile
 from parser.cst.treegen import TreeGen
 from parser.lexer import Tokenizer
 from test.snapshottest import SnapshotTestCase
 from test.utils import TestCaseUtils
-
-
-def _readfile(path: str):
-    with open(path) as f:
-        return f.read()
 
 
 class TestMain(TestCaseUtils, SnapshotTestCase):
@@ -17,7 +13,7 @@ class TestMain(TestCaseUtils, SnapshotTestCase):
         super().setUp()
 
     def _test_main_example_n(self, n: int):
-        src = _readfile(f'./main_example_{n}.st')
+        src = readfile(f'./main_example_{n}.st')
         tk = Tokenizer(src).tokenize()
         self.assertMatchesSnapshot(tk.tokens, 'tokens')
         t = TreeGen(tk)
