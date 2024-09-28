@@ -5,17 +5,18 @@ from io import StringIO
 from string import ascii_letters, digits
 from typing import TYPE_CHECKING, IO, Sequence
 
-from parser.error import BaseParseError, BaseLocatedError
-from parser.operators import OPS_SET, MAX_OP_LEN, OP_FIRST_CHARS
-from parser.str_region import StrRegion
-from parser.tokens import (
+from .tokens import (
     Token, WhitespaceToken, LineCommentToken, BlockCommentToken, NumberToken,
     StringToken, CommaToken, DotToken, OpToken, PAREN_TYPES,
     SemicolonToken, AttrNameToken, IdentNameToken,
     GETATTR_VALID_AFTER_CLS, EofToken
 )
+from ..error import BaseParseError, BaseLocatedError
+from ..operators import OPS_SET, MAX_OP_LEN, OP_FIRST_CHARS
+from ..str_region import StrRegion
+
 if TYPE_CHECKING:
-    from parser.tokens import ParenTokenT
+    from .tokens import ParenTokenT
 
 IDENT_START = ascii_letters + '_'
 IDENT_CONT = IDENT_START + digits
@@ -101,7 +102,6 @@ class Tokenizer(SrcHandler):
             else:
                 last_idx = idx
             # order fastest ones first
-            # noinspection GrazieInspection
             if self[idx] == ',':
                 idx = self._t_comma(idx)
             elif self[idx] == '.':
@@ -123,18 +123,13 @@ class Tokenizer(SrcHandler):
             elif self[idx] in '\'"':
                 idx = self._t_string(idx)
             elif self[idx] in digits:
-                # need to decide between number and attr_name here...
-                # except if a number can take the pace of an attr name.
-                # No, that wouldn't work:
-                # abc.12.3e9 => abc.(12.3e9) which is bad, needs to be
-                # abc.12.3e9 => (abc.12).3e9
-                # BAD:  abc.91.7 => abc.(91.7)
-                # GOOD: abc.91.7 => (abc.91).7
-                # meaning if last 'real' token is a DOT,
-                # this should be treated as an attr
+                # Can only be an attribute if prev 'real' token is a dot.
                 if self.prev_content_token_type is DotToken:
+                    # If prev token is a dot, it MUST be an attribute as
+                    # numbers aren't valid after '.'
                     idx = self._t_attr_name(idx)
                 else:
+                    # Otherwise, it can only be a number
                     idx = self._t_number(idx)
             elif self[idx] in IDENT_START:
                 # decide whether its attr_name or ident_name
@@ -171,6 +166,7 @@ class Tokenizer(SrcHandler):
         return tokens[-1].region.end
 
     def startswith(self, start: int, s: str):
+        assert not self.eof(start), "You probably shouldn't try to startswith after EOF"
         return self[start: start + len(s)].startswith(s)
 
     def _t_space(self, start: int):
@@ -187,7 +183,7 @@ class Tokenizer(SrcHandler):
         if not self.startswith(idx, '//'):
             return start
         idx += 2
-        while self.get(idx) != '\n':
+        while not self.eof(idx) and self.get(idx) != '\n':
             idx += 1
         return self.add_token(LineCommentToken(StrRegion(start, idx)))
 
@@ -196,8 +192,10 @@ class Tokenizer(SrcHandler):
         if not self.startswith(idx, '/*'):
             return start
         idx += 2
-        while not self.startswith(idx, '*/'):
+        while not self.eof(idx) and not self.startswith(idx, '*/'):
             idx += 1
+        if self.eof(idx):
+            raise self.err("Unterminated block comment", StrRegion(start, idx))
         idx += 2  # include '*/' in comment
         return self.add_token(BlockCommentToken(StrRegion(start, idx)))
 
@@ -221,6 +219,8 @@ class Tokenizer(SrcHandler):
             if self[idx] == q_type:
                 idx += 1
                 return self.add_token(StringToken(StrRegion(start, idx)))
+            # TODO: maybe somehow attach the escapes to the Token
+            #  so it doesn't need to be parsed again
             if self[idx] == '\\':
                 # 1 for the '\', 1 for the next char
                 idx += 2
@@ -294,11 +294,11 @@ class Tokenizer(SrcHandler):
 class _IncrementalNumberParser(SrcHandler):
     default_err_type = LocatedMalformedNumberError
 
-    # todo 0x, 0b
+    # todo 0x, 0b (I refuse to add octal literals) - also hex floats???
     def _parse_digit_seq(self, start: int) -> int | None:
         idx = start
-        if self[idx] not in digits:
-            if self[idx] == '_':
+        if self.get(idx) not in digits:
+            if self.get(idx) == '_':
                 raise self.err("Can't have '_' at the start of a number", idx)
             return None
         idx += 1
@@ -309,8 +309,9 @@ class _IncrementalNumberParser(SrcHandler):
                 elif self.get(idx + 1) == '_':
                     raise self.err(
                         "Can only have one consecutive '_' in a number", idx + 1)
-                raise self.err(
-                    "Can't have '_' at the end of a number", idx)
+                else:
+                    raise self.err(
+                        "Can't have '_' at the end of a number", idx)
             elif self.get(idx) in digits:
                 idx += 1
             else:
@@ -341,7 +342,9 @@ class _IncrementalNumberParser(SrcHandler):
             # or maybe raise an error?
             # abc.e definitely doesn't contain a number
             # but it *could* reach here to check if it's a number
-            return None
+            #   \- Note from later: it doesn't.
+            # return None
+            raise self.err("Number cannot be a single '.' (expected digits before or after", idx)
         return idx
 
     def _parse_number(self, start: int):

@@ -92,3 +92,81 @@ mul_level = pow_level ($[*/] pow_level)+
 add_level = mul_level ($[+-] mul_level)+
 cat_level = add_level ('..' add_level)+
 ...
+
+
+
+## ---------------- new GRAMMAR for expr ----------------
+
+Basic grammar:
+'(' = LPAR
+')' = RPAR
+'[' = LSQB
+']' = RSQB
+
+'.' = DOT
+',' = COMMA
+
+'+' < OP
+'-' < OP
+'*' < OP
+'/' < OP
+'%' < OP
+'**' < OP
+
+'!' < OP
+'&&' < OP
+'||' < OP
+
+'..' < OP
+
+'<' < OP
+'>' < OP
+'<=' < OP
+'>=' < OP
+'==' < OP
+'!=' < OP
+
+Unary = '+' | '-' | '!'
+Mul_Div_Mod = '*' | '/' | '%'
+Add_Sub = '+' | '-'
+Comp = '<' | '>' | '<=' | '>=' | '==' | '!='
+
+# -- Expressions --
+atom := STRING | NUMBER | IDENT
+
+autocat := (STRING)+
+atom_or_autocat := atom | autocat                                  # level 2
+   # \- implemented as NUMBER | IDENT | (STRING | STRING+)
+
+parens_or := '(' expr ')' | atom_or_autocat                        # level 1
+
+basic_item := parens_or (basic_item_chain)*                        # level 3
+basic_item_chain := fn_call_chain | getattr_chain | getitem_chain
+fn_call_chain := '(' fn_args ')'
+getattr_chain := '.' ATTR_NAME
+getitem_chain := '[' expr ']'
+   # \ - could be:
+   #   basic_item := fn_call | getattr | getitem | basic_item
+   #   fn_call := basic_item '(' fn_args ')'
+   #   getattr := basic_item '.' ATTR_NAME
+   #   getitem := basic_item '[' expr ']'
+   # But that could be trapped in infinite loop due to left-recursion:
+   #  parse basic_item -> try fn_call -> parse basic_item -> ...
+fn_args := expr (',' expr)* (',')?
+
+unary_pow_rhs := (Unary)* basic_item             # level 4.1
+@grouping:rtl
+pow_or := basic_item ('**' unary_pow_rhs)*       # level 4.2
+unary_or := (Unary)* pow_or                      # level 5
+mul_div_or := unary_or (Mul_Div_Mod unary_or)*   # level 6
+add_sub_or := mul_div_or (Add_Sub mul_div_or)*   # level 7
+cat_or := add_sub_or ('..' add_sub_or)*          # level 8
+@grouping:special
+comp_or := cat_or (Comp cat_or)*                 # level 9
+and_bool_or := comp_or ('&&' comp_or)*           # level 10
+or_bool_or := and_bool_or ('||' and_bool_or)*    # level 11
+
+expr := or_bool_or
+
+...  # (smt, etc.)
+

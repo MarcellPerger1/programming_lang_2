@@ -2,6 +2,11 @@ _exclude/
 
 *.prof
 
+# Pythonfuzz input/output
+# This is useful to use in CI so include in .gitattributes as linguist-generated
+# pythonfuzz_corpus/
+# crashes/
+
 # Created by https://www.toptal.com/developers/gitignore/api/python,pycharm,windows,linux
 # Edit at https://www.toptal.com/developers/gitignore?templates=python,pycharm,windows,linux
 

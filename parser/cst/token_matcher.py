@@ -5,7 +5,7 @@ from abc import ABC, abstractmethod
 from dataclasses import dataclass
 from typing import cast, Iterable, Any, TypeGuard, TypeAlias
 
-from parser.tokens import Token, OpToken, IdentNameToken
+from ..tokens import Token, OpToken, IdentNameToken
 
 
 @dataclass

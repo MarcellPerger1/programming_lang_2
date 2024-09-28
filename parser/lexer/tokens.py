@@ -4,7 +4,7 @@ from dataclasses import dataclass, field
 from enum import Enum
 from typing import Union, Callable, TYPE_CHECKING
 
-from parser.str_region import StrRegion
+from ..str_region import StrRegion
 
 __all__ = [
     'AnyCommentToken', 'AnyNameToken', 'AttrNameToken', 'BlockCommentToken',
@@ -13,7 +13,6 @@ __all__ = [
     'NamedTokenCls', 'NumberToken', 'OpToken', 'PAREN_TYPES', 'ParenSide',
     'ParenToken', 'ParenType', 'RBrace', 'RParToken', 'RSqBracket',
     'SemicolonToken',  'StringToken', 'Token', 'WhitespaceToken',
-    'NullToken'
 ]
 
 
@@ -186,15 +185,14 @@ class EofToken(NamedTokenCls):
     name = 'eof'
 
 
-class NullToken(NamedTokenCls):
-    name = 'null'
-
-
 GETATTR_VALID_AFTER_CLS = (
     StringToken,
     RParToken,
     RSqBracket,
     AttrNameToken,
     IdentNameToken
-    # todo could also be valid after floats
+    # Not valid (directly) after floats (need parens) because we treat all
+    # numbers the same and we cannot have it after ints
+    #   2.3 => (2).3 (attribute) or `2.3` (float)
+    # Also it would be confusing to have 2.e3 => num, 2.e3.3 -> num.attr.
 )

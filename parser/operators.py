@@ -8,7 +8,8 @@ ASSIGNABLE_OPS = (*'+-*/%', '**', '&&', '||', '..')
 ASSIGN_OPS = tuple(o + '=' for o in ASSIGNABLE_OPS) + ('=',)
 COMPARISONS = ('==', '!=', '<=', '>=', '<', '>')
 UNARY_OPS = (*'!+-',)
-BINARY_OPS = (*'+-*/%', '**', '&&', '||')
+BINARY_OPS = (*'+-*/%', '**', '&&', '||', '..')
+
 # all the ops that are actual single-token operators
 # and require no special syntax considerations
 OPS_SET = frozenset(UNARY_OPS + BINARY_OPS + COMPARISONS + ASSIGN_OPS)

@@ -2,9 +2,10 @@ import unittest
 from enum import IntFlag
 from typing import Sequence, TypeVar, Union
 
+from parser.lexer.tokens import WhitespaceToken, StringToken, EofToken, NumberToken
 from parser.str_region import StrRegion
 from parser.lexer import Tokenizer
-from parser.tokens import IdentNameToken, Token, DotToken, AttrNameToken
+from parser.tokens import IdentNameToken, Token, DotToken, AttrNameToken, OpToken
 
 
 def _strict_boundary_kwargs():
@@ -86,6 +87,46 @@ class MyTestCase(unittest.TestCase):
         end = t._t_attr_name(5)
         self.assertTokensEqual(t, [AttrNameToken(StrRegion(5, 6))])
         self.assertEqual(end, 6)
+
+    def test__t_number(self):
+        t = Tokenizer('a+432_123+e')
+        end = t._t_number(2)
+        self.assertTokensEqual(t, [NumberToken(StrRegion(2, 9))])
+        self.assertEqual(end, 9)
+        t = Tokenizer('2.')
+        end = t._t_number(0)
+        self.assertTokensEqual(t, [NumberToken(StrRegion(0, 2))])
+        self.assertEqual(end, 2)
+
+    def test_mod_supported(self):
+        t = Tokenizer('a+b%2')
+        t.tokenize()
+        self.assertTokensEqual(t, [
+            IdentNameToken(StrRegion(0, 1)),
+            OpToken(StrRegion(1, 2), '+'),
+            IdentNameToken(StrRegion(2, 3)),
+            OpToken(StrRegion(3, 4), '%'),
+            NumberToken(StrRegion(4, 5)),
+            EofToken(StrRegion(5, 5))
+        ])
+
+    def test_tokenize_concat_works(self):
+        t = Tokenizer('ab .. "s"')
+        t.tokenize()
+        self.assertTokensEqual(t, [
+            IdentNameToken(StrRegion(0, 2)),
+            WhitespaceToken(StrRegion(2, 3)),
+            OpToken(StrRegion(3, 5), '..'),
+            WhitespaceToken(StrRegion(5, 6)),
+            StringToken(StrRegion(6, 9)),
+            EofToken(StrRegion(9, 9)),
+        ], TokenStreamFlag.FULL)
+        self.assertTokensEqual(t, [
+            IdentNameToken(StrRegion(0, 2)),
+            OpToken(StrRegion(3, 5), '..'),
+            StringToken(StrRegion(6, 9)),
+            EofToken(StrRegion(9, 9)),
+        ], TokenStreamFlag.CONTENT)
 
 
 if __name__ == '__main__':

@@ -3,10 +3,10 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 from typing import TYPE_CHECKING
 
-from parser.str_region import StrRegion
+from .str_region import StrRegion
 
 if TYPE_CHECKING:
-    from parser.tokens import Token
+    from .tokens import Token
 
 
 @dataclass
@@ -33,6 +33,11 @@ class Node(Leaf):
         children = children or []
         return cls(name or token.name, token.region, parent, children)
 
+    @classmethod  # Better args order
+    def new(cls, name: str, region: StrRegion,
+            children: list[AnyNode], parent: Node = None):
+        return cls(name, region, parent, children)
+
     def __post_init__(self):
         children = self.children
         self.children = []
@@ -41,6 +46,8 @@ class Node(Leaf):
     def add(self, *nodes: AnyNode, update_end=False):
         end = self.region.end
         for n in nodes:
+            if n is None:
+                raise TypeError("Cannot have `None` as child of AnyNode (for now??)")
             end = max(end, n.region.end)
             self.children.append(n)
             n.parent = n

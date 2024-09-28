@@ -1,0 +1,23 @@
+NamedTokenCls(Token)
+    WhitespaceToken 'whitespace'
+    AnyCommentToken
+        LineCommentToken 'line_comment'
+        BlockCommentToken 'block_comment'
+
+    NumberToken 'number'
+    StringToken 'string'
+    CommaToken 'comma'
+    DotToken 'dot'
+    OpToken 'op'
+    ParenToken
+        LParToken 'lpar'
+        RParToken 'rpar'
+        LSqBracket 'lsqb'
+        RSqBracket 'rsqb'
+        LBrace 'lbrace'
+        RBrace 'rbrace'
+    SemicolonToken 'semi'
+    AnyNameToken
+        AttrNameToken 'attr_name'
+        IdentNameToken 'ident_name'
+    EofToken 'eof'

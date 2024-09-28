@@ -11,9 +11,9 @@ class TestLocatedError(unittest.TestCase):
             mock_display.return_value = 'mock_return_value'
             err = BaseLocatedError("a_message", StrRegion(0, 2), 'src_str')
             str(err)
-            self.assertEqual(len(err.__notes__), 1)
+            self.assertEqual(len(err.get_notes()), 1)
             str(err)
-            self.assertEqual(len(err.__notes__), 1)
+            self.assertEqual(len(err.get_notes()), 1)
 
     def test_uses_display_return_value(self):
         with patch.object(BaseLocatedError, 'display_region') as mock_display:
@@ -21,7 +21,7 @@ class TestLocatedError(unittest.TestCase):
             err = BaseLocatedError("a_message", StrRegion(0, 2), 'src_str')
             str(err)
             mock_display.assert_called_once_with('src_str', StrRegion(0, 2))
-            self.assertEqual(err.__notes__, ['mock_return_value'])
+            self.assertEqual(err.get_notes(), ['mock_return_value'])
 
     def test_only_calls_display_when_needed(self):
         with patch.object(BaseLocatedError, 'display_region') as mock_display:

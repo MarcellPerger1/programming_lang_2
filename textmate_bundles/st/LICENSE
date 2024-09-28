@@ -1,0 +1,10 @@
+This is a very heavily modified (all lines have been edited or reviewed by hand) version of
+  rust-syntax (A TextMate-style grammar for Rust)
+    at https://github.com/dustypomerleau/rust-syntax/blob/328a68299533bc2b8c71028be741cce78a9e0d53.
+  The original is Copyright (c) 2020 Dustin Pomerleau
+    and is available under the MIT license at the link above.
+  The full license text is available in the LICENSE.txt file at the website linked above.
+
+The modifications are available Copyright (c) 2023 Marcell Perger
+  and are also available under the MIT license
+  (see LICENSE file at the root of this project for full license text).
