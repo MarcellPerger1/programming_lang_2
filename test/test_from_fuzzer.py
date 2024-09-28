@@ -48,11 +48,8 @@ class FuzzerCorpusTestCases(unittest.IsolatedAsyncioTestCase, TestCaseUtils):
             await self._inner_once(src)  # Pycharm doesn't understand decorators
 
     async def test(self):
-        import cProfile
-        with cProfile.Profile() as p:
-            await asyncio.gather(*[
-                self._test_once(p) for p in Path('./pythonfuzz_corpus').iterdir()])
-        p.dump_stats('./prof_mp_slow_test.prof')
+        await asyncio.gather(*[
+            self._test_once(p) for p in Path('./pythonfuzz_corpus').iterdir()])
 
 
 class FuzzerCrashTestCase(BaseFuzzerTestCase):
