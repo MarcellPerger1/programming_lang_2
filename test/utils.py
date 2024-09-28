@@ -138,8 +138,7 @@ class SimpleProcessPool:
         self.tasks: dict[int, _Task] = {}
 
     def _create_processes(self):
-        return [_ProcessWrapper(self, i)
-                for i in range(self.n_processes)]
+        return [_ProcessWrapper(self, i) for i in range(self.n_processes)]
 
     def _kill_and_restart(self, i: int):
         self.processes[i].kill()
@@ -207,12 +206,12 @@ class SimpleProcessPool:
 
 
 class _ProcessWrapper:
-    def __init__(self, parent: SimpleProcessPool, i: int):
-        self.i = i
+    def __init__(self, parent: SimpleProcessPool, idx: int):
+        self.idx = idx
         self.pool = parent
         self.tasks_in = mp.Queue()
         self.results_out = mp.Queue()
-        self.p = mp.Process(name=f'_SimpleProcessPool:worker-{i}',
+        self.p = mp.Process(name=f'_SimpleProcessPool:worker-{idx}',
                             target=self._worker,
                             args=(self.tasks_in, self.results_out),
                             daemon=True)
