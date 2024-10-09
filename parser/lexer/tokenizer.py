@@ -296,10 +296,11 @@ class _IncrementalNumberParser(SrcHandler):
 
     # todo 0x, 0b (I refuse to add octal literals) - also hex floats???
     def _parse_digit_seq(self, start: int) -> int | None:
+        # (Returns None if no digits)
         idx = start
+        if self.get(idx) == '_':
+            raise self.err("Can't have '_' at the start of a number", idx)
         if self.get(idx) not in digits:
-            if self.get(idx) == '_':
-                raise self.err("Can't have '_' at the start of a number", idx)
             return None
         idx += 1
         while True:
@@ -315,43 +316,34 @@ class _IncrementalNumberParser(SrcHandler):
             elif self.get(idx) in digits:
                 idx += 1
             else:
-                return idx
+                return idx  # end of digits/'_'
 
-    def _parse_num_no_exp(self, start: int) -> int | None:
-        idx = start
+    def _parse_num_no_exp(self, idx: int) -> int:
         new_idx = self._parse_digit_seq(idx)
-        if new_idx is not None:
+        if new_idx is None:
+            if self.get(idx) != '.':
+                raise self.err("Number must start with digit or '.' ", idx)
+            has_pre_dot = False
+        else:
             has_pre_dot = True
             idx = new_idx
-        else:
-            # eg: .234, e7, abcdef
-            if self.get(idx) != '.':
-                return None
-            has_pre_dot = False
         if self.get(idx) != '.':
             # eg: 1234, 567e-5, 8 +9-10
             return idx
         idx += 1
         new_idx = self._parse_digit_seq(idx)
-        if new_idx is not None:
+        if new_idx is None:
+            has_post_dot = False
+        else:
             has_post_dot = True
             idx = new_idx
-        else:
-            has_post_dot = False
-        if not has_pre_dot and not has_post_dot:
-            # or maybe raise an error?
-            # abc.e definitely doesn't contain a number
-            # but it *could* reach here to check if it's a number
-            #   \- Note from later: it doesn't.
-            # return None
-            raise self.err("Number cannot be a single '.' (expected digits before or after", idx)
-        return idx
+        if has_pre_dot or has_post_dot:
+            return idx
+        raise self.err("Number cannot be a single '.' "
+                       "(expected digits before or after)", idx)
 
-    def _parse_number(self, start: int):
-        idx = start
+    def _parse_number(self, idx: int) -> int:
         idx = self._parse_num_no_exp(idx)
-        if idx is None:
-            return None
         if self.get(idx).lower() != 'e':
             return idx
         idx += 1
@@ -360,7 +352,7 @@ class _IncrementalNumberParser(SrcHandler):
         if self.get(idx) == '-':
             idx += 1
         new_idx = self._parse_digit_seq(idx)  # no dot after the 'e'
-        if not new_idx:
+        if new_idx is None:
             # eg: 1.2eC, 8e-Q which is always an error
             raise self.err("Expected integer after <number>e", idx)
         idx = new_idx
@@ -368,8 +360,6 @@ class _IncrementalNumberParser(SrcHandler):
 
     def parse(self, start: int) -> tuple[Token | None, int]:
         idx = self._parse_number(start)
-        if idx is None:
-            return None, start
         return NumberToken(StrRegion(start, idx)), idx
 
 
