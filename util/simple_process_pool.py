@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import asyncio
 import multiprocessing as mp
+import multiprocessing.pool
 import os
 import queue
 
@@ -49,6 +50,14 @@ class SimpleProcessPool:
 
     def _create_processes(self):
         return [_ProcessWrapper(self, i) for i in range(self.n_processes)]
+
+    def _append_new_process(self):
+        self.processes.append(_ProcessWrapper(self, len(self.processes)))
+        self.n_processes += 1
+
+    def grow_processes(self, minsize: int):
+        while len(self.processes) < minsize:
+            self._append_new_process()
 
     def _kill_and_restart(self, i: int):
         self.processes[i].kill()
