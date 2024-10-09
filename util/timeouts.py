@@ -3,7 +3,6 @@ from __future__ import annotations
 import asyncio
 import functools
 import multiprocessing as mp
-import multiprocessing.pool
 import os
 import time
 
@@ -104,7 +103,8 @@ async def _run_with_timeout_async_process(timeout: float, fn, args, kwargs,
 
 
 async def run_with_timeout_async(timeout: float, fn, args, kwargs,
-                                 debug=0, interval=0, pool: bool | mp.pool.Pool = None):
+                                 debug=0, interval=0,
+                                 pool: bool | int | SimpleProcessPool = None):
     """fn must be pickleable and a regular function **not** coroutine!
 
     debug:
@@ -115,19 +115,25 @@ async def run_with_timeout_async(timeout: float, fn, args, kwargs,
 
     pool:
      Use this if you're going to call this in a loop (with pool=False,
-     this function is rather expensive on Windows as it creates an entire new
-     process).
+      this function is rather expensive on Windows as it creates an entire new
+      process).
      If you're only calling this once, pool is rather useless as the first time
-     it is called, it creates all n processes.
-     You can pass your own pool, or True to use the default one with 4 workers.
+      it is called, it creates all n processes.
+     You can:
+      - Pass your own SimpleProcessPool
+      - Pass ``True`` to use the default pool (initial size is 4, see below)
+      - Pass an integer to use the default pool
+        after growing tit to a minimum size
     """
     if not pool:
         return await _run_with_timeout_async_process(
             timeout, fn, args, kwargs, debug, interval)
-    if pool is True:
-        if run_with_timeout_async.default_pool is None:
-            run_with_timeout_async.default_pool = SimpleProcessPool(4)
+    if pool is True or isinstance(pool, int):
+        minsize = 0 if pool is True else pool
         pool = run_with_timeout_async.default_pool
+        if pool is None:
+            pool = run_with_timeout_async.default_pool = SimpleProcessPool(4)
+        pool.grow_processes(minsize=minsize)
     return await _run_with_timeout_async_pool(pool, timeout, fn, args, kwargs, debug)
 
 run_with_timeout_async.default_pool = None
