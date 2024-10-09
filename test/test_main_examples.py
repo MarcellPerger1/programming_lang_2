@@ -1,6 +1,6 @@
 import unittest
 
-from parser.util import readfile
+from util import readfile
 from parser.cst.treegen import TreeGen
 from parser.lexer import Tokenizer
 from test.snapshottest import SnapshotTestCase

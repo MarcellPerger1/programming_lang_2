@@ -6,7 +6,8 @@ from parser.lexer.tokenizer import Tokenizer
 from parser.cst.treegen import TreeGen
 from parser.error import BaseParseError
 
-from test.utils import timeout_decor, TestCaseUtils, timeout_decor_async
+from test.utils import TestCaseUtils
+from util import timeout_decor, timeout_decor_async
 
 
 class BaseFuzzerTestCase(unittest.TestCase):
