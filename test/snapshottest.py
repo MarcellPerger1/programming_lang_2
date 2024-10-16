@@ -120,8 +120,16 @@ class SnapshotTestCase(unittest.TestCase):
         except KeyError:
             raise SnapshotsNotFound(f"Snapshot for {full_name} not found") from None
 
+    def _allocate_or_get_idx(self):
+        if self.curr_idx is not None:
+            return self.curr_idx
+        self.curr_idx = self.next_idx
+        self.next_idx += 1
+        return self.curr_idx
+
     def assertMatchesSnapshot(self, obj: object, name: str | None = None,
                               msg: str | None = None):
+        self.curr_idx = None
         full_name = self._get_full_name(name)
         actual = format_obj(obj)
         try:
@@ -151,9 +159,8 @@ class SnapshotTestCase(unittest.TestCase):
 
     def _get_sub_name(self, name: str):
         if name is None:
-            name = str(self.next_idx)
-            self.next_idx += 1
-        elif _string_is_number(name):
+            return str(self._allocate_or_get_idx())
+        if _string_is_number(name):
             raise ValueError("Custom name can't be a number")
         return name
 
@@ -189,7 +196,7 @@ class SnapshotTestCase(unittest.TestCase):
                 raise
 
 
-def parse_snap(text):
+def parse_snap(text: str):  # This is a bit overcomplicated - need a better format
     all_lines = text.splitlines()
     index_lines = all_lines[0:2]
     names: list[str]
