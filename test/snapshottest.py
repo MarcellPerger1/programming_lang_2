@@ -89,7 +89,7 @@ class SnapshotTestCase(unittest.TestCase):
         self.next_idx = 0
 
     @classmethod
-    def _read_snapshot_file_text(cls):
+    def _read_snapshot_text(cls):
         try:
             with open(cls._snap_file) as f:
                 return f.read()
@@ -102,14 +102,14 @@ class SnapshotTestCase(unittest.TestCase):
         if file in cls._files_cache:
             return cls._files_cache[file]
         try:
-            name_to_text = parse_snap(cls._read_snapshot_file_text())
+            snap_data = parse_snap(cls._read_snapshot_text())
         except SnapshotsNotFound:
             if not cls.update_snapshots:
                 raise
             cls.create_snapshot_file()
-            name_to_text = {}  # need to have something
-        cls._files_cache[file] = name_to_text
-        return name_to_text
+            snap_data = {}  # need to have something
+        cls._files_cache[file] = snap_data
+        return snap_data
 
     @classmethod
     def create_snapshot_file(cls):
@@ -153,6 +153,7 @@ class SnapshotTestCase(unittest.TestCase):
     def tearDownClass(cls) -> None:
         if cls.update_snapshots:
             cls.write_queued_snapshots()
+        cls._files_cache.clear()  # Free that huge data structure ASAP
 
     @classmethod
     def _make_snaps_dir(cls):
