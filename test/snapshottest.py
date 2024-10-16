@@ -91,8 +91,7 @@ class SnapshotTestCase(unittest.TestCase):
         if file in cls._files_cache:
             return cls._files_cache[file]
         try:
-            contents = cls._read_snapshot_file_text()
-            name_to_text = SnapParser(contents).parse_snap()
+            name_to_text = parse_snap(cls._read_snapshot_file_text())
         except SnapshotsNotFound:
             if not cls.update_snapshots:
                 raise
@@ -176,7 +175,7 @@ class SnapshotTestCase(unittest.TestCase):
         for filepath, snapshots in cls._queued_snapshot_writes.items():
             try:
                 with open(filepath, 'w') as f:
-                    SnapFormatter(snapshots).format_snap(f)
+                    format_snap(f, snapshots)
             except FileNotFoundError:
                 if not cls._snaps_dir.is_dir():
                     raise CantUpdateSnapshots(
@@ -185,53 +184,45 @@ class SnapshotTestCase(unittest.TestCase):
                 raise
 
 
-class SnapParser:
-    def __init__(self, text: str):
-        self.text = text
-
-    def parse_snap(self):
-        all_lines = self.text.splitlines()
-        index_lines = all_lines[0:2]
-        names: list[str]
-        csv_output = tuple(csv.reader(index_lines, 'unix'))
-        if len(csv_output) != 2:
-            raise SnapshotsNotFound("Can't read snapshot file (invalid format)")
-        lines_idx_str, names = csv_output
-        lines_idx = [int(idx_str) for idx_str in lines_idx_str]
-        assert len(set(names)) == len(names)
-        try:
-            line_name_tup: tuple[tuple[int, str], ...] = tuple(
-                zip(lines_idx, names, strict=True))
-        except ValueError:
-            raise SnapshotsNotFound("Can't read snapshot file (invalid format)")
-        name_to_src = {}
-        for i, (line_idx, name) in enumerate(line_name_tup):
-            start = line_idx
-            if i == len(line_name_tup) - 1:
-                # last item so go until end
-                end = len(all_lines)  # exclusive, including first 2 lines
-            else:
-                end = line_name_tup[i + 1][0]
-            src = '\n'.join(all_lines[start:end])
-            name_to_src[name] = src
-        return name_to_src
+def parse_snap(text):
+    all_lines = text.splitlines()
+    index_lines = all_lines[0:2]
+    names: list[str]
+    csv_output = tuple(csv.reader(index_lines, 'unix'))
+    if len(csv_output) != 2:
+        raise SnapshotsNotFound("Can't read snapshot file (invalid format)")
+    lines_idx_str, names = csv_output
+    lines_idx = [int(idx_str) for idx_str in lines_idx_str]
+    assert len(set(names)) == len(names)
+    try:
+        line_name_tup: tuple[tuple[int, str], ...] = tuple(
+            zip(lines_idx, names, strict=True))
+    except ValueError:
+        raise SnapshotsNotFound("Can't read snapshot file (invalid format)")
+    name_to_src = {}
+    for i, (line_idx, name) in enumerate(line_name_tup):
+        start = line_idx
+        if i == len(line_name_tup) - 1:
+            # last item so go until end
+            end = len(all_lines)  # exclusive, including first 2 lines
+        else:
+            end = line_name_tup[i + 1][0]
+        src = '\n'.join(all_lines[start:end])
+        name_to_src[name] = src
+    return name_to_src
 
 
-class SnapFormatter:
-    def __init__(self, name_to_src: dict[str, str]):
-        self.name_to_str = name_to_src
-
-    def format_snap(self, file: IO[str]):
-        body_list = []
-        line_idx_strs: list[str] = []
-        names: list[str] = []
-        start_line = 2
-        for name, src in self.name_to_str.items():
-            n_lines = len(src.splitlines())
-            line_idx_strs.append(str(start_line))
-            names.append(name)
-            start_line += n_lines
-            body_list.append(src)
-        body = '\n'.join(body_list)
-        csv.writer(file, 'unix').writerows([line_idx_strs, names])
-        file.write(body)
+def format_snap(file: IO[str], snap_data: dict[str, str]):
+    body_list = []
+    line_idx_strs: list[str] = []
+    names: list[str] = []
+    start_line = 2
+    for name, src in snap_data.items():
+        n_lines = len(src.splitlines())
+        line_idx_strs.append(str(start_line))
+        names.append(name)
+        start_line += n_lines
+        body_list.append(src)
+    body = '\n'.join(body_list)
+    csv.writer(file, 'unix').writerows([line_idx_strs, names])
+    file.write(body)
