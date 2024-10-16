@@ -25,6 +25,14 @@ def format_obj(obj: object) -> str:
         return repr(obj)
 
 
+def _string_is_number(s: str):
+    try:
+        int(s)
+        return True
+    except ValueError:
+        return False
+
+
 def _safe_cls_name(o: type):
     try:
         return o.__qualname__
@@ -139,18 +147,15 @@ class SnapshotTestCase(unittest.TestCase):
             self.assertEqual(expected, actual, msg)
 
     def _get_full_name(self, name: str | None):
+        return f'{self.cls_name}::{self.method_name}:{self._get_sub_name(name)}'
+
+    def _get_sub_name(self, name: str):
         if name is None:
             name = str(self.next_idx)
             self.next_idx += 1
-        else:
-            try:
-                int(name)
-            except ValueError:
-                pass
-            else:
-                raise ValueError("Custom name can't be a number")
-        full_name = f'{self.cls_name}::{self.method_name}:{name}'
-        return full_name
+        elif _string_is_number(name):
+            raise ValueError("Custom name can't be a number")
+        return name
 
     def queue_write_snapshot(self, full_name: str, new_value: str):
         print(f'Queueing write for snapshot {full_name}', file=sys.stderr)
