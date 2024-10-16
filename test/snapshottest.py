@@ -4,6 +4,7 @@ import os
 import pprint
 import sys
 import unittest
+from dataclasses import dataclass
 from pathlib import Path
 from typing import IO
 
@@ -42,10 +43,12 @@ def _safe_cls_name(o: type):
 
 _SNAPS_NOT_FOUND_MSG = (
     'Snapshots not found, execute this with PY_SNAPSHOTTEST_UPDATE=1 to write \n'
-    'the following as the snapshot for {full_name}:')
+    'the following as the snapshot for {full_name}:\n'
+    '{value}')
 _SNAPS_DONT_MATCH_MSG = (
     'Snapshots dont match actual value, execute this with PY_SNAPSHOTTEST_UPDATE=1 \n'
-    'to write the following as the snapshot for {full_name}:'
+    'to write the following as the snapshot for {full_name}:\n'
+    '{value}'
 )
 
 
@@ -113,56 +116,22 @@ class SnapshotTestCase(unittest.TestCase):
         cls._make_snaps_dir()
         Path(cls._snap_file).touch()
 
-    @classmethod
-    def _read_snapshot(cls, full_name: str):
-        try:
-            return cls._read_snapshot_file()[full_name]
-        except KeyError:
-            raise SnapshotsNotFound(f"Snapshot for {full_name} not found") from None
-
-    def _allocate_or_get_idx(self):
-        if self.curr_idx is not None:
-            return self.curr_idx
-        self.curr_idx = self.next_idx
-        self.next_idx += 1
-        return self.curr_idx
-
     def assertMatchesSnapshot(self, obj: object, name: str | None = None,
                               msg: str | None = None):
         self.curr_idx = None
-        full_name = self._get_full_name(name)
-        actual = format_obj(obj)
-        try:
-            expected = self._read_snapshot(full_name)
-        except SnapshotsNotFound:
-            if self.update_snapshots:
-                return self.queue_write_snapshot(full_name, actual)
-            self._output_msg_with_value(_SNAPS_NOT_FOUND_MSG, full_name, actual)
-            raise
+        v = SingleSnapshot(self, self._allocate_sub_name(name), self.get_opts())
+        v.assert_matches(format_obj(obj), msg)
+        if v.value_to_write is not None:
+            self.queue_write_snapshot(v.full_name, v.value_to_write)
 
-        if expected == actual:
-            return
-        if self.update_snapshots:
-            return self.queue_write_snapshot(full_name, actual)
-        if self.longMessage:
-            self._output_msg_with_value(_SNAPS_DONT_MATCH_MSG, full_name, actual)
-            print(_SNAPS_DONT_MATCH_MSG.format(full_name=full_name),
-                  file=sys.stderr, end='\n\n')
-            print(actual, file=sys.stderr)
-            self.assertEqual(expected, actual, msg)
-        else:
-            self.assertEqual(expected, actual, msg)
+    def get_opts(self) -> 'SnapOptions':
+        return SnapOptions(self.update_snapshots, self.longMessage)
 
-    def _output_msg_with_value(self, msg: str, full_name: str, value: str):
-        print(msg.format(full_name=full_name), file=sys.stderr, end='\n\n')
-        print(value, file=sys.stderr)
-
-    def _get_full_name(self, name: str | None):
-        return f'{self.cls_name}::{self.method_name}:{self._get_sub_name(name)}'
-
-    def _get_sub_name(self, name: str):
+    def _allocate_sub_name(self, name: str):
         if name is None:
-            return str(self._allocate_or_get_idx())
+            v = self.next_idx
+            self.next_idx += 1
+            return str(v)
         if _string_is_number(name):
             raise ValueError("Custom name can't be a number")
         return name
@@ -173,6 +142,12 @@ class SnapshotTestCase(unittest.TestCase):
             # create the new entry, copied from existing
             self._queued_snapshot_writes[self._snap_file] = self._read_snapshot_file()
         self._queued_snapshot_writes[self._snap_file][full_name] = new_value
+
+    def lookup_snapshot(self, full_name: str):
+        try:
+            return self._read_snapshot_file()[full_name]
+        except KeyError:
+            raise SnapshotsNotFound(f"Snapshot for {full_name} not found") from None
 
     @classmethod
     def tearDownClass(cls) -> None:
@@ -199,8 +174,44 @@ class SnapshotTestCase(unittest.TestCase):
                 raise
 
 
+@dataclass
+class SnapOptions:
+    update: bool = False
+    long_message: bool = False
+
+
 class SingleSnapshot:
-    ...
+    def __init__(self, parent: SnapshotTestCase, name: str, opts: SnapOptions):
+        self.p = parent
+        self.sub_name = name
+        self.opts = opts
+        self.full_name = f'{self.p.cls_name}::{self.p.method_name}:{self.sub_name}'
+        self.value_to_write = None
+
+    def assert_matches(self, actual: str, msg: str | None = None):
+        try:
+            expected = self.p.lookup_snapshot(self.full_name)
+        except SnapshotsNotFound:
+            if self.opts.update:
+                return self.queue_write(actual)
+            self._maybe_message_with_value(_SNAPS_NOT_FOUND_MSG, actual)
+            raise
+        if expected == actual:
+            return
+        if self.opts.update:
+            return self.queue_write(actual)
+        self._maybe_message_with_value(_SNAPS_DONT_MATCH_MSG, actual)
+        self.p.assertEqual(expected, actual, msg)  # will fail and error
+
+    def queue_write(self, value: str):
+        self.value_to_write = value
+
+    def _maybe_message_with_value(self, msg: str, value: str):
+        if self.opts.long_message:
+            self._output_msg_with_value(msg, value)
+
+    def _output_msg_with_value(self, msg: str, value: str):
+        print(msg.format(full_name=self.full_name, value=value), file=sys.stderr)
 
 
 def parse_snap(text: str):  # This is a bit overcomplicated - need a better format
