@@ -137,9 +137,7 @@ class SnapshotTestCase(unittest.TestCase):
         except SnapshotsNotFound:
             if self.update_snapshots:
                 return self.queue_write_snapshot(full_name, actual)
-            print(_SNAPS_NOT_FOUND_MSG.format(full_name=full_name),
-                  file=sys.stderr, end='\n\n')
-            print(actual, file=sys.stderr)
+            self._output_msg_with_value(_SNAPS_NOT_FOUND_MSG, full_name, actual)
             raise
 
         if expected == actual:
@@ -147,12 +145,17 @@ class SnapshotTestCase(unittest.TestCase):
         if self.update_snapshots:
             return self.queue_write_snapshot(full_name, actual)
         if self.longMessage:
+            self._output_msg_with_value(_SNAPS_DONT_MATCH_MSG, full_name, actual)
             print(_SNAPS_DONT_MATCH_MSG.format(full_name=full_name),
                   file=sys.stderr, end='\n\n')
             print(actual, file=sys.stderr)
             self.assertEqual(expected, actual, msg)
         else:
             self.assertEqual(expected, actual, msg)
+
+    def _output_msg_with_value(self, msg: str, full_name: str, value: str):
+        print(msg.format(full_name=full_name), file=sys.stderr, end='\n\n')
+        print(value, file=sys.stderr)
 
     def _get_full_name(self, name: str | None):
         return f'{self.cls_name}::{self.method_name}:{self._get_sub_name(name)}'
@@ -194,6 +197,10 @@ class SnapshotTestCase(unittest.TestCase):
                         f"Can't write snapshots - {cls._snaps_dir} "
                         f"is not is directory so can't write snapshots in it")
                 raise
+
+
+class SingleSnapshot:
+    ...
 
 
 def parse_snap(text: str):  # This is a bit overcomplicated - need a better format
