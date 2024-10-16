@@ -156,22 +156,21 @@ class SnapshotTestCase(unittest.TestCase):
 
     @classmethod
     def _make_snaps_dir(cls):
-        if not cls._snaps_dir.exists():
-            cls._snaps_dir.mkdir()
+        try:
+            cls._snaps_dir.mkdir(exist_ok=True)
+        except FileExistsError:
+            if not cls._snaps_dir.is_dir():
+                raise CantUpdateSnapshots(
+                    f"Can't write snapshots ({cls._snaps_dir} "
+                    f"is not is directory so can't write snapshots to it)")
+            raise
 
     @classmethod
     def write_queued_snapshots(cls):
         cls._make_snaps_dir()
         for filepath, snapshots in cls._queued_snapshot_writes.items():
-            try:
-                with open(filepath, 'w') as f:
-                    format_snap(f, snapshots)
-            except FileNotFoundError:
-                if not cls._snaps_dir.is_dir():
-                    raise CantUpdateSnapshots(
-                        f"Can't write snapshots - {cls._snaps_dir} "
-                        f"is not is directory so can't write snapshots in it")
-                raise
+            with open(filepath, 'w') as f:
+                format_snap(f, snapshots)
 
 
 @dataclass
