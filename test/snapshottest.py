@@ -9,6 +9,8 @@ from pathlib import Path
 from typing import IO
 
 
+# NOTE: This is copied from and should be kept up-to-date with
+# https://github.com/MarcellPerger1/mini-snapshot/blob/main/mini_snapshot.py
 class SnapshotsNotFound(RuntimeError):
     ...
 
