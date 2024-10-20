@@ -41,6 +41,13 @@ def _safe_cls_name(o: type):
         return o.__name__
 
 
+def open_or_create_rw(path: str):
+    try:
+        return open(path, 'r+')
+    except FileNotFoundError:
+        return open(path, 'w+')  # Try to create if not exists
+
+
 _SNAPS_NOT_FOUND_MSG = (
     'Snapshots not found, execute this with PY_SNAPSHOTTEST_UPDATE=1 to write \n'
     'the following as the snapshot for {full_name}:\n'
@@ -62,7 +69,7 @@ class SnapshotTestCase(unittest.TestCase):
     _files_cache: dict[str, dict[str, str]]
 
     update_snapshots: bool | None = None
-    _queued_snapshot_writes: dict[str, dict[str, str]]
+    _queued_changes: dict[str, dict[str, str]]
 
     @classmethod
     def setUpClass(cls) -> None:
@@ -72,7 +79,10 @@ class SnapshotTestCase(unittest.TestCase):
         if cls.update_snapshots is None:
             cls.update_snapshots = os.environ.get(
                 'PY_SNAPSHOTTEST_UPDATE', '0').lower() in ('1', 'true', 'yes')
-        cls._queued_snapshot_writes = {}
+        # Store changes, not entire file. This reduces (but doesn't eliminate)
+        # chance of race conditions when using threading.
+        # Additionally, reduces memory load during the main bit of the tests.
+        cls._queued_changes = {}
         super().setUpClass()
 
     @classmethod
@@ -106,23 +116,15 @@ class SnapshotTestCase(unittest.TestCase):
         except SnapshotsNotFound:
             if not cls.update_snapshots:
                 raise
-            cls.create_snapshot_file()
             snap_data = {}  # need to have something
         cls._files_cache[file] = snap_data
         return snap_data
 
-    @classmethod
-    def create_snapshot_file(cls):
-        cls._make_snaps_dir()
-        Path(cls._snap_file).touch()
-
     def assertMatchesSnapshot(self, obj: object, name: str | None = None,
                               msg: str | None = None):
-        self.curr_idx = None
-        v = SingleSnapshot(self, self._allocate_sub_name(name), self.get_opts())
-        v.assert_matches(format_obj(obj), msg)
-        if v.value_to_write is not None:
-            self.queue_write_snapshot(v.full_name, v.value_to_write)
+        SingleSnapshot(
+            self, self._allocate_sub_name(name), self.get_opts()
+        ).assert_matches(format_obj(obj), msg)
 
     def get_opts(self) -> 'SnapOptions':
         return SnapOptions(self.update_snapshots, self.longMessage)
@@ -137,11 +139,7 @@ class SnapshotTestCase(unittest.TestCase):
         return name
 
     def queue_write_snapshot(self, full_name: str, new_value: str):
-        print(f'Queueing write for snapshot {full_name}', file=sys.stderr)
-        if self._snap_file not in self._queued_snapshot_writes:
-            # create the new entry, copied from existing
-            self._queued_snapshot_writes[self._snap_file] = self._read_snapshot_file()
-        self._queued_snapshot_writes[self._snap_file][full_name] = new_value
+        self._queued_changes.setdefault(self._snap_file, {})[full_name] = new_value
 
     def lookup_snapshot(self, full_name: str):
         try:
@@ -151,27 +149,31 @@ class SnapshotTestCase(unittest.TestCase):
 
     @classmethod
     def tearDownClass(cls) -> None:
+        cls._files_cache.clear()  # Free that huge data structure ASAP (not used in write)
         if cls.update_snapshots:
             cls.write_queued_snapshots()
-        cls._files_cache.clear()  # Free that huge data structure ASAP
 
     @classmethod
     def _make_snaps_dir(cls):
         try:
             cls._snaps_dir.mkdir(exist_ok=True)
-        except FileExistsError:
-            if not cls._snaps_dir.is_dir():
-                raise CantUpdateSnapshots(
-                    f"Can't write snapshots ({cls._snaps_dir} "
-                    f"is not is directory so can't write snapshots to it)")
-            raise
+        except FileExistsError as e:
+            raise CantUpdateSnapshots(
+                f"Can't write snapshots ({cls._snaps_dir} is not a directory"
+                f" so can't write snapshots to it)") from e
 
     @classmethod
     def write_queued_snapshots(cls):
         cls._make_snaps_dir()
-        for filepath, snapshots in cls._queued_snapshot_writes.items():
-            with open(filepath, 'w') as f:
-                format_snap(f, snapshots)
+        for path, changes in cls._queued_changes.items():
+            with open_or_create_rw(path) as f:  # do in one go to reduce chance of racing
+                orig = parse_snap(f.read())  # Use most up-to-date value (no cache)
+                f.seek(0, os.SEEK_SET)  # go to start
+                format_snap(f, cls._apply_file_changes(orig, changes))
+
+    @classmethod
+    def _apply_file_changes(cls, orig: dict[str, str], new: dict[str, str]):
+        return orig | new
 
 
 @dataclass
@@ -186,7 +188,6 @@ class SingleSnapshot:
         self.sub_name = name
         self.opts = opts
         self.full_name = f'{self.p.cls_name}::{self.p.method_name}:{self.sub_name}'
-        self.value_to_write = None
 
     def assert_matches(self, actual: str, msg: str | None = None):
         try:
@@ -204,7 +205,7 @@ class SingleSnapshot:
         self.p.assertEqual(expected, actual, msg)  # will fail and error
 
     def queue_write(self, value: str):
-        self.value_to_write = value
+        self.p.queue_write_snapshot(self.full_name, value)
 
     def _maybe_message_with_value(self, msg: str, value: str):
         if self.opts.long_message:
