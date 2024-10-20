@@ -80,6 +80,7 @@ class SnapshotTestCase(unittest.TestCase):
 
     _files_cache: dict[str, dict[str, str]]
     _queued_changes: dict[str, dict[str, str]]
+    _subtest = None
 
     @classmethod
     def setUpClass(cls) -> None:
@@ -137,6 +138,15 @@ class SnapshotTestCase(unittest.TestCase):
     def get_opts(self) -> 'SnapOptions':
         return SnapOptions(self.update_snapshots, self.longMessage)
 
+    def get_self_name(self):
+        parts = [f'{self.cls_name}::{self.method_name}']
+        subt = self._subtest
+        while subt is not None:
+            # This formatting could be done better...
+            parts.append('{%s}' % subt._subDescription())
+            subt = getattr(subt, '_parent_', None)  # We override self.subTest
+        return '+'.join(parts)
+
     def _allocate_sub_name(self, name: str):
         if name is None:
             v = self.next_idx
@@ -154,6 +164,24 @@ class SnapshotTestCase(unittest.TestCase):
             return self._read_snapshot_file()[full_name]
         except KeyError:
             raise SnapshotsNotFound(f"Snapshot for {full_name} not found") from None
+
+    def subTest(self, msg: str = unittest.case._subtest_msg_sentinel, **params):
+        old = getattr(self, '_subtest', None)
+        v = super().subTest(msg, **params)
+        # TODO: somehow this needs to save & restore next_idx!
+        #  so probably will need to rewrite this completely
+        # Warning: Python-abusing below
+        # The unittest context manager only starts running once __enter__
+        # is called so call is manually as we need the ._subtest for
+        # the subtest chain
+        v.__enter__()
+
+        class NewClass(v.__class__):
+            def __enter__(self):
+                return
+        v.__class__ = NewClass
+        self._subtest._parent_ = old
+        return v
 
     @classmethod
     def tearDownClass(cls) -> None:
@@ -195,7 +223,7 @@ class SingleSnapshot:
         self.p = parent
         self.sub_name = name
         self.opts = opts
-        self.full_name = f'{self.p.cls_name}::{self.p.method_name}:{self.sub_name}'
+        self.full_name = f'{self.p.get_self_name()}:{self.sub_name}'
 
     def assert_matches(self, actual: str, msg: str | None = None):
         try:
