@@ -1,3 +1,4 @@
+import contextlib
 import csv
 import inspect
 import os
@@ -165,23 +166,17 @@ class SnapshotTestCase(unittest.TestCase):
         except KeyError:
             raise SnapshotsNotFound(f"Snapshot for {full_name} not found") from None
 
+    @contextlib.contextmanager
     def subTest(self, msg: str = unittest.case._subtest_msg_sentinel, **params):
-        old = getattr(self, '_subtest', None)
-        v = super().subTest(msg, **params)
-        # TODO: somehow this needs to save & restore next_idx!
-        #  so probably will need to rewrite this completely
-        # Warning: Python-abusing below
-        # The unittest context manager only starts running once __enter__
-        # is called so call is manually as we need the ._subtest for
-        # the subtest chain
-        v.__enter__()
-
-        class NewClass(v.__class__):
-            def __enter__(self):
-                return
-        v.__class__ = NewClass
-        self._subtest._parent_ = old
-        return v
+        parent_st = self._subtest
+        old_idx = self.next_idx
+        self.next_idx = 0
+        try:
+            with super().subTest(msg, **params) as st:
+                self._subtest._parent_ = parent_st
+                yield st
+        finally:
+            self.next_idx = old_idx
 
     @classmethod
     def tearDownClass(cls) -> None:
