@@ -3,12 +3,12 @@ from __future__ import annotations
 from typing import (TypeVar, cast, TypeAlias, Sequence, overload, Iterable, Callable)
 
 from .token_matcher import OpM, KwdM, Matcher, PatternT
+from .tree_node import Node, Leaf, AnyNode
 from ..error import BaseParseError, BaseLocatedError
 from ..lexer import Tokenizer
 from ..operators import UNARY_OPS, COMPARISONS, ASSIGN_OPS
 from ..str_region import StrRegion
 from ..tokens import *
-from ..tree_node import Node, Leaf, AnyNode
 
 DT = TypeVar('DT')
 

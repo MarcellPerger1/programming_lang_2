@@ -4,7 +4,7 @@ import sys
 from io import StringIO
 from typing import IO, Sequence
 
-from ..tree_node import Node, Leaf
+from .tree_node import Node, Leaf
 
 __all__ = [
     'TreePrinter', 'tree_print', 'tree_format', 'tprint', 'tformat'
