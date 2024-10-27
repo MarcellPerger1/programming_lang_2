@@ -195,8 +195,12 @@ class SnapshotTestCase(unittest.TestCase):
 
     @classmethod
     def write_queued_snapshots(cls):
+        if not cls._queued_changes:
+            return
         cls._make_snaps_dir()
         for path, changes in cls._queued_changes.items():
+            if not changes:
+                continue
             with _open_or_create_rw(path) as f:  # do in one go to reduce chance of racing
                 orig = parse_snap(f.read())  # Use most up-to-date value (no cache)
                 f.seek(0, os.SEEK_SET)  # go to start
