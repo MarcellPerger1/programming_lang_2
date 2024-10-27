@@ -20,24 +20,6 @@ class CantUpdateSnapshots(RuntimeError):
     ...
 
 
-def format_obj(obj: object) -> str:
-    if method := getattr(obj, '_format_snapshot_', None):
-        return method()
-    if isinstance(obj, str):
-        # already string, don't repr it to help with snapshot readability
-        # TODO: should be put something in front of this
-        #  e.g. '<str>(' + obj + ')' etc.,
-        #  maybe repr it into a triple-quoted string?
-        return obj
-    try:
-        return pprint.pformat(obj, width=120)
-    except TypeError:
-        # TODO: this will never match for classes without __repr__
-        #  as the fallback is to <object at 0x1234...> and the address
-        #  will (almost) never be the same
-        return repr(obj)
-
-
 def _string_is_number(s: str):
     try:
         int(s)
@@ -82,6 +64,38 @@ class SnapshotTestCase(unittest.TestCase):
     _files_cache: dict[str, dict[str, str]]
     _queued_changes: dict[str, dict[str, str]]
     _subtest = None
+
+    format_dispatch = {}
+
+    @classmethod
+    def _lookup_in_dispatch(cls, t: type):
+        if m := cls.format_dispatch.get(t):
+            return m
+        for sup in t.mro():
+            if m := cls.format_dispatch.get(sup):
+                cls.format_dispatch[t] = m  # Cache it so we don't need to walk MRO again.
+                return m
+        return None
+
+    @classmethod
+    def format_obj(cls, obj: object) -> str:
+        if method := cls._lookup_in_dispatch(type(obj)):
+            return method(obj)
+        if method := getattr(obj, '_format_snapshot_', None):
+            return method()
+        if isinstance(obj, str):
+            # already string, don't repr it to help with snapshot readability
+            # TODO: should be put something in front of this
+            #  e.g. '<str>(' + obj + ')' etc.,
+            #  maybe repr it into a triple-quoted string?
+            return obj
+        try:
+            return pprint.pformat(obj, width=120)
+        except TypeError:
+            # TODO: this will never match for classes without __repr__
+            #  as the fallback is to <object at 0x1234...> and the address
+            #  will (almost) never be the same
+            return repr(obj)
 
     @classmethod
     def setUpClass(cls) -> None:
@@ -134,7 +148,7 @@ class SnapshotTestCase(unittest.TestCase):
                               msg: str | None = None):
         SingleSnapshot(
             self, self._allocate_sub_name(name), self.get_opts()
-        ).assert_matches(format_obj(obj), msg)
+        ).assert_matches(self.format_obj(obj), msg)
 
     def get_opts(self) -> 'SnapOptions':
         return SnapOptions(self.update_snapshots, self.longMessage)
