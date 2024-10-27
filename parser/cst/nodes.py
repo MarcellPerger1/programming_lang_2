@@ -61,24 +61,38 @@ class NopNode(NamedLeafCls):
     name = 'nop'  # TODO: actually nop_smt
 
 
+# region ---- Blocks ----
 class BlockNode(NamedNodeCls):
     name = 'block'  # Varargs
 
 
-# TODO: `if` is a real mess - refactor it before attempting this
-# region if-mess
-class IfBlock(NamedNodeCls):
-    name = 'if'  # TODO: if is done vey badly - varargs with 1=if_cond, ...=elsif
+class ConditionalBlock(NamedNodeCls):  # Varargs: if, *elseif, else
+    name = 'if'  # TODO maybe conditional
+
+
+class IfBlock(NamedSizedNodeCls):
+    name = 'if_cond'  # TODO maybe just if
+    size = 2  # condition, block
 
 
 class ElseIfBlock(NamedSizedNodeCls):
-    name = 'elseif'  # TODO actually elseif_cond
+    name = 'elseif_cond'  # TODO maybe elseif
     size = 2
 
 
 class ElseBlock(NamedSizedNodeCls):
-    name = 'else'  # TODO actually else_cond
+    name = 'else_cond'  # TODO maybe just else
     size = 1  # just the BlockNode
+
+
+class WhileBlock(NamedSizedNodeCls):
+    name = 'while'
+    size = 2
+
+
+class RepeatBlock(NamedSizedNodeCls):
+    name = 'repeat'
+    size = 2
 # endregion
 
 

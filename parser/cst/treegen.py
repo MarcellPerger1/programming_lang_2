@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from typing import (TypeVar, cast, TypeAlias, Sequence, overload, Iterable, Callable)
 
+from .nodes import BlockNode
 from .token_matcher import OpM, KwdM, Matcher, PatternT
 from .tree_node import Node, Leaf, AnyNode
 from ..error import BaseParseError, BaseLocatedError
@@ -271,7 +272,7 @@ class TreeGen:
             raise self.err(f"Expected '}}' to close block, "
                            f"got {self[idx].name}", self[idx])
         idx += 1
-        return Node('block', self.tok_region(start, idx), None, smts), idx
+        return BlockNode(self.tok_region(start, idx), None, smts), idx
 
     def _parse_block_with_header(self, start: int, name: str,
                                  display: str = None, kwd: str = None) -> tuple[AnyNode, int]:
