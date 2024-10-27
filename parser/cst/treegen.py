@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from typing import (TypeVar, cast, TypeAlias, Sequence, overload, Iterable, Callable)
 
-from .nodes import BlockNode, ArgDeclNode
+from .nodes import BlockNode, ArgDeclNode, ConditionalBlock
 from .token_matcher import OpM, KwdM, Matcher, PatternT
 from .tree_node import Node, Leaf, AnyNode
 from ..error import BaseParseError, BaseLocatedError
@@ -312,8 +312,8 @@ class TreeGen:
                                f"got {self[idx + 1].name}", self[idx + 1])
         if else_part is None:
             else_part = Node('else_cond_NULL', self.tok_region(idx - 1, idx - 1))
-        return Node('if', self.tok_region(start, idx),
-                    None, [if_part, *elseif_parts, else_part]), idx
+        return ConditionalBlock(self.tok_region(start, idx),
+                                None, [if_part, *elseif_parts, else_part]), idx
 
     def _parse_if_cond(self, start: int) -> tuple[AnyNode, int]:
         return self._parse_block_with_header(start, name='if_cond', display='if', kwd='if')
