@@ -5,6 +5,8 @@ from __future__ import annotations
 from enum import IntFlag, Enum
 from typing import Sequence, TypeVar
 
+from parser.cst.tree_node import Node, Leaf, AnyNode
+from parser.cst.tree_print import tformat
 from parser.cst.treegen import TreeGen, CstParseError
 from parser.error import BaseParseError
 from parser.lexer import Tokenizer
@@ -38,6 +40,16 @@ def to_enum(obj: EnumTV | int | str, enum_t: type[EnumTV]) -> EnumTV:
 
 class CommonTestCase(SnapshotTestCase, TestCaseUtils):
     maxDiff = 65535
+
+    @classmethod
+    def _tree_format(cls, n: AnyNode):
+        return tformat(n, verbose=True)
+
+    @classmethod
+    def setUpClass(cls) -> None:
+        cls.format_dispatch.setdefault(Leaf, cls._tree_format)
+        cls.format_dispatch.setdefault(Node, cls._tree_format)
+        super().setUpClass()
 
     @classmethod
     def _token_as_tuple_no_region(cls, t: Token):
