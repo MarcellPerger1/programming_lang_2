@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from typing import (TypeVar, cast, TypeAlias, Sequence, overload, Iterable, Callable)
 
-from .nodes import BlockNode
+from .nodes import BlockNode, ArgDeclNode
 from .token_matcher import OpM, KwdM, Matcher, PatternT
 from .tree_node import Node, Leaf, AnyNode
 from ..error import BaseParseError, BaseLocatedError
@@ -249,7 +249,7 @@ class TreeGen:
                            f"Did you forget the type name?", self[idx])
         arg_name = Leaf.of(self[idx])
         idx += 1
-        arg_decl = Node('arg_decl', self.tok_region(start, idx), None, [tp_name, arg_name])
+        arg_decl = ArgDeclNode(self.tok_region(start, idx), None, [tp_name, arg_name])
         return arg_decl, idx
 
     def tok_region(self, start: int, end: int) -> StrRegion:
