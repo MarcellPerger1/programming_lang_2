@@ -83,6 +83,7 @@ class NamedNodeCls(Node):
         if type(self) is NamedNodeCls:
             raise TypeError("NamedNodeCls may not be instantiated directly;"
                             " use a subclass or use Node")
+        super().__post_init__()
 
     # noinspection PyMethodOverriding
     @classmethod
@@ -101,7 +102,8 @@ class NamedSizedNodeCls(NamedNodeCls):
     size: int
 
     def __post_init__(self):
-        if type(self) is NamedNodeCls:
+        # Don't call super().__post_init__() because we customise the _add() logic
+        if type(self) is NamedSizedNodeCls:
             raise TypeError("NamedSizedNodeCls may not be instantiated directly;"
                             " use a subclass or use Node")
         children = self.children
