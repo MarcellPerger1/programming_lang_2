@@ -201,6 +201,8 @@ class SnapshotTestCase(unittest.TestCase):
                 orig = parse_snap(f.read())  # Use most up-to-date value (no cache)
                 f.seek(0, os.SEEK_SET)  # go to start
                 format_snap(f, cls._apply_file_changes(orig, changes))
+                # Remove extra garbage that may be left over and not fully overwritten
+                f.truncate()
 
     @classmethod
     def _apply_file_changes(cls, orig: dict[str, str], new: dict[str, str]):
