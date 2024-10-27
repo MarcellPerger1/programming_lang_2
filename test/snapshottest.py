@@ -30,7 +30,7 @@ def format_obj(obj: object) -> str:
         #  maybe repr it into a triple-quoted string?
         return obj
     try:
-        return pprint.pformat(obj)
+        return pprint.pformat(obj, width=120)
     except TypeError:
         # TODO: this will never match for classes without __repr__
         #  as the fallback is to <object at 0x1234...> and the address
