@@ -85,9 +85,6 @@ class SnapshotTestCase(unittest.TestCase):
             return method()
         if isinstance(obj, str):
             # already string, don't repr it to help with snapshot readability
-            # TODO: should be put something in front of this
-            #  e.g. '<str>(' + obj + ')' etc.,
-            #  maybe repr it into a triple-quoted string?
             return obj
         try:
             return pprint.pformat(obj, width=120)
