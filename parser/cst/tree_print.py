@@ -4,7 +4,7 @@ import sys
 from io import StringIO
 from typing import IO, Sequence
 
-from .tree_node import Node, Leaf
+from .tree_node import Node, Leaf, AnyNode
 from ..str_region import StrRegion
 
 __all__ = [
@@ -62,18 +62,11 @@ class TreePrinter:
         self._indented_write(level, end)
 
     def _write_node(self, obj: Node, level: int):
-        if not self.verbose:
-            start = f'Node({obj.name}, ['
-        else:
-            start = f'Node({obj.name}, {self._fmt_region(obj.region)}, ['
+        start = self._fmt_node_header(obj, has_more_args=True) + '['
         self._write_seq(obj.children, level, start, end='])')
 
     def _write_leaf(self, obj: Leaf, level: int):
-        if not self.verbose:
-            self._indented_write(level, f'Leaf({obj.name})')
-        else:
-            self._indented_write(
-                level, f'Leaf({obj.name}, {self._fmt_region(obj.region)})')
+        self._indented_write(level, self._fmt_node_header(obj, has_more_args=False))
 
     def _write_fallback(self, obj: object, level: int):
         self._indented_write(level, repr(obj))
@@ -82,6 +75,16 @@ class TreePrinter:
         if level:
             self.stream.write(' ' * level * self.indent)
         self.stream.write(s)
+
+    def _fmt_node_header(self, obj: AnyNode, has_more_args=True):
+        args: list[str] = []
+        if type(obj) == Leaf or type(obj) == Node:
+            args.append(repr(obj.name))
+        if self.verbose:
+            args.append(self._fmt_region(obj.region))
+        if has_more_args:
+            args.append('')  # Placeholder for next arg so ', ' gets added
+        return f'{type(obj).__name__}({", ".join(args)}'
 
     @classmethod
     def _fmt_region(cls, r: StrRegion):
