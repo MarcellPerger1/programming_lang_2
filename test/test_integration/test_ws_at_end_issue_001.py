@@ -1,33 +1,14 @@
 import unittest
-from pathlib import Path
 
 from parser.lexer import Tokenizer
 from parser.tokens import *
-
-filepath = Path(__file__)
-
-
-def load_example():
-    path = (filepath.parent / 'examples'
-            / filepath.with_suffix('.txt').name.removeprefix('test_'))
-    with open(path) as f:
-        return f.read()
+from test.common import CommonTestCase, TokenStreamFlag
 
 
-class MyTestCase(unittest.TestCase):
-    def _token_as_tuple(self, t: Token):
-        if isinstance(t, OpToken):
-            return t.name, t.op_str
-        return (t.name, )
-
-    def assert_tokens_match(self, a: list[Token], b: list[Token]):
-        a_tuples = tuple(map(self._token_as_tuple, a))
-        b_tuples = tuple(map(self._token_as_tuple, b))
-        self.assertEqual(b_tuples, a_tuples)
-
+class MyTestCase(CommonTestCase):
     def test_ws_at_end(self):
-        t = Tokenizer(load_example()).tokenize()
-        self.assert_tokens_match(t.tokens, [
+        t = Tokenizer('let a =1; \n').tokenize()
+        self.assertTokensEqual(t, [
             IdentNameToken(),
             WhitespaceToken(),
             IdentNameToken(),
@@ -37,7 +18,7 @@ class MyTestCase(unittest.TestCase):
             SemicolonToken(),
             WhitespaceToken(),
             EofToken()
-        ])
+        ], TokenStreamFlag.FULL, check_regions=False)
 
 
 if __name__ == '__main__':

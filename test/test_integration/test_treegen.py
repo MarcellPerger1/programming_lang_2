@@ -2,19 +2,11 @@ import unittest
 
 from parser.lexer.tokenizer import Tokenizer
 from parser.operators import BINARY_OPS
-from parser.cst.treegen import TreeGen, CstParseError, LocatedCstError
-
-from test.snapshottest import SnapshotTestCase
-from test.utils import TestCaseUtils
+from parser.cst.treegen import TreeGen, LocatedCstError
+from test.common import CommonTestCase
 
 
-class TreeGenTest(SnapshotTestCase):
-    maxDiff = None
-
-    def assertTreeMatchesSnapshot(self, src: str):
-        t = TreeGen(Tokenizer(src))
-        self.assertMatchesSnapshot(t.parse())
-
+class TreeGenTest(CommonTestCase):
     def test_item_chain(self):
         self.assertTreeMatchesSnapshot('a[7].b.0.fn["c" .. 2] = fn(9).k[7 + r](3,);')
 
@@ -31,14 +23,10 @@ class TreeGenTest(SnapshotTestCase):
         self.assertTreeMatchesSnapshot('let b;')
 
 
-class TestFunctionDecl(SnapshotTestCase, TestCaseUtils):
+class TestFunctionDecl(CommonTestCase):
     def setUp(self) -> None:
         super().setUp()
         self.setProperCwd()
-
-    def assertTreeMatchesSnapshot(self, src: str):
-        t = TreeGen(Tokenizer(src))
-        self.assertMatchesSnapshot(t.parse())
 
     def test_no_params(self):
         self.assertTreeMatchesSnapshot('def a() { alert("Called"); }')
@@ -50,7 +38,7 @@ class TestFunctionDecl(SnapshotTestCase, TestCaseUtils):
         self.assertTreeMatchesSnapshot('def a(number a, string b){RESULT=a.."="..b;}')
 
 
-class TestTreeGenErrors(SnapshotTestCase, TestCaseUtils):
+class TestTreeGenErrors(CommonTestCase):
     def test_empty_sqb_error(self):
         with self.assertRaises(LocatedCstError) as err:
             TreeGen(Tokenizer('v=a[]+b')).parse()
@@ -59,19 +47,9 @@ class TestTreeGenErrors(SnapshotTestCase, TestCaseUtils):
         self.assertEqual(4, exc.region.end - 1)
 
 
-class TreeGenEofTest(SnapshotTestCase):
+class TreeGenEofTest(CommonTestCase):
     def test__at_expr_end(self):
         self.assertFailsGracefully('a.b()')
-
-    def assertFailsGracefully(self, src: str):
-        t = TreeGen(Tokenizer(src))
-        with self.assertRaises(CstParseError):
-            t.parse()
-
-    # noinspection PyMethodMayBeStatic
-    def assertValidParse(self, src: str):
-        t = TreeGen(Tokenizer(src))
-        t.parse()
 
     def test__at_assign_end(self):
         self.assertFailsGracefully('a.b = 8')

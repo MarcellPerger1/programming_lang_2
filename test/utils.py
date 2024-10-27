@@ -1,9 +1,11 @@
+"""General testing utils that could be used in any project
+(not specific to this project). Utils specific to this project should go in common.py"""
 from __future__ import annotations
 
 import os
 import unittest
 from pathlib import Path
-from typing import overload, TYPE_CHECKING, TypeVar, Protocol
+from typing import overload, TYPE_CHECKING, TypeVar, Protocol, Iterable, Container, Any
 
 from unittest.util import safe_repr
 
@@ -53,8 +55,12 @@ class TestCaseUtils(unittest.TestCase):
                         f' {safe_repr(lo)} and {safe_repr(hi)}')
         self.fail(self._formatMessage(msg, standard_msg))
 
+    def assertContains(self, container: Iterable | Container, member: Any, msg=None):
+        self.assertIn(member, container, msg)
+
     @staticmethod
     def isProperCwdSet():
+        # Not demon-proof but whatever... It is, however, CI-being-stupid-proof (I hope).
         return Path('./.github/workflows').exists()
 
     def setProperCwd(self):

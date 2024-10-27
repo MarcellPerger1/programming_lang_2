@@ -1,48 +1,13 @@
 import unittest
-from enum import IntFlag
-from typing import Sequence, TypeVar, Union
 
+from parser.lexer import Tokenizer
 from parser.lexer.tokens import WhitespaceToken, StringToken, EofToken, NumberToken
 from parser.str_region import StrRegion
-from parser.lexer import Tokenizer
-from parser.tokens import IdentNameToken, Token, DotToken, AttrNameToken, OpToken
+from parser.tokens import IdentNameToken, DotToken, AttrNameToken, OpToken
+from test.common import CommonTestCase, TokenStreamFlag
 
 
-def _strict_boundary_kwargs():
-    try:
-        from enum import FlagBoundary
-        return {'boundary': FlagBoundary.STRICT}
-    except ImportError:
-        return {}  # Python 3.10
-
-
-class TokenStreamFlag(IntFlag, **_strict_boundary_kwargs()):
-    CONTENT = 1
-    FULL = 2
-    BOTH = CONTENT | FULL
-
-
-EnumTV = TypeVar('EnumTV', bound=IntFlag)
-
-
-def to_enum(obj: EnumTV | int | str, enum_t: type[EnumTV]) -> EnumTV:
-    if isinstance(obj, str):
-        return enum_t[obj]
-    return enum_t(obj)
-
-
-class MyTestCase(unittest.TestCase):
-    def assertTokensEqual(
-            self, t: Tokenizer, expected: Sequence[Token],
-            stream: Union[str, int, TokenStreamFlag] = TokenStreamFlag.BOTH
-    ):
-        stream = to_enum(stream, TokenStreamFlag)
-        assert stream
-        if stream & TokenStreamFlag.CONTENT:
-            self.assertEqual(t.content_tokens, expected)
-        if stream & TokenStreamFlag.FULL:
-            self.assertEqual(t.tokens, expected)
-
+class MyTestCase(CommonTestCase):
     def test__t_ident_name__at_end(self):
         t = Tokenizer('abc')
         end = t._t_ident_name(0)
