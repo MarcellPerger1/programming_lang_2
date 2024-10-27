@@ -13,16 +13,18 @@ __all__ = [
 
 
 class TreePrinter:
-    def __init__(self, stream: IO[str] = None, indent=2, verbose=False):
+    def __init__(self, stream: IO[str] = None, indent=2, verbose=False, append_lf=False):
         self.indent = indent
         self.verbose = verbose
+        self.append_lf = append_lf
         if stream is None:
             stream = sys.stdout
         self.stream = stream
 
     def print(self, obj: object):
         self._write(obj, 0)
-        self.stream.write('\n')
+        if self.append_lf:
+            self.stream.write('\n')
 
     def format(self, obj: object):
         orig_stream = self.stream
@@ -66,7 +68,7 @@ class TreePrinter:
         self._write_seq(obj.children, level, start, end='])')
 
     def _write_leaf(self, obj: Leaf, level: int):
-        self._indented_write(level, self._fmt_node_header(obj, has_more_args=False))
+        self._indented_write(level, self._fmt_node_header(obj, has_more_args=False) + ')')
 
     def _write_fallback(self, obj: object, level: int):
         self._indented_write(level, repr(obj))
@@ -91,16 +93,14 @@ class TreePrinter:
         return f'StrRegion({r.start}, {r.end})'
 
 
-def tree_print(obj: object, stream: IO[str] = None, indent: int = 2):
-    if stream is None:
-        stream = sys.stdout
-    TreePrinter(stream, indent).print(obj)
+def tree_print(obj: object, stream: IO[str] = None, indent: int = 2,
+               verbose: bool = False, append_lf: bool = False):
+    TreePrinter(stream, indent, verbose, append_lf).print(obj)
 
 
-def tree_format(obj: object, indent: int = 2):
-    out = StringIO()
-    tree_print(obj, out, indent)
-    return out.getvalue()
+def tree_format(obj: object, indent: int = 2,
+                verbose: bool = False, append_lf: bool = False):
+    return TreePrinter(None, indent, verbose, append_lf).format(obj)
 
 
 tprint = tree_print
