@@ -31,6 +31,25 @@ class TreeGenTest(SnapshotTestCase):
         self.assertTreeMatchesSnapshot('let b;')
 
 
+class TestFunctionDecl(SnapshotTestCase, TestCaseUtils):
+    def setUp(self) -> None:
+        super().setUp()
+        self.setProperCwd()
+
+    def assertTreeMatchesSnapshot(self, src: str):
+        t = TreeGen(Tokenizer(src))
+        self.assertMatchesSnapshot(t.parse())
+
+    def test_no_params(self):
+        self.assertTreeMatchesSnapshot('def a() { alert("Called"); }')
+
+    def test_one_param(self):
+        self.assertTreeMatchesSnapshot('def a(number val){print(val);}')
+
+    def test_two_param(self):
+        self.assertTreeMatchesSnapshot('def a(number a, string b){RESULT=a.."="..b;}')
+
+
 class TestTreeGenErrors(SnapshotTestCase, TestCaseUtils):
     def test_empty_sqb_error(self):
         with self.assertRaises(LocatedCstError) as err:
