@@ -23,6 +23,16 @@ class TreeGenTest(CommonTestCase):
         self.assertTreeMatchesSnapshot('let b;')
 
 
+class TestBlocks(CommonTestCase):
+    def test_while(self):
+        self.assertTreeMatchesSnapshot('while a || !b && c >= 6 {}')
+        self.assertTreeMatchesSnapshot('while!(7%8){(7.7).abc(6,7,8);}')
+
+    def test_repeat(self):
+        self.assertTreeMatchesSnapshot('repeat a || !b && c >= 6 {}')
+        self.assertTreeMatchesSnapshot('repeat!(7%8){(7.7).abc(6,7,8);}')
+
+
 class TestFunctionDecl(CommonTestCase):
     def setUp(self) -> None:
         super().setUp()

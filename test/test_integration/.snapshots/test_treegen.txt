@@ -1,5 +1,5 @@
-"2","45","93","105","114","121","135","154"
-"TreeGenTest::test_item_chain:0","TreeGenTest::test_fn_call_in_lvalue:0","TreeGenTest::test_aug_assign:0","TreeGenTest::test__mod_supported:0","TreeGenTest::test_decl_no_value:0","TestFunctionDecl::test_no_params:0","TestFunctionDecl::test_one_param:0","TestFunctionDecl::test_two_param:0"
+"2","45","93","105","114","121","135","154","181","198","225","242"
+"TreeGenTest::test_item_chain:0","TreeGenTest::test_fn_call_in_lvalue:0","TreeGenTest::test_aug_assign:0","TreeGenTest::test__mod_supported:0","TreeGenTest::test_decl_no_value:0","TestFunctionDecl::test_no_params:0","TestFunctionDecl::test_one_param:0","TestFunctionDecl::test_two_param:0","TestBlocks::test_while:0","TestBlocks::test_while:1","TestBlocks::test_repeat:0","TestBlocks::test_repeat:1"
 ProgramNode(StrRegion(0, 43), [
   Node('=', StrRegion(0, 42), [
     GetitemNode(StrRegion(0, 21), [
@@ -174,6 +174,94 @@ ProgramNode(StrRegion(0, 44), [
             Leaf('string', StrRegion(36, 39))
           ]),
           Leaf('ident_name', StrRegion(41, 42))
+        ])
+      ])
+    ])
+  ])
+])
+ProgramNode(StrRegion(0, 26), [
+  WhileBlock(StrRegion(0, 26), [
+    Node('||', StrRegion(6, 23), [
+      Leaf('ident_name', StrRegion(6, 7)),
+      Node('&&', StrRegion(11, 23), [
+        Node('!', StrRegion(11, 13), [
+          Leaf('ident_name', StrRegion(12, 13))
+        ]),
+        Node('>=', StrRegion(17, 23), [
+          Leaf('ident_name', StrRegion(17, 18)),
+          Leaf('number', StrRegion(22, 23))
+        ])
+      ])
+    ]),
+    BlockNode(StrRegion(24, 26), [])
+  ])
+])
+ProgramNode(StrRegion(0, 30), [
+  WhileBlock(StrRegion(0, 30), [
+    Node('!', StrRegion(5, 11), [
+      Node('paren', StrRegion(6, 11), [
+        Node('%', StrRegion(7, 10), [
+          Leaf('number', StrRegion(7, 8)),
+          Leaf('number', StrRegion(9, 10))
+        ])
+      ])
+    ]),
+    BlockNode(StrRegion(11, 30), [
+      CallNode(StrRegion(12, 28), [
+        Node('getattr', StrRegion(12, 21), [
+          Node('paren', StrRegion(12, 17), [
+            Leaf('number', StrRegion(13, 16))
+          ]),
+          Leaf('attr_name', StrRegion(18, 21))
+        ]),
+        CallArgs(StrRegion(21, 28), [
+          Leaf('number', StrRegion(22, 23)),
+          Leaf('number', StrRegion(24, 25)),
+          Leaf('number', StrRegion(26, 27))
+        ])
+      ])
+    ])
+  ])
+])
+ProgramNode(StrRegion(0, 27), [
+  RepeatBlock(StrRegion(0, 27), [
+    Node('||', StrRegion(7, 24), [
+      Leaf('ident_name', StrRegion(7, 8)),
+      Node('&&', StrRegion(12, 24), [
+        Node('!', StrRegion(12, 14), [
+          Leaf('ident_name', StrRegion(13, 14))
+        ]),
+        Node('>=', StrRegion(18, 24), [
+          Leaf('ident_name', StrRegion(18, 19)),
+          Leaf('number', StrRegion(23, 24))
+        ])
+      ])
+    ]),
+    BlockNode(StrRegion(25, 27), [])
+  ])
+])
+ProgramNode(StrRegion(0, 31), [
+  RepeatBlock(StrRegion(0, 31), [
+    Node('!', StrRegion(6, 12), [
+      Node('paren', StrRegion(7, 12), [
+        Node('%', StrRegion(8, 11), [
+          Leaf('number', StrRegion(8, 9)),
+          Leaf('number', StrRegion(10, 11))
+        ])
+      ])
+    ]),
+    BlockNode(StrRegion(12, 31), [
+      CallNode(StrRegion(13, 29), [
+        Node('getattr', StrRegion(13, 22), [
+          Node('paren', StrRegion(13, 18), [
+            Leaf('number', StrRegion(14, 17))
+          ]),
+          Leaf('attr_name', StrRegion(19, 22))
+        ]),
+        CallArgs(StrRegion(22, 29), [
+          Leaf('number', StrRegion(23, 24)),
+          Leaf('number', StrRegion(25, 26)),
+          Leaf('number', StrRegion(27, 28))
         ])
       ])
     ])
