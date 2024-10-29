@@ -17,13 +17,13 @@ jobs:
           - "3.11"
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: Setup python ${{ matrix.py_version }}
-        uses: actions/setup-python@v4.6.1
+        uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.py_version }}
-      - name: Setup pythonfuzz >=1.0.11
+      - name: Setup pythonfuzz
         run: pip install -r requirements-dev.txt
-      - name: Run tests
+      - name: Run fuzzer (${{ inputs.iterations }} iterations)
         run: |
           python fuzz.py -n ${{ inputs.iterations }}
