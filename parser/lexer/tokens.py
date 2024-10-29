@@ -8,7 +8,7 @@ from ..str_region import StrRegion
 
 __all__ = [
     'AnyCommentToken', 'AnyNameToken', 'AttrNameToken', 'BlockCommentToken',
-    'CommaToken', 'DotToken', 'EofToken', 'GETATTR_VALID_AFTER_CLS',
+    'CommaToken', 'DotToken', 'EofToken',
     'IdentNameToken', 'LBrace', 'LParToken', 'LSqBracket', 'LineCommentToken',
     'NamedTokenCls', 'NumberToken', 'OpToken', 'PAREN_TYPES', 'ParenSide',
     'ParenToken', 'ParenType', 'RBrace', 'RParToken', 'RSqBracket',
