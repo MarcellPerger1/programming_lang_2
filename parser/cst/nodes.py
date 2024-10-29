@@ -85,6 +85,11 @@ class ElseBlock(NamedSizedNodeCls):
     size = 1  # just the BlockNode
 
 
+class NullElseBlock(NamedSizedNodeCls):
+    name = 'else_cond_NULL'  # TODO maybe just else_null
+    size = 0
+
+
 class WhileBlock(NamedSizedNodeCls):
     name = 'while'
     size = 2
