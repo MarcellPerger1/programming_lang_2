@@ -424,7 +424,7 @@ class TreeGen:
                                f"got {self[idx].name}", self[idx])
             right = Leaf.of(self[idx])
             idx += 1
-            return self.node_from_children('getattr', [left, right]), idx
+            return self.node_from_children(GetattrNode, [left, right]), idx
         elif isinstance(self[idx], LSqBracket):
             idx += 1
             inner, idx = self._parse_expr(idx)

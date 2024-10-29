@@ -1,7 +1,7 @@
 "2","13","24","35","41","52"
 "MyTestCase::test_issue_09__dot:after_call","MyTestCase::test_issue_09__sqb:after_call","MyTestCase::test_issue_09__dot:after_paren","MyTestCase::test_issue_09__dot:after_string","MyTestCase::test_issue_09__sqb:after_paren","MyTestCase::test_issue_09__sqb:after_string"
 ProgramNode(StrRegion(0, 15), [
-  Node('getattr', StrRegion(0, 14), [
+  GetattrNode(StrRegion(0, 14), [
     CallNode(StrRegion(0, 12), [
       Leaf('ident_name', StrRegion(0, 2)),
       CallArgs(StrRegion(2, 12), [
@@ -23,7 +23,7 @@ ProgramNode(StrRegion(0, 16), [
   ])
 ])
 ProgramNode(StrRegion(0, 14), [
-  Node('getattr', StrRegion(0, 13), [
+  GetattrNode(StrRegion(0, 13), [
     Node('paren', StrRegion(0, 11), [
       Node('+', StrRegion(1, 10), [
         Leaf('ident_name', StrRegion(1, 6)),
@@ -34,7 +34,7 @@ ProgramNode(StrRegion(0, 14), [
   ])
 ])
 ProgramNode(StrRegion(0, 13), [
-  Node('getattr', StrRegion(0, 12), [
+  GetattrNode(StrRegion(0, 12), [
     Leaf('string', StrRegion(0, 10)),
     Leaf('attr_name', StrRegion(11, 12))
   ])
