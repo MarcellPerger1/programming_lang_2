@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from .tree_node import NamedLeafCls, NamedNodeCls, NamedSizedNodeCls
+from .named_node import NamedLeafCls, NamedNodeCls, NamedSizedNodeCls
 
 __all__ = [
     "NumberNode", "StringNode", "AnyNameLeaf", "IdentNode", "AttrNameNode",

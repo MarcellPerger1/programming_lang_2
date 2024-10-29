@@ -4,7 +4,8 @@ from typing import (TypeVar, cast, TypeAlias, Sequence, overload, Iterable, Call
 
 from .nodes import *
 from .token_matcher import OpM, KwdM, Matcher, PatternT
-from .tree_node import Node, Leaf, AnyNode, AnyNamedNode
+from .named_node import AnyNamedNode
+from .base_node import Leaf, AnyNode, Node
 from ..error import BaseParseError, BaseLocatedError
 from ..lexer import Tokenizer
 from ..operators import UNARY_OPS, COMPARISONS, ASSIGN_OPS

@@ -5,7 +5,7 @@ from __future__ import annotations
 from enum import IntFlag, Enum
 from typing import Sequence, TypeVar
 
-from parser.cst.tree_node import Node, Leaf, AnyNode
+from parser.cst.base_node import Leaf, AnyNode, Node
 from parser.cst.tree_print import tformat
 from parser.cst.treegen import TreeGen, CstParseError
 from parser.error import BaseParseError
