@@ -118,3 +118,6 @@ class NamedSizedNodeCls(NamedNodeCls):
 
     def add(self, *nodes: AnyNode, update_end=False):
         raise TypeError(f"Cannot add nodes to fixed size {type(self).__name__}")
+
+
+AnyNamedNode = NamedLeafCls | NamedNodeCls

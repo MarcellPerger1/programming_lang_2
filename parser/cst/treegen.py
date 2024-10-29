@@ -2,9 +2,9 @@ from __future__ import annotations
 
 from typing import (TypeVar, cast, TypeAlias, Sequence, overload, Iterable, Callable)
 
-from .nodes import BlockNode, ArgDeclNode, ConditionalBlock, CallArgs
+from .nodes import BlockNode, ArgDeclNode, ConditionalBlock, CallArgs, CallNode
 from .token_matcher import OpM, KwdM, Matcher, PatternT
-from .tree_node import Node, Leaf, AnyNode
+from .tree_node import Node, Leaf, AnyNode, AnyNamedNode
 from ..error import BaseParseError, BaseLocatedError
 from ..lexer import Tokenizer
 from ..operators import UNARY_OPS, COMPARISONS, ASSIGN_OPS
@@ -446,7 +446,7 @@ class TreeGen:
             return node, idx
         elif isinstance(self[idx], LParToken):
             args, idx = self._parse_call_args(idx)
-            return self.node_from_children('call', [left, args]), idx
+            return self.node_from_children(CallNode, [left, args]), idx
         return left, idx
 
     def match_ops(self, idx: int, *ops: str | Sequence[str]) -> str | None:
@@ -549,10 +549,13 @@ class TreeGen:
         return StrRegion.union(*regs)
 
     @classmethod
-    def node_from_children(cls, name: str, children: list[AnyNode],
+    def node_from_children(cls, name_or_type: str | type[AnyNamedNode],
+                           children: list[AnyNode],
                            region: RegionUnionArgT = None, parent: Node = None):
         region = cls.region_union(region if region is not None else children)
-        return Node(name, region, parent, children)
+        if isinstance(name_or_type, str):
+            return Node(name_or_type, region, parent, children)
+        return name_or_type(region, parent, children)
 
 
 CstGen = TreeGen
