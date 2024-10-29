@@ -2,9 +2,7 @@ from __future__ import annotations
 
 from typing import (TypeVar, cast, TypeAlias, Sequence, overload, Iterable, Callable)
 
-from .nodes import (BlockNode, ArgDeclNode, ConditionalBlock, CallArgs,
-                    CallNode, GetitemNode, ProgramNode, LetNode, GlobalNode, DeclItemNode,
-                    DefineNode, ArgsDeclNode, WhileBlock, RepeatBlock, IfBlock)
+from .nodes import *
 from .token_matcher import OpM, KwdM, Matcher, PatternT
 from .tree_node import Node, Leaf, AnyNode, AnyNamedNode
 from ..error import BaseParseError, BaseLocatedError
@@ -304,9 +302,9 @@ class TreeGen:
                 raise self.err(f"Expected '{{' or 'if' after 'else', "
                                f"got {self[idx + 1].name}", self[idx + 1])
         if else_part is None:
-            else_part = Node('else_cond_NULL', self.tok_region(idx - 1, idx - 1))
-        return ConditionalBlock(self.tok_region(start, idx),
-                                None, [if_part, *elseif_parts, else_part]), idx
+            else_part = NullElseBlock(self.tok_region(idx - 1, idx - 1))
+        return ConditionalBlock(self.tok_region(start, idx), None,
+                                [if_part, *elseif_parts, else_part]), idx
 
     def _parse_if_cond(self, start: int) -> tuple[AnyNode, int]:
         return self._parse_block_with_header(start, IfBlock, 'if')
@@ -320,15 +318,14 @@ class TreeGen:
             raise self.err(f"Expected '{{' after expr in else if, "
                            f"got {self[idx].name}", self[idx])
         block, idx = self._parse_block(idx)
-        return Node('elseif_cond', self.tok_region(start, idx),
-                    None, [cond, block]), idx
+        return ElseIfBlock(self.tok_region(start, idx), None, [cond, block]), idx
 
     def _parse_else(self, start: int) -> tuple[AnyNode, int]:
         idx = start
         assert self.matches(idx, (KwdM('else'), LBrace))
         idx += 1  # don't advance past '{'; it's needed for _parse_block
         block, idx = self._parse_block(idx)
-        return Node('else_cond', self.tok_region(start, idx), None, [block]), idx
+        return ElseBlock(self.tok_region(start, idx), None, [block]), idx
 
     def _parse_call_args(self, start: int) -> tuple[AnyNode, int]:
         idx = start

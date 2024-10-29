@@ -152,7 +152,7 @@ ProgramNode(StrRegion(0, 144), [
       ]),
       BlockNode(StrRegion(99, 103), [])
     ]),
-    Node('elseif_cond', StrRegion(104, 128), [
+    ElseIfBlock(StrRegion(104, 128), [
       Leaf('ident_name', StrRegion(112, 113)),
       BlockNode(StrRegion(113, 128), [
         Node('+', StrRegion(115, 125), [
@@ -163,7 +163,7 @@ ProgramNode(StrRegion(0, 144), [
         ])
       ])
     ]),
-    Node('else_cond_NULL', StrRegion(127, 126), [])
+    NullElseBlock(StrRegion(127, 126), [])
   ]),
   Node('getattr', StrRegion(129, 143), [
     CallNode(StrRegion(129, 136), [
@@ -704,7 +704,7 @@ ProgramNode(StrRegion(0, 1685), [
             ])
           ])
         ]),
-        Node('else_cond_NULL', StrRegion(473, 468), [])
+        NullElseBlock(StrRegion(473, 468), [])
       ]),
       CallNode(StrRegion(479, 505), [
         Leaf('ident_name', StrRegion(479, 486)),
@@ -873,7 +873,7 @@ ProgramNode(StrRegion(0, 1685), [
             ])
           ])
         ]),
-        Node('else_cond_NULL', StrRegion(1097, 1092), [])
+        NullElseBlock(StrRegion(1097, 1092), [])
       ])
     ])
   ]),
@@ -949,7 +949,7 @@ ProgramNode(StrRegion(0, 1685), [
             ])
           ])
         ]),
-        Node('else_cond_NULL', StrRegion(1355, 1350), [])
+        NullElseBlock(StrRegion(1355, 1350), [])
       ])
     ])
   ]),
