@@ -4,7 +4,7 @@ Node('program', StrRegion(0, 15), [
   Node('getattr', StrRegion(0, 14), [
     Node('call', StrRegion(0, 12), [
       Leaf('ident_name', StrRegion(0, 2)),
-      Node('call_args', StrRegion(2, 12), [
+      CallArgs(StrRegion(2, 12), [
         Leaf('ident_name', StrRegion(3, 11))
       ])
     ]),
@@ -15,7 +15,7 @@ Node('program', StrRegion(0, 16), [
   Node('getitem', StrRegion(0, 15), [
     Node('call', StrRegion(0, 12), [
       Leaf('ident_name', StrRegion(0, 2)),
-      Node('call_args', StrRegion(2, 12), [
+      CallArgs(StrRegion(2, 12), [
         Leaf('ident_name', StrRegion(3, 11))
       ])
     ]),

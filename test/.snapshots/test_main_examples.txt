@@ -119,7 +119,7 @@ Node('program', StrRegion(0, 144), [
         ]),
         Leaf('attr_name', StrRegion(35, 43))
       ]),
-      Node('call_args', StrRegion(43, 62), [
+      CallArgs(StrRegion(43, 62), [
         Leaf('ident_name', StrRegion(44, 50)),
         Node('-', StrRegion(55, 60), [
           Leaf('number', StrRegion(59, 60))
@@ -139,14 +139,14 @@ Node('program', StrRegion(0, 144), [
             ]),
             Node('call', StrRegion(74, 93), [
               Leaf('ident_name', StrRegion(74, 76)),
-              Node('call_args', StrRegion(76, 93), [
+              CallArgs(StrRegion(76, 93), [
                 Leaf('string', StrRegion(77, 92))
               ])
             ])
           ]),
           Node('call', StrRegion(94, 98), [
             Leaf('ident_name', StrRegion(94, 96)),
-            Node('call_args', StrRegion(96, 98), [])
+            CallArgs(StrRegion(96, 98), [])
           ])
         ])
       ]),
@@ -158,7 +158,7 @@ Node('program', StrRegion(0, 144), [
         Node('+', StrRegion(115, 125), [
           Node('call', StrRegion(116, 125), [
             Leaf('ident_name', StrRegion(116, 123)),
-            Node('call_args', StrRegion(123, 125), [])
+            CallArgs(StrRegion(123, 125), [])
           ])
         ])
       ])
@@ -168,7 +168,7 @@ Node('program', StrRegion(0, 144), [
   Node('getattr', StrRegion(129, 143), [
     Node('call', StrRegion(129, 136), [
       Leaf('ident_name', StrRegion(129, 134)),
-      Node('call_args', StrRegion(134, 136), [])
+      CallArgs(StrRegion(134, 136), [])
     ]),
     Leaf('attr_name', StrRegion(137, 143))
   ])
@@ -670,7 +670,7 @@ Node('program', StrRegion(0, 1685), [
       Leaf('ident_name', StrRegion(7, 12)),
       Node('call', StrRegion(15, 21), [
         Leaf('ident_name', StrRegion(15, 19)),
-        Node('call_args', StrRegion(19, 21), [])
+        CallArgs(StrRegion(19, 21), [])
       ])
     ])
   ]),
@@ -690,12 +690,12 @@ Node('program', StrRegion(0, 1685), [
           BlockNode(StrRegion(432, 474), [
             Node('call', StrRegion(442, 467), [
               Leaf('ident_name', StrRegion(442, 448)),
-              Node('call_args', StrRegion(448, 467), [
+              CallArgs(StrRegion(448, 467), [
                 Node('getitem', StrRegion(449, 466), [
                   Leaf('ident_name', StrRegion(449, 454)),
                   Node('call', StrRegion(455, 465), [
                     Leaf('ident_name', StrRegion(455, 458)),
-                    Node('call_args', StrRegion(458, 465), [
+                    CallArgs(StrRegion(458, 465), [
                       Leaf('ident_name', StrRegion(459, 464))
                     ])
                   ])
@@ -708,11 +708,11 @@ Node('program', StrRegion(0, 1685), [
       ]),
       Node('call', StrRegion(479, 505), [
         Leaf('ident_name', StrRegion(479, 486)),
-        Node('call_args', StrRegion(486, 505), [
+        CallArgs(StrRegion(486, 505), [
           Leaf('ident_name', StrRegion(487, 492)),
           Node('call', StrRegion(494, 504), [
             Leaf('ident_name', StrRegion(494, 497)),
-            Node('call_args', StrRegion(497, 504), [
+            CallArgs(StrRegion(497, 504), [
               Leaf('ident_name', StrRegion(498, 503))
             ])
           ])
@@ -729,7 +729,7 @@ Node('program', StrRegion(0, 1685), [
           Leaf('ident_name', StrRegion(534, 541)),
           Node('call', StrRegion(544, 554), [
             Leaf('ident_name', StrRegion(544, 547)),
-            Node('call_args', StrRegion(547, 554), [
+            CallArgs(StrRegion(547, 554), [
               Leaf('ident_name', StrRegion(548, 553))
             ])
           ])
@@ -778,7 +778,7 @@ Node('program', StrRegion(0, 1685), [
           Leaf('ident_name', StrRegion(801, 808)),
           Node('call', StrRegion(811, 821), [
             Leaf('ident_name', StrRegion(811, 814)),
-            Node('call_args', StrRegion(814, 821), [
+            CallArgs(StrRegion(814, 821), [
               Leaf('ident_name', StrRegion(815, 820))
             ])
           ])
@@ -845,7 +845,7 @@ Node('program', StrRegion(0, 1685), [
             Leaf('ident_name', StrRegion(1006, 1011)),
             Node('call', StrRegion(1012, 1022), [
               Leaf('ident_name', StrRegion(1012, 1015)),
-              Node('call_args', StrRegion(1015, 1022), [
+              CallArgs(StrRegion(1015, 1022), [
                 Leaf('ident_name', StrRegion(1016, 1021))
               ])
             ])
@@ -857,7 +857,7 @@ Node('program', StrRegion(0, 1685), [
           Leaf('ident_name', StrRegion(1029, 1034)),
           Leaf('attr_name', StrRegion(1035, 1041))
         ]),
-        Node('call_args', StrRegion(1041, 1048), [
+        CallArgs(StrRegion(1041, 1048), [
           Leaf('ident_name', StrRegion(1042, 1047))
         ])
       ]),
@@ -867,7 +867,7 @@ Node('program', StrRegion(0, 1685), [
           BlockNode(StrRegion(1068, 1098), [
             Node('call', StrRegion(1078, 1091), [
               Leaf('ident_name', StrRegion(1078, 1084)),
-              Node('call_args', StrRegion(1084, 1091), [
+              CallArgs(StrRegion(1084, 1091), [
                 Leaf('ident_name', StrRegion(1085, 1090))
               ])
             ])
@@ -886,7 +886,7 @@ Node('program', StrRegion(0, 1685), [
           Leaf('ident_name', StrRegion(1130, 1137)),
           Node('call', StrRegion(1140, 1150), [
             Leaf('ident_name', StrRegion(1140, 1143)),
-            Node('call_args', StrRegion(1143, 1150), [
+            CallArgs(StrRegion(1143, 1150), [
               Leaf('ident_name', StrRegion(1144, 1149))
             ])
           ])
@@ -918,7 +918,7 @@ Node('program', StrRegion(0, 1685), [
           Leaf('ident_name', StrRegion(1222, 1227)),
           Leaf('attr_name', StrRegion(1228, 1234))
         ]),
-        Node('call_args', StrRegion(1234, 1240), [
+        CallArgs(StrRegion(1234, 1240), [
           Leaf('ident_name', StrRegion(1235, 1239))
         ])
       ]),
@@ -927,7 +927,7 @@ Node('program', StrRegion(0, 1685), [
           Leaf('ident_name', StrRegion(1246, 1251)),
           Leaf('attr_name', StrRegion(1252, 1258))
         ]),
-        Node('call_args', StrRegion(1258, 1264), [
+        CallArgs(StrRegion(1258, 1264), [
           Leaf('ident_name', StrRegion(1259, 1263))
         ])
       ]),
@@ -937,13 +937,13 @@ Node('program', StrRegion(0, 1685), [
           BlockNode(StrRegion(1305, 1356), [
             Node('call', StrRegion(1315, 1327), [
               Leaf('ident_name', StrRegion(1315, 1321)),
-              Node('call_args', StrRegion(1321, 1327), [
+              CallArgs(StrRegion(1321, 1327), [
                 Leaf('ident_name', StrRegion(1322, 1326))
               ])
             ]),
             Node('call', StrRegion(1337, 1349), [
               Leaf('ident_name', StrRegion(1337, 1343)),
-              Node('call_args', StrRegion(1343, 1349), [
+              CallArgs(StrRegion(1343, 1349), [
                 Leaf('ident_name', StrRegion(1344, 1348))
               ])
             ])
@@ -962,7 +962,7 @@ Node('program', StrRegion(0, 1685), [
           Leaf('ident_name', StrRegion(1459, 1466)),
           Node('call', StrRegion(1469, 1479), [
             Leaf('ident_name', StrRegion(1469, 1472)),
-            Node('call_args', StrRegion(1472, 1479), [
+            CallArgs(StrRegion(1472, 1479), [
               Leaf('ident_name', StrRegion(1473, 1478))
             ])
           ])

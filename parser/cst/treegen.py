@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from typing import (TypeVar, cast, TypeAlias, Sequence, overload, Iterable, Callable)
 
-from .nodes import BlockNode, ArgDeclNode, ConditionalBlock
+from .nodes import BlockNode, ArgDeclNode, ConditionalBlock, CallArgs
 from .token_matcher import OpM, KwdM, Matcher, PatternT
 from .tree_node import Node, Leaf, AnyNode
 from ..error import BaseParseError, BaseLocatedError
@@ -344,7 +344,7 @@ class TreeGen:
         if self.matches(idx, RParToken):
             # simple case, no args
             idx += 1
-            return Node('call_args', self.tok_region(start, idx)), idx
+            return CallArgs(self.tok_region(start, idx)), idx
         arg1, idx = self._parse_expr(idx)
         args = [arg1]
         while not self.matches(idx, RParToken):
@@ -364,8 +364,7 @@ class TreeGen:
         #         ^
         assert self.matches(idx, RParToken)
         idx += 1
-        call_args = Node('call_args', self.tok_region(start, idx), None, args)
-        return call_args, idx
+        return CallArgs(self.tok_region(start, idx), None, args), idx
 
     def _parse_expr(self, start: int) -> tuple[AnyNode, int]:
         expr, idx = self._parse_or_bool(start)
