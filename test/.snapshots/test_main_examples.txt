@@ -665,7 +665,7 @@ ProgramNode(StrRegion(0, 144), [
  WhitespaceToken(region=StrRegion(start=1685, end=1688)),
  EofToken(region=StrRegion(start=1688, end=1688))]
 ProgramNode(StrRegion(0, 1685), [
-  Node('global_decl', StrRegion(0, 22), [
+  GlobalNode(StrRegion(0, 22), [
     Node('decl_item', StrRegion(7, 21), [
       Leaf('ident_name', StrRegion(7, 12)),
       CallNode(StrRegion(15, 21), [
@@ -674,7 +674,7 @@ ProgramNode(StrRegion(0, 1685), [
       ])
     ])
   ]),
-  Node('global_decl', StrRegion(23, 49), [
+  GlobalNode(StrRegion(23, 49), [
     Node('decl_item', StrRegion(30, 48), [
       Leaf('ident_name', StrRegion(30, 40)),
       Leaf('ident_name', StrRegion(43, 48))
