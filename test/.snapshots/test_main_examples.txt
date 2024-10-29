@@ -89,7 +89,7 @@
  WhitespaceToken(region=StrRegion(start=144, end=145)),
  EofToken(region=StrRegion(start=145, end=145))]
 ProgramNode(StrRegion(0, 144), [
-  Node('let_decl', StrRegion(0, 18), [
+  LetNode(StrRegion(0, 18), [
     Node('decl_item', StrRegion(4, 17), [
       Leaf('ident_name', StrRegion(4, 5)),
       Node('+', StrRegion(8, 17), [
@@ -724,7 +724,7 @@ ProgramNode(StrRegion(0, 1685), [
     Leaf('ident_name', StrRegion(514, 521)),
     Node('args_decl', StrRegion(521, 523), []),
     BlockNode(StrRegion(524, 660), [
-      Node('let_decl', StrRegion(530, 555), [
+      LetNode(StrRegion(530, 555), [
         Node('decl_item', StrRegion(534, 554), [
           Leaf('ident_name', StrRegion(534, 541)),
           CallNode(StrRegion(544, 554), [
@@ -735,7 +735,7 @@ ProgramNode(StrRegion(0, 1685), [
           ])
         ])
       ]),
-      Node('let_decl', StrRegion(560, 586), [
+      LetNode(StrRegion(560, 586), [
         Node('decl_item', StrRegion(564, 585), [
           Leaf('ident_name', StrRegion(564, 568)),
           GetitemNode(StrRegion(571, 585), [
@@ -773,7 +773,7 @@ ProgramNode(StrRegion(0, 1685), [
     Leaf('ident_name', StrRegion(666, 675)),
     Node('args_decl', StrRegion(675, 677), []),
     BlockNode(StrRegion(678, 972), [
-      Node('let_decl', StrRegion(797, 822), [
+      LetNode(StrRegion(797, 822), [
         Node('decl_item', StrRegion(801, 821), [
           Leaf('ident_name', StrRegion(801, 808)),
           CallNode(StrRegion(811, 821), [
@@ -784,7 +784,7 @@ ProgramNode(StrRegion(0, 1685), [
           ])
         ])
       ]),
-      Node('let_decl', StrRegion(827, 853), [
+      LetNode(StrRegion(827, 853), [
         Node('decl_item', StrRegion(831, 852), [
           Leaf('ident_name', StrRegion(831, 835)),
           GetitemNode(StrRegion(838, 852), [
@@ -838,7 +838,7 @@ ProgramNode(StrRegion(0, 1685), [
     Leaf('ident_name', StrRegion(978, 985)),
     Node('args_decl', StrRegion(985, 987), []),
     BlockNode(StrRegion(988, 1100), [
-      Node('let_decl', StrRegion(994, 1024), [
+      LetNode(StrRegion(994, 1024), [
         Node('decl_item', StrRegion(998, 1023), [
           Leaf('ident_name', StrRegion(998, 1003)),
           GetitemNode(StrRegion(1006, 1023), [
@@ -881,7 +881,7 @@ ProgramNode(StrRegion(0, 1685), [
     Leaf('ident_name', StrRegion(1106, 1117)),
     Node('args_decl', StrRegion(1117, 1119), []),
     BlockNode(StrRegion(1120, 1358), [
-      Node('let_decl', StrRegion(1126, 1151), [
+      LetNode(StrRegion(1126, 1151), [
         Node('decl_item', StrRegion(1130, 1150), [
           Leaf('ident_name', StrRegion(1130, 1137)),
           CallNode(StrRegion(1140, 1150), [
@@ -892,7 +892,7 @@ ProgramNode(StrRegion(0, 1685), [
           ])
         ])
       ]),
-      Node('let_decl', StrRegion(1156, 1182), [
+      LetNode(StrRegion(1156, 1182), [
         Node('decl_item', StrRegion(1160, 1181), [
           Leaf('ident_name', StrRegion(1160, 1164)),
           GetitemNode(StrRegion(1167, 1181), [
@@ -901,7 +901,7 @@ ProgramNode(StrRegion(0, 1685), [
           ])
         ])
       ]),
-      Node('let_decl', StrRegion(1187, 1217), [
+      LetNode(StrRegion(1187, 1217), [
         Node('decl_item', StrRegion(1191, 1216), [
           Leaf('ident_name', StrRegion(1191, 1195)),
           GetitemNode(StrRegion(1198, 1216), [
@@ -957,7 +957,7 @@ ProgramNode(StrRegion(0, 1685), [
     Leaf('ident_name', StrRegion(1364, 1372)),
     Node('args_decl', StrRegion(1372, 1374), []),
     BlockNode(StrRegion(1375, 1671), [
-      Node('let_decl', StrRegion(1455, 1480), [
+      LetNode(StrRegion(1455, 1480), [
         Node('decl_item', StrRegion(1459, 1479), [
           Leaf('ident_name', StrRegion(1459, 1466)),
           CallNode(StrRegion(1469, 1479), [
@@ -968,7 +968,7 @@ ProgramNode(StrRegion(0, 1685), [
           ])
         ])
       ]),
-      Node('let_decl', StrRegion(1485, 1507), [
+      LetNode(StrRegion(1485, 1507), [
         Node('decl_item', StrRegion(1489, 1506), [
           Leaf('ident_name', StrRegion(1489, 1493)),
           GetitemNode(StrRegion(1496, 1506), [

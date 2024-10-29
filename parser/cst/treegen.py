@@ -3,7 +3,7 @@ from __future__ import annotations
 from typing import (TypeVar, cast, TypeAlias, Sequence, overload, Iterable, Callable)
 
 from .nodes import (BlockNode, ArgDeclNode, ConditionalBlock, CallArgs,
-                    CallNode, GetitemNode, ProgramNode)
+                    CallNode, GetitemNode, ProgramNode, LetNode)
 from .token_matcher import OpM, KwdM, Matcher, PatternT
 from .tree_node import Node, Leaf, AnyNode, AnyNamedNode
 from ..error import BaseParseError, BaseLocatedError
@@ -143,8 +143,7 @@ class TreeGen:
             raise self.err(f"Expected ';' or ',' after decl_item,"
                            f" got {self[idx].name}", self[idx])
         idx += 1
-        return Node('let_decl', self.tok_region(start, idx),
-                    None, items), idx
+        return LetNode(self.tok_region(start, idx), None, items), idx
 
     def _parse_decl_item_list(self, idx):
         items = []
