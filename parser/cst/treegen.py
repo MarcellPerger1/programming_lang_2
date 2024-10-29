@@ -4,7 +4,7 @@ from typing import (TypeVar, cast, TypeAlias, Sequence, overload, Iterable, Call
 
 from .nodes import (BlockNode, ArgDeclNode, ConditionalBlock, CallArgs,
                     CallNode, GetitemNode, ProgramNode, LetNode, GlobalNode, DeclItemNode,
-                    DefineNode, ArgsDeclNode)
+                    DefineNode, ArgsDeclNode, WhileBlock, RepeatBlock, IfBlock)
 from .token_matcher import OpM, KwdM, Matcher, PatternT
 from .tree_node import Node, Leaf, AnyNode, AnyNamedNode
 from ..error import BaseParseError, BaseLocatedError
@@ -269,26 +269,24 @@ class TreeGen:
         idx += 1
         return BlockNode(self.tok_region(start, idx), None, smts), idx
 
-    def _parse_block_with_header(self, start: int, name: str,
-                                 display: str = None, kwd: str = None) -> tuple[AnyNode, int]:
-        display = display or name  # default to same as node name
-        kwd = kwd or name
+    def _parse_block_with_header(self, start: int, cls: type[AnyNamedNode],
+                                 name: str = None) -> tuple[AnyNode, int]:
+        name = name or cls.name
         idx = start
-        assert self.matches(idx, KwdM(kwd))
+        assert self.matches(idx, KwdM(name))
         idx += 1
         expr, idx = self._parse_expr(idx)
         if not self.matches(idx, LBrace):
-            raise self.err(f"Expected '{{' after expr in {display}, "
+            raise self.err(f"Expected '{{' after expr in {name}, "
                            f"got {self[idx].name}", self[idx])
         block, idx = self._parse_block(idx)
-        return Node(name, self.tok_region(start, idx),
-                    None, [expr, block]), idx
+        return cls(self.tok_region(start, idx), None, [expr, block]), idx
 
     def _parse_while(self, start: int) -> tuple[AnyNode, int]:
-        return self._parse_block_with_header(start, 'while')
+        return self._parse_block_with_header(start, WhileBlock)
 
     def _parse_repeat(self, start: int) -> tuple[AnyNode, int]:
-        return self._parse_block_with_header(start, 'repeat')
+        return self._parse_block_with_header(start, RepeatBlock)
 
     def _parse_if(self, start: int) -> tuple[AnyNode, int]:
         idx = start
@@ -311,7 +309,7 @@ class TreeGen:
                                 None, [if_part, *elseif_parts, else_part]), idx
 
     def _parse_if_cond(self, start: int) -> tuple[AnyNode, int]:
-        return self._parse_block_with_header(start, name='if_cond', display='if', kwd='if')
+        return self._parse_block_with_header(start, IfBlock, 'if')
 
     def _parse_elseif(self, start: int) -> tuple[AnyNode, int]:
         idx = start

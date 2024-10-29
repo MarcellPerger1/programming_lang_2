@@ -128,7 +128,7 @@ ProgramNode(StrRegion(0, 144), [
     ])
   ]),
   ConditionalBlock(StrRegion(64, 128), [
-    Node('if_cond', StrRegion(64, 103), [
+    IfBlock(StrRegion(64, 103), [
       Node('>=', StrRegion(67, 98), [
         Leaf('number', StrRegion(67, 68)),
         Node('-', StrRegion(70, 98), [
@@ -685,7 +685,7 @@ ProgramNode(StrRegion(0, 1685), [
     ArgsDeclNode(StrRegion(409, 411), []),
     BlockNode(StrRegion(412, 508), [
       ConditionalBlock(StrRegion(418, 474), [
-        Node('if_cond', StrRegion(418, 474), [
+        IfBlock(StrRegion(418, 474), [
           Leaf('ident_name', StrRegion(421, 431)),
           BlockNode(StrRegion(432, 474), [
             CallNode(StrRegion(442, 467), [
@@ -862,7 +862,7 @@ ProgramNode(StrRegion(0, 1685), [
         ])
       ]),
       ConditionalBlock(StrRegion(1054, 1098), [
-        Node('if_cond', StrRegion(1054, 1098), [
+        IfBlock(StrRegion(1054, 1098), [
           Leaf('ident_name', StrRegion(1057, 1067)),
           BlockNode(StrRegion(1068, 1098), [
             CallNode(StrRegion(1078, 1091), [
@@ -932,7 +932,7 @@ ProgramNode(StrRegion(0, 1685), [
         ])
       ]),
       ConditionalBlock(StrRegion(1291, 1356), [
-        Node('if_cond', StrRegion(1291, 1356), [
+        IfBlock(StrRegion(1291, 1356), [
           Leaf('ident_name', StrRegion(1294, 1304)),
           BlockNode(StrRegion(1305, 1356), [
             CallNode(StrRegion(1315, 1327), [
