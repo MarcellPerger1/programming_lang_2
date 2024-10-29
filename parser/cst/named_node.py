@@ -83,12 +83,14 @@ NAME_REGISTRY: dict[str, type[AnyNamedNode]] = {}
 
 
 @overload
-def register_node_cls(cls: type[AnyNamedNode]): ...
+def register_corresponding_token(cls: type[AnyNamedNode]): ...
 @overload
-def register_node_cls(*names: str, include_attr=False): ...
+def register_corresponding_token(*names: str, include_attr=False): ...
 
 
-def register_node_cls(*args, include_attr=False):
+# Only really useful for thing with a 1-to-1 token-to-CST relation
+# (atoms and operators mainly)
+def register_corresponding_token(*args, include_attr=False):
     def decor(cls: type[AnyNamedNode]):
         for n in names:
             NAME_REGISTRY[n] = cls

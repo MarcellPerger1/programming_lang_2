@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from .named_node import NamedLeafCls, NamedNodeCls, NamedSizedNodeCls, register_node_cls
+from .named_node import NamedLeafCls, NamedNodeCls, NamedSizedNodeCls, register_corresponding_token
 
 __all__ = [
     "NumberNode", "StringNode", "AnyNameLeaf", "IdentNode", "AttrNameNode",
@@ -13,12 +13,12 @@ __all__ = [
 
 
 # region ---- Expressions ----
-@register_node_cls
+@register_corresponding_token
 class NumberNode(NamedLeafCls):
     name = 'number'
 
 
-@register_node_cls
+@register_corresponding_token
 class StringNode(NamedLeafCls):
     name = 'string'
 
@@ -27,12 +27,12 @@ class AnyNameLeaf(NamedLeafCls):
     pass
 
 
-@register_node_cls('ident_name')
+@register_corresponding_token('ident_name')
 class IdentNode(AnyNameLeaf):
     name = 'ident'  # TODO actually ident_name
 
 
-@register_node_cls
+@register_corresponding_token
 class AttrNameNode(AnyNameLeaf):
     name = 'attr_name'
 
