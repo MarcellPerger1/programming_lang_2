@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass, field
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, overload, Sequence
 
 from .base_node import Leaf, AnyNode, Node
 from ..str_region import StrRegion
@@ -31,7 +31,7 @@ class NamedLeafCls(Leaf):
 
 
 @dataclass
-class NamedNodeCls(Node):
+class NamedNodeCls(Node, NamedLeafCls):
     """A Node with a class-defined name"""
     name: str = field(init=False, repr=False)
 
@@ -39,7 +39,7 @@ class NamedNodeCls(Node):
         if type(self) is NamedNodeCls:
             raise TypeError("NamedNodeCls may not be instantiated directly;"
                             " use a subclass or use Node")
-        super().__post_init__()
+        Node.__post_init__(self)
 
     # noinspection PyMethodOverriding
     @classmethod
@@ -76,4 +76,38 @@ class NamedSizedNodeCls(NamedNodeCls):
         raise TypeError(f"Cannot add nodes to fixed size {type(self).__name__}")
 
 
-AnyNamedNode = NamedLeafCls | NamedNodeCls
+AnyNamedNode = NamedLeafCls
+
+
+NAME_REGISTRY: dict[str, type[AnyNamedNode]] = {}
+
+
+@overload
+def register_node_cls(cls: type[AnyNamedNode]): ...
+@overload
+def register_node_cls(*names: str, include_attr=False): ...
+
+
+def register_node_cls(*args, include_attr=False):
+    def decor(cls: type[AnyNamedNode]):
+        for n in names:
+            NAME_REGISTRY[n] = cls
+        if include_attr:
+            NAME_REGISTRY[cls.name] = cls
+        return cls
+
+    if len(args) == 1 and not isinstance(args[0], str):
+        names = ()
+        include_attr = True
+        return decor(args[0])
+    names = args
+    return decor
+
+
+# (Pycharm doesn't understand storing classes, probably because it's made in Java ;)
+# noinspection PyArgumentList
+def node_from_token(token: Token, children: Sequence[Node] = (), parent: Node | None = None):
+    if children:
+        return NAME_REGISTRY[token.name](token.region, parent, children)
+    return NAME_REGISTRY[token.name](token.region, parent)
+
