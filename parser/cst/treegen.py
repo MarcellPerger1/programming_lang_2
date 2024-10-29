@@ -171,7 +171,7 @@ class TreeGen:
         if not self.matches(idx, IdentNameToken):
             raise self.err(f"Expected identifier in decl_item, "
                            f"got {self[idx].name}", self[idx])
-        ident = Leaf.of(self[idx])
+        children = [Leaf.of(self[idx])]
         idx += 1
         # 1. global x, y = ...;
         #            ^
@@ -184,9 +184,7 @@ class TreeGen:
             if not isinstance(self.get(idx), (SemicolonToken, CommaToken)):
                 raise self.err(f"Expected ';' or ',' after decl_item,"
                                f" got {self[idx].name}", self[idx])
-            children = [ident, value]
-        else:
-            children = [ident]
+            children.append(value)
         return DeclItemNode(self.tok_region(start, idx), None, children), idx
 
     def _parse_define(self, start: int) -> tuple[AnyNode, int]:
