@@ -12,7 +12,7 @@ Node('program', StrRegion(0, 15), [
   ])
 ])
 Node('program', StrRegion(0, 16), [
-  Node('getitem', StrRegion(0, 15), [
+  GetitemNode(StrRegion(0, 15), [
     CallNode(StrRegion(0, 12), [
       Leaf('ident_name', StrRegion(0, 2)),
       CallArgs(StrRegion(2, 12), [
@@ -40,7 +40,7 @@ Node('program', StrRegion(0, 13), [
   ])
 ])
 Node('program', StrRegion(0, 15), [
-  Node('getitem', StrRegion(0, 14), [
+  GetitemNode(StrRegion(0, 14), [
     Node('paren', StrRegion(0, 11), [
       Node('+', StrRegion(1, 10), [
         Leaf('ident_name', StrRegion(1, 6)),
@@ -51,7 +51,7 @@ Node('program', StrRegion(0, 15), [
   ])
 ])
 Node('program', StrRegion(0, 24), [
-  Node('getitem', StrRegion(0, 23), [
+  GetitemNode(StrRegion(0, 23), [
     Leaf('string', StrRegion(0, 10)),
     Node('..', StrRegion(11, 22), [
       Leaf('string', StrRegion(11, 17)),

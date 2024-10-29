@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from typing import (TypeVar, cast, TypeAlias, Sequence, overload, Iterable, Callable)
 
-from .nodes import BlockNode, ArgDeclNode, ConditionalBlock, CallArgs, CallNode
+from .nodes import BlockNode, ArgDeclNode, ConditionalBlock, CallArgs, CallNode, GetitemNode
 from .token_matcher import OpM, KwdM, Matcher, PatternT
 from .tree_node import Node, Leaf, AnyNode, AnyNamedNode
 from ..error import BaseParseError, BaseLocatedError
@@ -440,7 +440,7 @@ class TreeGen:
             inner, idx = self._parse_expr(idx)
             if not isinstance(self[idx], RSqBracket):
                 raise self.err(f"Expected rsqb, got {self[idx].name}", self[idx])
-            node = self.node_from_children('getitem', [left, inner],
+            node = self.node_from_children(GetitemNode, [left, inner],
                                            region=[left, inner, self[idx]])
             idx += 1
             return node, idx
