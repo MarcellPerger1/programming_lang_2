@@ -349,7 +349,7 @@ ProgramNode(StrRegion(0, 38), [
 ProgramNode(StrRegion(0, 32), [
   Node('..', StrRegion(0, 31), [
     Node('..', StrRegion(0, 20), [
-      Node('autocat', StrRegion(0, 15), [
+      AutocatNode(StrRegion(0, 15), [
         Leaf('string', StrRegion(0, 5)),
         Leaf('string', StrRegion(6, 9)),
         Leaf('string', StrRegion(12, 15))

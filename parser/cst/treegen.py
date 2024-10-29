@@ -391,7 +391,7 @@ class TreeGen:
         assert strings, "_parse_autocat_or_string requires current token to be string"
         if len(strings) == 1:
             return strings[0], idx
-        return Node('autocat', self.tok_region(start, idx), None, strings), idx
+        return AutocatNode(self.tok_region(start, idx), None, strings), idx
 
     def _parse_atom_or_autocat(self, idx: int) -> tuple[AnyNode, int]:
         tok = self[idx]
