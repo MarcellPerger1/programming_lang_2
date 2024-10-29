@@ -88,7 +88,7 @@
  SemicolonToken(region=StrRegion(start=143, end=144)),
  WhitespaceToken(region=StrRegion(start=144, end=145)),
  EofToken(region=StrRegion(start=145, end=145))]
-Node('program', StrRegion(0, 144), [
+ProgramNode(StrRegion(0, 144), [
   Node('let_decl', StrRegion(0, 18), [
     Node('decl_item', StrRegion(4, 17), [
       Leaf('ident_name', StrRegion(4, 5)),
@@ -664,7 +664,7 @@ Node('program', StrRegion(0, 144), [
  RBrace(region=StrRegion(start=1684, end=1685)),
  WhitespaceToken(region=StrRegion(start=1685, end=1688)),
  EofToken(region=StrRegion(start=1688, end=1688))]
-Node('program', StrRegion(0, 1685), [
+ProgramNode(StrRegion(0, 1685), [
   Node('global_decl', StrRegion(0, 22), [
     Node('decl_item', StrRegion(7, 21), [
       Leaf('ident_name', StrRegion(7, 12)),

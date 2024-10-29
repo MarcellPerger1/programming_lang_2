@@ -1,6 +1,6 @@
 "2","13","24","35","41","52"
 "MyTestCase::test_issue_09__dot:after_call","MyTestCase::test_issue_09__sqb:after_call","MyTestCase::test_issue_09__dot:after_paren","MyTestCase::test_issue_09__dot:after_string","MyTestCase::test_issue_09__sqb:after_paren","MyTestCase::test_issue_09__sqb:after_string"
-Node('program', StrRegion(0, 15), [
+ProgramNode(StrRegion(0, 15), [
   Node('getattr', StrRegion(0, 14), [
     CallNode(StrRegion(0, 12), [
       Leaf('ident_name', StrRegion(0, 2)),
@@ -11,7 +11,7 @@ Node('program', StrRegion(0, 15), [
     Leaf('attr_name', StrRegion(13, 14))
   ])
 ])
-Node('program', StrRegion(0, 16), [
+ProgramNode(StrRegion(0, 16), [
   GetitemNode(StrRegion(0, 15), [
     CallNode(StrRegion(0, 12), [
       Leaf('ident_name', StrRegion(0, 2)),
@@ -22,7 +22,7 @@ Node('program', StrRegion(0, 16), [
     Leaf('number', StrRegion(13, 14))
   ])
 ])
-Node('program', StrRegion(0, 14), [
+ProgramNode(StrRegion(0, 14), [
   Node('getattr', StrRegion(0, 13), [
     Node('paren', StrRegion(0, 11), [
       Node('+', StrRegion(1, 10), [
@@ -33,13 +33,13 @@ Node('program', StrRegion(0, 14), [
     Leaf('attr_name', StrRegion(12, 13))
   ])
 ])
-Node('program', StrRegion(0, 13), [
+ProgramNode(StrRegion(0, 13), [
   Node('getattr', StrRegion(0, 12), [
     Leaf('string', StrRegion(0, 10)),
     Leaf('attr_name', StrRegion(11, 12))
   ])
 ])
-Node('program', StrRegion(0, 15), [
+ProgramNode(StrRegion(0, 15), [
   GetitemNode(StrRegion(0, 14), [
     Node('paren', StrRegion(0, 11), [
       Node('+', StrRegion(1, 10), [
@@ -50,7 +50,7 @@ Node('program', StrRegion(0, 15), [
     Leaf('number', StrRegion(12, 13))
   ])
 ])
-Node('program', StrRegion(0, 24), [
+ProgramNode(StrRegion(0, 24), [
   GetitemNode(StrRegion(0, 23), [
     Leaf('string', StrRegion(0, 10)),
     Node('..', StrRegion(11, 22), [

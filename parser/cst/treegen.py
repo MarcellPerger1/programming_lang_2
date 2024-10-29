@@ -2,7 +2,8 @@ from __future__ import annotations
 
 from typing import (TypeVar, cast, TypeAlias, Sequence, overload, Iterable, Callable)
 
-from .nodes import BlockNode, ArgDeclNode, ConditionalBlock, CallArgs, CallNode, GetitemNode
+from .nodes import (BlockNode, ArgDeclNode, ConditionalBlock, CallArgs,
+                    CallNode, GetitemNode, ProgramNode)
 from .token_matcher import OpM, KwdM, Matcher, PatternT
 from .tree_node import Node, Leaf, AnyNode, AnyNamedNode
 from ..error import BaseParseError, BaseLocatedError
@@ -77,7 +78,7 @@ class TreeGen:
         while not self.eof(idx) and not self.matches(idx, EofToken):
             smt, idx = self._parse_smt(idx)
             smts.append(smt)
-        node = Node('program', self.tok_region(0, idx), None, smts)
+        node = ProgramNode(self.tok_region(0, idx), None, smts)
         self.result = node
         return node
 

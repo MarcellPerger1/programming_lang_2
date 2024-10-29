@@ -1,6 +1,6 @@
 "2","45","93","105","114","121","135","154"
 "TreeGenTest::test_item_chain:0","TreeGenTest::test_fn_call_in_lvalue:0","TreeGenTest::test_aug_assign:0","TreeGenTest::test__mod_supported:0","TreeGenTest::test_decl_no_value:0","TestFunctionDecl::test_no_params:0","TestFunctionDecl::test_one_param:0","TestFunctionDecl::test_two_param:0"
-Node('program', StrRegion(0, 43), [
+ProgramNode(StrRegion(0, 43), [
   Node('=', StrRegion(0, 42), [
     GetitemNode(StrRegion(0, 21), [
       Node('getattr', StrRegion(0, 11), [
@@ -43,7 +43,7 @@ Node('program', StrRegion(0, 43), [
     ])
   ])
 ])
-Node('program', StrRegion(0, 45), [
+ProgramNode(StrRegion(0, 45), [
   Node('=', StrRegion(0, 44), [
     GetitemNode(StrRegion(0, 23), [
       CallNode(StrRegion(0, 13), [
@@ -91,7 +91,7 @@ Node('program', StrRegion(0, 45), [
     ])
   ])
 ])
-Node('program', StrRegion(0, 12), [
+ProgramNode(StrRegion(0, 12), [
   Node('+=', StrRegion(0, 11), [
     GetitemNode(StrRegion(0, 4), [
       Leaf('ident_name', StrRegion(0, 1)),
@@ -103,7 +103,7 @@ Node('program', StrRegion(0, 12), [
     ])
   ])
 ])
-Node('program', StrRegion(0, 6), [
+ProgramNode(StrRegion(0, 6), [
   Node('=', StrRegion(0, 5), [
     Leaf('ident_name', StrRegion(0, 1)),
     Node('%', StrRegion(2, 5), [
@@ -112,14 +112,14 @@ Node('program', StrRegion(0, 6), [
     ])
   ])
 ])
-Node('program', StrRegion(0, 6), [
+ProgramNode(StrRegion(0, 6), [
   Node('let_decl', StrRegion(0, 6), [
     Node('decl_item', StrRegion(4, 5), [
       Leaf('ident_name', StrRegion(4, 5))
     ])
   ])
 ])
-Node('program', StrRegion(0, 28), [
+ProgramNode(StrRegion(0, 28), [
   Node('define', StrRegion(0, 28), [
     Leaf('ident_name', StrRegion(4, 5)),
     Node('args_decl', StrRegion(5, 7), []),
@@ -133,7 +133,7 @@ Node('program', StrRegion(0, 28), [
     ])
   ])
 ])
-Node('program', StrRegion(0, 30), [
+ProgramNode(StrRegion(0, 30), [
   Node('define', StrRegion(0, 30), [
     Leaf('ident_name', StrRegion(4, 5)),
     Node('args_decl', StrRegion(5, 17), [
@@ -152,7 +152,7 @@ Node('program', StrRegion(0, 30), [
     ])
   ])
 ])
-Node('program', StrRegion(0, 44), [
+ProgramNode(StrRegion(0, 44), [
   Node('define', StrRegion(0, 44), [
     Leaf('ident_name', StrRegion(4, 5)),
     Node('args_decl', StrRegion(5, 25), [
