@@ -32,6 +32,11 @@ class TestBlocks(CommonTestCase):
         self.assertTreeMatchesSnapshot('repeat a || !b && c >= 6 {}')
         self.assertTreeMatchesSnapshot('repeat!(7%8){(7.7).abc(6,7,8);}')
 
+    def test_else_if_else(self):
+        self.assertTreeMatchesSnapshot('if(1){}else if(a||!b&&c!=6){}')
+        self.assertTreeMatchesSnapshot('if(1){}else{a();}')
+        self.assertTreeMatchesSnapshot('if(1){}else if 9{a();}else{b(a, a());}')
+
 
 class TestFunctionDecl(CommonTestCase):
     def setUp(self) -> None:
