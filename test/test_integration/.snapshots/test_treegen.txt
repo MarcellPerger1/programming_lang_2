@@ -114,7 +114,7 @@ ProgramNode(StrRegion(0, 6), [
 ])
 ProgramNode(StrRegion(0, 6), [
   LetNode(StrRegion(0, 6), [
-    Node('decl_item', StrRegion(4, 5), [
+    DeclItemNode(StrRegion(4, 5), [
       Leaf('ident_name', StrRegion(4, 5))
     ])
   ])

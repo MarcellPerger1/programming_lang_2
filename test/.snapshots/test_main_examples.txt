@@ -90,7 +90,7 @@
  EofToken(region=StrRegion(start=145, end=145))]
 ProgramNode(StrRegion(0, 144), [
   LetNode(StrRegion(0, 18), [
-    Node('decl_item', StrRegion(4, 17), [
+    DeclItemNode(StrRegion(4, 17), [
       Leaf('ident_name', StrRegion(4, 5)),
       Node('+', StrRegion(8, 17), [
         Node('*', StrRegion(8, 11), [
@@ -666,7 +666,7 @@ ProgramNode(StrRegion(0, 144), [
  EofToken(region=StrRegion(start=1688, end=1688))]
 ProgramNode(StrRegion(0, 1685), [
   GlobalNode(StrRegion(0, 22), [
-    Node('decl_item', StrRegion(7, 21), [
+    DeclItemNode(StrRegion(7, 21), [
       Leaf('ident_name', StrRegion(7, 12)),
       CallNode(StrRegion(15, 21), [
         Leaf('ident_name', StrRegion(15, 19)),
@@ -675,7 +675,7 @@ ProgramNode(StrRegion(0, 1685), [
     ])
   ]),
   GlobalNode(StrRegion(23, 49), [
-    Node('decl_item', StrRegion(30, 48), [
+    DeclItemNode(StrRegion(30, 48), [
       Leaf('ident_name', StrRegion(30, 40)),
       Leaf('ident_name', StrRegion(43, 48))
     ])
@@ -725,7 +725,7 @@ ProgramNode(StrRegion(0, 1685), [
     Node('args_decl', StrRegion(521, 523), []),
     BlockNode(StrRegion(524, 660), [
       LetNode(StrRegion(530, 555), [
-        Node('decl_item', StrRegion(534, 554), [
+        DeclItemNode(StrRegion(534, 554), [
           Leaf('ident_name', StrRegion(534, 541)),
           CallNode(StrRegion(544, 554), [
             Leaf('ident_name', StrRegion(544, 547)),
@@ -736,7 +736,7 @@ ProgramNode(StrRegion(0, 1685), [
         ])
       ]),
       LetNode(StrRegion(560, 586), [
-        Node('decl_item', StrRegion(564, 585), [
+        DeclItemNode(StrRegion(564, 585), [
           Leaf('ident_name', StrRegion(564, 568)),
           GetitemNode(StrRegion(571, 585), [
             Leaf('ident_name', StrRegion(571, 576)),
@@ -774,7 +774,7 @@ ProgramNode(StrRegion(0, 1685), [
     Node('args_decl', StrRegion(675, 677), []),
     BlockNode(StrRegion(678, 972), [
       LetNode(StrRegion(797, 822), [
-        Node('decl_item', StrRegion(801, 821), [
+        DeclItemNode(StrRegion(801, 821), [
           Leaf('ident_name', StrRegion(801, 808)),
           CallNode(StrRegion(811, 821), [
             Leaf('ident_name', StrRegion(811, 814)),
@@ -785,7 +785,7 @@ ProgramNode(StrRegion(0, 1685), [
         ])
       ]),
       LetNode(StrRegion(827, 853), [
-        Node('decl_item', StrRegion(831, 852), [
+        DeclItemNode(StrRegion(831, 852), [
           Leaf('ident_name', StrRegion(831, 835)),
           GetitemNode(StrRegion(838, 852), [
             Leaf('ident_name', StrRegion(838, 843)),
@@ -839,7 +839,7 @@ ProgramNode(StrRegion(0, 1685), [
     Node('args_decl', StrRegion(985, 987), []),
     BlockNode(StrRegion(988, 1100), [
       LetNode(StrRegion(994, 1024), [
-        Node('decl_item', StrRegion(998, 1023), [
+        DeclItemNode(StrRegion(998, 1023), [
           Leaf('ident_name', StrRegion(998, 1003)),
           GetitemNode(StrRegion(1006, 1023), [
             Leaf('ident_name', StrRegion(1006, 1011)),
@@ -882,7 +882,7 @@ ProgramNode(StrRegion(0, 1685), [
     Node('args_decl', StrRegion(1117, 1119), []),
     BlockNode(StrRegion(1120, 1358), [
       LetNode(StrRegion(1126, 1151), [
-        Node('decl_item', StrRegion(1130, 1150), [
+        DeclItemNode(StrRegion(1130, 1150), [
           Leaf('ident_name', StrRegion(1130, 1137)),
           CallNode(StrRegion(1140, 1150), [
             Leaf('ident_name', StrRegion(1140, 1143)),
@@ -893,7 +893,7 @@ ProgramNode(StrRegion(0, 1685), [
         ])
       ]),
       LetNode(StrRegion(1156, 1182), [
-        Node('decl_item', StrRegion(1160, 1181), [
+        DeclItemNode(StrRegion(1160, 1181), [
           Leaf('ident_name', StrRegion(1160, 1164)),
           GetitemNode(StrRegion(1167, 1181), [
             Leaf('ident_name', StrRegion(1167, 1172)),
@@ -902,7 +902,7 @@ ProgramNode(StrRegion(0, 1685), [
         ])
       ]),
       LetNode(StrRegion(1187, 1217), [
-        Node('decl_item', StrRegion(1191, 1216), [
+        DeclItemNode(StrRegion(1191, 1216), [
           Leaf('ident_name', StrRegion(1191, 1195)),
           GetitemNode(StrRegion(1198, 1216), [
             Leaf('ident_name', StrRegion(1198, 1203)),
@@ -958,7 +958,7 @@ ProgramNode(StrRegion(0, 1685), [
     Node('args_decl', StrRegion(1372, 1374), []),
     BlockNode(StrRegion(1375, 1671), [
       LetNode(StrRegion(1455, 1480), [
-        Node('decl_item', StrRegion(1459, 1479), [
+        DeclItemNode(StrRegion(1459, 1479), [
           Leaf('ident_name', StrRegion(1459, 1466)),
           CallNode(StrRegion(1469, 1479), [
             Leaf('ident_name', StrRegion(1469, 1472)),
@@ -969,7 +969,7 @@ ProgramNode(StrRegion(0, 1685), [
         ])
       ]),
       LetNode(StrRegion(1485, 1507), [
-        Node('decl_item', StrRegion(1489, 1506), [
+        DeclItemNode(StrRegion(1489, 1506), [
           Leaf('ident_name', StrRegion(1489, 1493)),
           GetitemNode(StrRegion(1496, 1506), [
             Leaf('ident_name', StrRegion(1496, 1501)),

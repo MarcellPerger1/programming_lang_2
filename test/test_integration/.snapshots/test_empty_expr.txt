@@ -2,7 +2,7 @@
 "MyTestCase::test_empty_expr_issue_04:0"
 ProgramNode(StrRegion(0, 9), [
   LetNode(StrRegion(0, 8), [
-    Node('decl_item', StrRegion(4, 7), [
+    DeclItemNode(StrRegion(4, 7), [
       Leaf('ident_name', StrRegion(4, 5)),
       Leaf('number', StrRegion(6, 7))
     ])
