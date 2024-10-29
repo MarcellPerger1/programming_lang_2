@@ -4,7 +4,7 @@ from typing import (TypeVar, cast, TypeAlias, Sequence, overload, Iterable, Call
 
 from .nodes import (BlockNode, ArgDeclNode, ConditionalBlock, CallArgs,
                     CallNode, GetitemNode, ProgramNode, LetNode, GlobalNode, DeclItemNode,
-                    DefineNode)
+                    DefineNode, ArgsDeclNode)
 from .token_matcher import OpM, KwdM, Matcher, PatternT
 from .tree_node import Node, Leaf, AnyNode, AnyNamedNode
 from ..error import BaseParseError, BaseLocatedError
@@ -210,7 +210,7 @@ class TreeGen:
         if self.matches(idx, RParToken):
             # simple case, no args
             idx += 1
-            return Node('args_decl', self.tok_region(start, idx)), idx
+            return ArgsDeclNode(self.tok_region(start, idx)), idx
         arg1, idx = self._parse_arg_decl(idx)
         arg_declares = [arg1]
         while not self.matches(idx, RParToken):
@@ -226,12 +226,11 @@ class TreeGen:
             #              ~~^^
             arg, idx = self._parse_arg_decl(idx)
             arg_declares.append(arg)
-        # def f(t1, t2)
-        #             ^
+        # def f(t1 arg1, t2 arg2)
+        #                       ^
         assert self.matches(idx, RParToken)
         idx += 1
-        args_decl = Node('args_decl', self.tok_region(start, idx), None, arg_declares)
-        return args_decl, idx
+        return ArgsDeclNode(self.tok_region(start, idx), None, arg_declares), idx
 
     def _parse_arg_decl(self, start: int) -> tuple[AnyNode, int]:
         idx = start

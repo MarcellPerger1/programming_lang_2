@@ -682,7 +682,7 @@ ProgramNode(StrRegion(0, 1685), [
   ]),
   DefineNode(StrRegion(398, 508), [
     Leaf('ident_name', StrRegion(402, 409)),
-    Node('args_decl', StrRegion(409, 411), []),
+    ArgsDeclNode(StrRegion(409, 411), []),
     BlockNode(StrRegion(412, 508), [
       ConditionalBlock(StrRegion(418, 474), [
         Node('if_cond', StrRegion(418, 474), [
@@ -722,7 +722,7 @@ ProgramNode(StrRegion(0, 1685), [
   ]),
   DefineNode(StrRegion(510, 660), [
     Leaf('ident_name', StrRegion(514, 521)),
-    Node('args_decl', StrRegion(521, 523), []),
+    ArgsDeclNode(StrRegion(521, 523), []),
     BlockNode(StrRegion(524, 660), [
       LetNode(StrRegion(530, 555), [
         DeclItemNode(StrRegion(534, 554), [
@@ -771,7 +771,7 @@ ProgramNode(StrRegion(0, 1685), [
   ]),
   DefineNode(StrRegion(662, 972), [
     Leaf('ident_name', StrRegion(666, 675)),
-    Node('args_decl', StrRegion(675, 677), []),
+    ArgsDeclNode(StrRegion(675, 677), []),
     BlockNode(StrRegion(678, 972), [
       LetNode(StrRegion(797, 822), [
         DeclItemNode(StrRegion(801, 821), [
@@ -836,7 +836,7 @@ ProgramNode(StrRegion(0, 1685), [
   ]),
   DefineNode(StrRegion(974, 1100), [
     Leaf('ident_name', StrRegion(978, 985)),
-    Node('args_decl', StrRegion(985, 987), []),
+    ArgsDeclNode(StrRegion(985, 987), []),
     BlockNode(StrRegion(988, 1100), [
       LetNode(StrRegion(994, 1024), [
         DeclItemNode(StrRegion(998, 1023), [
@@ -879,7 +879,7 @@ ProgramNode(StrRegion(0, 1685), [
   ]),
   DefineNode(StrRegion(1102, 1358), [
     Leaf('ident_name', StrRegion(1106, 1117)),
-    Node('args_decl', StrRegion(1117, 1119), []),
+    ArgsDeclNode(StrRegion(1117, 1119), []),
     BlockNode(StrRegion(1120, 1358), [
       LetNode(StrRegion(1126, 1151), [
         DeclItemNode(StrRegion(1130, 1150), [
@@ -955,7 +955,7 @@ ProgramNode(StrRegion(0, 1685), [
   ]),
   DefineNode(StrRegion(1360, 1671), [
     Leaf('ident_name', StrRegion(1364, 1372)),
-    Node('args_decl', StrRegion(1372, 1374), []),
+    ArgsDeclNode(StrRegion(1372, 1374), []),
     BlockNode(StrRegion(1375, 1671), [
       LetNode(StrRegion(1455, 1480), [
         DeclItemNode(StrRegion(1459, 1479), [
@@ -1036,7 +1036,7 @@ ProgramNode(StrRegion(0, 1685), [
   ]),
   DefineNode(StrRegion(1673, 1685), [
     Leaf('ident_name', StrRegion(1677, 1680)),
-    Node('args_decl', StrRegion(1680, 1682), []),
+    ArgsDeclNode(StrRegion(1680, 1682), []),
     BlockNode(StrRegion(1683, 1685), [])
   ])
 ])

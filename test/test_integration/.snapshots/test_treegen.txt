@@ -122,7 +122,7 @@ ProgramNode(StrRegion(0, 6), [
 ProgramNode(StrRegion(0, 28), [
   DefineNode(StrRegion(0, 28), [
     Leaf('ident_name', StrRegion(4, 5)),
-    Node('args_decl', StrRegion(5, 7), []),
+    ArgsDeclNode(StrRegion(5, 7), []),
     BlockNode(StrRegion(8, 28), [
       CallNode(StrRegion(10, 25), [
         Leaf('ident_name', StrRegion(10, 15)),
@@ -136,7 +136,7 @@ ProgramNode(StrRegion(0, 28), [
 ProgramNode(StrRegion(0, 30), [
   DefineNode(StrRegion(0, 30), [
     Leaf('ident_name', StrRegion(4, 5)),
-    Node('args_decl', StrRegion(5, 17), [
+    ArgsDeclNode(StrRegion(5, 17), [
       ArgDeclNode(StrRegion(6, 16), [
         Leaf('ident_name', StrRegion(6, 12)),
         Leaf('ident_name', StrRegion(13, 16))
@@ -155,7 +155,7 @@ ProgramNode(StrRegion(0, 30), [
 ProgramNode(StrRegion(0, 44), [
   DefineNode(StrRegion(0, 44), [
     Leaf('ident_name', StrRegion(4, 5)),
-    Node('args_decl', StrRegion(5, 25), [
+    ArgsDeclNode(StrRegion(5, 25), [
       ArgDeclNode(StrRegion(6, 14), [
         Leaf('ident_name', StrRegion(6, 12)),
         Leaf('ident_name', StrRegion(13, 14))
