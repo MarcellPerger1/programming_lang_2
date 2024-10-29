@@ -407,7 +407,7 @@ class TreeGen:
             inner, idx = self._parse_expr(idx + 1)
             idx = self._expect_cls_consume(
                 idx, RParToken, f"Expected ')' at end of expr, got {self[idx].name}")
-            return Node('paren', self.tok_region(start, idx), None, [inner]), idx
+            return ParenNode(self.tok_region(start, idx), None, [inner]), idx
         return self._parse_atom_or_autocat(idx)
 
     def _parse_basic_item(self, idx: int):

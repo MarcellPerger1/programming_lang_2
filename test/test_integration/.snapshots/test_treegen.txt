@@ -199,7 +199,7 @@ ProgramNode(StrRegion(0, 26), [
 ProgramNode(StrRegion(0, 30), [
   WhileBlock(StrRegion(0, 30), [
     Node('!', StrRegion(5, 11), [
-      Node('paren', StrRegion(6, 11), [
+      ParenNode(StrRegion(6, 11), [
         Node('%', StrRegion(7, 10), [
           Leaf('number', StrRegion(7, 8)),
           Leaf('number', StrRegion(9, 10))
@@ -209,7 +209,7 @@ ProgramNode(StrRegion(0, 30), [
     BlockNode(StrRegion(11, 30), [
       CallNode(StrRegion(12, 28), [
         GetattrNode(StrRegion(12, 21), [
-          Node('paren', StrRegion(12, 17), [
+          ParenNode(StrRegion(12, 17), [
             Leaf('number', StrRegion(13, 16))
           ]),
           Leaf('attr_name', StrRegion(18, 21))
@@ -243,7 +243,7 @@ ProgramNode(StrRegion(0, 27), [
 ProgramNode(StrRegion(0, 31), [
   RepeatBlock(StrRegion(0, 31), [
     Node('!', StrRegion(6, 12), [
-      Node('paren', StrRegion(7, 12), [
+      ParenNode(StrRegion(7, 12), [
         Node('%', StrRegion(8, 11), [
           Leaf('number', StrRegion(8, 9)),
           Leaf('number', StrRegion(10, 11))
@@ -253,7 +253,7 @@ ProgramNode(StrRegion(0, 31), [
     BlockNode(StrRegion(12, 31), [
       CallNode(StrRegion(13, 29), [
         GetattrNode(StrRegion(13, 22), [
-          Node('paren', StrRegion(13, 18), [
+          ParenNode(StrRegion(13, 18), [
             Leaf('number', StrRegion(14, 17))
           ]),
           Leaf('attr_name', StrRegion(19, 22))
@@ -270,13 +270,13 @@ ProgramNode(StrRegion(0, 31), [
 ProgramNode(StrRegion(0, 29), [
   ConditionalBlock(StrRegion(0, 29), [
     IfBlock(StrRegion(0, 7), [
-      Node('paren', StrRegion(2, 5), [
+      ParenNode(StrRegion(2, 5), [
         Leaf('number', StrRegion(3, 4))
       ]),
       BlockNode(StrRegion(5, 7), [])
     ]),
     ElseIfBlock(StrRegion(7, 29), [
-      Node('paren', StrRegion(14, 27), [
+      ParenNode(StrRegion(14, 27), [
         Node('||', StrRegion(15, 26), [
           Leaf('ident_name', StrRegion(15, 16)),
           Node('&&', StrRegion(18, 26), [
@@ -298,7 +298,7 @@ ProgramNode(StrRegion(0, 29), [
 ProgramNode(StrRegion(0, 17), [
   ConditionalBlock(StrRegion(0, 17), [
     IfBlock(StrRegion(0, 7), [
-      Node('paren', StrRegion(2, 5), [
+      ParenNode(StrRegion(2, 5), [
         Leaf('number', StrRegion(3, 4))
       ]),
       BlockNode(StrRegion(5, 7), [])
@@ -316,7 +316,7 @@ ProgramNode(StrRegion(0, 17), [
 ProgramNode(StrRegion(0, 38), [
   ConditionalBlock(StrRegion(0, 38), [
     IfBlock(StrRegion(0, 7), [
-      Node('paren', StrRegion(2, 5), [
+      ParenNode(StrRegion(2, 5), [
         Leaf('number', StrRegion(3, 4))
       ]),
       BlockNode(StrRegion(5, 7), [])
