@@ -6,6 +6,11 @@ from parser.cst.treegen import TreeGen, LocatedCstError
 from test.common import CommonTestCase
 
 
+class TestAutocat(CommonTestCase):
+    def test_autocat(self):
+        self.assertTreeMatchesSnapshot('"abc" "="\n  "1" .. a .. "b".d();')
+
+
 class TreeGenTest(CommonTestCase):
     def test_item_chain(self):
         self.assertTreeMatchesSnapshot('a[7].b.0.fn["c" .. 2] = fn(9).k[7 + r](3,);')
