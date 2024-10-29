@@ -3,7 +3,8 @@ from __future__ import annotations
 from typing import (TypeVar, cast, TypeAlias, Sequence, overload, Iterable, Callable)
 
 from .nodes import (BlockNode, ArgDeclNode, ConditionalBlock, CallArgs,
-                    CallNode, GetitemNode, ProgramNode, LetNode, GlobalNode, DeclItemNode)
+                    CallNode, GetitemNode, ProgramNode, LetNode, GlobalNode, DeclItemNode,
+                    DefineNode)
 from .token_matcher import OpM, KwdM, Matcher, PatternT
 from .tree_node import Node, Leaf, AnyNode, AnyNamedNode
 from ..error import BaseParseError, BaseLocatedError
@@ -198,8 +199,7 @@ class TreeGen:
         # def f(t1 arg1, t2 arg2) { <a block> }
         #                         ^
         block, idx = self._parse_block(idx)
-        return Node('define', self.tok_region(start, idx),
-                    None, [name, args_decl, block]), idx
+        return DefineNode(self.tok_region(start, idx), None, [name, args_decl, block]), idx
 
     def _parse_args_decl(self, start: int) -> tuple[AnyNode, int]:
         idx = start

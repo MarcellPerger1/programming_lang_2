@@ -680,7 +680,7 @@ ProgramNode(StrRegion(0, 1685), [
       Leaf('ident_name', StrRegion(43, 48))
     ])
   ]),
-  Node('define', StrRegion(398, 508), [
+  DefineNode(StrRegion(398, 508), [
     Leaf('ident_name', StrRegion(402, 409)),
     Node('args_decl', StrRegion(409, 411), []),
     BlockNode(StrRegion(412, 508), [
@@ -720,7 +720,7 @@ ProgramNode(StrRegion(0, 1685), [
       ])
     ])
   ]),
-  Node('define', StrRegion(510, 660), [
+  DefineNode(StrRegion(510, 660), [
     Leaf('ident_name', StrRegion(514, 521)),
     Node('args_decl', StrRegion(521, 523), []),
     BlockNode(StrRegion(524, 660), [
@@ -769,7 +769,7 @@ ProgramNode(StrRegion(0, 1685), [
       ])
     ])
   ]),
-  Node('define', StrRegion(662, 972), [
+  DefineNode(StrRegion(662, 972), [
     Leaf('ident_name', StrRegion(666, 675)),
     Node('args_decl', StrRegion(675, 677), []),
     BlockNode(StrRegion(678, 972), [
@@ -834,7 +834,7 @@ ProgramNode(StrRegion(0, 1685), [
       ])
     ])
   ]),
-  Node('define', StrRegion(974, 1100), [
+  DefineNode(StrRegion(974, 1100), [
     Leaf('ident_name', StrRegion(978, 985)),
     Node('args_decl', StrRegion(985, 987), []),
     BlockNode(StrRegion(988, 1100), [
@@ -877,7 +877,7 @@ ProgramNode(StrRegion(0, 1685), [
       ])
     ])
   ]),
-  Node('define', StrRegion(1102, 1358), [
+  DefineNode(StrRegion(1102, 1358), [
     Leaf('ident_name', StrRegion(1106, 1117)),
     Node('args_decl', StrRegion(1117, 1119), []),
     BlockNode(StrRegion(1120, 1358), [
@@ -953,7 +953,7 @@ ProgramNode(StrRegion(0, 1685), [
       ])
     ])
   ]),
-  Node('define', StrRegion(1360, 1671), [
+  DefineNode(StrRegion(1360, 1671), [
     Leaf('ident_name', StrRegion(1364, 1372)),
     Node('args_decl', StrRegion(1372, 1374), []),
     BlockNode(StrRegion(1375, 1671), [
@@ -1034,7 +1034,7 @@ ProgramNode(StrRegion(0, 1685), [
       ])
     ])
   ]),
-  Node('define', StrRegion(1673, 1685), [
+  DefineNode(StrRegion(1673, 1685), [
     Leaf('ident_name', StrRegion(1677, 1680)),
     Node('args_decl', StrRegion(1680, 1682), []),
     BlockNode(StrRegion(1683, 1685), [])
