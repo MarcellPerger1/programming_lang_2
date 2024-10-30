@@ -64,6 +64,114 @@ class CallNode(NamedSizedNodeCls):
 
 class CallArgs(NamedNodeCls):
     name = 'call_args'  # Varargs
+
+
+class OperatorNode(NamedNodeCls):
+    pass
+
+
+class UnaryOpNode(NamedSizedNodeCls, OperatorNode):
+    size = 1
+
+
+@register_corresponding_token('+', arity=1)
+@register_corresponding_token()
+class UPlusNode(UnaryOpNode):
+    name = '+(unary)'
+
+
+@register_corresponding_token('-', arity=1)
+@register_corresponding_token()
+class UMinusNode(UnaryOpNode):
+    name = '-(unary)'
+
+
+@register_corresponding_token
+class NotToken(UnaryOpNode):
+    name = '!'
+
+
+class BinOpNode(NamedSizedNodeCls, OperatorNode):
+    size = 2
+
+
+@register_corresponding_token
+class AddNode(BinOpNode):
+    name = '+'
+
+
+@register_corresponding_token
+class SubNode(BinOpNode):
+    name = '-'
+
+
+@register_corresponding_token
+class MulNode(BinOpNode):
+    name = '*'
+
+
+@register_corresponding_token
+class DivNode(BinOpNode):
+    name = '/'
+
+
+@register_corresponding_token
+class ModNode(BinOpNode):
+    name = '%'
+
+
+@register_corresponding_token
+class PowNode(BinOpNode):
+    name = '**'
+
+
+@register_corresponding_token
+class ConcatNode(BinOpNode):
+    name = '..'
+
+
+@register_corresponding_token
+class AndNode(BinOpNode):
+    name = '&&'
+
+
+@register_corresponding_token
+class OrNode(BinOpNode):
+    name = '||'
+
+
+class ComparisonNode(BinOpNode):
+    pass
+
+
+@register_corresponding_token
+class EqNode(ComparisonNode):
+    name = '=='
+
+
+@register_corresponding_token
+class NeqNode(ComparisonNode):
+    name = '!='
+
+
+@register_corresponding_token
+class LtNode(ComparisonNode):
+    name = '<'
+
+
+@register_corresponding_token
+class LeNode(ComparisonNode):
+    name = '<='
+
+
+@register_corresponding_token
+class GtNode(ComparisonNode):
+    name = '>'
+
+
+@register_corresponding_token
+class GeNode(ComparisonNode):
+    name = '>='
 # endregion
 
 
