@@ -94,7 +94,7 @@ class TreePrinter:
 
 
 def tree_print(obj: object, stream: IO[str] = None, indent: int = 2,
-               verbose: bool = False, append_lf: bool = False):
+               verbose: bool = False, append_lf: bool = True):
     TreePrinter(stream, indent, verbose, append_lf).print(obj)
 
 
