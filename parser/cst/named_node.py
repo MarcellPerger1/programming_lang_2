@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass, field
-from typing import TYPE_CHECKING, overload, Sequence
+from typing import TYPE_CHECKING, overload, Sequence, cast
 
 from .base_node import Leaf, AnyNode, Node
 from ..str_region import StrRegion
@@ -76,7 +76,24 @@ class NamedSizedNodeCls(NamedNodeCls):
         raise TypeError(f"Cannot add nodes to fixed size {type(self).__name__}")
 
 
-AnyNamedNode = NamedLeafCls
+# Types of fix Pycharm not understanding multiple inheritance w/ dataclasses
+class _AnyNamedNodeT(AnyNode):
+    name: str
+
+    def __init__(self, region: StrRegion, parent: Node | None = None,
+                 children: Sequence[AnyNode] = ()):
+        self.region = region
+        self.parent = parent
+        self.children: list[AnyNode] = list(children)
+
+    # noinspection PyMethodOverriding
+    @classmethod
+    def of(cls, token: Token, parent: Node | None = None):
+        return cls(token.region, parent)
+
+
+AnyNamedNode: type[_AnyNamedNodeT] | type[NamedLeafCls] = cast(
+    type[_AnyNamedNodeT], NamedLeafCls)
 
 
 NAME_REGISTRY: dict[str, type[AnyNamedNode]] = {}
