@@ -1,6 +1,7 @@
 from __future__ import annotations
 
-from .named_node import NamedLeafCls, NamedNodeCls, NamedSizedNodeCls, register_corresponding_token
+from .named_node import (NamedLeafCls, NamedNodeCls, NamedSizedNodeCls,
+                         register_corresponding_token)
 
 __all__ = [
     "NumberNode", "StringNode", "AnyNameLeaf", "IdentNode", "AttrNameNode",
@@ -33,12 +34,12 @@ class AnyNameLeaf(NamedLeafCls):
 
 @register_corresponding_token('ident_name')
 class IdentNode(AnyNameLeaf):
-    name = 'ident'  # TODO actually ident_name
+    name = 'ident'
 
 
-@register_corresponding_token
+@register_corresponding_token('attr_name')
 class AttrNameNode(AnyNameLeaf):
-    name = 'attr_name'
+    name = 'attr'
 
 
 class AutocatNode(NamedNodeCls):
@@ -58,7 +59,6 @@ class GetitemNode(NamedSizedNodeCls):
 class ParenNode(NamedSizedNodeCls):
     name = 'paren'
     size = 1
-    in_ast = False  # TODO Not used yet
 
 
 class CallNode(NamedSizedNodeCls):
@@ -181,7 +181,7 @@ class GeNode(ComparisonNode):
 
 # region ---- Statements ----
 class NopNode(NamedLeafCls):
-    name = 'nop'  # TODO: actually nop_smt
+    name = 'nop'
 
 
 # region ---- Blocks ----
@@ -190,26 +190,26 @@ class BlockNode(NamedNodeCls):
 
 
 class ConditionalBlock(NamedNodeCls):  # Varargs: if, *elseif, else
-    name = 'if'  # TODO maybe conditional
+    name = 'conditional'
 
 
 class IfBlock(NamedSizedNodeCls):
-    name = 'if_cond'  # TODO maybe just if
+    name = 'if'
     size = 2  # condition, block
 
 
 class ElseIfBlock(NamedSizedNodeCls):
-    name = 'elseif_cond'  # TODO maybe elseif
+    name = 'elseif'
     size = 2
 
 
 class ElseBlock(NamedSizedNodeCls):
-    name = 'else_cond'  # TODO maybe just else
+    name = 'else'
     size = 1  # just the BlockNode
 
 
-class NullElseBlock(NamedSizedNodeCls):
-    name = 'else_cond_NULL'  # TODO maybe just else_null
+class NullElseBlock(NamedLeafCls):
+    name = 'else_null'
     size = 0
 
 

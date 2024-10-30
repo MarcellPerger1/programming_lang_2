@@ -292,7 +292,7 @@ ProgramNode(StrRegion(0, 29), [
       ]),
       BlockNode(StrRegion(27, 29), [])
     ]),
-    NullElseBlock(StrRegion(28, 28), [])
+    NullElseBlock(StrRegion(28, 28))
   ])
 ])
 ProgramNode(StrRegion(0, 17), [
