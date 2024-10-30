@@ -7,5 +7,5 @@ ProgramNode(StrRegion(0, 9), [
       Leaf('number', StrRegion(6, 7))
     ])
   ]),
-  Leaf('nop_smt', StrRegion(8, 9))
+  NopNode(StrRegion(8, 9))
 ])
