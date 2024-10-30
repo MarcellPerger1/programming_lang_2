@@ -3,6 +3,7 @@ import unittest
 from parser.lexer.tokenizer import Tokenizer
 from parser.operators import BINARY_OPS
 from parser.cst.treegen import TreeGen, LocatedCstError
+from parser.str_region import StrRegion
 from test.common import CommonTestCase
 
 
@@ -41,6 +42,13 @@ class TestBlocks(CommonTestCase):
         self.assertTreeMatchesSnapshot('if(1){}else if(a||!b&&c!=6){}')
         self.assertTreeMatchesSnapshot('if(1){}else{a();}')
         self.assertTreeMatchesSnapshot('if(1){}else if 9{a();}else{b(a, a());}')
+
+    def test_else_cond_null(self):
+        src = 'if 0==1{exit();  } startup();'
+        n = TreeGen(Tokenizer(src)).parse()
+        node = n.children[0].children[-1]
+        self.assertLessEqual(node.region.start, node.region.end)
+        self.assertEqual(StrRegion(17, 18), node.region)
 
 
 class TestFunctionDecl(CommonTestCase):

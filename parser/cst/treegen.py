@@ -303,7 +303,8 @@ class TreeGen:
                 raise self.err(f"Expected '{{' or 'if' after 'else', "
                                f"got {self[idx + 1].name}", self[idx + 1])
         if else_part is None:
-            else_part = NullElseBlock(self.tok_region(idx - 1, idx - 1))
+            # Need to give it a location, so just do the '}' (prev token)
+            else_part = NullElseBlock(self.tok_region(idx - 1, idx))
         return ConditionalBlock(self.tok_region(start, idx), None,
                                 [if_part, *elseif_parts, else_part]), idx
 
