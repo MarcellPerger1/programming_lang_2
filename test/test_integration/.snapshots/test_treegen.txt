@@ -1,7 +1,7 @@
 "2","45","93","105","114","121","135","154","181","198","225","242","269","297","315","348"
 "TreeGenTest::test_item_chain:0","TreeGenTest::test_fn_call_in_lvalue:0","TreeGenTest::test_aug_assign:0","TreeGenTest::test__mod_supported:0","TreeGenTest::test_decl_no_value:0","TestFunctionDecl::test_no_params:0","TestFunctionDecl::test_one_param:0","TestFunctionDecl::test_two_param:0","TestBlocks::test_while:0","TestBlocks::test_while:1","TestBlocks::test_repeat:0","TestBlocks::test_repeat:1","TestBlocks::test_else_if_else:0","TestBlocks::test_else_if_else:1","TestBlocks::test_else_if_else:2","TestAutocat::test_autocat:0"
 ProgramNode(StrRegion(0, 43), [
-  Node('=', StrRegion(0, 42), [
+  AssignNode(StrRegion(0, 42), [
     GetitemNode(StrRegion(0, 21), [
       GetattrNode(StrRegion(0, 11), [
         GetattrNode(StrRegion(0, 8), [
@@ -16,7 +16,7 @@ ProgramNode(StrRegion(0, 43), [
         ]),
         AttrNameNode(StrRegion(9, 11))
       ]),
-      Node('..', StrRegion(12, 20), [
+      ConcatNode(StrRegion(12, 20), [
         StringNode(StrRegion(12, 15)),
         NumberNode(StrRegion(19, 20))
       ])
@@ -32,7 +32,7 @@ ProgramNode(StrRegion(0, 43), [
           ]),
           AttrNameNode(StrRegion(30, 31))
         ]),
-        Node('+', StrRegion(32, 37), [
+        AddNode(StrRegion(32, 37), [
           NumberNode(StrRegion(32, 33)),
           IdentNode(StrRegion(36, 37))
         ])
@@ -44,7 +44,7 @@ ProgramNode(StrRegion(0, 43), [
   ])
 ])
 ProgramNode(StrRegion(0, 45), [
-  Node('=', StrRegion(0, 44), [
+  AssignNode(StrRegion(0, 44), [
     GetitemNode(StrRegion(0, 23), [
       CallNode(StrRegion(0, 13), [
         GetattrNode(StrRegion(0, 11), [
@@ -64,7 +64,7 @@ ProgramNode(StrRegion(0, 45), [
         ]),
         CallArgs(StrRegion(11, 13), [])
       ]),
-      Node('..', StrRegion(14, 22), [
+      ConcatNode(StrRegion(14, 22), [
         StringNode(StrRegion(14, 17)),
         NumberNode(StrRegion(21, 22))
       ])
@@ -80,7 +80,7 @@ ProgramNode(StrRegion(0, 45), [
           ]),
           AttrNameNode(StrRegion(32, 33))
         ]),
-        Node('+', StrRegion(34, 39), [
+        AddNode(StrRegion(34, 39), [
           NumberNode(StrRegion(34, 35)),
           IdentNode(StrRegion(38, 39))
         ])
@@ -92,7 +92,7 @@ ProgramNode(StrRegion(0, 45), [
   ])
 ])
 ProgramNode(StrRegion(0, 12), [
-  Node('+=', StrRegion(0, 11), [
+  AddEqNode(StrRegion(0, 11), [
     GetitemNode(StrRegion(0, 4), [
       IdentNode(StrRegion(0, 1)),
       NumberNode(StrRegion(2, 3))
@@ -104,9 +104,9 @@ ProgramNode(StrRegion(0, 12), [
   ])
 ])
 ProgramNode(StrRegion(0, 6), [
-  Node('=', StrRegion(0, 5), [
+  AssignNode(StrRegion(0, 5), [
     IdentNode(StrRegion(0, 1)),
-    Node('%', StrRegion(2, 5), [
+    ModNode(StrRegion(2, 5), [
       IdentNode(StrRegion(2, 3)),
       IdentNode(StrRegion(4, 5))
     ])
@@ -166,10 +166,10 @@ ProgramNode(StrRegion(0, 44), [
       ])
     ]),
     BlockNode(StrRegion(25, 44), [
-      Node('=', StrRegion(26, 42), [
+      AssignNode(StrRegion(26, 42), [
         IdentNode(StrRegion(26, 32)),
-        Node('..', StrRegion(33, 42), [
-          Node('..', StrRegion(33, 39), [
+        ConcatNode(StrRegion(33, 42), [
+          ConcatNode(StrRegion(33, 39), [
             IdentNode(StrRegion(33, 34)),
             StringNode(StrRegion(36, 39))
           ]),
@@ -181,13 +181,13 @@ ProgramNode(StrRegion(0, 44), [
 ])
 ProgramNode(StrRegion(0, 26), [
   WhileBlock(StrRegion(0, 26), [
-    Node('||', StrRegion(6, 23), [
+    OrNode(StrRegion(6, 23), [
       IdentNode(StrRegion(6, 7)),
-      Node('&&', StrRegion(11, 23), [
-        Node('!', StrRegion(11, 13), [
+      AndNode(StrRegion(11, 23), [
+        NotNode(StrRegion(11, 13), [
           IdentNode(StrRegion(12, 13))
         ]),
-        Node('>=', StrRegion(17, 23), [
+        GeNode(StrRegion(17, 23), [
           IdentNode(StrRegion(17, 18)),
           NumberNode(StrRegion(22, 23))
         ])
@@ -198,9 +198,9 @@ ProgramNode(StrRegion(0, 26), [
 ])
 ProgramNode(StrRegion(0, 30), [
   WhileBlock(StrRegion(0, 30), [
-    Node('!', StrRegion(5, 11), [
+    NotNode(StrRegion(5, 11), [
       ParenNode(StrRegion(6, 11), [
-        Node('%', StrRegion(7, 10), [
+        ModNode(StrRegion(7, 10), [
           NumberNode(StrRegion(7, 8)),
           NumberNode(StrRegion(9, 10))
         ])
@@ -225,13 +225,13 @@ ProgramNode(StrRegion(0, 30), [
 ])
 ProgramNode(StrRegion(0, 27), [
   RepeatBlock(StrRegion(0, 27), [
-    Node('||', StrRegion(7, 24), [
+    OrNode(StrRegion(7, 24), [
       IdentNode(StrRegion(7, 8)),
-      Node('&&', StrRegion(12, 24), [
-        Node('!', StrRegion(12, 14), [
+      AndNode(StrRegion(12, 24), [
+        NotNode(StrRegion(12, 14), [
           IdentNode(StrRegion(13, 14))
         ]),
-        Node('>=', StrRegion(18, 24), [
+        GeNode(StrRegion(18, 24), [
           IdentNode(StrRegion(18, 19)),
           NumberNode(StrRegion(23, 24))
         ])
@@ -242,9 +242,9 @@ ProgramNode(StrRegion(0, 27), [
 ])
 ProgramNode(StrRegion(0, 31), [
   RepeatBlock(StrRegion(0, 31), [
-    Node('!', StrRegion(6, 12), [
+    NotNode(StrRegion(6, 12), [
       ParenNode(StrRegion(7, 12), [
-        Node('%', StrRegion(8, 11), [
+        ModNode(StrRegion(8, 11), [
           NumberNode(StrRegion(8, 9)),
           NumberNode(StrRegion(10, 11))
         ])
@@ -277,13 +277,13 @@ ProgramNode(StrRegion(0, 29), [
     ]),
     ElseIfBlock(StrRegion(7, 29), [
       ParenNode(StrRegion(14, 27), [
-        Node('||', StrRegion(15, 26), [
+        OrNode(StrRegion(15, 26), [
           IdentNode(StrRegion(15, 16)),
-          Node('&&', StrRegion(18, 26), [
-            Node('!', StrRegion(18, 20), [
+          AndNode(StrRegion(18, 26), [
+            NotNode(StrRegion(18, 20), [
               IdentNode(StrRegion(19, 20))
             ]),
-            Node('!=', StrRegion(22, 26), [
+            NeqNode(StrRegion(22, 26), [
               IdentNode(StrRegion(22, 23)),
               NumberNode(StrRegion(25, 26))
             ])
@@ -347,8 +347,8 @@ ProgramNode(StrRegion(0, 38), [
   ])
 ])
 ProgramNode(StrRegion(0, 32), [
-  Node('..', StrRegion(0, 31), [
-    Node('..', StrRegion(0, 20), [
+  ConcatNode(StrRegion(0, 31), [
+    ConcatNode(StrRegion(0, 20), [
       AutocatNode(StrRegion(0, 15), [
         StringNode(StrRegion(0, 5)),
         StringNode(StrRegion(6, 9)),

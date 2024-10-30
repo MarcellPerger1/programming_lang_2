@@ -92,18 +92,18 @@ ProgramNode(StrRegion(0, 144), [
   LetNode(StrRegion(0, 18), [
     DeclItemNode(StrRegion(4, 17), [
       IdentNode(StrRegion(4, 5)),
-      Node('+', StrRegion(8, 17), [
-        Node('*', StrRegion(8, 11), [
+      AddNode(StrRegion(8, 17), [
+        MulNode(StrRegion(8, 11), [
           NumberNode(StrRegion(8, 9)),
           NumberNode(StrRegion(10, 11))
         ]),
-        Node('-', StrRegion(15, 17), [
+        UMinusNode(StrRegion(15, 17), [
           NumberNode(StrRegion(16, 17))
         ])
       ])
     ])
   ]),
-  Node('/=', StrRegion(19, 62), [
+  DivEqNode(StrRegion(19, 62), [
     IdentNode(StrRegion(19, 20)),
     CallNode(StrRegion(24, 62), [
       GetattrNode(StrRegion(24, 43), [
@@ -121,7 +121,7 @@ ProgramNode(StrRegion(0, 144), [
       ]),
       CallArgs(StrRegion(43, 62), [
         IdentNode(StrRegion(44, 50)),
-        Node('-', StrRegion(55, 60), [
+        UMinusNode(StrRegion(55, 60), [
           NumberNode(StrRegion(59, 60))
         ])
       ])
@@ -129,11 +129,11 @@ ProgramNode(StrRegion(0, 144), [
   ]),
   ConditionalBlock(StrRegion(64, 128), [
     IfBlock(StrRegion(64, 103), [
-      Node('>=', StrRegion(67, 98), [
+      GeNode(StrRegion(67, 98), [
         NumberNode(StrRegion(67, 68)),
-        Node('-', StrRegion(70, 98), [
-          Node('+', StrRegion(70, 93), [
-            Node('-', StrRegion(70, 73), [
+        SubNode(StrRegion(70, 98), [
+          AddNode(StrRegion(70, 93), [
+            SubNode(StrRegion(70, 73), [
               NumberNode(StrRegion(70, 71)),
               NumberNode(StrRegion(72, 73))
             ]),
@@ -155,7 +155,7 @@ ProgramNode(StrRegion(0, 144), [
     ElseIfBlock(StrRegion(104, 128), [
       IdentNode(StrRegion(112, 113)),
       BlockNode(StrRegion(113, 128), [
-        Node('+', StrRegion(115, 125), [
+        UPlusNode(StrRegion(115, 125), [
           CallNode(StrRegion(116, 125), [
             IdentNode(StrRegion(116, 123)),
             CallArgs(StrRegion(123, 125), [])
@@ -744,23 +744,23 @@ ProgramNode(StrRegion(0, 1685), [
           ])
         ])
       ]),
-      Node('=', StrRegion(591, 626), [
+      AssignNode(StrRegion(591, 626), [
         GetitemNode(StrRegion(591, 605), [
           IdentNode(StrRegion(591, 596)),
           IdentNode(StrRegion(597, 604))
         ]),
         GetitemNode(StrRegion(608, 626), [
           IdentNode(StrRegion(608, 613)),
-          Node('-', StrRegion(614, 625), [
+          SubNode(StrRegion(614, 625), [
             IdentNode(StrRegion(614, 621)),
             NumberNode(StrRegion(624, 625))
           ])
         ])
       ]),
-      Node('=', StrRegion(632, 657), [
+      AssignNode(StrRegion(632, 657), [
         GetitemNode(StrRegion(632, 650), [
           IdentNode(StrRegion(632, 637)),
-          Node('-', StrRegion(638, 649), [
+          SubNode(StrRegion(638, 649), [
             IdentNode(StrRegion(638, 645)),
             NumberNode(StrRegion(648, 649))
           ])
@@ -793,39 +793,39 @@ ProgramNode(StrRegion(0, 1685), [
           ])
         ])
       ]),
-      Node('=', StrRegion(858, 893), [
+      AssignNode(StrRegion(858, 893), [
         GetitemNode(StrRegion(858, 872), [
           IdentNode(StrRegion(858, 863)),
           IdentNode(StrRegion(864, 871))
         ]),
         GetitemNode(StrRegion(875, 893), [
           IdentNode(StrRegion(875, 880)),
-          Node('-', StrRegion(881, 892), [
+          SubNode(StrRegion(881, 892), [
             IdentNode(StrRegion(881, 888)),
             NumberNode(StrRegion(891, 892))
           ])
         ])
       ]),
-      Node('=', StrRegion(899, 938), [
+      AssignNode(StrRegion(899, 938), [
         GetitemNode(StrRegion(899, 917), [
           IdentNode(StrRegion(899, 904)),
-          Node('-', StrRegion(905, 916), [
+          SubNode(StrRegion(905, 916), [
             IdentNode(StrRegion(905, 912)),
             NumberNode(StrRegion(915, 916))
           ])
         ]),
         GetitemNode(StrRegion(920, 938), [
           IdentNode(StrRegion(920, 925)),
-          Node('-', StrRegion(926, 937), [
+          SubNode(StrRegion(926, 937), [
             IdentNode(StrRegion(926, 933)),
             NumberNode(StrRegion(936, 937))
           ])
         ])
       ]),
-      Node('=', StrRegion(944, 969), [
+      AssignNode(StrRegion(944, 969), [
         GetitemNode(StrRegion(944, 962), [
           IdentNode(StrRegion(944, 949)),
-          Node('-', StrRegion(950, 961), [
+          SubNode(StrRegion(950, 961), [
             IdentNode(StrRegion(950, 957)),
             NumberNode(StrRegion(960, 961))
           ])
@@ -906,7 +906,7 @@ ProgramNode(StrRegion(0, 1685), [
           IdentNode(StrRegion(1191, 1195)),
           GetitemNode(StrRegion(1198, 1216), [
             IdentNode(StrRegion(1198, 1203)),
-            Node('-', StrRegion(1204, 1215), [
+            SubNode(StrRegion(1204, 1215), [
               IdentNode(StrRegion(1204, 1211)),
               NumberNode(StrRegion(1214, 1215))
             ])
@@ -977,55 +977,55 @@ ProgramNode(StrRegion(0, 1685), [
           ])
         ])
       ]),
-      Node('=', StrRegion(1512, 1547), [
+      AssignNode(StrRegion(1512, 1547), [
         GetitemNode(StrRegion(1512, 1526), [
           IdentNode(StrRegion(1512, 1517)),
           IdentNode(StrRegion(1518, 1525))
         ]),
         GetitemNode(StrRegion(1529, 1547), [
           IdentNode(StrRegion(1529, 1534)),
-          Node('-', StrRegion(1535, 1546), [
+          SubNode(StrRegion(1535, 1546), [
             IdentNode(StrRegion(1535, 1542)),
             NumberNode(StrRegion(1545, 1546))
           ])
         ])
       ]),
-      Node('=', StrRegion(1553, 1592), [
+      AssignNode(StrRegion(1553, 1592), [
         GetitemNode(StrRegion(1553, 1571), [
           IdentNode(StrRegion(1553, 1558)),
-          Node('-', StrRegion(1559, 1570), [
+          SubNode(StrRegion(1559, 1570), [
             IdentNode(StrRegion(1559, 1566)),
             NumberNode(StrRegion(1569, 1570))
           ])
         ]),
         GetitemNode(StrRegion(1574, 1592), [
           IdentNode(StrRegion(1574, 1579)),
-          Node('-', StrRegion(1580, 1591), [
+          SubNode(StrRegion(1580, 1591), [
             IdentNode(StrRegion(1580, 1587)),
             NumberNode(StrRegion(1590, 1591))
           ])
         ])
       ]),
-      Node('=', StrRegion(1598, 1637), [
+      AssignNode(StrRegion(1598, 1637), [
         GetitemNode(StrRegion(1598, 1616), [
           IdentNode(StrRegion(1598, 1603)),
-          Node('-', StrRegion(1604, 1615), [
+          SubNode(StrRegion(1604, 1615), [
             IdentNode(StrRegion(1604, 1611)),
             NumberNode(StrRegion(1614, 1615))
           ])
         ]),
         GetitemNode(StrRegion(1619, 1637), [
           IdentNode(StrRegion(1619, 1624)),
-          Node('-', StrRegion(1625, 1636), [
+          SubNode(StrRegion(1625, 1636), [
             IdentNode(StrRegion(1625, 1632)),
             NumberNode(StrRegion(1635, 1636))
           ])
         ])
       ]),
-      Node('=', StrRegion(1643, 1668), [
+      AssignNode(StrRegion(1643, 1668), [
         GetitemNode(StrRegion(1643, 1661), [
           IdentNode(StrRegion(1643, 1648)),
-          Node('-', StrRegion(1649, 1660), [
+          SubNode(StrRegion(1649, 1660), [
             IdentNode(StrRegion(1649, 1656)),
             NumberNode(StrRegion(1659, 1660))
           ])

@@ -25,7 +25,7 @@ ProgramNode(StrRegion(0, 16), [
 ProgramNode(StrRegion(0, 14), [
   GetattrNode(StrRegion(0, 13), [
     ParenNode(StrRegion(0, 11), [
-      Node('+', StrRegion(1, 10), [
+      AddNode(StrRegion(1, 10), [
         IdentNode(StrRegion(1, 6)),
         IdentNode(StrRegion(9, 10))
       ])
@@ -42,7 +42,7 @@ ProgramNode(StrRegion(0, 13), [
 ProgramNode(StrRegion(0, 15), [
   GetitemNode(StrRegion(0, 14), [
     ParenNode(StrRegion(0, 11), [
-      Node('+', StrRegion(1, 10), [
+      AddNode(StrRegion(1, 10), [
         IdentNode(StrRegion(1, 6)),
         IdentNode(StrRegion(9, 10))
       ])
@@ -53,7 +53,7 @@ ProgramNode(StrRegion(0, 15), [
 ProgramNode(StrRegion(0, 24), [
   GetitemNode(StrRegion(0, 23), [
     StringNode(StrRegion(0, 10)),
-    Node('..', StrRegion(11, 22), [
+    ConcatNode(StrRegion(11, 22), [
       StringNode(StrRegion(11, 17)),
       NumberNode(StrRegion(21, 22))
     ])

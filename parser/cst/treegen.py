@@ -4,8 +4,8 @@ from typing import (TypeVar, cast, TypeAlias, Sequence, overload, Iterable, Call
 
 from .nodes import *
 from .token_matcher import OpM, KwdM, Matcher, PatternT
-from .named_node import AnyNamedNode, node_from_token
-from .base_node import Leaf, AnyNode, Node
+from .named_node import AnyNamedNode, node_from_token, node_cls_from_name
+from .base_node import AnyNode, Node
 from ..error import BaseParseError, BaseLocatedError
 from ..lexer import Tokenizer
 from ..operators import UNARY_OPS, COMPARISONS, ASSIGN_OPS
@@ -542,11 +542,14 @@ class TreeGen:
     @classmethod
     def node_from_children(cls, name_or_type: str | type[AnyNamedNode],
                            children: list[AnyNode],
-                           region: RegionUnionArgT = None, parent: Node = None):
+                           region: RegionUnionArgT = None,
+                           parent: Node = None, arity: int = None):
         region = cls.region_union(region if region is not None else children)
         if isinstance(name_or_type, str):
-            return Node(name_or_type, region, parent, children)
-        return name_or_type(region, parent, children)
+            klass = node_cls_from_name(name_or_type, children, arity)
+        else:
+            klass = name_or_type
+        return klass(region, parent, children)
 
 
 CstGen = TreeGen
