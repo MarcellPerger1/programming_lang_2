@@ -99,8 +99,8 @@ class CommonTestCase(SnapshotTestCase, TestCaseUtils):
             TreeGen(Tokenizer(src)).parse()
         except BaseParseError:
             return None
-        except Exception as ex:
-            raise ex
+        except Exception:
+            raise
         return None
 
     def assertTreeMatchesSnapshot(self, src: str):
