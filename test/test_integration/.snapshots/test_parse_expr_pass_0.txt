@@ -3,9 +3,9 @@
 ProgramNode(StrRegion(0, 15), [
   GetattrNode(StrRegion(0, 14), [
     CallNode(StrRegion(0, 12), [
-      Leaf('ident_name', StrRegion(0, 2)),
+      IdentNode(StrRegion(0, 2)),
       CallArgs(StrRegion(2, 12), [
-        Leaf('ident_name', StrRegion(3, 11))
+        IdentNode(StrRegion(3, 11))
       ])
     ]),
     Leaf('attr_name', StrRegion(13, 14))
@@ -14,20 +14,20 @@ ProgramNode(StrRegion(0, 15), [
 ProgramNode(StrRegion(0, 16), [
   GetitemNode(StrRegion(0, 15), [
     CallNode(StrRegion(0, 12), [
-      Leaf('ident_name', StrRegion(0, 2)),
+      IdentNode(StrRegion(0, 2)),
       CallArgs(StrRegion(2, 12), [
-        Leaf('ident_name', StrRegion(3, 11))
+        IdentNode(StrRegion(3, 11))
       ])
     ]),
-    Leaf('number', StrRegion(13, 14))
+    NumberNode(StrRegion(13, 14))
   ])
 ])
 ProgramNode(StrRegion(0, 14), [
   GetattrNode(StrRegion(0, 13), [
     ParenNode(StrRegion(0, 11), [
       Node('+', StrRegion(1, 10), [
-        Leaf('ident_name', StrRegion(1, 6)),
-        Leaf('ident_name', StrRegion(9, 10))
+        IdentNode(StrRegion(1, 6)),
+        IdentNode(StrRegion(9, 10))
       ])
     ]),
     Leaf('attr_name', StrRegion(12, 13))
@@ -35,7 +35,7 @@ ProgramNode(StrRegion(0, 14), [
 ])
 ProgramNode(StrRegion(0, 13), [
   GetattrNode(StrRegion(0, 12), [
-    Leaf('string', StrRegion(0, 10)),
+    StringNode(StrRegion(0, 10)),
     Leaf('attr_name', StrRegion(11, 12))
   ])
 ])
@@ -43,19 +43,19 @@ ProgramNode(StrRegion(0, 15), [
   GetitemNode(StrRegion(0, 14), [
     ParenNode(StrRegion(0, 11), [
       Node('+', StrRegion(1, 10), [
-        Leaf('ident_name', StrRegion(1, 6)),
-        Leaf('ident_name', StrRegion(9, 10))
+        IdentNode(StrRegion(1, 6)),
+        IdentNode(StrRegion(9, 10))
       ])
     ]),
-    Leaf('number', StrRegion(12, 13))
+    NumberNode(StrRegion(12, 13))
   ])
 ])
 ProgramNode(StrRegion(0, 24), [
   GetitemNode(StrRegion(0, 23), [
-    Leaf('string', StrRegion(0, 10)),
+    StringNode(StrRegion(0, 10)),
     Node('..', StrRegion(11, 22), [
-      Leaf('string', StrRegion(11, 17)),
-      Leaf('number', StrRegion(21, 22))
+      StringNode(StrRegion(11, 17)),
+      NumberNode(StrRegion(21, 22))
     ])
   ])
 ])

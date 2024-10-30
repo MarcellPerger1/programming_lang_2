@@ -4,7 +4,7 @@ from typing import (TypeVar, cast, TypeAlias, Sequence, overload, Iterable, Call
 
 from .nodes import *
 from .token_matcher import OpM, KwdM, Matcher, PatternT
-from .named_node import AnyNamedNode
+from .named_node import AnyNamedNode, node_from_token
 from .base_node import Leaf, AnyNode, Node
 from ..error import BaseParseError, BaseLocatedError
 from ..lexer import Tokenizer
@@ -171,7 +171,7 @@ class TreeGen:
         if not self.matches(idx, IdentNameToken):
             raise self.err(f"Expected identifier in decl_item, "
                            f"got {self[idx].name}", self[idx])
-        children = [Leaf.of(self[idx])]
+        children = [node_from_token(self[idx])]
         idx += 1
         # 1. global x, y = ...;
         #            ^
@@ -192,7 +192,7 @@ class TreeGen:
         assert self.matches(idx, KwdM('def'))
         idx += 1
         assert self.matches(idx, IdentNameToken)
-        name = Leaf.of(self.tokens[idx])
+        name = node_from_token(self.tokens[idx])
         idx += 1
         args_decl, idx = self._parse_args_decl(idx)
         # def f(t1 arg1, t2 arg2) { <a block> }
@@ -236,12 +236,12 @@ class TreeGen:
         if not self.matches(idx, IdentNameToken):
             raise self.err(f"Error: expected type name, got {self[idx].name}."
                            f"Did you forget a ')'?", self[idx])
-        tp_name = Leaf.of(self[idx])
+        tp_name = node_from_token(self[idx])
         idx += 1
         if not self.matches(idx, IdentNameToken):
             raise self.err(f"Error: expected arg name, got {self[idx].name}."
                            f"Did you forget the type name?", self[idx])
-        arg_name = Leaf.of(self[idx])
+        arg_name = node_from_token(self[idx])
         idx += 1
         arg_decl = ArgDeclNode(self.tok_region(start, idx), None, [tp_name, arg_name])
         return arg_decl, idx
@@ -380,14 +380,14 @@ class TreeGen:
         """Parses literal/ident ('atom' as in can't be broken down further, like 'atomic')"""
         tok = self[idx]
         if isinstance(tok, (StringToken, NumberToken, IdentNameToken)):
-            return Leaf.of(tok), idx + 1
+            return node_from_token(tok), idx + 1
         raise self.err(f"Unexpected {tok.name} token {tok.get_str(self.src)!r}", tok)
 
     def _parse_autocat_or_string(self, idx: int) -> tuple[AnyNode, int]:
         start = idx
         strings = []
         while isinstance(self[idx], StringToken):
-            strings.append(Leaf.of(self[idx]))
+            strings.append(node_from_token(self[idx]))
             idx += 1
         assert strings, "_parse_autocat_or_string requires current token to be string"
         if len(strings) == 1:
@@ -397,7 +397,7 @@ class TreeGen:
     def _parse_atom_or_autocat(self, idx: int) -> tuple[AnyNode, int]:
         tok = self[idx]
         if isinstance(tok, (NumberToken, IdentNameToken)):
-            return Leaf.of(tok), idx + 1
+            return node_from_token(tok), idx + 1
         if isinstance(tok, StringToken):
             return self._parse_autocat_or_string(idx)
         raise self.err(f"Unexpected {tok.name} token {tok.get_str(self.src)!r}", tok)
