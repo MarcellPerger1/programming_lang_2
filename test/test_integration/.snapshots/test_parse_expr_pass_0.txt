@@ -8,7 +8,7 @@ ProgramNode(StrRegion(0, 15), [
         IdentNode(StrRegion(3, 11))
       ])
     ]),
-    Leaf('attr_name', StrRegion(13, 14))
+    AttrNameNode(StrRegion(13, 14))
   ])
 ])
 ProgramNode(StrRegion(0, 16), [
@@ -30,13 +30,13 @@ ProgramNode(StrRegion(0, 14), [
         IdentNode(StrRegion(9, 10))
       ])
     ]),
-    Leaf('attr_name', StrRegion(12, 13))
+    AttrNameNode(StrRegion(12, 13))
   ])
 ])
 ProgramNode(StrRegion(0, 13), [
   GetattrNode(StrRegion(0, 12), [
     StringNode(StrRegion(0, 10)),
-    Leaf('attr_name', StrRegion(11, 12))
+    AttrNameNode(StrRegion(11, 12))
   ])
 ])
 ProgramNode(StrRegion(0, 15), [

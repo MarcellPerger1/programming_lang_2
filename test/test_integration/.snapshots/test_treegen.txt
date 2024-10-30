@@ -10,11 +10,11 @@ ProgramNode(StrRegion(0, 43), [
               IdentNode(StrRegion(0, 1)),
               NumberNode(StrRegion(2, 3))
             ]),
-            Leaf('attr_name', StrRegion(5, 6))
+            AttrNameNode(StrRegion(5, 6))
           ]),
-          Leaf('attr_name', StrRegion(7, 8))
+          AttrNameNode(StrRegion(7, 8))
         ]),
-        Leaf('attr_name', StrRegion(9, 11))
+        AttrNameNode(StrRegion(9, 11))
       ]),
       Node('..', StrRegion(12, 20), [
         StringNode(StrRegion(12, 15)),
@@ -30,7 +30,7 @@ ProgramNode(StrRegion(0, 43), [
               NumberNode(StrRegion(27, 28))
             ])
           ]),
-          Leaf('attr_name', StrRegion(30, 31))
+          AttrNameNode(StrRegion(30, 31))
         ]),
         Node('+', StrRegion(32, 37), [
           NumberNode(StrRegion(32, 33)),
@@ -56,11 +56,11 @@ ProgramNode(StrRegion(0, 45), [
                   NumberNode(StrRegion(2, 3))
                 ])
               ]),
-              Leaf('attr_name', StrRegion(5, 6))
+              AttrNameNode(StrRegion(5, 6))
             ]),
-            Leaf('attr_name', StrRegion(7, 8))
+            AttrNameNode(StrRegion(7, 8))
           ]),
-          Leaf('attr_name', StrRegion(9, 11))
+          AttrNameNode(StrRegion(9, 11))
         ]),
         CallArgs(StrRegion(11, 13), [])
       ]),
@@ -78,7 +78,7 @@ ProgramNode(StrRegion(0, 45), [
               NumberNode(StrRegion(29, 30))
             ])
           ]),
-          Leaf('attr_name', StrRegion(32, 33))
+          AttrNameNode(StrRegion(32, 33))
         ]),
         Node('+', StrRegion(34, 39), [
           NumberNode(StrRegion(34, 35)),
@@ -99,7 +99,7 @@ ProgramNode(StrRegion(0, 12), [
     ]),
     GetattrNode(StrRegion(8, 11), [
       IdentNode(StrRegion(8, 9)),
-      Leaf('attr_name', StrRegion(10, 11))
+      AttrNameNode(StrRegion(10, 11))
     ])
   ])
 ])
@@ -212,7 +212,7 @@ ProgramNode(StrRegion(0, 30), [
           ParenNode(StrRegion(12, 17), [
             NumberNode(StrRegion(13, 16))
           ]),
-          Leaf('attr_name', StrRegion(18, 21))
+          AttrNameNode(StrRegion(18, 21))
         ]),
         CallArgs(StrRegion(21, 28), [
           NumberNode(StrRegion(22, 23)),
@@ -256,7 +256,7 @@ ProgramNode(StrRegion(0, 31), [
           ParenNode(StrRegion(13, 18), [
             NumberNode(StrRegion(14, 17))
           ]),
-          Leaf('attr_name', StrRegion(19, 22))
+          AttrNameNode(StrRegion(19, 22))
         ]),
         CallArgs(StrRegion(22, 29), [
           NumberNode(StrRegion(23, 24)),
@@ -359,7 +359,7 @@ ProgramNode(StrRegion(0, 32), [
     CallNode(StrRegion(24, 31), [
       GetattrNode(StrRegion(24, 29), [
         StringNode(StrRegion(24, 27)),
-        Leaf('attr_name', StrRegion(28, 29))
+        AttrNameNode(StrRegion(28, 29))
       ]),
       CallArgs(StrRegion(29, 31), [])
     ])

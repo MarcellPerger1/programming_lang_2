@@ -111,13 +111,13 @@ ProgramNode(StrRegion(0, 144), [
           GetitemNode(StrRegion(24, 32), [
             GetattrNode(StrRegion(24, 29), [
               IdentNode(StrRegion(24, 27)),
-              Leaf('attr_name', StrRegion(28, 29))
+              AttrNameNode(StrRegion(28, 29))
             ]),
             NumberNode(StrRegion(30, 31))
           ]),
-          Leaf('attr_name', StrRegion(33, 34))
+          AttrNameNode(StrRegion(33, 34))
         ]),
-        Leaf('attr_name', StrRegion(35, 43))
+        AttrNameNode(StrRegion(35, 43))
       ]),
       CallArgs(StrRegion(43, 62), [
         IdentNode(StrRegion(44, 50)),
@@ -170,7 +170,7 @@ ProgramNode(StrRegion(0, 144), [
       IdentNode(StrRegion(129, 134)),
       CallArgs(StrRegion(134, 136), [])
     ]),
-    Leaf('attr_name', StrRegion(137, 143))
+    AttrNameNode(StrRegion(137, 143))
   ])
 ])
 [IdentNameToken(region=StrRegion(start=0, end=6)),
@@ -855,7 +855,7 @@ ProgramNode(StrRegion(0, 1685), [
       CallNode(StrRegion(1029, 1048), [
         GetattrNode(StrRegion(1029, 1041), [
           IdentNode(StrRegion(1029, 1034)),
-          Leaf('attr_name', StrRegion(1035, 1041))
+          AttrNameNode(StrRegion(1035, 1041))
         ]),
         CallArgs(StrRegion(1041, 1048), [
           IdentNode(StrRegion(1042, 1047))
@@ -916,7 +916,7 @@ ProgramNode(StrRegion(0, 1685), [
       CallNode(StrRegion(1222, 1240), [
         GetattrNode(StrRegion(1222, 1234), [
           IdentNode(StrRegion(1222, 1227)),
-          Leaf('attr_name', StrRegion(1228, 1234))
+          AttrNameNode(StrRegion(1228, 1234))
         ]),
         CallArgs(StrRegion(1234, 1240), [
           IdentNode(StrRegion(1235, 1239))
@@ -925,7 +925,7 @@ ProgramNode(StrRegion(0, 1685), [
       CallNode(StrRegion(1246, 1264), [
         GetattrNode(StrRegion(1246, 1258), [
           IdentNode(StrRegion(1246, 1251)),
-          Leaf('attr_name', StrRegion(1252, 1258))
+          AttrNameNode(StrRegion(1252, 1258))
         ]),
         CallArgs(StrRegion(1258, 1264), [
           IdentNode(StrRegion(1259, 1263))

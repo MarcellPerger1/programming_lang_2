@@ -423,7 +423,7 @@ class TreeGen:
             if not isinstance(self[idx], AttrNameToken):
                 raise self.err(f"Expected attribute name after '.', "
                                f"got {self[idx].name}", self[idx])
-            right = Leaf.of(self[idx])
+            right = node_from_token(self[idx])
             idx += 1
             return self.node_from_children(GetattrNode, [left, right]), idx
         elif isinstance(self[idx], LSqBracket):
