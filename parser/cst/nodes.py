@@ -1,7 +1,7 @@
 from __future__ import annotations
 
-from .named_node import (NamedLeafCls, NamedNodeCls, NamedSizedNodeCls,
-                         register_corresponding_token)
+from ..trees.named_node import (NamedLeafCls, NamedNodeCls, NamedSizedNodeCls,
+                                register_corresponding_token)
 
 __all__ = [
     "NumberNode", "StringNode", "AnyNameLeaf", "IdentNode", "AttrNameNode",

@@ -4,7 +4,7 @@ import time
 from util import readfile
 from parser.cst.treegen import TreeGen
 from parser.lexer import Tokenizer, print_tokens
-from parser.cst.tree_print import tprint
+from parser.trees.tree_print import tprint
 
 
 def make_tree(src: str):
