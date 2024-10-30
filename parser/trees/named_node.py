@@ -4,10 +4,10 @@ from dataclasses import dataclass, field
 from typing import TYPE_CHECKING, overload, Sequence, cast, Literal
 
 from .base_node import Leaf, AnyNode, Node
-from ..str_region import StrRegion
+from parser.str_region import StrRegion
 
 if TYPE_CHECKING:
-    from ..tokens import Token
+    from parser.tokens import Token
 
 
 # NOTE: these classes only follow the Liskov substitution principle on
