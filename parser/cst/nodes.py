@@ -12,6 +12,10 @@ __all__ = [
 ]
 
 
+class ProgramNode(NamedNodeCls):
+    name = 'program'  # Varargs
+
+
 # region ---- Expressions ----
 @register_corresponding_token
 class NumberNode(NamedLeafCls):
@@ -87,7 +91,7 @@ class UMinusNode(UnaryOpNode):
 
 
 @register_corresponding_token
-class NotToken(UnaryOpNode):
+class NotNode(UnaryOpNode):
     name = '!'
 
 
@@ -175,9 +179,7 @@ class GeNode(ComparisonNode):
 # endregion
 
 
-# TODO: operators??!
-
-
+# region ---- Statements ----
 class NopNode(NamedLeafCls):
     name = 'nop'  # TODO: actually nop_smt
 
@@ -219,7 +221,6 @@ class WhileBlock(NamedSizedNodeCls):
 class RepeatBlock(NamedSizedNodeCls):
     name = 'repeat'
     size = 2
-# endregion
 
 
 class DefineNode(NamedSizedNodeCls):
@@ -238,6 +239,7 @@ class ArgDeclNode(NamedSizedNodeCls):
 
 class DeclItemNode(NamedNodeCls):
     name = 'decl_item'  # 1 or 2 (name and optional value)
+# endregion
 
 
 class LetNode(NamedNodeCls):
@@ -248,5 +250,58 @@ class GlobalNode(NamedNodeCls):
     name = 'global_decl'  # Varargs
 
 
-class ProgramNode(NamedNodeCls):
-    name = 'program'  # Varargs
+# region ---- Assignment-ops ----
+class AssignOpNode(BinOpNode):
+    pass
+
+
+@register_corresponding_token
+class AssignNode(AssignOpNode):
+    name = '='
+
+
+@register_corresponding_token
+class AddEqNode(AssignOpNode):
+    name = '+='
+
+
+@register_corresponding_token
+class SubEqNode(AssignOpNode):
+    name = '-='
+
+
+@register_corresponding_token
+class MulEqNode(AssignOpNode):
+    name = '*='
+
+
+@register_corresponding_token
+class DivEqNode(AssignOpNode):
+    name = '/='
+
+
+@register_corresponding_token
+class ModEqNode(AssignOpNode):
+    name = '%='
+
+
+@register_corresponding_token
+class PowEqNode(AssignOpNode):
+    name = '**='
+
+
+@register_corresponding_token
+class ConcatEqNode(AssignOpNode):
+    name = '..='
+
+
+@register_corresponding_token
+class AndEqNode(AssignOpNode):
+    name = '&&='
+
+
+@register_corresponding_token
+class OrEqNode(AssignOpNode):
+    name = '||='
+# endregion
+# endregion

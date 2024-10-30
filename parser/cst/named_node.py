@@ -152,20 +152,19 @@ def _cls_with_arity_or_general(name: str, arity: int):
         return NAME_REGISTRY[name]
 
 
-def node_cls_from_token_name(name: str, n_children: int | None = None,
-                             arity: int = None):
+def node_cls_from_name(name: str, children: list | int | None = None, arity: int = None):
     """Priority: arity > n_children > auto"""
     if arity is not None:
         return _cls_with_arity_or_general(name, arity)
-    if n_children is not None:
+    if children is not None:
+        n_children = children if isinstance(children, int) else len(children)
         return _cls_with_arity_or_general(name, n_children)
     return NAME_REGISTRY[name]
 
 
 def node_from_token(token: Token, children: Sequence[Node] = None,
                     parent: Node | None = None, arity: int = None):
-    cls = node_cls_from_token_name(
-        token.name, None if children is None else len(children), arity)
+    cls = node_cls_from_name(token.name, children, arity)
     if children:
         return cls(token.region, parent, children)
     return cls(token.region, parent)
