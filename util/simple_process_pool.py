@@ -180,8 +180,10 @@ class _ProcessWrapper:
             try:
                 result = key, True, fn(*args, **kwargs)
             except Exception as e:
-                result = key, False, mp.pool.ExceptionWithTraceback(e)
+                # noinspection PyUnresolvedReferences
+                result = key, False, mp.pool.ExceptionWithTraceback(e, e.__traceback__)
             try:
                 results_out.put(result)
             except Exception as e:
+                # noinspection PyUnresolvedReferences
                 results_out.put(mp.pool.MaybeEncodingError(e, result[1]))
