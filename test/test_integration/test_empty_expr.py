@@ -1,15 +1,11 @@
 import unittest
-from typing import Iterable, Container, Any
 
-from test.snapshottest import SnapshotTestCase
+from test.common import CommonTestCase
 from parser.lexer import Tokenizer
 from parser.cst.treegen import CstGen, LocatedCstError
-from test.utils import TestCaseUtils
 
 
-class MyTestCase(SnapshotTestCase, TestCaseUtils):
-    def assertContains(self, container: Iterable | Container, member: Any, msg=None):
-        self.assertIn(member, container, msg)
+class MyTestCase(CommonTestCase):
 
     def test_error_empty_assign_source(self):
         t = Tokenizer('let a= ;').tokenize()

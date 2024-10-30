@@ -1,13 +1,12 @@
 import unittest
 
+from test.common import CommonTestCase
 from util import readfile
 from parser.cst.treegen import TreeGen
 from parser.lexer import Tokenizer
-from test.snapshottest import SnapshotTestCase
-from test.utils import TestCaseUtils
 
 
-class TestMain(TestCaseUtils, SnapshotTestCase):
+class TestMain(CommonTestCase):
     def setUp(self):
         self.setProperCwd()
         super().setUp()

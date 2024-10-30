@@ -1,292 +1,367 @@
-"2","110","231","259","279"
-"TreeGenTest::test_item_chain:0","TreeGenTest::test_fn_call_in_lvalue:0","TreeGenTest::test_aug_assign:0","TreeGenTest::test__mod_supported:0","TreeGenTest::test_decl_no_value:0"
-Node(name='program',
-     region=StrRegion(start=0, end=43),
-     parent=None,
-     children=[Node(name='=',
-                    region=StrRegion(start=0, end=42),
-                    parent=...,
-                    children=[Node(name='getitem',
-                                   region=StrRegion(start=0, end=21),
-                                   parent=...,
-                                   children=[Node(name='getattr',
-                                                  region=StrRegion(start=0,
-                                                                   end=11),
-                                                  parent=...,
-                                                  children=[Node(name='getattr',
-                                                                 region=StrRegion(start=0,
-                                                                                  end=8),
-                                                                 parent=...,
-                                                                 children=[Node(name='getattr',
-                                                                                region=StrRegion(start=0,
-                                                                                                 end=6),
-                                                                                parent=...,
-                                                                                children=[Node(name='getitem',
-                                                                                               region=StrRegion(start=0,
-                                                                                                                end=4),
-                                                                                               parent=...,
-                                                                                               children=[Leaf(name='ident_name',
-                                                                                                              region=StrRegion(start=0,
-                                                                                                                               end=1),
-                                                                                                              parent=...),
-                                                                                                         Leaf(name='number',
-                                                                                                              region=StrRegion(start=2,
-                                                                                                                               end=3),
-                                                                                                              parent=...)]),
-                                                                                          Leaf(name='attr_name',
-                                                                                               region=StrRegion(start=5,
-                                                                                                                end=6),
-                                                                                               parent=...)]),
-                                                                           Leaf(name='attr_name',
-                                                                                region=StrRegion(start=7,
-                                                                                                 end=8),
-                                                                                parent=...)]),
-                                                            Leaf(name='attr_name',
-                                                                 region=StrRegion(start=9,
-                                                                                  end=11),
-                                                                 parent=...)]),
-                                             Node(name='..',
-                                                  region=StrRegion(start=12,
-                                                                   end=20),
-                                                  parent=...,
-                                                  children=[Leaf(name='string',
-                                                                 region=StrRegion(start=12,
-                                                                                  end=15),
-                                                                 parent=...),
-                                                            Leaf(name='number',
-                                                                 region=StrRegion(start=19,
-                                                                                  end=20),
-                                                                 parent=...)])]),
-                              Node(name='call',
-                                   region=StrRegion(start=24, end=42),
-                                   parent=...,
-                                   children=[Node(name='getitem',
-                                                  region=StrRegion(start=24,
-                                                                   end=38),
-                                                  parent=...,
-                                                  children=[Node(name='getattr',
-                                                                 region=StrRegion(start=24,
-                                                                                  end=31),
-                                                                 parent=...,
-                                                                 children=[Node(name='call',
-                                                                                region=StrRegion(start=24,
-                                                                                                 end=29),
-                                                                                parent=...,
-                                                                                children=[Leaf(name='ident_name',
-                                                                                               region=StrRegion(start=24,
-                                                                                                                end=26),
-                                                                                               parent=...),
-                                                                                          Node(name='call_args',
-                                                                                               region=StrRegion(start=26,
-                                                                                                                end=29),
-                                                                                               parent=...,
-                                                                                               children=[Leaf(name='number',
-                                                                                                              region=StrRegion(start=27,
-                                                                                                                               end=28),
-                                                                                                              parent=...)])]),
-                                                                           Leaf(name='attr_name',
-                                                                                region=StrRegion(start=30,
-                                                                                                 end=31),
-                                                                                parent=...)]),
-                                                            Node(name='+',
-                                                                 region=StrRegion(start=32,
-                                                                                  end=37),
-                                                                 parent=...,
-                                                                 children=[Leaf(name='number',
-                                                                                region=StrRegion(start=32,
-                                                                                                 end=33),
-                                                                                parent=...),
-                                                                           Leaf(name='ident_name',
-                                                                                region=StrRegion(start=36,
-                                                                                                 end=37),
-                                                                                parent=...)])]),
-                                             Node(name='call_args',
-                                                  region=StrRegion(start=38,
-                                                                   end=42),
-                                                  parent=...,
-                                                  children=[Leaf(name='number',
-                                                                 region=StrRegion(start=39,
-                                                                                  end=40),
-                                                                 parent=...)])])])])
-Node(name='program',
-     region=StrRegion(start=0, end=45),
-     parent=None,
-     children=[Node(name='=',
-                    region=StrRegion(start=0, end=44),
-                    parent=...,
-                    children=[Node(name='getitem',
-                                   region=StrRegion(start=0, end=23),
-                                   parent=...,
-                                   children=[Node(name='call',
-                                                  region=StrRegion(start=0,
-                                                                   end=13),
-                                                  parent=...,
-                                                  children=[Node(name='getattr',
-                                                                 region=StrRegion(start=0,
-                                                                                  end=11),
-                                                                 parent=...,
-                                                                 children=[Node(name='getattr',
-                                                                                region=StrRegion(start=0,
-                                                                                                 end=8),
-                                                                                parent=...,
-                                                                                children=[Node(name='getattr',
-                                                                                               region=StrRegion(start=0,
-                                                                                                                end=6),
-                                                                                               parent=...,
-                                                                                               children=[Node(name='call',
-                                                                                                              region=StrRegion(start=0,
-                                                                                                                               end=4),
-                                                                                                              parent=...,
-                                                                                                              children=[Leaf(name='ident_name',
-                                                                                                                             region=StrRegion(start=0,
-                                                                                                                                              end=1),
-                                                                                                                             parent=...),
-                                                                                                                        Node(name='call_args',
-                                                                                                                             region=StrRegion(start=1,
-                                                                                                                                              end=4),
-                                                                                                                             parent=...,
-                                                                                                                             children=[Leaf(name='number',
-                                                                                                                                            region=StrRegion(start=2,
-                                                                                                                                                             end=3),
-                                                                                                                                            parent=...)])]),
-                                                                                                         Leaf(name='attr_name',
-                                                                                                              region=StrRegion(start=5,
-                                                                                                                               end=6),
-                                                                                                              parent=...)]),
-                                                                                          Leaf(name='attr_name',
-                                                                                               region=StrRegion(start=7,
-                                                                                                                end=8),
-                                                                                               parent=...)]),
-                                                                           Leaf(name='attr_name',
-                                                                                region=StrRegion(start=9,
-                                                                                                 end=11),
-                                                                                parent=...)]),
-                                                            Node(name='call_args',
-                                                                 region=StrRegion(start=11,
-                                                                                  end=13),
-                                                                 parent=...,
-                                                                 children=[])]),
-                                             Node(name='..',
-                                                  region=StrRegion(start=14,
-                                                                   end=22),
-                                                  parent=...,
-                                                  children=[Leaf(name='string',
-                                                                 region=StrRegion(start=14,
-                                                                                  end=17),
-                                                                 parent=...),
-                                                            Leaf(name='number',
-                                                                 region=StrRegion(start=21,
-                                                                                  end=22),
-                                                                 parent=...)])]),
-                              Node(name='call',
-                                   region=StrRegion(start=26, end=44),
-                                   parent=...,
-                                   children=[Node(name='getitem',
-                                                  region=StrRegion(start=26,
-                                                                   end=40),
-                                                  parent=...,
-                                                  children=[Node(name='getattr',
-                                                                 region=StrRegion(start=26,
-                                                                                  end=33),
-                                                                 parent=...,
-                                                                 children=[Node(name='call',
-                                                                                region=StrRegion(start=26,
-                                                                                                 end=31),
-                                                                                parent=...,
-                                                                                children=[Leaf(name='ident_name',
-                                                                                               region=StrRegion(start=26,
-                                                                                                                end=28),
-                                                                                               parent=...),
-                                                                                          Node(name='call_args',
-                                                                                               region=StrRegion(start=28,
-                                                                                                                end=31),
-                                                                                               parent=...,
-                                                                                               children=[Leaf(name='number',
-                                                                                                              region=StrRegion(start=29,
-                                                                                                                               end=30),
-                                                                                                              parent=...)])]),
-                                                                           Leaf(name='attr_name',
-                                                                                region=StrRegion(start=32,
-                                                                                                 end=33),
-                                                                                parent=...)]),
-                                                            Node(name='+',
-                                                                 region=StrRegion(start=34,
-                                                                                  end=39),
-                                                                 parent=...,
-                                                                 children=[Leaf(name='number',
-                                                                                region=StrRegion(start=34,
-                                                                                                 end=35),
-                                                                                parent=...),
-                                                                           Leaf(name='ident_name',
-                                                                                region=StrRegion(start=38,
-                                                                                                 end=39),
-                                                                                parent=...)])]),
-                                             Node(name='call_args',
-                                                  region=StrRegion(start=40,
-                                                                   end=44),
-                                                  parent=...,
-                                                  children=[Leaf(name='number',
-                                                                 region=StrRegion(start=41,
-                                                                                  end=42),
-                                                                 parent=...)])])])])
-Node(name='program',
-     region=StrRegion(start=0, end=12),
-     parent=None,
-     children=[Node(name='+=',
-                    region=StrRegion(start=0, end=11),
-                    parent=...,
-                    children=[Node(name='getitem',
-                                   region=StrRegion(start=0, end=4),
-                                   parent=...,
-                                   children=[Leaf(name='ident_name',
-                                                  region=StrRegion(start=0,
-                                                                   end=1),
-                                                  parent=...),
-                                             Leaf(name='number',
-                                                  region=StrRegion(start=2,
-                                                                   end=3),
-                                                  parent=...)]),
-                              Node(name='getattr',
-                                   region=StrRegion(start=8, end=11),
-                                   parent=...,
-                                   children=[Leaf(name='ident_name',
-                                                  region=StrRegion(start=8,
-                                                                   end=9),
-                                                  parent=...),
-                                             Leaf(name='attr_name',
-                                                  region=StrRegion(start=10,
-                                                                   end=11),
-                                                  parent=...)])])])
-Node(name='program',
-     region=StrRegion(start=0, end=6),
-     parent=None,
-     children=[Node(name='=',
-                    region=StrRegion(start=0, end=5),
-                    parent=...,
-                    children=[Leaf(name='ident_name',
-                                   region=StrRegion(start=0, end=1),
-                                   parent=...),
-                              Node(name='%',
-                                   region=StrRegion(start=2, end=5),
-                                   parent=...,
-                                   children=[Leaf(name='ident_name',
-                                                  region=StrRegion(start=2,
-                                                                   end=3),
-                                                  parent=...),
-                                             Leaf(name='ident_name',
-                                                  region=StrRegion(start=4,
-                                                                   end=5),
-                                                  parent=...)])])])
-Node(name='program',
-     region=StrRegion(start=0, end=6),
-     parent=None,
-     children=[Node(name='let_decl',
-                    region=StrRegion(start=0, end=6),
-                    parent=...,
-                    children=[Node(name='decl_item',
-                                   region=StrRegion(start=4, end=5),
-                                   parent=...,
-                                   children=[Leaf(name='ident_name',
-                                                  region=StrRegion(start=4,
-                                                                   end=5),
-                                                  parent=...)])])])
+"2","45","93","105","114","121","135","154","181","198","225","242","269","297","315","348"
+"TreeGenTest::test_item_chain:0","TreeGenTest::test_fn_call_in_lvalue:0","TreeGenTest::test_aug_assign:0","TreeGenTest::test__mod_supported:0","TreeGenTest::test_decl_no_value:0","TestFunctionDecl::test_no_params:0","TestFunctionDecl::test_one_param:0","TestFunctionDecl::test_two_param:0","TestBlocks::test_while:0","TestBlocks::test_while:1","TestBlocks::test_repeat:0","TestBlocks::test_repeat:1","TestBlocks::test_else_if_else:0","TestBlocks::test_else_if_else:1","TestBlocks::test_else_if_else:2","TestAutocat::test_autocat:0"
+ProgramNode(StrRegion(0, 43), [
+  AssignNode(StrRegion(0, 42), [
+    GetitemNode(StrRegion(0, 21), [
+      GetattrNode(StrRegion(0, 11), [
+        GetattrNode(StrRegion(0, 8), [
+          GetattrNode(StrRegion(0, 6), [
+            GetitemNode(StrRegion(0, 4), [
+              IdentNode(StrRegion(0, 1)),
+              NumberNode(StrRegion(2, 3))
+            ]),
+            AttrNameNode(StrRegion(5, 6))
+          ]),
+          AttrNameNode(StrRegion(7, 8))
+        ]),
+        AttrNameNode(StrRegion(9, 11))
+      ]),
+      ConcatNode(StrRegion(12, 20), [
+        StringNode(StrRegion(12, 15)),
+        NumberNode(StrRegion(19, 20))
+      ])
+    ]),
+    CallNode(StrRegion(24, 42), [
+      GetitemNode(StrRegion(24, 38), [
+        GetattrNode(StrRegion(24, 31), [
+          CallNode(StrRegion(24, 29), [
+            IdentNode(StrRegion(24, 26)),
+            CallArgs(StrRegion(26, 29), [
+              NumberNode(StrRegion(27, 28))
+            ])
+          ]),
+          AttrNameNode(StrRegion(30, 31))
+        ]),
+        AddNode(StrRegion(32, 37), [
+          NumberNode(StrRegion(32, 33)),
+          IdentNode(StrRegion(36, 37))
+        ])
+      ]),
+      CallArgs(StrRegion(38, 42), [
+        NumberNode(StrRegion(39, 40))
+      ])
+    ])
+  ])
+])
+ProgramNode(StrRegion(0, 45), [
+  AssignNode(StrRegion(0, 44), [
+    GetitemNode(StrRegion(0, 23), [
+      CallNode(StrRegion(0, 13), [
+        GetattrNode(StrRegion(0, 11), [
+          GetattrNode(StrRegion(0, 8), [
+            GetattrNode(StrRegion(0, 6), [
+              CallNode(StrRegion(0, 4), [
+                IdentNode(StrRegion(0, 1)),
+                CallArgs(StrRegion(1, 4), [
+                  NumberNode(StrRegion(2, 3))
+                ])
+              ]),
+              AttrNameNode(StrRegion(5, 6))
+            ]),
+            AttrNameNode(StrRegion(7, 8))
+          ]),
+          AttrNameNode(StrRegion(9, 11))
+        ]),
+        CallArgs(StrRegion(11, 13), [])
+      ]),
+      ConcatNode(StrRegion(14, 22), [
+        StringNode(StrRegion(14, 17)),
+        NumberNode(StrRegion(21, 22))
+      ])
+    ]),
+    CallNode(StrRegion(26, 44), [
+      GetitemNode(StrRegion(26, 40), [
+        GetattrNode(StrRegion(26, 33), [
+          CallNode(StrRegion(26, 31), [
+            IdentNode(StrRegion(26, 28)),
+            CallArgs(StrRegion(28, 31), [
+              NumberNode(StrRegion(29, 30))
+            ])
+          ]),
+          AttrNameNode(StrRegion(32, 33))
+        ]),
+        AddNode(StrRegion(34, 39), [
+          NumberNode(StrRegion(34, 35)),
+          IdentNode(StrRegion(38, 39))
+        ])
+      ]),
+      CallArgs(StrRegion(40, 44), [
+        NumberNode(StrRegion(41, 42))
+      ])
+    ])
+  ])
+])
+ProgramNode(StrRegion(0, 12), [
+  AddEqNode(StrRegion(0, 11), [
+    GetitemNode(StrRegion(0, 4), [
+      IdentNode(StrRegion(0, 1)),
+      NumberNode(StrRegion(2, 3))
+    ]),
+    GetattrNode(StrRegion(8, 11), [
+      IdentNode(StrRegion(8, 9)),
+      AttrNameNode(StrRegion(10, 11))
+    ])
+  ])
+])
+ProgramNode(StrRegion(0, 6), [
+  AssignNode(StrRegion(0, 5), [
+    IdentNode(StrRegion(0, 1)),
+    ModNode(StrRegion(2, 5), [
+      IdentNode(StrRegion(2, 3)),
+      IdentNode(StrRegion(4, 5))
+    ])
+  ])
+])
+ProgramNode(StrRegion(0, 6), [
+  LetNode(StrRegion(0, 6), [
+    DeclItemNode(StrRegion(4, 5), [
+      IdentNode(StrRegion(4, 5))
+    ])
+  ])
+])
+ProgramNode(StrRegion(0, 28), [
+  DefineNode(StrRegion(0, 28), [
+    IdentNode(StrRegion(4, 5)),
+    ArgsDeclNode(StrRegion(5, 7), []),
+    BlockNode(StrRegion(8, 28), [
+      CallNode(StrRegion(10, 25), [
+        IdentNode(StrRegion(10, 15)),
+        CallArgs(StrRegion(15, 25), [
+          StringNode(StrRegion(16, 24))
+        ])
+      ])
+    ])
+  ])
+])
+ProgramNode(StrRegion(0, 30), [
+  DefineNode(StrRegion(0, 30), [
+    IdentNode(StrRegion(4, 5)),
+    ArgsDeclNode(StrRegion(5, 17), [
+      ArgDeclNode(StrRegion(6, 16), [
+        IdentNode(StrRegion(6, 12)),
+        IdentNode(StrRegion(13, 16))
+      ])
+    ]),
+    BlockNode(StrRegion(17, 30), [
+      CallNode(StrRegion(18, 28), [
+        IdentNode(StrRegion(18, 23)),
+        CallArgs(StrRegion(23, 28), [
+          IdentNode(StrRegion(24, 27))
+        ])
+      ])
+    ])
+  ])
+])
+ProgramNode(StrRegion(0, 44), [
+  DefineNode(StrRegion(0, 44), [
+    IdentNode(StrRegion(4, 5)),
+    ArgsDeclNode(StrRegion(5, 25), [
+      ArgDeclNode(StrRegion(6, 14), [
+        IdentNode(StrRegion(6, 12)),
+        IdentNode(StrRegion(13, 14))
+      ]),
+      ArgDeclNode(StrRegion(16, 24), [
+        IdentNode(StrRegion(16, 22)),
+        IdentNode(StrRegion(23, 24))
+      ])
+    ]),
+    BlockNode(StrRegion(25, 44), [
+      AssignNode(StrRegion(26, 42), [
+        IdentNode(StrRegion(26, 32)),
+        ConcatNode(StrRegion(33, 42), [
+          ConcatNode(StrRegion(33, 39), [
+            IdentNode(StrRegion(33, 34)),
+            StringNode(StrRegion(36, 39))
+          ]),
+          IdentNode(StrRegion(41, 42))
+        ])
+      ])
+    ])
+  ])
+])
+ProgramNode(StrRegion(0, 26), [
+  WhileBlock(StrRegion(0, 26), [
+    OrNode(StrRegion(6, 23), [
+      IdentNode(StrRegion(6, 7)),
+      AndNode(StrRegion(11, 23), [
+        NotNode(StrRegion(11, 13), [
+          IdentNode(StrRegion(12, 13))
+        ]),
+        GeNode(StrRegion(17, 23), [
+          IdentNode(StrRegion(17, 18)),
+          NumberNode(StrRegion(22, 23))
+        ])
+      ])
+    ]),
+    BlockNode(StrRegion(24, 26), [])
+  ])
+])
+ProgramNode(StrRegion(0, 30), [
+  WhileBlock(StrRegion(0, 30), [
+    NotNode(StrRegion(5, 11), [
+      ParenNode(StrRegion(6, 11), [
+        ModNode(StrRegion(7, 10), [
+          NumberNode(StrRegion(7, 8)),
+          NumberNode(StrRegion(9, 10))
+        ])
+      ])
+    ]),
+    BlockNode(StrRegion(11, 30), [
+      CallNode(StrRegion(12, 28), [
+        GetattrNode(StrRegion(12, 21), [
+          ParenNode(StrRegion(12, 17), [
+            NumberNode(StrRegion(13, 16))
+          ]),
+          AttrNameNode(StrRegion(18, 21))
+        ]),
+        CallArgs(StrRegion(21, 28), [
+          NumberNode(StrRegion(22, 23)),
+          NumberNode(StrRegion(24, 25)),
+          NumberNode(StrRegion(26, 27))
+        ])
+      ])
+    ])
+  ])
+])
+ProgramNode(StrRegion(0, 27), [
+  RepeatBlock(StrRegion(0, 27), [
+    OrNode(StrRegion(7, 24), [
+      IdentNode(StrRegion(7, 8)),
+      AndNode(StrRegion(12, 24), [
+        NotNode(StrRegion(12, 14), [
+          IdentNode(StrRegion(13, 14))
+        ]),
+        GeNode(StrRegion(18, 24), [
+          IdentNode(StrRegion(18, 19)),
+          NumberNode(StrRegion(23, 24))
+        ])
+      ])
+    ]),
+    BlockNode(StrRegion(25, 27), [])
+  ])
+])
+ProgramNode(StrRegion(0, 31), [
+  RepeatBlock(StrRegion(0, 31), [
+    NotNode(StrRegion(6, 12), [
+      ParenNode(StrRegion(7, 12), [
+        ModNode(StrRegion(8, 11), [
+          NumberNode(StrRegion(8, 9)),
+          NumberNode(StrRegion(10, 11))
+        ])
+      ])
+    ]),
+    BlockNode(StrRegion(12, 31), [
+      CallNode(StrRegion(13, 29), [
+        GetattrNode(StrRegion(13, 22), [
+          ParenNode(StrRegion(13, 18), [
+            NumberNode(StrRegion(14, 17))
+          ]),
+          AttrNameNode(StrRegion(19, 22))
+        ]),
+        CallArgs(StrRegion(22, 29), [
+          NumberNode(StrRegion(23, 24)),
+          NumberNode(StrRegion(25, 26)),
+          NumberNode(StrRegion(27, 28))
+        ])
+      ])
+    ])
+  ])
+])
+ProgramNode(StrRegion(0, 29), [
+  ConditionalBlock(StrRegion(0, 29), [
+    IfBlock(StrRegion(0, 7), [
+      ParenNode(StrRegion(2, 5), [
+        NumberNode(StrRegion(3, 4))
+      ]),
+      BlockNode(StrRegion(5, 7), [])
+    ]),
+    ElseIfBlock(StrRegion(7, 29), [
+      ParenNode(StrRegion(14, 27), [
+        OrNode(StrRegion(15, 26), [
+          IdentNode(StrRegion(15, 16)),
+          AndNode(StrRegion(18, 26), [
+            NotNode(StrRegion(18, 20), [
+              IdentNode(StrRegion(19, 20))
+            ]),
+            NeqNode(StrRegion(22, 26), [
+              IdentNode(StrRegion(22, 23)),
+              NumberNode(StrRegion(25, 26))
+            ])
+          ])
+        ])
+      ]),
+      BlockNode(StrRegion(27, 29), [])
+    ]),
+    NullElseBlock(StrRegion(28, 29))
+  ])
+])
+ProgramNode(StrRegion(0, 17), [
+  ConditionalBlock(StrRegion(0, 17), [
+    IfBlock(StrRegion(0, 7), [
+      ParenNode(StrRegion(2, 5), [
+        NumberNode(StrRegion(3, 4))
+      ]),
+      BlockNode(StrRegion(5, 7), [])
+    ]),
+    ElseBlock(StrRegion(7, 17), [
+      BlockNode(StrRegion(11, 17), [
+        CallNode(StrRegion(12, 15), [
+          IdentNode(StrRegion(12, 13)),
+          CallArgs(StrRegion(13, 15), [])
+        ])
+      ])
+    ])
+  ])
+])
+ProgramNode(StrRegion(0, 38), [
+  ConditionalBlock(StrRegion(0, 38), [
+    IfBlock(StrRegion(0, 7), [
+      ParenNode(StrRegion(2, 5), [
+        NumberNode(StrRegion(3, 4))
+      ]),
+      BlockNode(StrRegion(5, 7), [])
+    ]),
+    ElseIfBlock(StrRegion(7, 22), [
+      NumberNode(StrRegion(15, 16)),
+      BlockNode(StrRegion(16, 22), [
+        CallNode(StrRegion(17, 20), [
+          IdentNode(StrRegion(17, 18)),
+          CallArgs(StrRegion(18, 20), [])
+        ])
+      ])
+    ]),
+    ElseBlock(StrRegion(22, 38), [
+      BlockNode(StrRegion(26, 38), [
+        CallNode(StrRegion(27, 36), [
+          IdentNode(StrRegion(27, 28)),
+          CallArgs(StrRegion(28, 36), [
+            IdentNode(StrRegion(29, 30)),
+            CallNode(StrRegion(32, 35), [
+              IdentNode(StrRegion(32, 33)),
+              CallArgs(StrRegion(33, 35), [])
+            ])
+          ])
+        ])
+      ])
+    ])
+  ])
+])
+ProgramNode(StrRegion(0, 32), [
+  ConcatNode(StrRegion(0, 31), [
+    ConcatNode(StrRegion(0, 20), [
+      AutocatNode(StrRegion(0, 15), [
+        StringNode(StrRegion(0, 5)),
+        StringNode(StrRegion(6, 9)),
+        StringNode(StrRegion(12, 15))
+      ]),
+      IdentNode(StrRegion(19, 20))
+    ]),
+    CallNode(StrRegion(24, 31), [
+      GetattrNode(StrRegion(24, 29), [
+        StringNode(StrRegion(24, 27)),
+        AttrNameNode(StrRegion(28, 29))
+      ]),
+      CallArgs(StrRegion(29, 31), [])
+    ])
+  ])
+])

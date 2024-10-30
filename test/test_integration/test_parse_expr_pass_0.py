@@ -2,12 +2,10 @@ import unittest
 
 from parser.cst.treegen import CstGen
 from parser.lexer import Tokenizer
-from test.snapshottest import SnapshotTestCase
+from test.common import CommonTestCase
 
 
-class MyTestCase(SnapshotTestCase):
-    maxDiff = 2000
-
+class MyTestCase(CommonTestCase):
     def test_issue_09__dot(self):
         t = Tokenizer('fn(call_arg).a;').tokenize()
         node = CstGen(t).parse()

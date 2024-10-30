@@ -1,12 +1,9 @@
 from __future__ import annotations
 
 from dataclasses import dataclass, field
-from typing import TYPE_CHECKING
 
-from .str_region import StrRegion
-
-if TYPE_CHECKING:
-    from .tokens import Token
+from ..tokens import Token
+from ..str_region import StrRegion
 
 
 @dataclass
@@ -18,9 +15,6 @@ class Leaf:
     @classmethod
     def of(cls, token: Token, name: str | None = '', parent: Node | None = None):
         return cls(name or token.name, token.region, parent)
-
-
-AnyNode = Leaf
 
 
 @dataclass
@@ -53,3 +47,6 @@ class Node(Leaf):
             n.parent = n
         if update_end:
             self.region.end = end
+
+
+AnyNode = Leaf

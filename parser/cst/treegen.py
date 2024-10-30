@@ -2,13 +2,15 @@ from __future__ import annotations
 
 from typing import (TypeVar, cast, TypeAlias, Sequence, overload, Iterable, Callable)
 
+from .nodes import *
 from .token_matcher import OpM, KwdM, Matcher, PatternT
+from .named_node import AnyNamedNode, node_from_token, node_cls_from_name
+from .base_node import AnyNode, Node
 from ..error import BaseParseError, BaseLocatedError
 from ..lexer import Tokenizer
 from ..operators import UNARY_OPS, COMPARISONS, ASSIGN_OPS
 from ..str_region import StrRegion
 from ..tokens import *
-from ..tree_node import Node, Leaf, AnyNode
 
 DT = TypeVar('DT')
 
@@ -76,7 +78,7 @@ class TreeGen:
         while not self.eof(idx) and not self.matches(idx, EofToken):
             smt, idx = self._parse_smt(idx)
             smts.append(smt)
-        node = Node('program', self.tok_region(0, idx), None, smts)
+        node = ProgramNode(self.tok_region(0, idx), None, smts)
         self.result = node
         return node
 
@@ -101,7 +103,7 @@ class TreeGen:
         elif self.matches(idx, (KwdM('let'), IdentNameToken)):
             smt, idx = self._parse_let(idx)
         elif self.matches(idx, SemicolonToken):
-            smt = Leaf('nop_smt', self.tok_region(idx, idx + 1))
+            smt = NopNode(self.tok_region(idx, idx + 1))
             idx += 1
         else:
             # can only be an expr
@@ -141,8 +143,7 @@ class TreeGen:
             raise self.err(f"Expected ';' or ',' after decl_item,"
                            f" got {self[idx].name}", self[idx])
         idx += 1
-        return Node('let_decl', self.tok_region(start, idx),
-                    None, items), idx
+        return LetNode(self.tok_region(start, idx), None, items), idx
 
     def _parse_decl_item_list(self, idx):
         items = []
@@ -163,15 +164,14 @@ class TreeGen:
             raise self.err(f"Expected ';' or ',' after decl_item,"
                            f" got {self[idx].name}", self[idx])
         idx += 1
-        return Node('global_decl', self.tok_region(start, idx),
-                    None, items), idx
+        return GlobalNode(self.tok_region(start, idx), None, items), idx
 
     def _parse_decl_item(self, start: int) -> tuple[AnyNode, int]:
         idx = start
         if not self.matches(idx, IdentNameToken):
             raise self.err(f"Expected identifier in decl_item, "
                            f"got {self[idx].name}", self[idx])
-        ident = Leaf.of(self[idx])
+        children = [node_from_token(self[idx])]
         idx += 1
         # 1. global x, y = ...;
         #            ^
@@ -184,25 +184,21 @@ class TreeGen:
             if not isinstance(self.get(idx), (SemicolonToken, CommaToken)):
                 raise self.err(f"Expected ';' or ',' after decl_item,"
                                f" got {self[idx].name}", self[idx])
-            children = [ident, value]
-        else:
-            children = [ident]
-        glob = Node('decl_item', self.tok_region(start, idx), None, children)
-        return glob, idx
+            children.append(value)
+        return DeclItemNode(self.tok_region(start, idx), None, children), idx
 
     def _parse_define(self, start: int) -> tuple[AnyNode, int]:
         idx = start
         assert self.matches(idx, KwdM('def'))
         idx += 1
         assert self.matches(idx, IdentNameToken)
-        name = Leaf.of(self.tokens[idx])
+        name = node_from_token(self.tokens[idx])
         idx += 1
         args_decl, idx = self._parse_args_decl(idx)
         # def f(t1 arg1, t2 arg2) { <a block> }
         #                         ^
         block, idx = self._parse_block(idx)
-        return Node('define', self.tok_region(start, idx),
-                    None, [name, args_decl, block]), idx
+        return DefineNode(self.tok_region(start, idx), None, [name, args_decl, block]), idx
 
     def _parse_args_decl(self, start: int) -> tuple[AnyNode, int]:
         idx = start
@@ -213,7 +209,7 @@ class TreeGen:
         if self.matches(idx, RParToken):
             # simple case, no args
             idx += 1
-            return Node('args_decl', self.tok_region(start, idx)), idx
+            return ArgsDeclNode(self.tok_region(start, idx)), idx
         arg1, idx = self._parse_arg_decl(idx)
         arg_declares = [arg1]
         while not self.matches(idx, RParToken):
@@ -229,26 +225,25 @@ class TreeGen:
             #              ~~^^
             arg, idx = self._parse_arg_decl(idx)
             arg_declares.append(arg)
-        # def f(t1, t2)
-        #             ^
+        # def f(t1 arg1, t2 arg2)
+        #                       ^
         assert self.matches(idx, RParToken)
         idx += 1
-        args_decl = Node('args_decl', self.tok_region(start, idx), None, arg_declares)
-        return args_decl, idx
+        return ArgsDeclNode(self.tok_region(start, idx), None, arg_declares), idx
 
     def _parse_arg_decl(self, start: int) -> tuple[AnyNode, int]:
         idx = start
         if not self.matches(idx, IdentNameToken):
             raise self.err(f"Error: expected type name, got {self[idx].name}."
                            f"Did you forget a ')'?", self[idx])
-        tp_name = Leaf.of(self[idx])
+        tp_name = node_from_token(self[idx])
         idx += 1
         if not self.matches(idx, IdentNameToken):
             raise self.err(f"Error: expected arg name, got {self[idx].name}."
                            f"Did you forget the type name?", self[idx])
-        arg_name = Leaf.of(self[idx])
+        arg_name = node_from_token(self[idx])
         idx += 1
-        arg_decl = Node('arg_decl', self.tok_region(start, idx), None, [tp_name, arg_name])
+        arg_decl = ArgDeclNode(self.tok_region(start, idx), None, [tp_name, arg_name])
         return arg_decl, idx
 
     def tok_region(self, start: int, end: int) -> StrRegion:
@@ -271,28 +266,26 @@ class TreeGen:
             raise self.err(f"Expected '}}' to close block, "
                            f"got {self[idx].name}", self[idx])
         idx += 1
-        return Node('block', self.tok_region(start, idx), None, smts), idx
+        return BlockNode(self.tok_region(start, idx), None, smts), idx
 
-    def _parse_block_with_header(self, start: int, name: str,
-                                 display: str = None, kwd: str = None) -> tuple[AnyNode, int]:
-        display = display or name  # default to same as node name
-        kwd = kwd or name
+    def _parse_block_with_header(self, start: int, cls: type[AnyNamedNode],
+                                 name: str = None) -> tuple[AnyNode, int]:
+        name = name or cls.name
         idx = start
-        assert self.matches(idx, KwdM(kwd))
+        assert self.matches(idx, KwdM(name))
         idx += 1
         expr, idx = self._parse_expr(idx)
         if not self.matches(idx, LBrace):
-            raise self.err(f"Expected '{{' after expr in {display}, "
+            raise self.err(f"Expected '{{' after expr in {name}, "
                            f"got {self[idx].name}", self[idx])
         block, idx = self._parse_block(idx)
-        return Node(name, self.tok_region(start, idx),
-                    None, [expr, block]), idx
+        return cls(self.tok_region(start, idx), None, [expr, block]), idx
 
     def _parse_while(self, start: int) -> tuple[AnyNode, int]:
-        return self._parse_block_with_header(start, 'while')
+        return self._parse_block_with_header(start, WhileBlock)
 
     def _parse_repeat(self, start: int) -> tuple[AnyNode, int]:
-        return self._parse_block_with_header(start, 'repeat')
+        return self._parse_block_with_header(start, RepeatBlock)
 
     def _parse_if(self, start: int) -> tuple[AnyNode, int]:
         idx = start
@@ -310,12 +303,13 @@ class TreeGen:
                 raise self.err(f"Expected '{{' or 'if' after 'else', "
                                f"got {self[idx + 1].name}", self[idx + 1])
         if else_part is None:
-            else_part = Node('else_cond_NULL', self.tok_region(idx - 1, idx - 1))
-        return Node('if', self.tok_region(start, idx),
-                    None, [if_part, *elseif_parts, else_part]), idx
+            # Need to give it a location, so just do the '}' (prev token)
+            else_part = NullElseBlock(self.tok_region(idx - 1, idx))
+        return ConditionalBlock(self.tok_region(start, idx), None,
+                                [if_part, *elseif_parts, else_part]), idx
 
     def _parse_if_cond(self, start: int) -> tuple[AnyNode, int]:
-        return self._parse_block_with_header(start, name='if_cond', display='if', kwd='if')
+        return self._parse_block_with_header(start, IfBlock, 'if')
 
     def _parse_elseif(self, start: int) -> tuple[AnyNode, int]:
         idx = start
@@ -326,15 +320,14 @@ class TreeGen:
             raise self.err(f"Expected '{{' after expr in else if, "
                            f"got {self[idx].name}", self[idx])
         block, idx = self._parse_block(idx)
-        return Node('elseif_cond', self.tok_region(start, idx),
-                    None, [cond, block]), idx
+        return ElseIfBlock(self.tok_region(start, idx), None, [cond, block]), idx
 
     def _parse_else(self, start: int) -> tuple[AnyNode, int]:
         idx = start
         assert self.matches(idx, (KwdM('else'), LBrace))
         idx += 1  # don't advance past '{'; it's needed for _parse_block
         block, idx = self._parse_block(idx)
-        return Node('else_cond', self.tok_region(start, idx), None, [block]), idx
+        return ElseBlock(self.tok_region(start, idx), None, [block]), idx
 
     def _parse_call_args(self, start: int) -> tuple[AnyNode, int]:
         idx = start
@@ -343,7 +336,7 @@ class TreeGen:
         if self.matches(idx, RParToken):
             # simple case, no args
             idx += 1
-            return Node('call_args', self.tok_region(start, idx)), idx
+            return CallArgs(self.tok_region(start, idx)), idx
         arg1, idx = self._parse_expr(idx)
         args = [arg1]
         while not self.matches(idx, RParToken):
@@ -363,8 +356,7 @@ class TreeGen:
         #         ^
         assert self.matches(idx, RParToken)
         idx += 1
-        call_args = Node('call_args', self.tok_region(start, idx), None, args)
-        return call_args, idx
+        return CallArgs(self.tok_region(start, idx), None, args), idx
 
     def _parse_expr(self, start: int) -> tuple[AnyNode, int]:
         expr, idx = self._parse_or_bool(start)
@@ -389,24 +381,24 @@ class TreeGen:
         """Parses literal/ident ('atom' as in can't be broken down further, like 'atomic')"""
         tok = self[idx]
         if isinstance(tok, (StringToken, NumberToken, IdentNameToken)):
-            return Leaf.of(tok), idx + 1
+            return node_from_token(tok), idx + 1
         raise self.err(f"Unexpected {tok.name} token {tok.get_str(self.src)!r}", tok)
 
     def _parse_autocat_or_string(self, idx: int) -> tuple[AnyNode, int]:
         start = idx
         strings = []
         while isinstance(self[idx], StringToken):
-            strings.append(Leaf.of(self[idx]))
+            strings.append(node_from_token(self[idx]))
             idx += 1
         assert strings, "_parse_autocat_or_string requires current token to be string"
         if len(strings) == 1:
             return strings[0], idx
-        return Node('autocat', self.tok_region(start, idx), None, strings), idx
+        return AutocatNode(self.tok_region(start, idx), None, strings), idx
 
     def _parse_atom_or_autocat(self, idx: int) -> tuple[AnyNode, int]:
         tok = self[idx]
         if isinstance(tok, (NumberToken, IdentNameToken)):
-            return Leaf.of(tok), idx + 1
+            return node_from_token(tok), idx + 1
         if isinstance(tok, StringToken):
             return self._parse_autocat_or_string(idx)
         raise self.err(f"Unexpected {tok.name} token {tok.get_str(self.src)!r}", tok)
@@ -417,7 +409,7 @@ class TreeGen:
             inner, idx = self._parse_expr(idx + 1)
             idx = self._expect_cls_consume(
                 idx, RParToken, f"Expected ')' at end of expr, got {self[idx].name}")
-            return Node('paren', self.tok_region(start, idx), None, [inner]), idx
+            return ParenNode(self.tok_region(start, idx), None, [inner]), idx
         return self._parse_atom_or_autocat(idx)
 
     def _parse_basic_item(self, idx: int):
@@ -432,21 +424,21 @@ class TreeGen:
             if not isinstance(self[idx], AttrNameToken):
                 raise self.err(f"Expected attribute name after '.', "
                                f"got {self[idx].name}", self[idx])
-            right = Leaf.of(self[idx])
+            right = node_from_token(self[idx])
             idx += 1
-            return self.node_from_children('getattr', [left, right]), idx
+            return self.node_from_children(GetattrNode, [left, right]), idx
         elif isinstance(self[idx], LSqBracket):
             idx += 1
             inner, idx = self._parse_expr(idx)
             if not isinstance(self[idx], RSqBracket):
                 raise self.err(f"Expected rsqb, got {self[idx].name}", self[idx])
-            node = self.node_from_children('getitem', [left, inner],
+            node = self.node_from_children(GetitemNode, [left, inner],
                                            region=[left, inner, self[idx]])
             idx += 1
             return node, idx
         elif isinstance(self[idx], LParToken):
             args, idx = self._parse_call_args(idx)
-            return self.node_from_children('call', [left, args]), idx
+            return self.node_from_children(CallNode, [left, args]), idx
         return left, idx
 
     def match_ops(self, idx: int, *ops: str | Sequence[str]) -> str | None:
@@ -549,10 +541,16 @@ class TreeGen:
         return StrRegion.union(*regs)
 
     @classmethod
-    def node_from_children(cls, name: str, children: list[AnyNode],
-                           region: RegionUnionArgT = None, parent: Node = None):
+    def node_from_children(cls, name_or_type: str | type[AnyNamedNode],
+                           children: list[AnyNode],
+                           region: RegionUnionArgT = None,
+                           parent: Node = None, arity: int = None):
         region = cls.region_union(region if region is not None else children)
-        return Node(name, region, parent, children)
+        if isinstance(name_or_type, str):
+            klass = node_cls_from_name(name_or_type, children, arity)
+        else:
+            klass = name_or_type
+        return klass(region, parent, children)
 
 
 CstGen = TreeGen

@@ -2,19 +2,17 @@ import unittest
 
 from parser.lexer.tokenizer import Tokenizer
 from parser.operators import BINARY_OPS
-from parser.cst.treegen import TreeGen, CstParseError, LocatedCstError
+from parser.cst.treegen import TreeGen, LocatedCstError
+from parser.str_region import StrRegion
+from test.common import CommonTestCase
 
-from test.snapshottest import SnapshotTestCase
-from test.utils import TestCaseUtils
+
+class TestAutocat(CommonTestCase):
+    def test_autocat(self):
+        self.assertTreeMatchesSnapshot('"abc" "="\n  "1" .. a .. "b".d();')
 
 
-class TreeGenTest(SnapshotTestCase):
-    maxDiff = None
-
-    def assertTreeMatchesSnapshot(self, src: str):
-        t = TreeGen(Tokenizer(src))
-        self.assertMatchesSnapshot(t.parse())
-
+class TreeGenTest(CommonTestCase):
     def test_item_chain(self):
         self.assertTreeMatchesSnapshot('a[7].b.0.fn["c" .. 2] = fn(9).k[7 + r](3,);')
 
@@ -31,7 +29,44 @@ class TreeGenTest(SnapshotTestCase):
         self.assertTreeMatchesSnapshot('let b;')
 
 
-class TestTreeGenErrors(SnapshotTestCase, TestCaseUtils):
+class TestBlocks(CommonTestCase):
+    def test_while(self):
+        self.assertTreeMatchesSnapshot('while a || !b && c >= 6 {}')
+        self.assertTreeMatchesSnapshot('while!(7%8){(7.7).abc(6,7,8);}')
+
+    def test_repeat(self):
+        self.assertTreeMatchesSnapshot('repeat a || !b && c >= 6 {}')
+        self.assertTreeMatchesSnapshot('repeat!(7%8){(7.7).abc(6,7,8);}')
+
+    def test_else_if_else(self):
+        self.assertTreeMatchesSnapshot('if(1){}else if(a||!b&&c!=6){}')
+        self.assertTreeMatchesSnapshot('if(1){}else{a();}')
+        self.assertTreeMatchesSnapshot('if(1){}else if 9{a();}else{b(a, a());}')
+
+    def test_else_cond_null(self):
+        src = 'if 0==1{exit();  } startup();'
+        n = TreeGen(Tokenizer(src)).parse()
+        node = n.children[0].children[-1]
+        self.assertLessEqual(node.region.start, node.region.end)
+        self.assertEqual(StrRegion(17, 18), node.region)
+
+
+class TestFunctionDecl(CommonTestCase):
+    def setUp(self) -> None:
+        super().setUp()
+        self.setProperCwd()
+
+    def test_no_params(self):
+        self.assertTreeMatchesSnapshot('def a() { alert("Called"); }')
+
+    def test_one_param(self):
+        self.assertTreeMatchesSnapshot('def a(number val){print(val);}')
+
+    def test_two_param(self):
+        self.assertTreeMatchesSnapshot('def a(number a, string b){RESULT=a.."="..b;}')
+
+
+class TestTreeGenErrors(CommonTestCase):
     def test_empty_sqb_error(self):
         with self.assertRaises(LocatedCstError) as err:
             TreeGen(Tokenizer('v=a[]+b')).parse()
@@ -40,19 +75,9 @@ class TestTreeGenErrors(SnapshotTestCase, TestCaseUtils):
         self.assertEqual(4, exc.region.end - 1)
 
 
-class TreeGenEofTest(SnapshotTestCase):
+class TreeGenEofTest(CommonTestCase):
     def test__at_expr_end(self):
         self.assertFailsGracefully('a.b()')
-
-    def assertFailsGracefully(self, src: str):
-        t = TreeGen(Tokenizer(src))
-        with self.assertRaises(CstParseError):
-            t.parse()
-
-    # noinspection PyMethodMayBeStatic
-    def assertValidParse(self, src: str):
-        t = TreeGen(Tokenizer(src))
-        t.parse()
 
     def test__at_assign_end(self):
         self.assertFailsGracefully('a.b = 8')
