@@ -1,9 +1,10 @@
 from __future__ import annotations
 
-from typing import (TypeVar, cast, TypeAlias, Sequence, overload, Iterable, Callable)
+from typing import (TypeVar, cast, Sequence, overload, Iterable, Callable)
 
 from .nodes import *
 from .token_matcher import OpM, KwdM, Matcher, PatternT
+from ..common import region_union, RegionUnionArgT
 from ..error import BaseParseError, BaseLocatedError
 from ..lexer import Tokenizer
 from ..operators import UNARY_OPS, COMPARISONS, ASSIGN_OPS
@@ -525,27 +526,14 @@ class TreeGen:
         return self._parse_ltr_operator_level(idx, ('||',), self._parse_and_bool)
 
     def err(self, msg: str, loc: RegionUnionArgT):
-        return LocatedCstError(msg, self.region_union(loc), self.src)
-
-    @classmethod
-    def region_union(cls, *args: RegionUnionArgT):
-        regs = []
-        for loc in args:
-            if isinstance(loc, (Token, AnyNode)):
-                loc = loc.region  # Token and AnyNode, both have `.region`
-            if isinstance(loc, StrRegion):
-                regs.append(loc)
-            else:
-                assert not isinstance(loc, str)
-                regs.append(cls.region_union(*loc))
-        return StrRegion.union(*regs)
+        return LocatedCstError(msg, region_union(loc), self.src)
 
     @classmethod
     def node_from_children(cls, name_or_type: str | type[AnyNamedNode],
                            children: list[AnyNode],
                            region: RegionUnionArgT = None,
                            parent: Node = None, arity: int = None):
-        region = cls.region_union(region if region is not None else children)
+        region = region_union(region if region is not None else children)
         if isinstance(name_or_type, str):
             klass = node_cls_from_name(name_or_type, children, arity)
         else:
@@ -554,9 +542,6 @@ class TreeGen:
 
 
 CstGen = TreeGen
-
-RegionUnionFlatT: TypeAlias = 'Token | AnyNode | StrRegion'
-RegionUnionArgT: TypeAlias = 'RegionUnionFlatT | Sequence[RegionUnionFlatT]'
 
 
 # operator precedence (most to least binding):
