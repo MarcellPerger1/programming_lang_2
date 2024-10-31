@@ -344,7 +344,7 @@ class DefineNode(NamedSizedNodeCls):
 
     @property
     def block(self):
-        return checked_cast(BlockNode, self.children[1])
+        return checked_cast(BlockNode, self.children[2])
 
 
 class ArgsDeclNode(NamedNodeCls):
