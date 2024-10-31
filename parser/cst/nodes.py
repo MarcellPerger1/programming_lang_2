@@ -7,12 +7,18 @@ from ..trees.named_node import (NamedLeafCls, NamedNodeCls, NamedSizedNodeCls,
                                 register_corresponding_token)
 
 __all__ = [
-    "NumberNode", "StringNode", "AnyNameLeaf", "IdentNode", "AttrNameNode",
-    "AutocatNode", "GetattrNode", "GetitemNode", "ParenNode", "CallNode",
-    "CallArgs", "NopNode", "BlockNode", "ConditionalBlock", "IfBlock",
+    "ProgramNode", "NumberNode", "StringNode", "AnyNameLeaf", "IdentNode",
+    "AttrNameNode", "AutocatNode", "GetattrNode", "GetitemNode", "ParenNode",
+    "CallNode", "CallArgs", "OperatorNode", "UnaryOpNode", "UPlusNode",
+    "UMinusNode", "NotNode", "BinOpNode", "AddNode", "SubNode", "MulNode",
+    "DivNode", "ModNode", "PowNode", "ConcatNode", "AndNode", "OrNode",
+    "ComparisonNode", "EqNode", "NeqNode", "LtNode", "LeNode", "GtNode",
+    "GeNode", "NopNode", "BlockNode", "ConditionalBlock", "IfBlock",
     "ElseIfBlock", "ElseBlock", "NullElseBlock", "WhileBlock", "RepeatBlock",
     "DefineNode", "ArgsDeclNode", "ArgDeclNode", "DeclItemNode", "LetNode",
-    "GlobalNode", "ProgramNode",
+    "GlobalNode", "AssignOpNode", "AssignNode", "AddEqNode", "SubEqNode",
+    "MulEqNode", "DivEqNode", "ModEqNode", "PowEqNode", "ConcatEqNode",
+    "AndEqNode", "OrEqNode",
 ]
 
 
