@@ -369,25 +369,6 @@ class _IncrementalNumberParser(SrcHandler):
         return NumberToken(StrRegion(start, idx)), idx
 
 
-def main():
-    import pprint
-    src = ("ab2 = 12==!(  \n" + r"e3.1.2 >= '7\'\\')%12;var x='b'..7")
-    t = Tokenizer(src)
-    t.tokenize()
-    pprint.pp(t.tokens)
-    table = []
-    for tok in t.tokens:
-        if tok.is_whitespace:
-            row = ['(WS) ' + repr(tok.region.resolve(src)), tok.name]
-        else:
-            row = [str(tok.region.resolve(src)), tok.name]
-        table.append(row)
-    max0 = max(len(r[0]) for r in table)
-    max1 = max(len(r[1]) for r in table)
-    for s0, s1 in table:
-        print(f'{s0:>{max0}} {s1:>{max1}}')
-
-
 def print_tokens(src: str, tokens: list[Token], stream: IO[str] = None, do_ws=False):
     if stream is None:
         stream = sys.stdout
@@ -408,7 +389,3 @@ def format_tokens(src: str, tokens: list[Token], do_ws=False):
     out = StringIO()
     print_tokens(src, tokens, out, do_ws)
     return out.getvalue()
-
-
-if __name__ == '__main__':
-    main()
