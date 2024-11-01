@@ -1,8 +1,8 @@
 import unittest
 from unittest.mock import patch
 
-from parser.error import BaseLocatedError
-from parser.str_region import StrRegion
+from parser.common.error import BaseLocatedError
+from parser.common.str_region import StrRegion
 
 
 class TestLocatedError(unittest.TestCase):

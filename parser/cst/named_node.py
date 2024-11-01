@@ -4,7 +4,7 @@ from dataclasses import dataclass, field
 from typing import TYPE_CHECKING, overload, Sequence, cast, Literal
 
 from .base_node import Leaf, AnyNode, Node
-from parser.str_region import StrRegion
+from parser.common.str_region import StrRegion
 
 if TYPE_CHECKING:
     from parser.tokens import Token

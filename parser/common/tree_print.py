@@ -4,7 +4,7 @@ import sys
 from io import StringIO
 from typing import IO, Sequence
 
-from .cst.base_node import Leaf, AnyNode, Node
+from ..cst.base_node import Leaf, AnyNode, Node
 from .str_region import StrRegion
 
 __all__ = [

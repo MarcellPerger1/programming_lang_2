@@ -2,9 +2,9 @@ from __future__ import annotations
 
 from dataclasses import dataclass, field
 
-from ..common import HasRegion
+from ..common.common import HasRegion
+from ..common.str_region import StrRegion
 from ..tokens import Token
-from ..str_region import StrRegion
 
 
 @dataclass

@@ -1,6 +1,6 @@
 from unittest import TestCase
 
-from parser.str_region import StrRegion
+from parser.common.str_region import StrRegion
 from parser.tokens import NumberToken, IdentNameToken
 from parser.cst.named_node import node_from_token
 from parser.cst.nodes import NumberNode, IdentNode

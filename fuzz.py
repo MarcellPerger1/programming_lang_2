@@ -2,7 +2,7 @@ import time
 
 from parser.lexer.tokenizer import Tokenizer
 from parser.cst.treegen import TreeGen
-from parser.error import BaseParseError
+from parser.common.error import BaseParseError
 
 from pythonfuzz.fuzzer import Fuzzer
 import pythonfuzz.fuzzer as fuzzer_ns  # For patching pythonfuzz
