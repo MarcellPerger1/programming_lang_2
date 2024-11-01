@@ -4,6 +4,7 @@ from dataclasses import dataclass, field
 from enum import Enum
 from typing import Union, Callable, TYPE_CHECKING
 
+from ..common import HasRegion
 from ..str_region import StrRegion
 
 __all__ = [
@@ -17,7 +18,7 @@ __all__ = [
 
 
 @dataclass
-class Token:
+class Token(HasRegion):
     name: str
     region: StrRegion = None
     # not a field but a class var:

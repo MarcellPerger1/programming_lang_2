@@ -2,12 +2,13 @@ from __future__ import annotations
 
 from dataclasses import dataclass, field
 
+from ..common import HasRegion
 from ..tokens import Token
 from ..str_region import StrRegion
 
 
 @dataclass
-class Leaf:
+class Leaf(HasRegion):
     name: str
     region: StrRegion
     parent: Node | None = None
