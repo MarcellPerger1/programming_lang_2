@@ -183,16 +183,3 @@ class IdentNameToken(AnyNameToken):
 
 class EofToken(NamedTokenCls):
     name = 'eof'
-
-
-GETATTR_VALID_AFTER_CLS = (
-    StringToken,
-    RParToken,
-    RSqBracket,
-    AttrNameToken,
-    IdentNameToken
-    # Not valid (directly) after floats (need parens) because we treat all
-    # numbers the same and we cannot have it after ints
-    #   2.3 => (2).3 (attribute) or `2.3` (float)
-    # Also it would be confusing to have 2.e3 => num, 2.e3.3 -> num.attr.
-)

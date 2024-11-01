@@ -9,7 +9,7 @@ from .tokens import (
     Token, WhitespaceToken, LineCommentToken, BlockCommentToken, NumberToken,
     StringToken, CommaToken, DotToken, OpToken, PAREN_TYPES,
     SemicolonToken, AttrNameToken, IdentNameToken,
-    GETATTR_VALID_AFTER_CLS, EofToken
+    EofToken, RParToken, RSqBracket
 )
 from ..common import StrRegion
 from ..common.error import BaseParseError, BaseLocatedError
@@ -289,6 +289,19 @@ class Tokenizer(SrcHandler):
         while self.get(idx) in IDENT_CONT:
             idx += 1
         return self.add_token(IdentNameToken(StrRegion(start, idx)))
+
+
+GETATTR_VALID_AFTER_CLS = (
+    StringToken,
+    RParToken,
+    RSqBracket,
+    AttrNameToken,
+    IdentNameToken
+    # Not valid (directly) after floats (need parens) because we treat all
+    # numbers the same and we cannot have it after ints
+    #   2.3 => (2).3 (attribute) or `2.3` (float)
+    # Also it would be confusing to have 2.e3 => num, 2.e3.3 -> num.attr.
+)
 
 
 class _IncrementalNumberParser(SrcHandler):
