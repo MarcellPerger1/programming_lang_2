@@ -6,7 +6,7 @@ from string import ascii_letters, digits
 from typing import IO, Sequence
 
 from .tokens import *
-from ..common import StrRegion
+from ..common import StrRegion, region_union
 from ..common.error import BaseParseError, BaseLocatedError
 from ..operators import OPS_SET, MAX_OP_LEN, OP_FIRST_CHARS
 
@@ -56,18 +56,10 @@ class SrcHandler:
             seq: tuple[int | Token | StrRegion, ...] = tuple(loc)
         except TypeError:
             seq = (loc,)
-        regs = []
-        for o in seq:
-            if isinstance(o, int):
-                reg = StrRegion(o, o + 1)
-            elif isinstance(o, Token):
-                reg = o.region
-            else:
-                reg = o
-            regs.append(reg)
-        region = StrRegion.including(*regs)
-        if tp is None:
-            tp = self.default_err_type
+        region = region_union([
+            StrRegion(o, o + 1) if isinstance(o, int) else o
+            for o in seq])
+        tp = tp or self.default_err_type
         return tp(msg, region, self.src)
 
 
