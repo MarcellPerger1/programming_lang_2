@@ -2,6 +2,8 @@ from typing import TypeAlias, Sequence
 
 from .str_region import StrRegion
 
+__all__ = ['HasRegion', 'RegionUnionArgT', 'region_union']
+
 
 class HasRegion:
     region: StrRegion

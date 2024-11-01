@@ -2,8 +2,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass, field
 
-from ..common.common import HasRegion
-from ..common.str_region import StrRegion
+from ..common import StrRegion, HasRegion
 from ..tokens import Token
 
 

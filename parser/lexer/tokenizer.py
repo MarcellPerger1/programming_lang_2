@@ -11,8 +11,8 @@ from .tokens import (
     SemicolonToken, AttrNameToken, IdentNameToken,
     GETATTR_VALID_AFTER_CLS, EofToken
 )
+from ..common import StrRegion
 from ..common.error import BaseParseError, BaseLocatedError
-from ..common.str_region import StrRegion
 from ..operators import OPS_SET, MAX_OP_LEN, OP_FIRST_CHARS
 
 if TYPE_CHECKING:

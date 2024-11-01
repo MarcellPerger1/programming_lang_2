@@ -9,6 +9,8 @@ from typing import Sequence
 from .common import HasRegion
 from .str_region import StrRegion
 
+__all__ = ['BaseParseError', 'BaseLocatedError']
+
 
 # We unconditionally add this polyfill to ensure that
 # exceptions are always part of str(exc).

@@ -6,9 +6,8 @@ from .base_node import AnyNode, Node
 from .named_node import AnyNamedNode, node_from_token, node_cls_from_name
 from .nodes import *
 from .token_matcher import OpM, KwdM, Matcher, PatternT
-from ..common.common import region_union, RegionUnionArgT
+from ..common import StrRegion, region_union, RegionUnionArgT
 from ..common.error import BaseParseError, BaseLocatedError
-from ..common.str_region import StrRegion
 from ..lexer import Tokenizer
 from ..operators import UNARY_OPS, COMPARISONS, ASSIGN_OPS
 from ..tokens import *
