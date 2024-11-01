@@ -3,8 +3,8 @@ from __future__ import annotations
 from typing import cast
 
 from util import checked_cast
-from ..trees.named_node import (NamedLeafCls, NamedNodeCls, NamedSizedNodeCls,
-                                register_corresponding_token)
+from .named_node import (NamedLeafCls, NamedNodeCls, NamedSizedNodeCls,
+                         register_corresponding_token)
 
 __all__ = [
     "ProgramNode", "NumberNode", "StringNode", "AnyNameLeaf", "IdentNode",

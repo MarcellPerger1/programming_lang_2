@@ -6,7 +6,10 @@ import traceback
 from dataclasses import replace as d_replace
 from typing import Sequence
 
+from .common import HasRegion
 from .str_region import StrRegion
+
+__all__ = ['BaseParseError', 'BaseLocatedError']
 
 
 # We unconditionally add this polyfill to ensure that
@@ -67,7 +70,7 @@ class BaseParseError(_PolyfillAddNoteMixin, Exception):
     pass
 
 
-class BaseLocatedError(BaseParseError):
+class BaseLocatedError(BaseParseError, HasRegion):
     __notes__: list[str]  # but might not exist
 
     def __init__(self, msg: str, region: StrRegion, src: str):

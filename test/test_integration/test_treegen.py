@@ -3,7 +3,7 @@ import unittest
 from parser.lexer.tokenizer import Tokenizer
 from parser.operators import BINARY_OPS
 from parser.cst.treegen import TreeGen, LocatedCstError
-from parser.str_region import StrRegion
+from parser.common import StrRegion
 from test.common import CommonTestCase
 
 

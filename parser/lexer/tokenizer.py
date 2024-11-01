@@ -11,9 +11,9 @@ from .tokens import (
     SemicolonToken, AttrNameToken, IdentNameToken,
     GETATTR_VALID_AFTER_CLS, EofToken
 )
-from ..error import BaseParseError, BaseLocatedError
+from ..common import StrRegion
+from ..common.error import BaseParseError, BaseLocatedError
 from ..operators import OPS_SET, MAX_OP_LEN, OP_FIRST_CHARS
-from ..str_region import StrRegion
 
 if TYPE_CHECKING:
     from .tokens import ParenTokenT

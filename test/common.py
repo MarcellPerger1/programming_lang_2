@@ -5,10 +5,10 @@ from __future__ import annotations
 from enum import IntFlag, Enum
 from typing import Sequence, TypeVar
 
-from parser.trees.base_node import Leaf, AnyNode, Node
-from parser.trees.tree_print import tformat
+from parser.common.error import BaseParseError
+from parser.common.tree_print import tformat
+from parser.cst.base_node import Leaf, AnyNode, Node
 from parser.cst.treegen import TreeGen, CstParseError
-from parser.error import BaseParseError
 from parser.lexer import Tokenizer
 from parser.lexer.tokens import Token, OpToken
 from test.snapshottest import SnapshotTestCase

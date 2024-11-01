@@ -2,7 +2,7 @@ import unittest
 
 from parser.lexer import Tokenizer
 from parser.lexer.tokens import WhitespaceToken, StringToken, EofToken, NumberToken
-from parser.str_region import StrRegion
+from parser.common import StrRegion
 from parser.tokens import IdentNameToken, DotToken, AttrNameToken, OpToken
 from test.common import CommonTestCase, TokenStreamFlag
 

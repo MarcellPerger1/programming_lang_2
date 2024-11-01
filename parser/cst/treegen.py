@@ -2,16 +2,15 @@ from __future__ import annotations
 
 from typing import (TypeVar, cast, Sequence, overload, Iterable, Callable)
 
+from .base_node import AnyNode, Node
+from .named_node import AnyNamedNode, node_from_token, node_cls_from_name
 from .nodes import *
 from .token_matcher import OpM, KwdM, Matcher, PatternT
-from ..common import region_union, RegionUnionArgT
-from ..error import BaseParseError, BaseLocatedError
+from ..common import StrRegion, region_union, RegionUnionArgT
+from ..common.error import BaseParseError, BaseLocatedError
 from ..lexer import Tokenizer
 from ..operators import UNARY_OPS, COMPARISONS, ASSIGN_OPS
-from ..str_region import StrRegion
 from ..tokens import *
-from ..trees.base_node import AnyNode, Node
-from ..trees.named_node import AnyNamedNode, node_from_token, node_cls_from_name
 
 DT = TypeVar('DT')
 
