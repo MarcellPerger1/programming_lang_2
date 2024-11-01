@@ -4,8 +4,8 @@ import sys
 from io import StringIO
 from typing import IO, Sequence
 
-from .base_node import Leaf, AnyNode, Node
-from parser.str_region import StrRegion
+from .cst.base_node import Leaf, AnyNode, Node
+from .str_region import StrRegion
 
 __all__ = [
     'TreePrinter', 'tree_print', 'tree_format', 'tprint', 'tformat'
