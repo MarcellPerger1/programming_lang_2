@@ -2,7 +2,6 @@ from __future__ import annotations
 
 from dataclasses import dataclass, field
 from enum import Enum
-from typing import Union, Callable, TYPE_CHECKING
 
 from ..common import HasRegion, StrRegion
 
@@ -92,11 +91,6 @@ class ParenToken(NamedTokenCls):
     side = None  # type: ParenSide
     paren_type = None  # type: ParenType
     paren_str = None  # type: str
-
-
-if TYPE_CHECKING:
-    ParenTokenT = Union[type[ParenToken], Callable[[StrRegion], ParenToken]]
-    __all__.append('ParenTokenT')
 
 
 def register_paren_cls(char: str):

@@ -3,20 +3,13 @@ from __future__ import annotations
 import sys
 from io import StringIO
 from string import ascii_letters, digits
-from typing import TYPE_CHECKING, IO, Sequence
+from typing import IO, Sequence
 
-from .tokens import (
-    Token, WhitespaceToken, LineCommentToken, BlockCommentToken, NumberToken,
-    StringToken, CommaToken, DotToken, OpToken, PAREN_TYPES,
-    SemicolonToken, AttrNameToken, IdentNameToken,
-    EofToken, RParToken, RSqBracket
-)
+from .tokens import *
 from ..common import StrRegion
 from ..common.error import BaseParseError, BaseLocatedError
 from ..operators import OPS_SET, MAX_OP_LEN, OP_FIRST_CHARS
 
-if TYPE_CHECKING:
-    from .tokens import ParenTokenT
 
 IDENT_START = ascii_letters + '_'
 IDENT_CONT = IDENT_START + digits
@@ -138,7 +131,7 @@ class Tokenizer(SrcHandler):
                 else:
                     idx = self._t_ident_name(idx)
             elif self[idx] in PAREN_TYPES:
-                tp: ParenTokenT = PAREN_TYPES[self[idx]]
+                tp = PAREN_TYPES[self[idx]]
                 idx = self.add_token(tp(StrRegion(idx, idx + 1)))
             elif self[idx:idx+2] == '//':
                 idx = self._t_line_comment(idx)
