@@ -1,9 +1,12 @@
 from __future__ import annotations
 
 from dataclasses import dataclass, field
+from typing import TYPE_CHECKING
 
 from ..common import StrRegion, HasRegion
-from ..tokens import Token
+
+if TYPE_CHECKING:
+    from ..tokens import Token
 
 
 @dataclass
