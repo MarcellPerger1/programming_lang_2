@@ -5,10 +5,11 @@ from io import StringIO
 from string import ascii_letters, digits
 from typing import IO, Sequence
 
+from .errors import LocatedTokenizerError, LocatedMalformedNumberError
 from .tokens import *
 from .tokens import OpToken, CommaToken
 from ..common import StrRegion, region_union
-from ..common.error import BaseParseError, BaseLocatedError
+from ..common.error import BaseLocatedError
 from ..operators import OPS_SET, MAX_OP_LEN, OP_FIRST_CHARS
 
 
@@ -16,23 +17,7 @@ IDENT_START = ascii_letters + '_'
 IDENT_CONT = IDENT_START + digits
 
 
-class TokenizerError(BaseParseError):
-    ...
-
-
-class LocatedTokenizerError(BaseLocatedError, TokenizerError):
-    ...
-
-
-class MalformedNumberError(TokenizerError):
-    ...
-
-
-class LocatedMalformedNumberError(LocatedTokenizerError, MalformedNumberError):
-    ...
-
-
-class SrcHandler:
+class UsesSrc:
     def __init__(self, src: str):
         self.src: str = src
 
@@ -64,7 +49,7 @@ class SrcHandler:
         return tp(msg, region, self.src)
 
 
-class Tokenizer(SrcHandler):
+class Tokenizer(UsesSrc):
     def __init__(self, src: str):
         super().__init__(src)
         self.tokens: list[Token] = []
@@ -270,7 +255,7 @@ GETATTR_VALID_AFTER_CLS = (
 )
 
 
-class _IncrementalNumberParser(SrcHandler):
+class _IncrementalNumberParser(UsesSrc):
     default_err_type = LocatedMalformedNumberError
 
     # todo 0x, 0b (I refuse to add octal literals) - also hex floats???

@@ -1,5 +1,4 @@
-from .tokenizer import (
-    Tokenizer,
-    TokenizerError, LocatedTokenizerError,
-    LocatedMalformedNumberError, MalformedNumberError,
-    print_tokens, format_tokens)
+from .tokenizer import Tokenizer, print_tokens, format_tokens
+from .errors import (
+    TokenizerError, LocatedTokenizerError, MalformedNumberError,
+    LocatedMalformedNumberError)
