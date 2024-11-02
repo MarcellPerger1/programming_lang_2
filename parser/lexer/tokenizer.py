@@ -86,7 +86,7 @@ class Tokenizer(SrcHandler):
                     f" This is a bug in the tokenizer.")
             else:
                 last_idx = idx
-            # order fastest ones first
+            # order fastest comparisons/most common chars first
             if self[idx] == ',':
                 idx = self._t_comma(idx)
             elif self[idx] == '.':
@@ -152,12 +152,11 @@ class Tokenizer(SrcHandler):
 
     def startswith(self, start: int, s: str):
         assert not self.eof(start), "You probably shouldn't try to startswith after EOF"
-        return self[start: start + len(s)].startswith(s)
+        return self.src.startswith(s, start)
 
     def _t_space(self, start: int):
         idx = start
-        if not self[idx].isspace():
-            return start
+        assert self[idx].isspace(), "_t_space should only be called on spaces"
         while self.get(idx).isspace():
             idx += 1
         return self.add_token(
@@ -184,12 +183,9 @@ class Tokenizer(SrcHandler):
         idx += 2  # include '*/' in comment
         return self.add_token(BlockCommentToken(StrRegion(start, idx)))
 
-    def _t_comma(self, start: int) -> int:
-        idx = start
-        if self[idx] != ',':
-            return start
-        idx += 1
-        return self.add_token(CommaToken(StrRegion(start, idx)))
+    def _t_comma(self, idx: int) -> int:
+        assert self[idx] == ','
+        return self.add_token(CommaToken(StrRegion(idx, idx + 1)))
 
     def _t_string(self, start: int) -> int:
         idx = start
@@ -221,27 +217,19 @@ class Tokenizer(SrcHandler):
     # If we check for a valid getattr first based on the previous tokens
     # (yes, I know looking at previous tokens is not good),
     # and if there isn't one, try to do the float
-    def _t_number(self, start: int) -> int:
+    def _t_number(self, idx: int) -> int:
         # doesn't handle negative numbers,
         # those should be handled as a separate '-' operator
-        idx = start
         assert self[idx] != '-', "_t_number doesn't handle negative numbers"
-        tok, idx = _IncrementalNumberParser(self.src).parse(idx)
-        if tok is not None:
-            self.add_token(tok)
-        return idx
+        return self.add_token(_IncrementalNumberParser(self.src).parse(idx))
 
-    def _t_dot(self, start: int) -> int:
-        idx = start
+    def _t_dot(self, idx: int) -> int:
         assert self[idx] == '.', "_t_dot should only be called if char is '.'"
-        idx += 1
-        return self.add_token(DotToken(StrRegion(start, idx)))
+        return self.add_token(DotToken(StrRegion(idx, idx + 1)))
 
-    def _t_concat(self, start: int) -> int:
-        idx = start
+    def _t_concat(self, idx: int) -> int:
         assert self.startswith(idx, '..')
-        idx += 2
-        return self.add_token(OpToken(StrRegion(start, idx), '..'))
+        return self.add_token(OpToken(StrRegion(idx, idx + 2), '..'))
 
     def _could_be_op(self, start: int) -> bool:
         return self[start] in OP_FIRST_CHARS
@@ -356,9 +344,8 @@ class _IncrementalNumberParser(SrcHandler):
         idx = new_idx
         return idx
 
-    def parse(self, start: int) -> tuple[Token | None, int]:
-        idx = self._parse_number(start)
-        return NumberToken(StrRegion(start, idx)), idx
+    def parse(self, start: int) -> Token:
+        return NumberToken(StrRegion(start, self._parse_number(start)))
 
 
 def print_tokens(src: str, tokens: list[Token], stream: IO[str] = None, do_ws=False):
