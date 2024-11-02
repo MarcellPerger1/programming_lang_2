@@ -2,7 +2,6 @@ from __future__ import annotations
 
 from dataclasses import dataclass, field
 from enum import Enum
-from typing import Union, Callable, TYPE_CHECKING
 
 from ..common import HasRegion, StrRegion
 
@@ -94,11 +93,6 @@ class ParenToken(NamedTokenCls):
     paren_str = None  # type: str
 
 
-if TYPE_CHECKING:
-    ParenTokenT = Union[type[ParenToken], Callable[[StrRegion], ParenToken]]
-    __all__.append('ParenTokenT')
-
-
 def register_paren_cls(char: str):
     def inner(cls: type[ParenToken]):
         PAREN_TYPES[cls] = char
@@ -183,16 +177,3 @@ class IdentNameToken(AnyNameToken):
 
 class EofToken(NamedTokenCls):
     name = 'eof'
-
-
-GETATTR_VALID_AFTER_CLS = (
-    StringToken,
-    RParToken,
-    RSqBracket,
-    AttrNameToken,
-    IdentNameToken
-    # Not valid (directly) after floats (need parens) because we treat all
-    # numbers the same and we cannot have it after ints
-    #   2.3 => (2).3 (attribute) or `2.3` (float)
-    # Also it would be confusing to have 2.e3 => num, 2.e3.3 -> num.attr.
-)

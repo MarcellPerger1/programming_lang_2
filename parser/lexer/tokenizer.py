@@ -1,84 +1,32 @@
 from __future__ import annotations
 
-import sys
-from io import StringIO
 from string import ascii_letters, digits
-from typing import TYPE_CHECKING, IO, Sequence
 
-from .tokens import (
-    Token, WhitespaceToken, LineCommentToken, BlockCommentToken, NumberToken,
-    StringToken, CommaToken, DotToken, OpToken, PAREN_TYPES,
-    SemicolonToken, AttrNameToken, IdentNameToken,
-    GETATTR_VALID_AFTER_CLS, EofToken
-)
+from .number_parser import NumberParser
+from .src_handler import UsesSrc
+from .tokens import *
 from ..common import StrRegion
-from ..common.error import BaseParseError, BaseLocatedError
 from ..operators import OPS_SET, MAX_OP_LEN, OP_FIRST_CHARS
 
-if TYPE_CHECKING:
-    from .tokens import ParenTokenT
 
 IDENT_START = ascii_letters + '_'
 IDENT_CONT = IDENT_START + digits
 
 
-class TokenizerError(BaseParseError):
-    ...
+GETATTR_VALID_AFTER_CLS = (
+    StringToken,
+    RParToken,
+    RSqBracket,
+    AttrNameToken,
+    IdentNameToken
+    # Not valid (directly) after floats (need parens) because we treat all
+    # numbers the same and we cannot have it after ints
+    #   2.3 => (2).3 (attribute) or `2.3` (float)
+    # Also it would be confusing to have 2.e3 => num, 2.e3.3 -> num.attr.
+)
 
 
-class LocatedTokenizerError(BaseLocatedError, TokenizerError):
-    ...
-
-
-class MalformedNumberError(TokenizerError):
-    ...
-
-
-class LocatedMalformedNumberError(LocatedTokenizerError, MalformedNumberError):
-    ...
-
-
-class SrcHandler:
-    def __init__(self, src: str):
-        self.src: str = src
-
-    def __getitem__(self, item: int | slice) -> str:
-        return self.src[item]
-
-    def eof(self, idx: int):
-        return idx >= len(self.src)
-
-    def get(self, idx: int, eof: str = '\0') -> str:
-        try:
-            return self.src[idx]
-        except IndexError:
-            return eof
-
-    default_err_type = LocatedTokenizerError
-
-    def err(self, msg: str,
-            loc: int | Token | StrRegion | Sequence[int | Token | StrRegion],
-            tp: type[BaseLocatedError] = None):
-        try:
-            seq: tuple[int | Token | StrRegion, ...] = tuple(loc)
-        except TypeError:
-            seq = (loc,)
-        regs = []
-        for o in seq:
-            if isinstance(o, int):
-                reg = StrRegion(o, o + 1)
-            elif isinstance(o, Token):
-                reg = o.region
-            else:
-                reg = o
-            regs.append(reg)
-        region = StrRegion.including(*regs)
-        if tp is None:
-            tp = self.default_err_type
-        return tp(msg, region, self.src)
-
-
-class Tokenizer(SrcHandler):
+class Tokenizer(UsesSrc):
     def __init__(self, src: str):
         super().__init__(src)
         self.tokens: list[Token] = []
@@ -101,15 +49,15 @@ class Tokenizer(SrcHandler):
                     f" This is a bug in the tokenizer.")
             else:
                 last_idx = idx
-            # order fastest ones first
+            # order fastest comparisons/most common chars first
             if self[idx] == ',':
-                idx = self._t_comma(idx)
+                idx = self.add_token(CommaToken(StrRegion(idx, idx + 1)))
             elif self[idx] == '.':
                 # this is the complicated case where we need to decide:
                 # is it a NumberToken, a GetattrToken or a OpToken('..')
                 # need to use get as file could end on the '.'
                 if self.get(idx + 1) == '.':
-                    idx = self._t_concat(idx)
+                    idx = self.add_token(OpToken(StrRegion(idx, idx + 2), '..'))
                 elif self.prev_content_token_type in GETATTR_VALID_AFTER_CLS:
                     idx = self._t_dot(idx)
                 else:
@@ -138,7 +86,7 @@ class Tokenizer(SrcHandler):
                 else:
                     idx = self._t_ident_name(idx)
             elif self[idx] in PAREN_TYPES:
-                tp: ParenTokenT = PAREN_TYPES[self[idx]]
+                tp = PAREN_TYPES[self[idx]]
                 idx = self.add_token(tp(StrRegion(idx, idx + 1)))
             elif self[idx:idx+2] == '//':
                 idx = self._t_line_comment(idx)
@@ -167,12 +115,11 @@ class Tokenizer(SrcHandler):
 
     def startswith(self, start: int, s: str):
         assert not self.eof(start), "You probably shouldn't try to startswith after EOF"
-        return self[start: start + len(s)].startswith(s)
+        return self.src.startswith(s, start)
 
     def _t_space(self, start: int):
         idx = start
-        if not self[idx].isspace():
-            return start
+        assert self[idx].isspace(), "_t_space should only be called on spaces"
         while self.get(idx).isspace():
             idx += 1
         return self.add_token(
@@ -180,8 +127,7 @@ class Tokenizer(SrcHandler):
 
     def _t_line_comment(self, start: int) -> int:
         idx = start
-        if not self.startswith(idx, '//'):
-            return start
+        assert self.startswith(idx, '//')
         idx += 2
         while not self.eof(idx) and self.get(idx) != '\n':
             idx += 1
@@ -199,17 +145,11 @@ class Tokenizer(SrcHandler):
         idx += 2  # include '*/' in comment
         return self.add_token(BlockCommentToken(StrRegion(start, idx)))
 
-    def _t_comma(self, start: int) -> int:
-        idx = start
-        if self[idx] != ',':
-            return start
-        idx += 1
-        return self.add_token(CommaToken(StrRegion(start, idx)))
-
     def _t_string(self, start: int) -> int:
         idx = start
-        if self[idx] not in '\'"':
-            return start
+        # Note: the assert and assignment cannot be merged as Python wouldn't
+        # execute the assignment in `-O` optimisation mode
+        assert self[idx] in '\'"'
         q_type = self[idx]
         idx += 1
         while True:
@@ -236,27 +176,15 @@ class Tokenizer(SrcHandler):
     # If we check for a valid getattr first based on the previous tokens
     # (yes, I know looking at previous tokens is not good),
     # and if there isn't one, try to do the float
-    def _t_number(self, start: int) -> int:
+    def _t_number(self, idx: int) -> int:
         # doesn't handle negative numbers,
         # those should be handled as a separate '-' operator
-        idx = start
         assert self[idx] != '-', "_t_number doesn't handle negative numbers"
-        tok, idx = _IncrementalNumberParser(self.src).parse(idx)
-        if tok is not None:
-            self.add_token(tok)
-        return idx
+        return self.add_token(NumberParser(self.src).parse(idx))
 
-    def _t_dot(self, start: int) -> int:
-        idx = start
+    def _t_dot(self, idx: int) -> int:
         assert self[idx] == '.', "_t_dot should only be called if char is '.'"
-        idx += 1
-        return self.add_token(DotToken(StrRegion(start, idx)))
-
-    def _t_concat(self, start: int) -> int:
-        idx = start
-        assert self.startswith(idx, '..')
-        idx += 2
-        return self.add_token(OpToken(StrRegion(start, idx), '..'))
+        return self.add_token(DotToken(StrRegion(idx, idx + 1)))
 
     def _could_be_op(self, start: int) -> bool:
         return self[start] in OP_FIRST_CHARS
@@ -289,120 +217,3 @@ class Tokenizer(SrcHandler):
         while self.get(idx) in IDENT_CONT:
             idx += 1
         return self.add_token(IdentNameToken(StrRegion(start, idx)))
-
-
-class _IncrementalNumberParser(SrcHandler):
-    default_err_type = LocatedMalformedNumberError
-
-    # todo 0x, 0b (I refuse to add octal literals) - also hex floats???
-    def _parse_digit_seq(self, start: int) -> int | None:
-        # (Returns None if no digits)
-        idx = start
-        if self.get(idx) == '_':
-            raise self.err("Can't have '_' at the start of a number", idx)
-        if self.get(idx) not in digits:
-            return None
-        idx += 1
-        while True:
-            if self.get(idx) == '_':
-                if self.get(idx + 1) in digits:
-                    idx += 2  # '_' and digit
-                elif self.get(idx + 1) == '_':
-                    raise self.err(
-                        "Can only have one consecutive '_' in a number", idx + 1)
-                else:
-                    raise self.err(
-                        "Can't have '_' at the end of a number", idx)
-            elif self.get(idx) in digits:
-                idx += 1
-            else:
-                return idx  # end of digits/'_'
-
-    def _parse_num_no_exp(self, idx: int) -> int:
-        new_idx = self._parse_digit_seq(idx)
-        if new_idx is None:
-            if self.get(idx) != '.':
-                raise self.err("Number must start with digit or '.' ", idx)
-            has_pre_dot = False
-        else:
-            has_pre_dot = True
-            idx = new_idx
-        if self.get(idx) != '.':
-            # eg: 1234, 567e-5, 8 +9-10
-            return idx
-        idx += 1
-        new_idx = self._parse_digit_seq(idx)
-        if new_idx is None:
-            has_post_dot = False
-        else:
-            has_post_dot = True
-            idx = new_idx
-        if has_pre_dot or has_post_dot:
-            return idx
-        raise self.err("Number cannot be a single '.' "
-                       "(expected digits before or after)", idx)
-
-    def _parse_number(self, idx: int) -> int:
-        idx = self._parse_num_no_exp(idx)
-        if self.get(idx).lower() != 'e':
-            return idx
-        idx += 1
-        # need to handle '-' here explicitly as it is part of the number
-        # so can't just be parsed as a separate operator
-        if self.get(idx) == '-':
-            idx += 1
-        new_idx = self._parse_digit_seq(idx)  # no dot after the 'e'
-        if new_idx is None:
-            # eg: 1.2eC, 8e-Q which is always an error
-            raise self.err("Expected integer after <number>e", idx)
-        idx = new_idx
-        return idx
-
-    def parse(self, start: int) -> tuple[Token | None, int]:
-        idx = self._parse_number(start)
-        return NumberToken(StrRegion(start, idx)), idx
-
-
-def main():
-    import pprint
-    src = ("ab2 = 12==!(  \n" + r"e3.1.2 >= '7\'\\')%12;var x='b'..7")
-    t = Tokenizer(src)
-    t.tokenize()
-    pprint.pp(t.tokens)
-    table = []
-    for tok in t.tokens:
-        if tok.is_whitespace:
-            row = ['(WS) ' + repr(tok.region.resolve(src)), tok.name]
-        else:
-            row = [str(tok.region.resolve(src)), tok.name]
-        table.append(row)
-    max0 = max(len(r[0]) for r in table)
-    max1 = max(len(r[1]) for r in table)
-    for s0, s1 in table:
-        print(f'{s0:>{max0}} {s1:>{max1}}')
-
-
-def print_tokens(src: str, tokens: list[Token], stream: IO[str] = None, do_ws=False):
-    if stream is None:
-        stream = sys.stdout
-    table = []
-    for tok in tokens:
-        if tok.is_whitespace:
-            if do_ws:
-                table.append(['(WS) ' + repr(tok.region.resolve(src)), tok.name])
-        else:
-            table.append([str(tok.region.resolve(src)), tok.name])
-    max0 = max(len(r[0]) for r in table)
-    max1 = max(len(r[1]) for r in table)
-    for s0, s1 in table:
-        print(f'{s0:>{max0}} | {s1:>{max1}}', file=stream)
-
-
-def format_tokens(src: str, tokens: list[Token], do_ws=False):
-    out = StringIO()
-    print_tokens(src, tokens, out, do_ws)
-    return out.getvalue()
-
-
-if __name__ == '__main__':
-    main()
