@@ -6,6 +6,7 @@ from string import ascii_letters, digits
 from typing import IO, Sequence
 
 from .tokens import *
+from .tokens import OpToken, CommaToken
 from ..common import StrRegion, region_union
 from ..common.error import BaseParseError, BaseLocatedError
 from ..operators import OPS_SET, MAX_OP_LEN, OP_FIRST_CHARS
@@ -88,13 +89,13 @@ class Tokenizer(SrcHandler):
                 last_idx = idx
             # order fastest comparisons/most common chars first
             if self[idx] == ',':
-                idx = self._t_comma(idx)
+                idx = self.add_token(CommaToken(StrRegion(idx, idx + 1)))
             elif self[idx] == '.':
                 # this is the complicated case where we need to decide:
                 # is it a NumberToken, a GetattrToken or a OpToken('..')
                 # need to use get as file could end on the '.'
                 if self.get(idx + 1) == '.':
-                    idx = self._t_concat(idx)
+                    idx = self.add_token(OpToken(StrRegion(idx, idx + 2), '..'))
                 elif self.prev_content_token_type in GETATTR_VALID_AFTER_CLS:
                     idx = self._t_dot(idx)
                 else:
@@ -164,8 +165,7 @@ class Tokenizer(SrcHandler):
 
     def _t_line_comment(self, start: int) -> int:
         idx = start
-        if not self.startswith(idx, '//'):
-            return start
+        assert self.startswith(idx, '//')
         idx += 2
         while not self.eof(idx) and self.get(idx) != '\n':
             idx += 1
@@ -183,14 +183,11 @@ class Tokenizer(SrcHandler):
         idx += 2  # include '*/' in comment
         return self.add_token(BlockCommentToken(StrRegion(start, idx)))
 
-    def _t_comma(self, idx: int) -> int:
-        assert self[idx] == ','
-        return self.add_token(CommaToken(StrRegion(idx, idx + 1)))
-
     def _t_string(self, start: int) -> int:
         idx = start
-        if self[idx] not in '\'"':
-            return start
+        # Note: the assert and assignment cannot be merged as Python wouldn't
+        # execute the assignment in `-O` optimisation mode
+        assert self[idx] in '\'"'
         q_type = self[idx]
         idx += 1
         while True:
@@ -226,10 +223,6 @@ class Tokenizer(SrcHandler):
     def _t_dot(self, idx: int) -> int:
         assert self[idx] == '.', "_t_dot should only be called if char is '.'"
         return self.add_token(DotToken(StrRegion(idx, idx + 1)))
-
-    def _t_concat(self, idx: int) -> int:
-        assert self.startswith(idx, '..')
-        return self.add_token(OpToken(StrRegion(idx, idx + 2), '..'))
 
     def _could_be_op(self, start: int) -> bool:
         return self[start] in OP_FIRST_CHARS
