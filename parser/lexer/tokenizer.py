@@ -1,9 +1,6 @@
 from __future__ import annotations
 
-import sys
-from io import StringIO
 from string import ascii_letters, digits
-from typing import IO
 
 from .number_parser import NumberParser
 from .src_handler import UsesSrc
@@ -14,6 +11,19 @@ from ..operators import OPS_SET, MAX_OP_LEN, OP_FIRST_CHARS
 
 IDENT_START = ascii_letters + '_'
 IDENT_CONT = IDENT_START + digits
+
+
+GETATTR_VALID_AFTER_CLS = (
+    StringToken,
+    RParToken,
+    RSqBracket,
+    AttrNameToken,
+    IdentNameToken
+    # Not valid (directly) after floats (need parens) because we treat all
+    # numbers the same and we cannot have it after ints
+    #   2.3 => (2).3 (attribute) or `2.3` (float)
+    # Also it would be confusing to have 2.e3 => num, 2.e3.3 -> num.attr.
+)
 
 
 class Tokenizer(UsesSrc):
@@ -207,38 +217,3 @@ class Tokenizer(UsesSrc):
         while self.get(idx) in IDENT_CONT:
             idx += 1
         return self.add_token(IdentNameToken(StrRegion(start, idx)))
-
-
-GETATTR_VALID_AFTER_CLS = (
-    StringToken,
-    RParToken,
-    RSqBracket,
-    AttrNameToken,
-    IdentNameToken
-    # Not valid (directly) after floats (need parens) because we treat all
-    # numbers the same and we cannot have it after ints
-    #   2.3 => (2).3 (attribute) or `2.3` (float)
-    # Also it would be confusing to have 2.e3 => num, 2.e3.3 -> num.attr.
-)
-
-
-def print_tokens(src: str, tokens: list[Token], stream: IO[str] = None, do_ws=False):
-    if stream is None:
-        stream = sys.stdout
-    table = []
-    for tok in tokens:
-        if tok.is_whitespace:
-            if do_ws:
-                table.append(['(WS) ' + repr(tok.region.resolve(src)), tok.name])
-        else:
-            table.append([str(tok.region.resolve(src)), tok.name])
-    max0 = max(len(r[0]) for r in table)
-    max1 = max(len(r[1]) for r in table)
-    for s0, s1 in table:
-        print(f'{s0:>{max0}} | {s1:>{max1}}', file=stream)
-
-
-def format_tokens(src: str, tokens: list[Token], do_ws=False):
-    out = StringIO()
-    print_tokens(src, tokens, out, do_ws)
-    return out.getvalue()

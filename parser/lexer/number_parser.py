@@ -2,10 +2,10 @@ from __future__ import annotations
 
 from string import digits
 
-from parser.common import StrRegion
-from parser.lexer import LocatedMalformedNumberError
-from parser.lexer.src_handler import UsesSrc
-from parser.lexer.tokens import Token, NumberToken
+from .errors import LocatedMalformedNumberError
+from .src_handler import UsesSrc
+from .tokens import Token, NumberToken
+from ..common import StrRegion
 
 
 class NumberParser(UsesSrc):
