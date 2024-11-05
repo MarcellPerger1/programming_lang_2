@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from os import PathLike
-from typing import TypeVar, Any, overload
+from typing import TypeVar, Any, overload, Iterable
 
 from .simple_process_pool import *
 from .timeouts import *
@@ -26,3 +26,7 @@ def checked_cast(typ: type[T | U], val: Any) -> T | U: ...
 def checked_cast(typ: type[T], val: Any) -> T:
     assert isinstance(val, typ)
     return val
+
+
+def flatten_force(seq: Iterable[Iterable[T]]) -> list[T]:
+    return [item for sub in seq for item in sub]
