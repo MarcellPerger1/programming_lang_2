@@ -70,6 +70,8 @@ class TreeGen:
         return Matcher(pattern, self.tokens, start, self.src).match(want_full)
 
     def parse(self):
+        if self.result:
+            return self.result
         if not self.tokenizer.is_done:
             self.tokenizer.tokenize()
         assert isinstance(self.tokens[-1], EofToken)
