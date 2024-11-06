@@ -236,11 +236,11 @@ class AstGen:
     @classmethod
     def _lookup_autowalk_fn(cls, t: type[AnyNode]):
         assert t != Leaf and t != Node and issubclass(t, AnyNode)
-        if value := _AUTOWALK_EXPR_DICT[t]:
+        if value := _AUTOWALK_EXPR_DICT.get(t):
             return value
         for supertype in t.mro():  # See if any supertypes have the autowalker
             if not issubclass(supertype, AnyNode):
                 continue  # Skip - could be a mixin
-            if value := _AUTOWALK_EXPR_DICT[supertype]:
+            if value := _AUTOWALK_EXPR_DICT.get(supertype):
                 return value
         raise LookupError(f"No such autowalk-er declared ({t})")
