@@ -78,15 +78,15 @@ class CommonTestCase(SnapshotTestCase, TestCaseUtils):
         if stream & TokenStreamFlag.FULL:
             self.assertTokenStreamEquals(t.tokens, expected, check_regions)
 
-    def assertValidParse(self, src: str):
+    def assertValidParseCST(self, src: str):
         self.assertIsNotNone(TreeGen(Tokenizer(src)).parse())
 
-    def assertFailsGracefully(self, src: str):
+    def assertFailsGracefullyCST(self, src: str):
         t = TreeGen(Tokenizer(src))
         with self.assertRaises(CstParseError):
             t.parse()
 
-    def assertNotInternalError(self, src: str):
+    def assertNotInternalErrorCST(self, src: str):
         try:
             TreeGen(Tokenizer(src)).parse()
         except BaseParseError:
@@ -94,7 +94,7 @@ class CommonTestCase(SnapshotTestCase, TestCaseUtils):
         self.assertTrue(True)
 
     @classmethod
-    def raiseInternalErrorsOnly(cls, src: str):
+    def raiseInternalErrorsOnlyCST(cls, src: str):
         try:
             TreeGen(Tokenizer(src)).parse()
         except BaseParseError:
@@ -103,6 +103,6 @@ class CommonTestCase(SnapshotTestCase, TestCaseUtils):
             raise
         return None
 
-    def assertTreeMatchesSnapshot(self, src: str):
+    def assertCstMatchesSnapshot(self, src: str):
         t = TreeGen(Tokenizer(src))
         self.assertMatchesSnapshot(t.parse())
