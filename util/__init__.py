@@ -30,3 +30,11 @@ def checked_cast(typ: type[T], val: Any) -> T:
 
 def flatten_force(seq: Iterable[Iterable[T]]) -> list[T]:
     return [item for sub in seq for item in sub]
+
+
+def is_strict_subclass(o: object, type_or_types: tuple[type, ...]):
+    try:
+        types = tuple(type_or_types)
+    except TypeError:
+        types = (type_or_types,)
+    return isinstance(o, type) and issubclass(o, types) and o not in types

@@ -1,13 +1,15 @@
 from __future__ import annotations
 
+import inspect
 import sys
 from typing import Callable
 
-from util import flatten_force
+from util import flatten_force, is_strict_subclass
 from .ast_node import *  # TODO: add __all__
 from ..common import region_union, RegionUnionArgT
 from ..common.error import BaseParseError, BaseLocatedError
 from ..cst.base_node import AnyNode, Node, Leaf
+from ..cst.named_node import NamedLeafCls, NamedNodeCls, NamedSizedNodeCls
 from ..cst.nodes import *
 from ..cst.treegen import CstGen
 
@@ -37,18 +39,44 @@ ALLOWED_IN_SMT = (  # Note: use with isinstance
     AssignOpNode,
 )
 
-# TODO return type???
-_AUTOWALK_DICT: dict[type[AnyNode], Callable[['AstGen', AnyNode], ...]]
+
+_AUTOWALK_EXPR_DICT: dict[type[AnyNode], Callable[['AstGen', AnyNode], AstNode]] = {}
 
 
 # This should be a member of AstGen but python doesn't like decorators
-# defined in classes being used in the same class
-# noinspection PyProtectedMember
-def _register_auto_walk(node_type: type[AnyNode]):
+# defined in classes being used in the same class. The __takes_args is to tell
+# Pycharm to add parens when using this as a decorator
+# TODO types for this: (@overload?)
+def _register_autowalk_expr(node_type: type[AnyNode] = None, *, __takes_args=1):
     def decor(fn):
-        _AUTOWALK_DICT[node_type] = fn
+        _AUTOWALK_EXPR_DICT[
+            node_type if node_type is not None
+            else _detect_autowalk_type_from_annot(fn)
+        ] = fn
         return fn
-    return decor
+    if node_type is None or isinstance(node_type, type):
+        return decor
+    return decor(node_type)
+
+
+def _detect_autowalk_type_from_annot(fn):
+    # Warning: Introspection black magic below! May contain demons and/or dragons.
+    try:
+        sig = inspect.signature(fn, eval_str=True, globals=globals())
+    except Exception as e:
+        raise TypeError("Cannot automatically determine node_type") from e
+    try:
+        bound = sig.bind(0, 1)  # simulate call w/ 2 args
+    except TypeError as e:
+        raise TypeError("Cannot automatically determine node_type") from e
+    arg2_name: str = (*bound.arguments,)[1]  # get name it's bound to
+    param = sig.parameters[arg2_name]  # lookup the param by name
+    if param.kind not in (param.POSITIONAL_ONLY, param.POSITIONAL_OR_KEYWORD):
+        raise TypeError("Cannot automatically determine node_type")
+    if not is_strict_subclass(param.annotation, (
+            NamedLeafCls, NamedNodeCls, NamedSizedNodeCls)):
+        raise TypeError("Cannot automatically determine node_type")
+    return param.annotation
 
 
 # The job of this is to check that the syntax is valid and the semantics
@@ -117,8 +145,7 @@ class AstGen:
         elif isinstance(smt, CallNode):
             # Check that it transforms into smt-intrinsic and
             # not expr-intrinsic in codegen/typecheck
-            return [AstCall(smt.region, self._walk_expr(smt.target),
-                            [self._walk_expr(a) for a in smt.arglist.args])]
+            return [self._walk_call(smt)]
         assert 0, f"Unhandled node class {type(smt).__name__} in _walk_smt"
 
     def _walk_assign_left(self, lhs: AnyNode) -> AstNode:
@@ -132,14 +159,6 @@ class AstGen:
             return self._walk_getattr(lhs)
         raise self.err(f"Cannot assign to {lhs.name!r} expr", lhs)
 
-    def _walk_getattr(self, node: GetattrNode) -> AstAttribute:
-        return AstAttribute(node.region, self._walk_expr(node.target),
-                            self._walk_attr_name(node.attr))
-
-    def _walk_getitem(self, node: GetitemNode) -> AstItem:
-        return AstItem(node.region, self._walk_expr(node.target),
-                       self._walk_expr(node.item))
-
     def _walk_block(self, nodes: list[AnyNode] | BlockNode) -> list[AstNode]:
         if isinstance(nodes, BlockNode):
             nodes = nodes.statements
@@ -148,12 +167,59 @@ class AstGen:
     def _walk_expr(self, expr: AnyNode) -> AstNode:
         ...
 
+    @_register_autowalk_expr()
+    def _walk_number(self, node: NumberNode) -> AstNumber:
+        return AstNumber(node.region)
+
+    @_register_autowalk_expr()
+    def _walk_string(self, node: StringNode) -> AstString:
+        return AstString(node.region)
+
+    @_register_autowalk_expr()
+    def _walk_autocat(self, node: AutocatNode) -> AstString:
+        # TODO: value=... attr!
+        return AstString(node.region)
+
+    # TODO: how to handle autocat? Put them together here to a autocat node?
+    #  (probably put them together? or transform into regular '..'?)
+
+    @_register_autowalk_expr()  # Don't need to pass the type due to black magic
     def _walk_ident(self, ident: IdentNode) -> AstIdent:
         return AstIdent(ident.region, self.node_str(ident, intern=True))
 
+    @_register_autowalk_expr()
     def _walk_attr_name(self, attr_name: AttrNameNode) -> AstAttrName:
         return AstAttrName(
             attr_name.region, self.node_str(attr_name, intern=True))
+
+    @_register_autowalk_expr()
+    def _walk_getattr(self, node: GetattrNode) -> AstAttribute:
+        return AstAttribute(node.region, self._walk_expr(node.target),
+                            self._walk_attr_name(node.attr))
+
+    @_register_autowalk_expr()
+    def _walk_getitem(self, node: GetitemNode) -> AstItem:
+        return AstItem(node.region, self._walk_expr(node.target),
+                       self._walk_expr(node.item))
+
+    @_register_autowalk_expr()
+    def _walk_paren(self, node: ParenNode) -> AstNode:
+        return self._walk_expr(node.contents)
+
+    @_register_autowalk_expr()
+    def _walk_call(self, node: CallNode) -> AstCall:
+        return AstCall(node.region, self._walk_expr(node.target),
+                       [self._walk_expr(a) for a in node.arglist.args])
+
+    @_register_autowalk_expr()
+    def _walk_unary_op(self, node: UnaryOpNode) -> AstUnaryOp:
+        op = node.name.removesuffix('(unary)')
+        return AstUnaryOp(node.region, op, self._walk_expr(node.operand))
+
+    @_register_autowalk_expr()
+    def _walk_binary_op(self, node: BinOpNode) -> AstBinOp:
+        return AstBinOp(node.region, node.name, self._walk_expr(node.left),
+                        self._walk_expr(node.right))
 
     def node_str(self, node: HasRegion, intern=False):
         s = node.region.resolve(self.src)
@@ -164,17 +230,17 @@ class AstGen:
     def err(self, msg: str, loc: RegionUnionArgT):
         return LocatedAstError(msg, region_union(loc), self.src)
 
-    def autowalk(self, node: AnyNode):
+    def autowalk_expr(self, node: AnyNode):
         return self._lookup_autowalk_fn(type(node))(self, node)
 
     @classmethod
     def _lookup_autowalk_fn(cls, t: type[AnyNode]):
         assert t != Leaf and t != Node and issubclass(t, AnyNode)
-        if value := _AUTOWALK_DICT[t]:
+        if value := _AUTOWALK_EXPR_DICT[t]:
             return value
         for supertype in t.mro():  # See if any supertypes have the autowalker
             if not issubclass(supertype, AnyNode):
                 continue  # Skip - could be a mixin
-            if value := _AUTOWALK_DICT[supertype]:
+            if value := _AUTOWALK_EXPR_DICT[supertype]:
                 return value
         raise LookupError(f"No such autowalk-er declared ({t})")

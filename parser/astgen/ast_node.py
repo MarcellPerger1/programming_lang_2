@@ -87,6 +87,16 @@ class AstDefine(AstNode):
 
 # region ---- <Expressions> ----
 @dataclass
+class AstNumber(AstNode):
+    ...  # TODO: value: int? or value_str: str?
+
+
+@dataclass
+class AstString(AstNode):
+    ...  # TODO: value: str, resolve escapes
+
+
+@dataclass
 class AstAnyName(AstNode):
     id: str
 
@@ -124,4 +134,40 @@ class AstCall(AstNode):
     name = 'call'
     obj: AstNode
     args: list[AstNode]
+
+
+@dataclass
+class AstOp(AstNode):
+    op: str
+
+
+@dataclass
+class AstBinOp(AstOp):
+    left: AstNode
+    right: AstNode
+
+    valid_ops = [*'+-*/%', '**', '..', '||', '&&',  # ops
+                 '==', '!=', '<', '>', '<=', '>='  # comparisons
+                 ]  # type: list[str]
+
+    def __post_init__(self):
+        assert self.op in self.valid_ops
+
+    @property
+    def name(self):
+        return self.op
+
+
+@dataclass
+class AstUnaryOp(AstOp):
+    operand: AstNode
+
+    valid_ops = ('+', '-', '!')
+
+    def __post_init__(self):
+        assert self.op in self.valid_ops
+
+    @property
+    def name(self):
+        return self.op
 # endregion ---- </Expressions> ----
