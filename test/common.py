@@ -5,6 +5,7 @@ from __future__ import annotations
 from enum import IntFlag, Enum
 from typing import Sequence, TypeVar
 
+from parser.astgen.astgen import AstGen
 from parser.common.error import BaseParseError
 from parser.common.tree_print import tformat
 from parser.cst.base_node import Leaf, AnyNode, Node
@@ -106,3 +107,6 @@ class CommonTestCase(SnapshotTestCase, TestCaseUtils):
     def assertCstMatchesSnapshot(self, src: str):
         t = TreeGen(Tokenizer(src))
         self.assertMatchesSnapshot(t.parse())
+
+    def assertValidParseAST(self, src: str):
+        self.assertIsNotNone(AstGen(TreeGen(Tokenizer(src))).walk())
