@@ -89,10 +89,13 @@ class AstGen:
     def __init__(self, cst: CstGen):
         self.cst = cst
         self.src = self.cst.src
+        self.result: AstNode | None = None
 
     def walk(self):
-        self.root = self.cst.parse()
-        self._walk_program(self.root)
+        if not self.result:
+            self.root = self.cst.parse()
+            self.result = self._walk_program(self.root)
+        return self.result
 
     def _walk_program(self, root: AnyNode):
         assert isinstance(root, ProgramNode)
@@ -165,9 +168,9 @@ class AstGen:
         return flatten_force(map(self._walk_smt, nodes))
 
     def _walk_expr(self, expr: AnyNode) -> AstNode:
-        ...
+        return self.autowalk_expr(expr)
 
-    @_register_autowalk_expr()
+    @_register_autowalk_expr()  # Don't need to pass the type due to black magic
     def _walk_number(self, node: NumberNode) -> AstNumber:
         return AstNumber(node.region)
 
@@ -180,10 +183,7 @@ class AstGen:
         # TODO: value=... attr!
         return AstString(node.region)
 
-    # TODO: how to handle autocat? Put them together here to a autocat node?
-    #  (probably put them together? or transform into regular '..'?)
-
-    @_register_autowalk_expr()  # Don't need to pass the type due to black magic
+    @_register_autowalk_expr()
     def _walk_ident(self, ident: IdentNode) -> AstIdent:
         return AstIdent(ident.region, self.node_str(ident, intern=True))
 
