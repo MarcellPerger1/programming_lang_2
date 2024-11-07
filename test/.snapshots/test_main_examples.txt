@@ -1,5 +1,5 @@
-"2","90","175","666"
-"TestMain::test_example_0:tokens","TestMain::test_example_0:cst","TestMain::test_example_1:tokens","TestMain::test_example_1:cst"
+"2","90","175","666","1042"
+"TestMain::test_example_0:tokens","TestMain::test_example_0:cst","TestMain::test_example_1:tokens","TestMain::test_example_1:cst","TestMain::test_example_1:ast"
 [IdentNameToken(region=StrRegion(start=0, end=3)),
  WhitespaceToken(region=StrRegion(start=3, end=4)),
  IdentNameToken(region=StrRegion(start=4, end=5)),
@@ -1040,3 +1040,424 @@ ProgramNode(StrRegion(0, 1685), [
     BlockNode(StrRegion(1683, 1685), [])
   ])
 ])
+AstProgramNode(StrRegion(0, 1685),
+  [
+    AstDeclNode(StrRegion(0, 22),
+      VarDeclType.GLOBAL,
+      [
+        (
+          AstIdent(StrRegion(7, 12), 'stack'),
+          AstCall(StrRegion(15, 21),
+            AstIdent(StrRegion(15, 19), 'list'),
+            []
+          )
+        )
+      ]
+    ),
+    AstDeclNode(StrRegion(23, 49),
+      VarDeclType.GLOBAL,
+      [
+        (
+          AstIdent(StrRegion(30, 40), 'COUNT_REFS'),
+          AstIdent(StrRegion(43, 48), 'false')
+        )
+      ]
+    ),
+    AstDefine(StrRegion(398, 508),
+      AstIdent(StrRegion(402, 409), 'POP_TOP'),
+      [],
+      [
+        AstIf(StrRegion(418, 474),
+          AstIdent(StrRegion(421, 431), 'COUNT_REFS'),
+          [
+            AstCall(StrRegion(442, 467),
+              AstIdent(StrRegion(442, 448), 'decref'),
+              [
+                AstItem(StrRegion(449, 466),
+                  AstIdent(StrRegion(449, 454), 'stack'),
+                  AstCall(StrRegion(455, 465),
+                    AstIdent(StrRegion(455, 458), 'len'),
+                    [
+                      AstIdent(StrRegion(459, 464), 'stack')
+                    ]
+                  )
+                )
+              ]
+            )
+          ],
+          None
+        ),
+        AstCall(StrRegion(479, 505),
+          AstIdent(StrRegion(479, 486), 'delitem'),
+          [
+            AstIdent(StrRegion(487, 492), 'stack'),
+            AstCall(StrRegion(494, 504),
+              AstIdent(StrRegion(494, 497), 'len'),
+              [
+                AstIdent(StrRegion(498, 503), 'stack')
+              ]
+            )
+          ]
+        )
+      ]
+    ),
+    AstDefine(StrRegion(510, 660),
+      AstIdent(StrRegion(514, 521), 'ROT_TWO'),
+      [],
+      [
+        AstDeclNode(StrRegion(530, 555),
+          VarDeclType.LET,
+          [
+            (
+              AstIdent(StrRegion(534, 541), 'tos_idx'),
+              AstCall(StrRegion(544, 554),
+                AstIdent(StrRegion(544, 547), 'len'),
+                [
+                  AstIdent(StrRegion(548, 553), 'stack')
+                ]
+              )
+            )
+          ]
+        ),
+        AstDeclNode(StrRegion(560, 586),
+          VarDeclType.LET,
+          [
+            (
+              AstIdent(StrRegion(564, 568), 'tos0'),
+              AstItem(StrRegion(571, 585),
+                AstIdent(StrRegion(571, 576), 'stack'),
+                AstIdent(StrRegion(577, 584), 'tos_idx')
+              )
+            )
+          ]
+        ),
+        AstAssign(StrRegion(591, 626),
+          AstItem(StrRegion(591, 605),
+            AstIdent(StrRegion(591, 596), 'stack'),
+            AstIdent(StrRegion(597, 604), 'tos_idx')
+          ),
+          AstItem(StrRegion(608, 626),
+            AstIdent(StrRegion(608, 613), 'stack'),
+            AstBinOp(StrRegion(614, 625),
+              '-',
+              AstIdent(StrRegion(614, 621), 'tos_idx'),
+              AstNumber(StrRegion(624, 625))
+            )
+          )
+        ),
+        AstAssign(StrRegion(632, 657),
+          AstItem(StrRegion(632, 650),
+            AstIdent(StrRegion(632, 637), 'stack'),
+            AstBinOp(StrRegion(638, 649),
+              '-',
+              AstIdent(StrRegion(638, 645), 'tos_idx'),
+              AstNumber(StrRegion(648, 649))
+            )
+          ),
+          AstIdent(StrRegion(653, 657), 'tos0')
+        )
+      ]
+    ),
+    AstDefine(StrRegion(662, 972),
+      AstIdent(StrRegion(666, 675), 'ROT_THREE'),
+      [],
+      [
+        AstDeclNode(StrRegion(797, 822),
+          VarDeclType.LET,
+          [
+            (
+              AstIdent(StrRegion(801, 808), 'tos_idx'),
+              AstCall(StrRegion(811, 821),
+                AstIdent(StrRegion(811, 814), 'len'),
+                [
+                  AstIdent(StrRegion(815, 820), 'stack')
+                ]
+              )
+            )
+          ]
+        ),
+        AstDeclNode(StrRegion(827, 853),
+          VarDeclType.LET,
+          [
+            (
+              AstIdent(StrRegion(831, 835), 'tos0'),
+              AstItem(StrRegion(838, 852),
+                AstIdent(StrRegion(838, 843), 'stack'),
+                AstIdent(StrRegion(844, 851), 'tos_idx')
+              )
+            )
+          ]
+        ),
+        AstAssign(StrRegion(858, 893),
+          AstItem(StrRegion(858, 872),
+            AstIdent(StrRegion(858, 863), 'stack'),
+            AstIdent(StrRegion(864, 871), 'tos_idx')
+          ),
+          AstItem(StrRegion(875, 893),
+            AstIdent(StrRegion(875, 880), 'stack'),
+            AstBinOp(StrRegion(881, 892),
+              '-',
+              AstIdent(StrRegion(881, 888), 'tos_idx'),
+              AstNumber(StrRegion(891, 892))
+            )
+          )
+        ),
+        AstAssign(StrRegion(899, 938),
+          AstItem(StrRegion(899, 917),
+            AstIdent(StrRegion(899, 904), 'stack'),
+            AstBinOp(StrRegion(905, 916),
+              '-',
+              AstIdent(StrRegion(905, 912), 'tos_idx'),
+              AstNumber(StrRegion(915, 916))
+            )
+          ),
+          AstItem(StrRegion(920, 938),
+            AstIdent(StrRegion(920, 925), 'stack'),
+            AstBinOp(StrRegion(926, 937),
+              '-',
+              AstIdent(StrRegion(926, 933), 'tos_idx'),
+              AstNumber(StrRegion(936, 937))
+            )
+          )
+        ),
+        AstAssign(StrRegion(944, 969),
+          AstItem(StrRegion(944, 962),
+            AstIdent(StrRegion(944, 949), 'stack'),
+            AstBinOp(StrRegion(950, 961),
+              '-',
+              AstIdent(StrRegion(950, 957), 'tos_idx'),
+              AstNumber(StrRegion(960, 961))
+            )
+          ),
+          AstIdent(StrRegion(965, 969), 'tos0')
+        )
+      ]
+    ),
+    AstDefine(StrRegion(974, 1100),
+      AstIdent(StrRegion(978, 985), 'DUP_TOP'),
+      [],
+      [
+        AstDeclNode(StrRegion(994, 1024),
+          VarDeclType.LET,
+          [
+            (
+              AstIdent(StrRegion(998, 1003), 'value'),
+              AstItem(StrRegion(1006, 1023),
+                AstIdent(StrRegion(1006, 1011), 'stack'),
+                AstCall(StrRegion(1012, 1022),
+                  AstIdent(StrRegion(1012, 1015), 'len'),
+                  [
+                    AstIdent(StrRegion(1016, 1021), 'stack')
+                  ]
+                )
+              )
+            )
+          ]
+        ),
+        AstCall(StrRegion(1029, 1048),
+          AstAttribute(StrRegion(1029, 1041),
+            AstIdent(StrRegion(1029, 1034), 'stack'),
+            AstAttrName(StrRegion(1035, 1041), 'append')
+          ),
+          [
+            AstIdent(StrRegion(1042, 1047), 'value')
+          ]
+        ),
+        AstIf(StrRegion(1054, 1098),
+          AstIdent(StrRegion(1057, 1067), 'COUNT_REFS'),
+          [
+            AstCall(StrRegion(1078, 1091),
+              AstIdent(StrRegion(1078, 1084), 'incref'),
+              [
+                AstIdent(StrRegion(1085, 1090), 'value')
+              ]
+            )
+          ],
+          None
+        )
+      ]
+    ),
+    AstDefine(StrRegion(1102, 1358),
+      AstIdent(StrRegion(1106, 1117), 'DUP_TOP_TWO'),
+      [],
+      [
+        AstDeclNode(StrRegion(1126, 1151),
+          VarDeclType.LET,
+          [
+            (
+              AstIdent(StrRegion(1130, 1137), 'tos_idx'),
+              AstCall(StrRegion(1140, 1150),
+                AstIdent(StrRegion(1140, 1143), 'len'),
+                [
+                  AstIdent(StrRegion(1144, 1149), 'stack')
+                ]
+              )
+            )
+          ]
+        ),
+        AstDeclNode(StrRegion(1156, 1182),
+          VarDeclType.LET,
+          [
+            (
+              AstIdent(StrRegion(1160, 1164), 'tos0'),
+              AstItem(StrRegion(1167, 1181),
+                AstIdent(StrRegion(1167, 1172), 'stack'),
+                AstIdent(StrRegion(1173, 1180), 'tos_idx')
+              )
+            )
+          ]
+        ),
+        AstDeclNode(StrRegion(1187, 1217),
+          VarDeclType.LET,
+          [
+            (
+              AstIdent(StrRegion(1191, 1195), 'tos1'),
+              AstItem(StrRegion(1198, 1216),
+                AstIdent(StrRegion(1198, 1203), 'stack'),
+                AstBinOp(StrRegion(1204, 1215),
+                  '-',
+                  AstIdent(StrRegion(1204, 1211), 'tod_idx'),
+                  AstNumber(StrRegion(1214, 1215))
+                )
+              )
+            )
+          ]
+        ),
+        AstCall(StrRegion(1222, 1240),
+          AstAttribute(StrRegion(1222, 1234),
+            AstIdent(StrRegion(1222, 1227), 'stack'),
+            AstAttrName(StrRegion(1228, 1234), 'append')
+          ),
+          [
+            AstIdent(StrRegion(1235, 1239), 'tos1')
+          ]
+        ),
+        AstCall(StrRegion(1246, 1264),
+          AstAttribute(StrRegion(1246, 1258),
+            AstIdent(StrRegion(1246, 1251), 'stack'),
+            AstAttrName(StrRegion(1252, 1258), 'append')
+          ),
+          [
+            AstIdent(StrRegion(1259, 1263), 'tos0')
+          ]
+        ),
+        AstIf(StrRegion(1291, 1356),
+          AstIdent(StrRegion(1294, 1304), 'COUNT_REFS'),
+          [
+            AstCall(StrRegion(1315, 1327),
+              AstIdent(StrRegion(1315, 1321), 'incref'),
+              [
+                AstIdent(StrRegion(1322, 1326), 'tos0')
+              ]
+            ),
+            AstCall(StrRegion(1337, 1349),
+              AstIdent(StrRegion(1337, 1343), 'incref'),
+              [
+                AstIdent(StrRegion(1344, 1348), 'tos1')
+              ]
+            )
+          ],
+          None
+        )
+      ]
+    ),
+    AstDefine(StrRegion(1360, 1671),
+      AstIdent(StrRegion(1364, 1372), 'ROT_FOUR'),
+      [],
+      [
+        AstDeclNode(StrRegion(1455, 1480),
+          VarDeclType.LET,
+          [
+            (
+              AstIdent(StrRegion(1459, 1466), 'tos_idx'),
+              AstCall(StrRegion(1469, 1479),
+                AstIdent(StrRegion(1469, 1472), 'len'),
+                [
+                  AstIdent(StrRegion(1473, 1478), 'stack')
+                ]
+              )
+            )
+          ]
+        ),
+        AstDeclNode(StrRegion(1485, 1507),
+          VarDeclType.LET,
+          [
+            (
+              AstIdent(StrRegion(1489, 1493), 'tos0'),
+              AstItem(StrRegion(1496, 1506),
+                AstIdent(StrRegion(1496, 1501), 'stack'),
+                AstIdent(StrRegion(1502, 1505), 'tos')
+              )
+            )
+          ]
+        ),
+        AstAssign(StrRegion(1512, 1547),
+          AstItem(StrRegion(1512, 1526),
+            AstIdent(StrRegion(1512, 1517), 'stack'),
+            AstIdent(StrRegion(1518, 1525), 'tos_idx')
+          ),
+          AstItem(StrRegion(1529, 1547),
+            AstIdent(StrRegion(1529, 1534), 'stack'),
+            AstBinOp(StrRegion(1535, 1546),
+              '-',
+              AstIdent(StrRegion(1535, 1542), 'tos_idx'),
+              AstNumber(StrRegion(1545, 1546))
+            )
+          )
+        ),
+        AstAssign(StrRegion(1553, 1592),
+          AstItem(StrRegion(1553, 1571),
+            AstIdent(StrRegion(1553, 1558), 'stack'),
+            AstBinOp(StrRegion(1559, 1570),
+              '-',
+              AstIdent(StrRegion(1559, 1566), 'tos_idx'),
+              AstNumber(StrRegion(1569, 1570))
+            )
+          ),
+          AstItem(StrRegion(1574, 1592),
+            AstIdent(StrRegion(1574, 1579), 'stack'),
+            AstBinOp(StrRegion(1580, 1591),
+              '-',
+              AstIdent(StrRegion(1580, 1587), 'tos_idx'),
+              AstNumber(StrRegion(1590, 1591))
+            )
+          )
+        ),
+        AstAssign(StrRegion(1598, 1637),
+          AstItem(StrRegion(1598, 1616),
+            AstIdent(StrRegion(1598, 1603), 'stack'),
+            AstBinOp(StrRegion(1604, 1615),
+              '-',
+              AstIdent(StrRegion(1604, 1611), 'tos_idx'),
+              AstNumber(StrRegion(1614, 1615))
+            )
+          ),
+          AstItem(StrRegion(1619, 1637),
+            AstIdent(StrRegion(1619, 1624), 'stack'),
+            AstBinOp(StrRegion(1625, 1636),
+              '-',
+              AstIdent(StrRegion(1625, 1632), 'tos_idx'),
+              AstNumber(StrRegion(1635, 1636))
+            )
+          )
+        ),
+        AstAssign(StrRegion(1643, 1668),
+          AstItem(StrRegion(1643, 1661),
+            AstIdent(StrRegion(1643, 1648), 'stack'),
+            AstBinOp(StrRegion(1649, 1660),
+              '-',
+              AstIdent(StrRegion(1649, 1656), 'tos_idx'),
+              AstNumber(StrRegion(1659, 1660))
+            )
+          ),
+          AstIdent(StrRegion(1664, 1668), 'tos0')
+        )
+      ]
+    ),
+    AstDefine(StrRegion(1673, 1685),
+      AstIdent(StrRegion(1677, 1680), 'NOP'),
+      [],
+      []
+    )
+  ]
+)

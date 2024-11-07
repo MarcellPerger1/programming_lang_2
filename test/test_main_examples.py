@@ -19,7 +19,7 @@ class TestMain(CommonTestCase):
         t = TreeGen(tk)
         self.assertMatchesSnapshot(t.parse(), 'cst')
         if do_ast:
-            self.assertMatchesSnapshot(AstGen(t).walk())
+            self.assertMatchesSnapshot(AstGen(t).walk(), 'ast')
 
     def test_example_0(self):
         self._test_main_example_n(0, do_ast=False)
