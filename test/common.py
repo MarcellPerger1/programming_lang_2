@@ -5,6 +5,7 @@ from __future__ import annotations
 from enum import IntFlag, Enum
 from typing import Sequence, TypeVar
 
+from parser.astgen.ast_node import AstNode
 from parser.astgen.astgen import AstGen
 from parser.common.error import BaseParseError
 from parser.common.tree_print import tformat
@@ -50,6 +51,7 @@ class CommonTestCase(SnapshotTestCase, TestCaseUtils):
     def setUpClass(cls) -> None:
         cls.format_dispatch.setdefault(Leaf, cls._tree_format)
         cls.format_dispatch.setdefault(Node, cls._tree_format)
+        cls.format_dispatch.setdefault(AstNode, cls._tree_format)
         super().setUpClass()
 
     @classmethod
