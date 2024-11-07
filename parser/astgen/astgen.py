@@ -6,23 +6,14 @@ from typing import Callable, overload, TypeVar, TypeAlias
 
 from util import flatten_force, is_strict_subclass
 from .ast_node import *  # TODO: add __all__
+from .errors import LocatedAstError
 from ..common import region_union, RegionUnionArgT
-from ..common.error import BaseParseError, BaseLocatedError
 from ..cst.base_node import AnyNode, Node, Leaf
 from ..cst.named_node import NamedLeafCls, NamedNodeCls, NamedSizedNodeCls
 from ..cst.nodes import *
 from ..cst.treegen import CstGen
 
-
-class AstParseError(BaseParseError):
-    pass
-
-
-class LocatedAstError(BaseLocatedError, AstParseError):
-    pass
-
-
-# Final syntax lowering/codegen:
+# Final syntax lowering/codegen: (???)
 # AST -> blocks, intrinsics, functions -> blocks & intrinsics -> intrinsics
 #     |                                 |
 #  ops to intrinsics             resolve idents
