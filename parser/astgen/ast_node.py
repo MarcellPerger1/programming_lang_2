@@ -5,6 +5,13 @@ from enum import StrEnum
 
 from ..common import HasRegion, StrRegion
 
+__all__ = [
+    "AstNode", "AstProgramNode", "VarDeclType", "AstDeclNode", "AstRepeat",
+    "AstIf", "AstWhile", "AstAssign", "AstAugAssign", "AstDefine", "AstNumber",
+    "AstString", "AstAnyName", "AstIdent", "AstAttrName", "AstAttribute",
+    "AstItem", "AstCall", "AstOp", "AstBinOp", "AstUnaryOp",
+]
+
 
 @dataclass
 class AstNode(HasRegion):

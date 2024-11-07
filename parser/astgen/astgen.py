@@ -5,7 +5,7 @@ import sys
 from typing import Callable, overload, TypeVar, TypeAlias
 
 from util import flatten_force, is_strict_subclass
-from .ast_node import *  # TODO: add __all__
+from .ast_node import *
 from .errors import LocatedAstError
 from ..common import region_union, RegionUnionArgT
 from ..cst.base_node import AnyNode, Node, Leaf
