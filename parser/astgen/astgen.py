@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import inspect
 import sys
-from typing import Callable
+from typing import Callable, overload, TypeVar, TypeAlias
 
 from util import flatten_force, is_strict_subclass
 from .ast_node import *  # TODO: add __all__
@@ -40,14 +40,19 @@ ALLOWED_IN_SMT = (  # Note: use with isinstance
 )
 
 
-_AUTOWALK_EXPR_DICT: dict[type[AnyNode], Callable[['AstGen', AnyNode], AstNode]] = {}
+AutowalkerT: TypeAlias = Callable[['AstGen', AnyNode], AstNode]
+CT = TypeVar('CT', bound=AutowalkerT)
+
+_AUTOWALK_EXPR_DICT: dict[type[AnyNode], AutowalkerT] = {}
 
 
-# This should be a member of AstGen but python doesn't like decorators
-# defined in classes being used in the same class. The __takes_args is to tell
-# Pycharm to add parens when using this as a decorator
-# TODO types for this: (@overload?)
-def _register_autowalk_expr(node_type: type[AnyNode] = None, *, __takes_args=1):
+@overload
+def _register_autowalk_expr(node_type: type[AnyNode], /) -> Callable[[CT], CT]: ...
+@overload
+def _register_autowalk_expr(cls: CT, /) -> CT: ...
+
+
+def _register_autowalk_expr(node_type: type[AnyNode] = None, /):
     def decor(fn):
         _AUTOWALK_EXPR_DICT[
             node_type if node_type is not None
@@ -170,53 +175,53 @@ class AstGen:
     def _walk_expr(self, expr: AnyNode) -> AstNode:
         return self.autowalk_expr(expr)
 
-    @_register_autowalk_expr()  # Don't need to pass the type due to black magic
+    @_register_autowalk_expr  # Don't need to pass the type due to black magic
     def _walk_number(self, node: NumberNode) -> AstNumber:
         return AstNumber(node.region)
 
-    @_register_autowalk_expr()
+    @_register_autowalk_expr
     def _walk_string(self, node: StringNode) -> AstString:
         return AstString(node.region)
 
-    @_register_autowalk_expr()
+    @_register_autowalk_expr
     def _walk_autocat(self, node: AutocatNode) -> AstString:
         # TODO: value=... attr!
         return AstString(node.region)
 
-    @_register_autowalk_expr()
+    @_register_autowalk_expr
     def _walk_ident(self, ident: IdentNode) -> AstIdent:
         return AstIdent(ident.region, self.node_str(ident, intern=True))
 
-    @_register_autowalk_expr()
+    @_register_autowalk_expr
     def _walk_attr_name(self, attr_name: AttrNameNode) -> AstAttrName:
         return AstAttrName(
             attr_name.region, self.node_str(attr_name, intern=True))
 
-    @_register_autowalk_expr()
+    @_register_autowalk_expr
     def _walk_getattr(self, node: GetattrNode) -> AstAttribute:
         return AstAttribute(node.region, self._walk_expr(node.target),
                             self._walk_attr_name(node.attr))
 
-    @_register_autowalk_expr()
+    @_register_autowalk_expr
     def _walk_getitem(self, node: GetitemNode) -> AstItem:
         return AstItem(node.region, self._walk_expr(node.target),
                        self._walk_expr(node.item))
 
-    @_register_autowalk_expr()
+    @_register_autowalk_expr
     def _walk_paren(self, node: ParenNode) -> AstNode:
         return self._walk_expr(node.contents)
 
-    @_register_autowalk_expr()
+    @_register_autowalk_expr
     def _walk_call(self, node: CallNode) -> AstCall:
         return AstCall(node.region, self._walk_expr(node.target),
                        [self._walk_expr(a) for a in node.arglist.args])
 
-    @_register_autowalk_expr()
+    @_register_autowalk_expr
     def _walk_unary_op(self, node: UnaryOpNode) -> AstUnaryOp:
         op = node.name.removesuffix('(unary)')
         return AstUnaryOp(node.region, op, self._walk_expr(node.operand))
 
-    @_register_autowalk_expr()
+    @_register_autowalk_expr
     def _walk_binary_op(self, node: BinOpNode) -> AstBinOp:
         return AstBinOp(node.region, node.name, self._walk_expr(node.left),
                         self._walk_expr(node.right))
