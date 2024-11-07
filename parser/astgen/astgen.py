@@ -52,7 +52,8 @@ def _register_autowalk_expr(node_type: type[AnyNode] = None, /):
         return fn
     if node_type is None or isinstance(node_type, type):
         return decor
-    return decor(node_type)
+    f, node_type = node_type, None
+    return decor(f)
 
 
 def _detect_autowalk_type_from_annot(fn):
