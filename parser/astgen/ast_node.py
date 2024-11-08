@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-from enum import StrEnum
+from enum import Enum
 
 from ..common import HasRegion, StrRegion
 
@@ -27,7 +27,7 @@ class AstProgramNode(AstNode):
 
 
 # region ---- <Statements> ----
-class VarDeclType(StrEnum):
+class VarDeclType(Enum):
     LET = 'let'
     GLOBAL = 'global'
 
