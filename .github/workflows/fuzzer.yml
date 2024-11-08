@@ -32,7 +32,7 @@ jobs:
             py_version: "3.11"
           - do_shard: false
             py_version: "3.12"
-    name: ${{ inputs.do_shard && 'Run fuzzer' || format('Run fuzzer (shard {0})', inputs.shard_index) }}
+    name: ${{ inputs.do_shard && format('Run fuzzer (shard {0})', inputs.shard_index) || 'Run fuzzer' }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
