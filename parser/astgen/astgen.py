@@ -6,8 +6,9 @@ from typing import Callable, overload, TypeVar, TypeAlias
 
 from util import flatten_force, is_strict_subclass
 from .ast_node import *
+from .eval_literal import eval_number, eval_string
 from .errors import LocatedAstError
-from ..common import region_union, RegionUnionArgT
+from ..common import region_union, RegionUnionArgT, HasRegion
 from ..cst.base_node import AnyNode, Node, Leaf
 from ..cst.named_node import NamedLeafCls, NamedNodeCls, NamedSizedNodeCls
 from ..cst.nodes import *
@@ -169,16 +170,18 @@ class AstGen:
 
     @_register_autowalk_expr  # Don't need to pass the type due to black magic
     def _walk_number(self, node: NumberNode) -> AstNumber:
-        return AstNumber(node.region)
+        return AstNumber(node.region, eval_number(self.node_str(node)))
 
     @_register_autowalk_expr
     def _walk_string(self, node: StringNode) -> AstString:
-        return AstString(node.region)
+        return AstString(node.region, self._eval_string(node))
+
+    def _eval_string(self, node: StringNode):
+        return eval_string(self.node_str(node), node.region, self.src)
 
     @_register_autowalk_expr
     def _walk_autocat(self, node: AutocatNode) -> AstString:
-        # TODO: value=... attr!
-        return AstString(node.region)
+        return AstString(node.region, ''.join(map(self._eval_string, node.parts)))
 
     @_register_autowalk_expr
     def _walk_ident(self, ident: IdentNode) -> AstIdent:

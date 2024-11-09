@@ -95,12 +95,12 @@ class AstDefine(AstNode):
 # region ---- <Expressions> ----
 @dataclass
 class AstNumber(AstNode):
-    ...  # TODO: value: int? or value_str: str?
+    value: float  # No real point in storing the string representation (can just
 
 
 @dataclass
 class AstString(AstNode):
-    ...  # TODO: value: str, resolve escapes
+    value: str
 
 
 @dataclass
