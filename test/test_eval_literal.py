@@ -18,7 +18,6 @@ class TestEvalStringConsistency(CommonTestCase):
         with self.assertRaises(AstStringParseError) as ctx:
             self._get_result_from_full(r'"\x7"')
         self.assertContains(ctx.exception.msg, "expected 2")
-        print(AstStringParseError.display_region(r'a="\x7";', ctx.exception.region))
         self.assertEqual(3, ctx.exception.region.start)
         self.assertEqual(6, ctx.exception.region.end)
 
