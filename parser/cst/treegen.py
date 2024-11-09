@@ -108,11 +108,7 @@ class TreeGen:
             smt = NopNode(self.tok_region(idx, idx + 1))
             idx += 1
         else:
-            # can only be an expr
-            # todo for now we are assuming that a smt can contain any expr
-            #  but this could/will change in the future
-            #  although it may be better not to deal with it here
-            #  and instead do a post-processing step
+            # can only be an expr/(LHS of) assignment
             smt, idx = self._parse_expr_or_assign(idx)
         return smt, idx
 

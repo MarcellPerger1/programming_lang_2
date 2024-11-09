@@ -156,11 +156,11 @@ class Tokenizer(UsesSrc):
             if self.eof(idx):
                 raise self.err(f"Unexpected EOF in string "
                                f"(expected {q_type} to close string)", idx)
+            # Do just enough parsing here to determine the end of the string
+            #  (resolving escapes is done at the AST stage)
             if self[idx] == q_type:
                 idx += 1
                 return self.add_token(StringToken(StrRegion(start, idx)))
-            # TODO: maybe somehow attach the escapes to the Token
-            #  so it doesn't need to be parsed again
             if self[idx] == '\\':
                 # 1 for the '\', 1 for the next char
                 idx += 2
