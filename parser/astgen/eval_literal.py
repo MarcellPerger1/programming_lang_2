@@ -14,13 +14,16 @@ _MISSING = object()
 
 
 def eval_number(src: str):
-    # All allowed numbers should satisfy float()'s requirements
     try:
-        return float(src)
-    except ValueError as e:
-        raise AssertionError(
-            "There is a bug in tokenizer's _NumberParser. AST received a "
-            "number node that Python can't parser") from e
+        return int(src)  # Check int first (so generated code doesn't have useless `.0`s)
+    except ValueError:
+        # All allowed numbers should satisfy float()'s requirements
+        try:
+            return float(src)
+        except ValueError as e:
+            raise AssertionError(
+                "There is a bug in tokenizer's _NumberParser. AST received a "
+                "number node that Python can't parser") from e
 
 
 def eval_string(s: str, region: StrRegion, full_src: str):

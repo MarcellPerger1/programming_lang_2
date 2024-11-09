@@ -95,12 +95,13 @@ class AstDefine(AstNode):
 # region ---- <Expressions> ----
 @dataclass
 class AstNumber(AstNode):
-    value: float  # No real point in storing the string representation (can just
+    # No real point in storing the string representation (could always StrRegion.resolve())
+    value: float | int
 
 
 @dataclass
 class AstString(AstNode):
-    value: str
+    value: str  # Values with escapes, etc. resolved
 
 
 @dataclass
