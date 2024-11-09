@@ -1,12 +1,27 @@
 import ast
 import sys
 
-from parser.astgen.eval_literal import eval_string
+from parser.astgen.eval_literal import eval_string, AstStringParseError
 from parser.common import StrRegion
 from test.common import CommonTestCase
 
 
 class TestEvalStringConsistency(CommonTestCase):
+    # noinspection PyMethodMayBeStatic
+    def _get_result_from_full(self, s: str):
+        return eval_string(f"{s}", StrRegion(2, 2 + len(s)), f"a={s};")
+
+    def test_basic(self):
+        self.assertEqual('a', self._get_result_from_full("'a'"))
+
+    def test_error(self):
+        with self.assertRaises(AstStringParseError) as ctx:
+            self._get_result_from_full(r'"\x7"')
+        self.assertContains(ctx.exception.msg, "expected 2")
+        print(AstStringParseError.display_region(r'a="\x7";', ctx.exception.region))
+        self.assertEqual(3, ctx.exception.region.start)
+        self.assertEqual(6, ctx.exception.region.end)
+
     def test_py_consistency(self):
         base = r'a\\\a\b\v\f\0\n\rq\t' '\\"' "\\'"
         for x in range(0, 256, 3):
