@@ -62,18 +62,18 @@ def _detect_autowalk_type_from_annot(fn):
     try:
         sig = inspect.signature(fn, eval_str=True, globals=globals())
     except Exception as e:
-        raise TypeError("Cannot automatically determine node_type") from e
+        raise TypeError("Unable to detect node_type (cannot resolve annotations)") from e
     try:
         bound = sig.bind(0, 1)  # simulate call w/ 2 args
     except TypeError as e:
-        raise TypeError("Cannot automatically determine node_type") from e
+        raise TypeError("Unable to detect node_type (signature may be incompatible)") from e
     arg2_name: str = (*bound.arguments,)[1]  # get name it's bound to
     param = sig.parameters[arg2_name]  # lookup the param by name
     if param.kind not in (param.POSITIONAL_ONLY, param.POSITIONAL_OR_KEYWORD):
-        raise TypeError("Cannot automatically determine node_type")
+        raise TypeError("Unable to detect node_type (cannot find second positional arg)")
     if not is_strict_subclass(param.annotation, (
             NamedLeafCls, NamedNodeCls, NamedSizedNodeCls)):
-        raise TypeError("Cannot automatically determine node_type")
+        raise TypeError("Unable to detect node_type (annotation is not a node type)")
     return param.annotation
 
 
