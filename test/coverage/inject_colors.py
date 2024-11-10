@@ -28,8 +28,11 @@ _DETECT_INJECTION_RE = re.compile(r'Copyright \(c\) 202\d Marcell Perger', re.IG
 
 
 def copy_append_unless_present(src: Path, dest: Path):
+    code = readfile(src)
+    assert _DETECT_INJECTION_RE.search(code) is not None, \
+        "Expected magic detection string to be present in source"
     if _DETECT_INJECTION_RE.search(readfile(dest)) is None:
-        append_to_file(dest, '\n' + readfile(src))
+        append_to_file(dest, '\n' + code)
         return True
     return False
 
@@ -44,11 +47,11 @@ def run(cov_dir: Path):
     did_inject_1 = copy_append_unless_present(css_src, css_dest)
     did_inject_2 = copy_append_unless_present(js_src, js_dest)
     if did_inject_1 and did_inject_2:
-        print('Colors injected successfully')
+        print('Colors/fixes injected successfully')
     elif did_inject_1 or did_inject_2:
-        print('Colors partially injected (was already present in some files)')
+        print('Colors/fixes partially injected (was already present in some files)')
     else:
-        print('Colors already present')
+        print('Colors/fixes already present')
 
 
 if __name__ == '__main__':

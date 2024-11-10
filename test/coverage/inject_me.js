@@ -25,7 +25,6 @@ function linkifyRow(tr) {
   let a = nameField.children[0];
   let href = a.href;
   [...tr.children].forEach((el, i) => {  // Copy to avoid problems with iterating while modifying
-    console.log(el, i);
     if(i==0) return;
     if(el.querySelector('td > a')) return;  // Already has an <a>
     let aNew = document.createElement('a');

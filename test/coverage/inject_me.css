@@ -14,35 +14,36 @@ tr:has(.green), .green {
   background-color: #294436 !important;
 }
 
-#index td, #index th {
-  vertical-align: middle;
-}
+
 #index tr.region td {
   border-bottom: none;
-  padding: 0px;  /*anchor gets all the padding*/
+  padding: 0px;  /*<a> gets all the padding*/
 }
 
 #index tr.region:hover, #index tr.region:hover a {
   text-decoration: underline;
 }
 
-#index tr a {
-  text-decoration: none;
-  color: inherit;
-  padding: .25em .5em;
-  width: calc(100% - 1em);
-  height: calc(100% - .5em);
-  display: flex;
-  justify-content: right;
-  align-content: center;
-  align-items: center;
-}
-#index tr td.name a {
-  justify-content: left;
-}
 #index tr {
   height: fit-content;
-}
-#index tr td {
-  height: 100%;
+  td {
+    height: 100%;
+    vertical-align: middle;
+    a {
+      text-decoration: none;
+      color: inherit;
+      padding: .25em .5em;
+      width: calc(100% - 1em);
+      height: calc(100% - .5em);
+      display: flex;
+      align-content: center;
+      align-items: center;
+    }
+  }
+  td a {
+    justify-content: right;
+  }
+  td.name a {
+    justify-content: left;
+  }
 }
