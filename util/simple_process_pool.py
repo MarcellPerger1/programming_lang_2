@@ -167,8 +167,8 @@ class _ProcessWrapper:
         self.waiting_for_task = True
         self.pool.put_task_result(result)
 
-    @classmethod
-    def _worker(cls, tasks_in: mp.Queue, results_out: mp.Queue):
+    @classmethod  # coverage.py can't look inside other processes
+    def _worker(cls, tasks_in: mp.Queue, results_out: mp.Queue):  # pragma: no cover
         while True:
             try:
                 task = tasks_in.get()

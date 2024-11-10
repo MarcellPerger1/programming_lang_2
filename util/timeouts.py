@@ -13,7 +13,8 @@ class TestTimeout(Exception):
     ...
 
 
-def _worker_process(fn, dest, args, kwargs, debug):
+# coverage.py can't look inside other processes
+def _worker_process(fn, dest, args, kwargs, debug):  # pragma: no cover
     if debug >= 1:
         print(f"Worker process running on pid={os.getpid()}")
     if debug >= 2:
