@@ -213,7 +213,9 @@ class SnapshotTestCase(unittest.TestCase):
             if not changes:
                 continue
             with _open_or_create_rw(path) as f:  # do in one go to reduce chance of racing
-                orig = parse_snap(f.read())  # Use most up-to-date value (no cache)
+                content = f.read()  # Read most up-to-date value (no cache)
+                # Only use .strip() in the condition - whitespace may be part of snapshot
+                orig = parse_snap(content) if content.strip() else {}
                 f.seek(0, os.SEEK_SET)  # go to start
                 format_snap(f, cls._apply_file_changes(orig, changes))
                 # Remove extra garbage that may be left over and not fully overwritten
