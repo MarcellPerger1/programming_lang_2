@@ -31,7 +31,7 @@ class TreeGen:
     def __init__(self, tokenizer: Tokenizer):
         self.tokenizer = tokenizer
         self.src = self.tokenizer.src
-        self.result: Node | None = None
+        self.result: ProgramNode | None = None
 
     @property
     def all_tokens(self):

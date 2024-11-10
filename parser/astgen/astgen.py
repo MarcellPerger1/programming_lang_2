@@ -82,8 +82,6 @@ def _detect_autowalk_type_from_annot(fn):
 # e.g. reject `2 + b = q;`, reject `1 + q;` (cannot represent expr in smt)
 # e.g. accept `abc.d[2] = 3` even if there is no `abc`
 class AstGen:
-    root: AnyNode
-
     def __init__(self, cst: CstGen):
         self.cst = cst
         self.src = self.cst.src
@@ -91,12 +89,10 @@ class AstGen:
 
     def walk(self):
         if not self.result:
-            self.root = self.cst.parse()
-            self.result = self._walk_program(self.root)
+            self.result = self._walk_program(self.cst.parse())
         return self.result
 
-    def _walk_program(self, root: AnyNode):
-        assert isinstance(root, ProgramNode)
+    def _walk_program(self, root: ProgramNode):
         return AstProgramNode(root.region, self._walk_block(root.statements))
 
     def _walk_smt(self, smt: AnyNode) -> list[AstNode]:
