@@ -100,11 +100,6 @@ class AstGen:
         return AstProgramNode(root.region, self._walk_block(root.statements))
 
     def _walk_smt(self, smt: AnyNode) -> list[AstNode]:
-        if not isinstance(smt, ALLOWED_IN_SMT):
-            raise self.err(
-                f"Expected statement, not {smt.name!r} expression. Hint: "
-                f"expressions have no side-effect so are not allowed at "
-                f"the root level.", smt.region)
         if isinstance(smt, NopNode):
             return []
         elif isinstance(smt, (LetNode, GlobalNode)):
@@ -147,7 +142,11 @@ class AstGen:
             # Check that it transforms into smt-intrinsic and
             # not expr-intrinsic in codegen/typecheck
             return [self._walk_call(smt)]
-        assert 0, f"Unhandled node class {type(smt).__name__} in _walk_smt"
+        else:
+            raise self.err(
+                f"Expected statement, not {smt.name!r} expression. Hint: "
+                f"expressions have no side-effect so are not allowed at "
+                f"the root level.", smt.region)
 
     def _walk_assign_left(self, lhs: AnyNode) -> AstNode:
         if isinstance(lhs, IdentNode):
@@ -175,9 +174,6 @@ class AstGen:
     @_register_autowalk_expr
     def _walk_string(self, node: StringNode) -> AstString:
         return AstString(node.region, self._eval_string(node))
-
-    def _eval_string(self, node: StringNode):
-        return eval_string(self.node_str(node), node.region, self.src)
 
     @_register_autowalk_expr
     def _walk_autocat(self, node: AutocatNode) -> AstString:
@@ -220,6 +216,9 @@ class AstGen:
     def _walk_binary_op(self, node: BinOpNode) -> AstBinOp:
         return AstBinOp(node.region, node.name, self._walk_expr(node.left),
                         self._walk_expr(node.right))
+
+    def _eval_string(self, node: StringNode):
+        return eval_string(self.node_str(node), node.region, self.src)
 
     def node_str(self, node: HasRegion, intern=False):
         s = node.region.resolve(self.src)
