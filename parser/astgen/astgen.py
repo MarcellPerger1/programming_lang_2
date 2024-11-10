@@ -115,16 +115,7 @@ class AstGen:
             return [AstWhile(smt.region, self._walk_expr(smt.cond),
                              self._walk_block(smt.block))]
         elif isinstance(smt, ConditionalBlock):
-            # Build up else/elseif parts inner-first
-            node = (None if isinstance(smt.else_block, NullElseBlock)
-                    else self._walk_block(smt.else_block.block))
-            for elseif in smt.elseif_blocks:
-                # region is current elseif to end
-                node = AstIf(elseif.region | smt.else_block.region,
-                             self._walk_expr(elseif.cond),
-                             self._walk_block(elseif.block), node)
-            return [AstIf(smt.region, self._walk_expr(smt.if_block.cond),
-                          self._walk_block(smt.if_block.block), node)]
+            return self._walk_conditional(smt)
         elif isinstance(smt, AssignNode):  # Simple assignment
             return [AstAssign(smt.region, self._walk_assign_left(smt.target),
                               self._walk_expr(smt.source))]
@@ -158,6 +149,18 @@ class AstGen:
         if isinstance(lhs, GetattrNode):  # ditto
             return self._walk_getattr(lhs)
         raise self.err(f"Cannot assign to {lhs.name!r} expr", lhs)
+
+    def _walk_conditional(self, smt: ConditionalBlock):
+        # Build up else/elseif parts inner-first
+        node = (None if isinstance(smt.else_block, NullElseBlock)
+                else self._walk_block(smt.else_block.block))
+        for elseif in smt.elseif_blocks:
+            # region is current elseif to end
+            node = AstIf(elseif.region | smt.else_block.region,
+                         self._walk_expr(elseif.cond),
+                         self._walk_block(elseif.block), node)
+        return [AstIf(smt.region, self._walk_expr(smt.if_block.cond),
+                      self._walk_block(smt.if_block.block), node)]
 
     def _walk_block(self, nodes: list[AnyNode] | BlockNode) -> list[AstNode]:
         if isinstance(nodes, BlockNode):
