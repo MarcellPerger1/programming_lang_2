@@ -110,5 +110,9 @@ class CommonTestCase(SnapshotTestCase, TestCaseUtils):
         t = TreeGen(Tokenizer(src))
         self.assertMatchesSnapshot(t.parse())
 
+    def assertAstMatchesSnapshot(self, src: str):
+        t = AstGen(TreeGen(Tokenizer(src)))
+        self.assertMatchesSnapshot(t.parse())
+
     def assertValidParseAST(self, src: str):
         self.assertIsNotNone(AstGen(TreeGen(Tokenizer(src))).parse())

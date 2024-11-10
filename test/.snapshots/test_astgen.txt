@@ -1,0 +1,14 @@
+"2"
+"TestAstGen::test_op_node:0"
+AstProgramNode(StrRegion(0, 6),
+  [
+    AstAssign(StrRegion(0, 5),
+      AstIdent(StrRegion(0, 1), 's'),
+      AstBinOp(StrRegion(2, 5),
+        '+',
+        AstIdent(StrRegion(2, 3), 's'),
+        AstNumber(StrRegion(4, 5), 9)
+      )
+    )
+  ]
+)
