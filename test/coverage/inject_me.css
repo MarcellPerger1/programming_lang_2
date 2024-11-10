@@ -1,0 +1,57 @@
+/* Copyright (c) 2024 Marcell Perger, available under the MIT license, see
+https://github.com/MarcellPerger1/programming_lang_2 */
+
+/* Add fancy colors, works in dark mode, untested in light mode. */
+/* Add fancy colors, works in dark mode, untested in light mode.
+IMPORTANT: do not remove or change the top line! My build scripts that inject
+ colors into the htmlcov depend on it being there (so they don't append this twice)! */
+tr:has(.red), .red {
+  background-color: #593232 !important;
+}
+tr:has(.orange), .orange {
+  background-color: #71632c !important;
+}
+tr:has(.green), .green {
+  background-color: #294436 !important;
+}
+
+#index td, #index th {
+  vertical-align: middle;
+}
+#index tr.region td {
+  border-bottom: none;
+  padding: 0px;
+}
+/*
+#index tr a {
+  text-decoration: none;
+  color: inherit;
+  padding: .25em .5em;
+  width: calc(100% - 1em);
+  display: inline-block;*/
+   /*So width: 100% actually does something*/
+/*}*/
+#index tr.region:hover, #index tr.region:hover a {
+  text-decoration: underline;
+}
+
+#index tr a {
+  text-decoration: none;
+  color: inherit;
+  padding: .25em .5em;
+  width: calc(100% - 1em);
+  height: calc(100% - .5em);
+  display: flex;
+  justify-content: right;
+  align-content: center;
+  align-items: center;
+}
+#index tr td.name a {
+  justify-content: left;
+}
+#index tr {
+  height: fit-content;
+}
+#index tr td {
+  height: 100%;
+}
