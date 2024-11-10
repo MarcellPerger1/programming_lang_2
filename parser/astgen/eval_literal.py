@@ -2,13 +2,8 @@ from __future__ import annotations
 
 import unicodedata
 
-from .errors import LocatedAstError
+from .errors import AstStringParseError
 from ..common import StrRegion
-
-
-class AstStringParseError(LocatedAstError):
-    ...
-
 
 _MISSING = object()
 
@@ -23,7 +18,7 @@ def eval_number(src: str):
         except ValueError as e:
             raise AssertionError(
                 "There is a bug in tokenizer's _NumberParser. AST received a "
-                "number node that Python can't parser") from e
+                "number node that Python can't parse") from e
 
 
 def eval_string(s: str, region: StrRegion, full_src: str):
@@ -58,7 +53,7 @@ class _EvalString:
             elif c == 'N':
                 res, i = self._handle_named_unicode_escape(i, start_i)
             else:
-                raise self.err("Unknown string escape \\{c}", StrRegion(start_i, i))
+                raise self.err(f"Unknown string escape \\{c}", StrRegion(start_i, i))
             chars.append(res)
         return ''.join(chars)
 
@@ -76,7 +71,7 @@ class _EvalString:
             raise self.err(
                 f"Invalid escape in string (expected {length} hex digits)",
                 StrRegion(start_i, i)) from None
-        return (chr(value)), i
+        return chr(value), i
 
     # the Very Special Case: \N{......}
     def _handle_named_unicode_escape(self, i: int, start_i: int):

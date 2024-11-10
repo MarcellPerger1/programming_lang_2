@@ -9,3 +9,7 @@ class AstParseError(BaseParseError):
 
 class LocatedAstError(BaseLocatedError, AstParseError):
     pass
+
+
+class AstStringParseError(LocatedAstError):
+    pass

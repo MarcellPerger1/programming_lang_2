@@ -1,7 +1,8 @@
 import ast
 import sys
 
-from parser.astgen.eval_literal import eval_string, AstStringParseError
+from parser.astgen.eval_literal import eval_string
+from parser.astgen.errors import AstStringParseError
 from parser.common import StrRegion
 from test.common import CommonTestCase
 
