@@ -2,8 +2,7 @@
 https://github.com/MarcellPerger1/programming_lang_2 */
 
 /* Add fancy colors, works in dark mode, untested in light mode. */
-/* Add fancy colors, works in dark mode, untested in light mode.
-IMPORTANT: do not remove or change the top line! My build scripts that inject
+/* IMPORTANT: do not remove or change the top line! My build scripts that inject
  colors into the htmlcov depend on it being there (so they don't append this twice)! */
 tr:has(.red), .red {
   background-color: #593232 !important;
@@ -20,17 +19,9 @@ tr:has(.green), .green {
 }
 #index tr.region td {
   border-bottom: none;
-  padding: 0px;
+  padding: 0px;  /*anchor gets all the padding*/
 }
-/*
-#index tr a {
-  text-decoration: none;
-  color: inherit;
-  padding: .25em .5em;
-  width: calc(100% - 1em);
-  display: inline-block;*/
-   /*So width: 100% actually does something*/
-/*}*/
+
 #index tr.region:hover, #index tr.region:hover a {
   text-decoration: underline;
 }
