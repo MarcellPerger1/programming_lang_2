@@ -102,15 +102,13 @@ class AstGen:
     def _walk_smt(self, smt: AnyNode) -> list[AstNode]:
         if isinstance(smt, NopNode):
             return []
-        elif isinstance(smt, (LetNode, GlobalNode)):
-            decl_tp = VarDeclType.LET if isinstance(smt, LetNode) else VarDeclType.GLOBAL
-            decls = [(self._walk_ident(d.ident),
-                      None if d.value is None else self._walk_expr(d.value))
-                     for d in smt.decls]
-            return [AstDeclNode(smt.region, decl_tp, decls)]
+        elif isinstance(smt, LetNode):
+            return self._walk_var_decl(smt, VarDeclType.LET)
+        elif isinstance(smt, GlobalNode):
+            return self._walk_var_decl(smt, VarDeclType.GLOBAL)
         elif isinstance(smt, RepeatBlock):
             return [AstRepeat(smt.region, self._walk_expr(smt.count),
-                              self._walk_block(smt.block.statements))]
+                              self._walk_block(smt.block))]
         elif isinstance(smt, WhileBlock):
             return [AstWhile(smt.region, self._walk_expr(smt.cond),
                              self._walk_block(smt.block))]
@@ -138,6 +136,12 @@ class AstGen:
                 f"Expected statement, not {smt.name!r} expression. Hint: "
                 f"expressions have no side-effect so are not allowed at "
                 f"the root level.", smt.region)
+
+    def _walk_var_decl(self, smt: LetNode | GlobalNode, decl_tp: VarDeclType):
+        decls = [(self._walk_ident(d.ident),
+                  None if d.value is None else self._walk_expr(d.value))
+                 for d in smt.decls]
+        return [AstDeclNode(smt.region, decl_tp, decls)]
 
     def _walk_assign_left(self, lhs: AnyNode) -> AstNode:
         if isinstance(lhs, IdentNode):
