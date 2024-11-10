@@ -87,7 +87,7 @@ class AstGen:
         self.src = self.cst.src
         self.result: AstNode | None = None
 
-    def walk(self):
+    def parse(self):
         if not self.result:
             self.result = self._walk_program(self.cst.parse())
         return self.result

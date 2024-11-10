@@ -26,7 +26,7 @@ def run(src: str, idx: int = -1, do_ast=True):
         tp1 = time.perf_counter()
         if do_ast:
             ta0 = time.perf_counter()
-            ast_node = AstGen(treegen).walk()
+            ast_node = AstGen(treegen).parse()
             ta1 = time.perf_counter()
 
     tn0 = time.perf_counter()

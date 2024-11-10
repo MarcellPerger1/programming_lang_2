@@ -111,4 +111,4 @@ class CommonTestCase(SnapshotTestCase, TestCaseUtils):
         self.assertMatchesSnapshot(t.parse())
 
     def assertValidParseAST(self, src: str):
-        self.assertIsNotNone(AstGen(TreeGen(Tokenizer(src))).walk())
+        self.assertIsNotNone(AstGen(TreeGen(Tokenizer(src))).parse())

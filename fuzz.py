@@ -30,7 +30,7 @@ def fuzz(buf):
     try:
         string = buf.decode("ascii")
         try:
-            AstGen(TreeGen(Tokenizer(string))).walk()
+            AstGen(TreeGen(Tokenizer(string))).parse()
         except BaseParseError:
             pass
     except UnicodeDecodeError:
