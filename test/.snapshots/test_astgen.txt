@@ -1,5 +1,5 @@
-"2"
-"TestAstGen::test_op_node:0"
+"2","14"
+"TestAstGen::test_op_node:0","TestAstGen::test_nop_node:0"
 AstProgramNode(StrRegion(0, 6),
   [
     AstAssign(StrRegion(0, 5),
@@ -9,6 +9,37 @@ AstProgramNode(StrRegion(0, 6),
         AstIdent(StrRegion(2, 3), 's'),
         AstNumber(StrRegion(4, 5), 9)
       )
+    )
+  ]
+)
+AstProgramNode(StrRegion(0, 66),
+  [
+    AstIf(StrRegion(0, 38),
+      AstNumber(StrRegion(3, 4), 2),
+      [],
+      AstIf(StrRegion(8, 38),
+        AstBinOp(StrRegion(17, 21),
+          '==',
+          AstNumber(StrRegion(17, 18), 1),
+          AstNumber(StrRegion(20, 21), 2)
+        ),
+        [
+          AstCall(StrRegion(24, 27),
+            AstIdent(StrRegion(24, 25), 'a'),
+            []
+          )
+        ],
+        []
+      )
+    ),
+    AstRepeat(StrRegion(41, 53),
+      AstIdent(StrRegion(48, 49), 'a'),
+      []
+    ),
+    AstDefine(StrRegion(54, 65),
+      AstIdent(StrRegion(58, 60), 'fn'),
+      [],
+      []
     )
   ]
 )
