@@ -242,5 +242,6 @@ class AstGen:
             if not issubclass(supertype, AnyNode):
                 continue  # Skip - could be a mixin
             if value := _AUTOWALK_EXPR_DICT.get(supertype):
+                _AUTOWALK_EXPR_DICT[t] = value  # Add it as cache
                 return value
         raise LookupError(f"No such autowalk-er declared ({t})")
