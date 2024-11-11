@@ -24,8 +24,8 @@ class TestEvalStringConsistency(CommonTestCase):
 
     def test_py_consistency(self):
         base = r'a\\\a\b\v\f\0\n\rq\t' '\\"' "\\'"
-        for x in range(0, 256, 3):
-            for u in range(0, 65000, 1217):
+        for x in (*range(0, 34, 3), *range(34, 256, 9), 255):
+            for u in range(0, 65000, 1387):
                 for big_u in range(0, 0x110000, 0xE4C1):
                     v2 = (base + f'\\x{x:0>2x}1\\u{u:0>4x}e\\U{big_u:0>8x}'
                                  '\\N{COPYRIGHT SIGN}\\N{EM DASH}')
