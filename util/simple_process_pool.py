@@ -5,8 +5,8 @@ import multiprocessing as mp
 import multiprocessing.pool
 import os
 import queue
-
 import time
+import weakref
 from dataclasses import dataclass, field
 from typing import Callable
 
@@ -142,13 +142,41 @@ class _ProcessWrapper:
                             daemon=True)
         self.waiting_for_task = True
         self.p.start()
+        # weakref.finalize function is the civilized alternative to __del__
+        # with actually sensible semantics, see
+        # https://docs.python.org/3.11/library/weakref.html#weakref.finalize
+        weakref.finalize(self, self._finalize)
+
+    # (No tracing in finalizers so disable coverage for this)
+    def _finalize(self, timeout=0.008):  # pragma: no cover
+        # Give children 8ms to clean up, instead of rudely GC-ing them out of
+        # existence (ruining coverage by not giving them a chance to run atexit)
+        self.close(timeout, force=True)
 
     def submit(self, task: _Task):
         self.waiting_for_task = False
         self.tasks_in.put(task.inputs)
 
+    def close(self, timeout=0.008, force=False) -> bool:
+        # First, politely ask it to close
+        if not self.p.is_alive():
+            return True
+        self.tasks_in.put(None)
+        self.p.join(timeout)
+        # If it's no longer alive, it did close
+        if not self.p.is_alive():
+            self.p.close()
+            self._close_queues()
+            return True
+        if force:  # (Didn't close)
+            self.kill()
+        return False
+
     def kill(self):
         self.p.kill()
+        self._close_queues()
+
+    def _close_queues(self):
         self.tasks_in.close()
         self.results_out.close()
 
@@ -167,8 +195,8 @@ class _ProcessWrapper:
         self.waiting_for_task = True
         self.pool.put_task_result(result)
 
-    @classmethod  # coverage.py can't look inside other processes
-    def _worker(cls, tasks_in: mp.Queue, results_out: mp.Queue):  # pragma: no cover
+    @classmethod
+    def _worker(cls, tasks_in: mp.Queue, results_out: mp.Queue):
         while True:
             try:
                 task = tasks_in.get()
