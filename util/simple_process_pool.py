@@ -5,6 +5,7 @@ import multiprocessing as mp
 import multiprocessing.pool
 import os
 import queue
+import sys
 import time
 import weakref
 from dataclasses import dataclass, field
@@ -148,16 +149,20 @@ class _ProcessWrapper:
         weakref.finalize(self, self._finalize)
 
     # (No tracing in finalizers so disable coverage for this)
-    def _finalize(self, timeout=0.008):  # pragma: no cover
-        # Give children 8ms to clean up, instead of rudely GC-ing them out of
+    def _finalize(self, timeout=0.050):  # pragma: no cover
+        # Give children 50ms to clean up, instead of rudely GC-ing them out of
         # existence (ruining coverage by not giving them a chance to run atexit)
-        self.close(timeout, force=True)
+        # I know 50ms is a lot, but it takes that long to shut down!
+        #  (Windows processes are very heavyweight!)
+        if not self.close(timeout, force=True):
+            print(f"Process didn't close in {timeout*1000} when being GCed, "
+                  "so was killed.", file=sys.stderr)
 
     def submit(self, task: _Task):
         self.waiting_for_task = False
         self.tasks_in.put(task.inputs)
 
-    def close(self, timeout=0.008, force=False) -> bool:
+    def close(self, timeout=0.050, force=False) -> bool:
         # First, politely ask it to close
         if not self.p.is_alive():
             return True
