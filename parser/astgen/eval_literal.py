@@ -15,7 +15,7 @@ def eval_number(src: str):
         # All allowed numbers should satisfy float()'s requirements
         try:
             return float(src)
-        except ValueError as e:
+        except ValueError as e:  # pragma: no cover
             raise AssertionError(
                 "There is a bug in tokenizer's _NumberParser. AST received a "
                 "number node that Python can't parse") from e
