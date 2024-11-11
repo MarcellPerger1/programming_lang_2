@@ -155,8 +155,8 @@ class _ProcessWrapper:
         # I know 50ms is a lot, but it takes that long to shut down!
         #  (Windows processes are very heavyweight!)
         if not self.close(timeout, force=True):
-            print(f"Process didn't close in {timeout*1000} when being GCed, "
-                  "so was killed.", file=sys.stderr)
+            print(f"Process didn't close in {timeout*1000:.0f}ms when being "
+                  f"GCed, so was killed.", file=sys.stderr)
 
     def submit(self, task: _Task):
         self.waiting_for_task = False
