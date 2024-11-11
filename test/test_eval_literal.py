@@ -1,10 +1,28 @@
 import ast
 import sys
 
-from parser.astgen.eval_literal import eval_string
+from parser.astgen.eval_literal import eval_string, eval_number
 from parser.astgen.errors import AstStringParseError
 from parser.common import StrRegion
 from test.common import CommonTestCase
+
+
+class TestEvalNumber(CommonTestCase):
+    def test_float(self):
+        v = eval_number('.3e-7')
+        self.assertEqual(0.3e-7, v)
+        self.assertIsInstance(v, float)
+        v = eval_number('2.0')
+        self.assertEqual(2.0, v)
+        self.assertIsInstance(v, float)
+
+    def test_int(self):
+        v = eval_number('6')
+        self.assertEqual(6, v)
+        self.assertIsInstance(v, int)
+        v = eval_number('-122')
+        self.assertEqual(-122, v)
+        self.assertIsInstance(v, int)
 
 
 class TestEvalStringConsistency(CommonTestCase):
@@ -15,12 +33,41 @@ class TestEvalStringConsistency(CommonTestCase):
     def test_basic(self):
         self.assertEqual('a', self._get_result_from_full("'a'"))
 
-    def test_error(self):
+    def _assert_err_and_region(self, src: str, region: StrRegion):
         with self.assertRaises(AstStringParseError) as ctx:
-            self._get_result_from_full(r'"\x7"')
-        self.assertContains(ctx.exception.msg, "expected 2")
-        self.assertEqual(3, ctx.exception.region.start)
-        self.assertEqual(6, ctx.exception.region.end)
+            self._get_result_from_full(src)
+        self.assertEqual(region, ctx.exception.region)
+        return ctx.exception.msg
+
+    def test_error(self):
+        msg = self._assert_err_and_region(r'"\x7"', StrRegion(3, 6))
+        self.assertContains(msg, "expected 2")
+        self.assertContains(msg.lower(), "unterminated")
+
+        msg = self._assert_err_and_region(r'"\u4fdq"', StrRegion(3, 9))
+        self.assertContains(msg, "expected 4")
+
+        msg = self._assert_err_and_region(r'"\q"', StrRegion(3, 5))
+        self.assertContains(msg, "Unknown string escape \\q")
+
+        msg = self._assert_err_and_region(r'"\N"', StrRegion(3, 5))
+        self.assertContains(msg, "\\N")
+        self.assertContains(msg.lower(), "expected '{'")
+
+        msg = self._assert_err_and_region(r'"\N7"', StrRegion(3, 5))
+        self.assertContains(msg, "\\N")
+        self.assertContains(msg.lower(), "expected '{'")
+
+        msg = self._assert_err_and_region(r'"\N{}"', StrRegion(3, 7))
+        self.assertContains(msg.lower(), "empty character name")
+
+        msg = self._assert_err_and_region(r'"\N{EM DASH"', StrRegion(3, 3 + 10))
+        self.assertContains(msg.lower(), "terminated by a '}'")
+
+        msg = self._assert_err_and_region(
+            r'"\N{i am not a unicode character and if i existed these '
+            r'tests would break}"', StrRegion(3, 3 + 73))
+        self.assertContains(msg.lower(), "unknown unicode character name")
 
     def test_py_consistency(self):
         base = r'a\\\a\b\v\f\0\n\rq\t' '\\"' "\\'"
