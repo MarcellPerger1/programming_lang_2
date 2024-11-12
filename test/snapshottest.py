@@ -37,9 +37,9 @@ def _safe_cls_name(o: type):
 
 def _open_or_create_rw(path: str):
     try:
-        return open(path, 'r+')
+        return open(path, 'r+', encoding='utf8')
     except FileNotFoundError:
-        return open(path, 'w+')  # Try to create if not exists
+        return open(path, 'w+', encoding='utf8')  # Try to create if not exists
 
 
 _SNAPS_NOT_FOUND_MSG = (
@@ -122,7 +122,7 @@ class SnapshotTestCase(unittest.TestCase):
     @classmethod
     def _read_snapshot_text(cls):
         try:
-            with open(cls.snap_file) as f:
+            with open(cls.snap_file, encoding='utf8') as f:
                 return f.read()
         except FileNotFoundError as orig_err:
             raise SnapshotsNotFound("Snapshot file not found") from orig_err
