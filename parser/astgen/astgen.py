@@ -116,7 +116,7 @@ class AstGen:
         elif isinstance(smt, AssignOpNode):  # Other (aug.) assignment
             return [AstAugAssign(
                 smt.region, smt.name, self._walk_assign_left(smt.target),
-                self._walk_expr(smt.target))]
+                self._walk_expr(smt.source))]
         elif isinstance(smt, DefineNode):
             # Check arg types during name resolution
             decls = [(self._walk_ident(d.type), self._walk_ident(d.ident))
