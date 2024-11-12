@@ -57,22 +57,25 @@ def _register_autowalk_expr(node_type: type[AnyNode] = None, /):
     return decor(f)
 
 
+# A lot of coverage ignoring below in the error cases - we don't test this
+# function specifically (if the autowalking works, this must have worked)
 def _detect_autowalk_type_from_annot(fn):
     # Warning: Introspection black magic below! May contain demons and/or dragons.
     try:
         sig = inspect.signature(fn, eval_str=True, globals=globals())
-    except Exception as e:
+    except Exception as e:  # pragma: no cover
         raise TypeError("Unable to detect node_type (cannot resolve annotations)") from e
     try:
         bound = sig.bind(0, 1)  # simulate call w/ 2 args
-    except TypeError as e:
+    except TypeError as e:  # pragma: no cover
         raise TypeError("Unable to detect node_type (signature may be incompatible)") from e
     arg2_name: str = (*bound.arguments,)[1]  # get name it's bound to
     param = sig.parameters[arg2_name]  # lookup the param by name
-    if param.kind not in (param.POSITIONAL_ONLY, param.POSITIONAL_OR_KEYWORD):
+    if param.kind not in (param.POSITIONAL_ONLY,
+                          param.POSITIONAL_OR_KEYWORD):  # pragma: no cover
         raise TypeError("Unable to detect node_type (cannot find second positional arg)")
     if not is_strict_subclass(param.annotation, (
-            NamedLeafCls, NamedNodeCls, NamedSizedNodeCls)):
+            NamedLeafCls, NamedNodeCls, NamedSizedNodeCls)):  # pragma: no cover
         raise TypeError("Unable to detect node_type (annotation is not a node type)")
     return param.annotation
 
@@ -246,4 +249,4 @@ class AstGen:
             if value := _AUTOWALK_EXPR_DICT.get(supertype):
                 _AUTOWALK_EXPR_DICT[t] = value  # Add it as cache
                 return value
-        raise LookupError(f"No such autowalk-er declared ({t})")
+        raise LookupError(f"No such autowalk-er declared ({t})")  # pragma: no cover
