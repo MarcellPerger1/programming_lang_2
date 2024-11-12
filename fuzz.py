@@ -1,5 +1,6 @@
 import time
 
+from parser.astgen.astgen import AstGen
 from parser.lexer.tokenizer import Tokenizer
 from parser.cst.treegen import TreeGen
 from parser.common.error import BaseParseError
@@ -29,7 +30,7 @@ def fuzz(buf):
     try:
         string = buf.decode("ascii")
         try:
-            TreeGen(Tokenizer(string)).parse()
+            AstGen(TreeGen(Tokenizer(string))).parse()
         except BaseParseError:
             pass
     except UnicodeDecodeError:
@@ -39,11 +40,12 @@ def fuzz(buf):
 if __name__ == '__main__':
     import argparse
     ap = argparse.ArgumentParser("fuzz.py", description="Runs a fuzzer for n iterations")
+    # Use type=float as gh mobile cannot specify integers as workflow args
     ap.add_argument('-n', '--iterations', default=-1,
-                    type=int, help="Number of iterations to run pythonfuzz for")
+                    type=float, help="Number of iterations to run pythonfuzz for")
     ap.add_argument('-i', '--infinite',
                     action='store_const', const=-1, dest='iterations')
     args = ap.parse_args()
 
-    fuzzer = Fuzzer(fuzz, dirs=['./pythonfuzz_corpus'], timeout=30, runs=args.iterations)
+    fuzzer = Fuzzer(fuzz, dirs=['./pythonfuzz_corpus'], timeout=30, runs=int(args.iterations))
     fuzzer.start()

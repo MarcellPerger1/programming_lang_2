@@ -22,13 +22,12 @@ def _worker_process(fn, dest, args, kwargs, debug):
     if dest is None:
         # No error handling channel - let caller handle it (e.g. the pool can handle it)
         return fn(*args, **kwargs)
-    # noinspection PyBroadException
     try:
         result = fn(*args, *kwargs)
     except Exception as e:
         print(e)
         dest.put(e)
-        raise
+        raise  # So Python prints it out properly
     else:
         dest.put(result)
 

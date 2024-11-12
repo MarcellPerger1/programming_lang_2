@@ -31,7 +31,7 @@ class TreeGen:
     def __init__(self, tokenizer: Tokenizer):
         self.tokenizer = tokenizer
         self.src = self.tokenizer.src
-        self.result: Node | None = None
+        self.result: ProgramNode | None = None
 
     @property
     def all_tokens(self):
@@ -70,6 +70,8 @@ class TreeGen:
         return Matcher(pattern, self.tokens, start, self.src).match(want_full)
 
     def parse(self):
+        if self.result:
+            return self.result
         if not self.tokenizer.is_done:
             self.tokenizer.tokenize()
         assert isinstance(self.tokens[-1], EofToken)
@@ -106,11 +108,7 @@ class TreeGen:
             smt = NopNode(self.tok_region(idx, idx + 1))
             idx += 1
         else:
-            # can only be an expr
-            # todo for now we are assuming that a smt can contain any expr
-            #  but this could/will change in the future
-            #  although it may be better not to deal with it here
-            #  and instead do a post-processing step
+            # can only be an expr/(LHS of) assignment
             smt, idx = self._parse_expr_or_assign(idx)
         return smt, idx
 

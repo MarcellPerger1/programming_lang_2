@@ -5,16 +5,34 @@ on:
         description: Number of iterations
         type: number
         default: 250000
+      do_shard:
+        description: Run it on 4 separate machines (`n` on each)?
+        type: boolean
+        default: false
 
 
 jobs:
-  test:
+  fuzzer:
     runs-on: ubuntu-latest
     strategy:
       matrix:
         py_version: 
           - "3.10"
           - "3.11"
+          - "3.12"
+        do_shard:
+          - ${{ inputs.do_shard }}
+        shard_index: [0, 1, 2, 3]
+        exclude:
+          - do_shard: false
+        include:
+          - do_shard: false
+            py_version: "3.10"
+          - do_shard: false
+            py_version: "3.11"
+          - do_shard: false
+            py_version: "3.12"
+    name: ${{ inputs.do_shard && format('Run fuzzer (Python {0}, shard {1})', matrix.py_version, matrix.shard_index) || format('Run fuzzer (Python {0})', matrix.py_version) }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4

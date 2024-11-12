@@ -5,6 +5,9 @@ from __future__ import annotations
 from enum import IntFlag, Enum
 from typing import Sequence, TypeVar
 
+from parser.astgen.ast_node import AstNode
+from parser.astgen.astgen import AstGen
+from parser.astgen.errors import LocatedAstError
 from parser.common.error import BaseParseError
 from parser.common.tree_print import tformat
 from parser.cst.base_node import Leaf, AnyNode, Node
@@ -49,6 +52,7 @@ class CommonTestCase(SnapshotTestCase, TestCaseUtils):
     def setUpClass(cls) -> None:
         cls.format_dispatch.setdefault(Leaf, cls._tree_format)
         cls.format_dispatch.setdefault(Node, cls._tree_format)
+        cls.format_dispatch.setdefault(AstNode, cls._tree_format)
         super().setUpClass()
 
     @classmethod
@@ -78,15 +82,16 @@ class CommonTestCase(SnapshotTestCase, TestCaseUtils):
         if stream & TokenStreamFlag.FULL:
             self.assertTokenStreamEquals(t.tokens, expected, check_regions)
 
-    def assertValidParse(self, src: str):
+    def assertValidParseCST(self, src: str):
         self.assertIsNotNone(TreeGen(Tokenizer(src)).parse())
 
-    def assertFailsGracefully(self, src: str):
+    def assertFailsGracefullyCST(self, src: str):
         t = TreeGen(Tokenizer(src))
-        with self.assertRaises(CstParseError):
+        with self.assertRaises(CstParseError) as ctx:
             t.parse()
+        return ctx.exception
 
-    def assertNotInternalError(self, src: str):
+    def assertNotInternalErrorCST(self, src: str):
         try:
             TreeGen(Tokenizer(src)).parse()
         except BaseParseError:
@@ -94,7 +99,7 @@ class CommonTestCase(SnapshotTestCase, TestCaseUtils):
         self.assertTrue(True)
 
     @classmethod
-    def raiseInternalErrorsOnly(cls, src: str):
+    def raiseInternalErrorsOnlyCST(cls, src: str):
         try:
             TreeGen(Tokenizer(src)).parse()
         except BaseParseError:
@@ -103,6 +108,19 @@ class CommonTestCase(SnapshotTestCase, TestCaseUtils):
             raise
         return None
 
-    def assertTreeMatchesSnapshot(self, src: str):
+    def assertCstMatchesSnapshot(self, src: str):
         t = TreeGen(Tokenizer(src))
         self.assertMatchesSnapshot(t.parse())
+
+    def assertAstMatchesSnapshot(self, src: str):
+        t = AstGen(TreeGen(Tokenizer(src)))
+        self.assertMatchesSnapshot(t.parse())
+
+    def assertValidParseAST(self, src: str):
+        self.assertIsNotNone(AstGen(TreeGen(Tokenizer(src))).parse())
+
+    def assertFailsGracefullyAST(self, src: str):
+        a = AstGen(TreeGen(Tokenizer(src)))
+        with self.assertRaises(LocatedAstError) as ctx:
+            a.parse()
+        return ctx.exception

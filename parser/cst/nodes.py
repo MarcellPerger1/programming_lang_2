@@ -73,7 +73,7 @@ class GetattrNode(NamedSizedNodeCls):
 
     @property
     def attr(self):
-        return self.children[1]
+        return checked_cast(AttrNameNode, self.children[1])
 
 
 class GetitemNode(NamedSizedNodeCls):
@@ -86,7 +86,7 @@ class GetitemNode(NamedSizedNodeCls):
 
     @property
     def item(self):
-        return checked_cast(AttrNameNode, self.children[1])
+        return self.children[1]
 
 
 class ParenNode(NamedSizedNodeCls):

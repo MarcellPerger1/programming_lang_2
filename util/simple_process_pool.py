@@ -5,8 +5,9 @@ import multiprocessing as mp
 import multiprocessing.pool
 import os
 import queue
-
+import sys
 import time
+import weakref
 from dataclasses import dataclass, field
 from typing import Callable
 
@@ -18,7 +19,7 @@ class _Task:
 
 
 @dataclass
-class _PoolApplyTimeoutContext:
+class _TimeoutMgr:
     timeout: float | None = None
     timeout_includes_waiting: bool = False
     start: float = field(default_factory=time.perf_counter)
@@ -63,8 +64,7 @@ class SimpleProcessPool:
         self.processes[i].kill()
         self.processes[i] = _ProcessWrapper(self, i)
 
-    async def _wait_for_empty_process(
-            self, timeout_ctx: _PoolApplyTimeoutContext, interval: float = 0):
+    async def _wait_for_empty_process(self, timeout_ctx: _TimeoutMgr, interval: float = 0):
         while True:
             for i, p in enumerate(self.processes):
                 self._update_process(i)
@@ -91,7 +91,7 @@ class SimpleProcessPool:
     async def apply(self, fn, args=None, kwargs=None, timeout: float = None,
                     interval: float = 0, timeout_includes_waiting=False):
         key, task = self._create_task(fn, args or (), kwargs or {})
-        timeout_ctx = _PoolApplyTimeoutContext(timeout, timeout_includes_waiting)
+        timeout_ctx = _TimeoutMgr(timeout, timeout_includes_waiting)
         proc_idx = await self._submit_to_empty_process(task, timeout_ctx, interval)
         await self._wait_for_task_result(key, proc_idx, timeout_ctx, interval)
         return self._handle_task_result(key)
@@ -112,7 +112,8 @@ class SimpleProcessPool:
             await asyncio.sleep(interval)
             self._update_all_processes()
 
-    async def _submit_to_empty_process(self, task, timeout_ctx, interval):
+    async def _submit_to_empty_process(
+            self, task: _Task, timeout_ctx: _TimeoutMgr, interval: float):
         idx, p = await self._wait_for_empty_process(timeout_ctx, interval)
         p.submit(task)
         timeout_ctx.on_start_task()
@@ -142,13 +143,45 @@ class _ProcessWrapper:
                             daemon=True)
         self.waiting_for_task = True
         self.p.start()
+        # weakref.finalize function is the civilized alternative to __del__
+        # with actually sensible semantics, see
+        # https://docs.python.org/3.11/library/weakref.html#weakref.finalize
+        weakref.finalize(self, self._finalize)
+
+    # (No tracing in finalizers so disable coverage for this)
+    def _finalize(self, timeout=0.050):  # pragma: no cover
+        # Give children 50ms to clean up, instead of rudely GC-ing them out of
+        # existence (ruining coverage by not giving them a chance to run atexit)
+        # I know 50ms is a lot, but it takes that long to shut down!
+        #  (Windows processes are very heavyweight!)
+        if not self.close(timeout, force=True):
+            print(f"Process didn't close in {timeout*1000:.0f}ms when being "
+                  f"GCed, so was killed.", file=sys.stderr)
 
     def submit(self, task: _Task):
         self.waiting_for_task = False
         self.tasks_in.put(task.inputs)
 
+    def close(self, timeout=0.050, force=False) -> bool:
+        # First, politely ask it to close
+        if not self.p.is_alive():
+            return True
+        self.tasks_in.put(None)
+        self.p.join(timeout)
+        # If it's no longer alive, it did close
+        if not self.p.is_alive():
+            self.p.close()
+            self._close_queues()
+            return True
+        if force:  # (Didn't close)
+            self.kill()
+        return False
+
     def kill(self):
         self.p.kill()
+        self._close_queues()
+
+    def _close_queues(self):
         self.tasks_in.close()
         self.results_out.close()
 

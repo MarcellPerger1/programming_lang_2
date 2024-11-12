@@ -37,9 +37,9 @@ def _safe_cls_name(o: type):
 
 def _open_or_create_rw(path: str):
     try:
-        return open(path, 'r+')
+        return open(path, 'r+', encoding='utf8')
     except FileNotFoundError:
-        return open(path, 'w+')  # Try to create if not exists
+        return open(path, 'w+', encoding='utf8')  # Try to create if not exists
 
 
 _SNAPS_NOT_FOUND_MSG = (
@@ -122,7 +122,7 @@ class SnapshotTestCase(unittest.TestCase):
     @classmethod
     def _read_snapshot_text(cls):
         try:
-            with open(cls.snap_file) as f:
+            with open(cls.snap_file, encoding='utf8') as f:
                 return f.read()
         except FileNotFoundError as orig_err:
             raise SnapshotsNotFound("Snapshot file not found") from orig_err
@@ -213,7 +213,9 @@ class SnapshotTestCase(unittest.TestCase):
             if not changes:
                 continue
             with _open_or_create_rw(path) as f:  # do in one go to reduce chance of racing
-                orig = parse_snap(f.read())  # Use most up-to-date value (no cache)
+                content = f.read()  # Read most up-to-date value (no cache)
+                # Only use .strip() in the condition - whitespace may be part of snapshot
+                orig = parse_snap(content) if content.strip() else {}
                 f.seek(0, os.SEEK_SET)  # go to start
                 format_snap(f, cls._apply_file_changes(orig, changes))
                 # Remove extra garbage that may be left over and not fully overwritten

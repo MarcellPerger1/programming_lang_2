@@ -20,7 +20,7 @@ class FuzzerCorpusTestCases(unittest.IsolatedAsyncioTestCase, TestCaseUtils):
     @staticmethod
     @timeout_decor_async(5, debug=0, pool=True)
     def _inner_once(src: str):
-        return CommonTestCase.raiseInternalErrorsOnly(src)
+        return CommonTestCase.raiseInternalErrorsOnlyCST(src)
 
     async def _test_once(self, p: Path):
         with self.subTest(corp=p.name):
@@ -38,12 +38,12 @@ class FuzzerCrashTestCase(CommonTestCase):
     """Tests for crashes caught by pythonfuzz"""
 
     def test_3610f59833246958fff7d5cbc5b23f8c99496c3c8fda3f5606f5b198713cbb95(self):
-        self.assertNotInternalError('. ')
-        self.assertNotInternalError('.')
+        self.assertNotInternalErrorCST('. ')
+        self.assertNotInternalErrorCST('.')
 
     def test_62428fae4dba4c7722b8d7e1b8ad7bbe7a01ac1603e4421d42df7e0c0ad70f85(self):
-        self.assertNotInternalError('!W>W>W9Jd')
-        self.assertNotInternalError('!W>W>W9Jd\x1e')
+        self.assertNotInternalErrorCST('!W>W>W9Jd')
+        self.assertNotInternalErrorCST('!W>W>W9Jd\x1e')
 
 
 class FuzzerTimeoutTestCase(CommonTestCase):
@@ -54,7 +54,7 @@ class FuzzerTimeoutTestCase(CommonTestCase):
     @staticmethod
     @timeout_decor(5, debug=0)
     def inner_a32460d584fd8a20d1e62007db570eaf41342f248e42c21a33780fd976e45290():
-        return CommonTestCase.raiseInternalErrorsOnly('s/*y')
+        return CommonTestCase.raiseInternalErrorsOnlyCST('s/*y')
 
     def test_a32460d584fd8a20d1e62007db570eaf41342f248e42c21a33780fd976e45290(self):
         self.inner_a32460d584fd8a20d1e62007db570eaf41342f248e42c21a33780fd976e45290()
@@ -63,7 +63,7 @@ class FuzzerTimeoutTestCase(CommonTestCase):
     @timeout_decor(5, debug=0)
     def inner_ed988ae940f54542ec54fd3c402a009fe2fdb660bd558d76a3612781a5ef6aa2():
         TreeGen(Tokenizer('a;//')).parse()
-        return CommonTestCase.raiseInternalErrorsOnly('a<//')
+        return CommonTestCase.raiseInternalErrorsOnlyCST('a<//')
 
     def test_ed988ae940f54542ec54fd3c402a009fe2fdb660bd558d76a3612781a5ef6aa2(self):
         self.inner_ed988ae940f54542ec54fd3c402a009fe2fdb660bd558d76a3612781a5ef6aa2()

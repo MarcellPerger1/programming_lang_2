@@ -108,7 +108,7 @@ class BaseLocatedError(BaseParseError, HasRegion):
 
     @classmethod
     def display_region(cls, src: str, region: StrRegion) -> str:
-        if region.end > len(src):  # end exc so ok if 1 beyond string
+        if region.end > len(src):  # end excl so ok if 1 beyond string
             region = d_replace(region, end=len(src))
         if region.start >= len(src):
             region = d_replace(region, start=len(src) - 1)
@@ -116,10 +116,9 @@ class BaseLocatedError(BaseParseError, HasRegion):
             # length=0 but still try to do something
             region = d_replace(region, end=region.start + 1)
         lines = src.splitlines(keepends=True)
-        lengths = tuple(map(len, lines))
-        cum_lengths = tuple(itertools.accumulate(lengths))
+        cum_lengths = tuple(itertools.accumulate(tuple(map(len, lines))))
         start_idx = region.start
-        end_idx = region.end - 1  # its inclusive here
+        end_idx = region.end - 1  # its inclusive below so convert excl -> incl
         start_line, start_col = cls.idx_to_coord(cum_lengths, start_idx)
         end_line, end_col = cls.idx_to_coord(cum_lengths, end_idx)
         if start_line == end_line:
