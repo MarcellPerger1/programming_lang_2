@@ -35,3 +35,11 @@ class TestAstGen(CommonTestCase):
 
     def test_getattr(self):
         self.assertAstMatchesSnapshot('a.b[c].d = e.f[g].h[i];')
+
+    def test_string_basic(self):  # Just test very basic string stuff, rest is in eval_string
+        self.assertAstMatchesSnapshot('a="a\\ueDf9\\t";'
+                                      "b = 'q\\a\\'q';")
+
+    def test_autocat(self):
+        self.assertAstMatchesSnapshot(
+            'b="abc\\U0010f9aB"  ' + "'end1234'\n" + "'\"'" + '"\'";')

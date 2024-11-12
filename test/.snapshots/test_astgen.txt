@@ -1,5 +1,5 @@
-"2","14","45","93","122"
-"TestAstGen::test_op_node:0","TestAstGen::test_nop_node:0","TestAstGen::test_aug_assign:0","TestAstGen::test_getattr:0","TestAstGen::test_while_block:0"
+"2","14","45","93","122","184","192"
+"TestAstGen::test_op_node:0","TestAstGen::test_nop_node:0","TestAstGen::test_aug_assign:0","TestAstGen::test_getattr:0","TestAstGen::test_while_block:0","TestAstGen::test_autocat:0","TestAstGen::test_string_basic:0"
 AstProgramNode(StrRegion(0, 6),
   [
     AstAssign(StrRegion(0, 5),
@@ -179,6 +179,26 @@ AstProgramNode(StrRegion(0, 83),
           ]
         )
       ]
+    )
+  ]
+)
+AstProgramNode(StrRegion(0, 36),
+  [
+    AstAssign(StrRegion(0, 35),
+      AstIdent(StrRegion(0, 1), 'b'),
+      AstString(StrRegion(2, 35), 'abc\U0010f9abend1234"\'')
+    )
+  ]
+)
+AstProgramNode(StrRegion(0, 27),
+  [
+    AstAssign(StrRegion(0, 13),
+      AstIdent(StrRegion(0, 1), 'a'),
+      AstString(StrRegion(2, 13), 'a\uedf9\t')
+    ),
+    AstAssign(StrRegion(14, 26),
+      AstIdent(StrRegion(14, 15), 'b'),
+      AstString(StrRegion(18, 26), "q\x07'q")
     )
   ]
 )
