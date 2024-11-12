@@ -7,6 +7,7 @@ from typing import Sequence, TypeVar
 
 from parser.astgen.ast_node import AstNode
 from parser.astgen.astgen import AstGen
+from parser.astgen.errors import LocatedAstError
 from parser.common.error import BaseParseError
 from parser.common.tree_print import tformat
 from parser.cst.base_node import Leaf, AnyNode, Node
@@ -86,8 +87,9 @@ class CommonTestCase(SnapshotTestCase, TestCaseUtils):
 
     def assertFailsGracefullyCST(self, src: str):
         t = TreeGen(Tokenizer(src))
-        with self.assertRaises(CstParseError):
+        with self.assertRaises(CstParseError) as ctx:
             t.parse()
+        return ctx.exception
 
     def assertNotInternalErrorCST(self, src: str):
         try:
@@ -116,3 +118,9 @@ class CommonTestCase(SnapshotTestCase, TestCaseUtils):
 
     def assertValidParseAST(self, src: str):
         self.assertIsNotNone(AstGen(TreeGen(Tokenizer(src))).parse())
+
+    def assertFailsGracefullyAST(self, src: str):
+        a = AstGen(TreeGen(Tokenizer(src)))
+        with self.assertRaises(LocatedAstError) as ctx:
+            a.parse()
+        return ctx.exception
