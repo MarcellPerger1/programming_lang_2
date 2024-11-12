@@ -43,3 +43,6 @@ class TestAstGen(CommonTestCase):
     def test_autocat(self):
         self.assertAstMatchesSnapshot(
             'b="abc\\U0010f9aB"  ' + "'end1234'\n" + "'\"'" + '"\'";')
+
+    def test_unaries(self):
+        self.assertAstMatchesSnapshot('a=+(-!b==!-+c)-+--r+(-9);')

@@ -1,5 +1,5 @@
-"2","14","45","93","122","184","192"
-"TestAstGen::test_op_node:0","TestAstGen::test_nop_node:0","TestAstGen::test_aug_assign:0","TestAstGen::test_getattr:0","TestAstGen::test_while_block:0","TestAstGen::test_autocat:0","TestAstGen::test_string_basic:0"
+"2","14","45","93","122","184","192","204"
+"TestAstGen::test_op_node:0","TestAstGen::test_nop_node:0","TestAstGen::test_aug_assign:0","TestAstGen::test_getattr:0","TestAstGen::test_while_block:0","TestAstGen::test_autocat:0","TestAstGen::test_string_basic:0","TestAstGen::test_unaries:0"
 AstProgramNode(StrRegion(0, 6),
   [
     AstAssign(StrRegion(0, 5),
@@ -199,6 +199,56 @@ AstProgramNode(StrRegion(0, 27),
     AstAssign(StrRegion(14, 26),
       AstIdent(StrRegion(14, 15), 'b'),
       AstString(StrRegion(18, 26), "q\x07'q")
+    )
+  ]
+)
+AstProgramNode(StrRegion(0, 25),
+  [
+    AstAssign(StrRegion(0, 24),
+      AstIdent(StrRegion(0, 1), 'a'),
+      AstBinOp(StrRegion(2, 24),
+        '+',
+        AstBinOp(StrRegion(2, 19),
+          '-',
+          AstUnaryOp(StrRegion(2, 14),
+            '+',
+            AstBinOp(StrRegion(4, 13),
+              '==',
+              AstUnaryOp(StrRegion(4, 7),
+                '-',
+                AstUnaryOp(StrRegion(5, 7),
+                  '!',
+                  AstIdent(StrRegion(6, 7), 'b')
+                )
+              ),
+              AstUnaryOp(StrRegion(9, 13),
+                '!',
+                AstUnaryOp(StrRegion(10, 13),
+                  '-',
+                  AstUnaryOp(StrRegion(11, 13),
+                    '+',
+                    AstIdent(StrRegion(12, 13), 'c')
+                  )
+                )
+              )
+            )
+          ),
+          AstUnaryOp(StrRegion(15, 19),
+            '+',
+            AstUnaryOp(StrRegion(16, 19),
+              '-',
+              AstUnaryOp(StrRegion(17, 19),
+                '-',
+                AstIdent(StrRegion(18, 19), 'r')
+              )
+            )
+          )
+        ),
+        AstUnaryOp(StrRegion(21, 23),
+          '-',
+          AstNumber(StrRegion(22, 23), 9)
+        )
+      )
     )
   ]
 )
