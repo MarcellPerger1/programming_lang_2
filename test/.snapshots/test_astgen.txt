@@ -1,5 +1,5 @@
-"2","14"
-"TestAstGen::test_op_node:0","TestAstGen::test_nop_node:0"
+"2","14","45","93","122"
+"TestAstGen::test_op_node:0","TestAstGen::test_nop_node:0","TestAstGen::test_aug_assign:0","TestAstGen::test_getattr:0","TestAstGen::test_while_block:0"
 AstProgramNode(StrRegion(0, 6),
   [
     AstAssign(StrRegion(0, 5),
@@ -40,6 +40,145 @@ AstProgramNode(StrRegion(0, 66),
       AstIdent(StrRegion(58, 60), 'fn'),
       [],
       []
+    )
+  ]
+)
+AstProgramNode(StrRegion(0, 88),
+  [
+    AstAugAssign(StrRegion(0, 11),
+      '+=',
+      AstIdent(StrRegion(0, 1), 'a'),
+      AstBinOp(StrRegion(5, 11),
+        '+',
+        AstNumber(StrRegion(5, 6), 6),
+        AstUnaryOp(StrRegion(9, 11),
+          '!',
+          AstNumber(StrRegion(10, 11), 0)
+        )
+      )
+    ),
+    AstAugAssign(StrRegion(13, 41),
+      '**=',
+      AstItem(StrRegion(13, 26),
+        AstAttribute(StrRegion(13, 16),
+          AstIdent(StrRegion(13, 14), 'a'),
+          AstAttrName(StrRegion(15, 16), 'b')
+        ),
+        AstBinOp(StrRegion(17, 25),
+          '..',
+          AstIdent(StrRegion(17, 18), 'c'),
+          AstString(StrRegion(22, 25), 'w')
+        )
+      ),
+      AstCall(StrRegion(31, 41),
+        AstAttribute(StrRegion(31, 39),
+          AstUnaryOp(StrRegion(32, 36),
+            '-',
+            AstNumber(StrRegion(33, 36), 0.5)
+          ),
+          AstAttrName(StrRegion(38, 39), 'q')
+        ),
+        []
+      )
+    ),
+    AstAugAssign(StrRegion(42, 87),
+      '||=',
+      AstAttribute(StrRegion(42, 45),
+        AstIdent(StrRegion(42, 43), 'a'),
+        AstAttrName(StrRegion(44, 45), 'c')
+      ),
+      AstString(StrRegion(50, 87), '\t\x1b[34;45m("default")\x1b[0m\n')
+    )
+  ]
+)
+AstProgramNode(StrRegion(0, 23),
+  [
+    AstAssign(StrRegion(0, 22),
+      AstAttribute(StrRegion(0, 8),
+        AstItem(StrRegion(0, 6),
+          AstAttribute(StrRegion(0, 3),
+            AstIdent(StrRegion(0, 1), 'a'),
+            AstAttrName(StrRegion(2, 3), 'b')
+          ),
+          AstIdent(StrRegion(4, 5), 'c')
+        ),
+        AstAttrName(StrRegion(7, 8), 'd')
+      ),
+      AstItem(StrRegion(11, 22),
+        AstAttribute(StrRegion(11, 19),
+          AstItem(StrRegion(11, 17),
+            AstAttribute(StrRegion(11, 14),
+              AstIdent(StrRegion(11, 12), 'e'),
+              AstAttrName(StrRegion(13, 14), 'f')
+            ),
+            AstIdent(StrRegion(15, 16), 'g')
+          ),
+          AstAttrName(StrRegion(18, 19), 'h')
+        ),
+        AstIdent(StrRegion(20, 21), 'i')
+      )
+    )
+  ]
+)
+AstProgramNode(StrRegion(0, 83),
+  [
+    AstWhile(StrRegion(0, 17),
+      AstBinOp(StrRegion(6, 14),
+        '==',
+        AstUnaryOp(StrRegion(6, 8),
+          '-',
+          AstNumber(StrRegion(7, 8), 1)
+        ),
+        AstBinOp(StrRegion(10, 14),
+          '+',
+          AstNumber(StrRegion(10, 11), 1),
+          AstUnaryOp(StrRegion(12, 14),
+            '-',
+            AstNumber(StrRegion(13, 14), 2)
+          )
+        )
+      ),
+      []
+    ),
+    AstWhile(StrRegion(19, 83),
+      AstBinOp(StrRegion(26, 55),
+        '==',
+        AstCall(StrRegion(26, 39),
+          AstAttribute(StrRegion(26, 37),
+            AstAttribute(StrRegion(26, 31),
+              AstIdent(StrRegion(26, 29), 'Abc'),
+              AstAttrName(StrRegion(30, 31), 'd')
+            ),
+            AstAttrName(StrRegion(32, 37), 'lower')
+          ),
+          []
+        ),
+        AstCall(StrRegion(41, 55),
+          AstAttribute(StrRegion(41, 53),
+            AstItem(StrRegion(41, 47),
+              AstIdent(StrRegion(41, 44), 'msg'),
+              AstNumber(StrRegion(45, 46), 0)
+            ),
+            AstAttrName(StrRegion(48, 53), 'lower')
+          ),
+          []
+        )
+      ),
+      [
+        AstCall(StrRegion(60, 80),
+          AstIdent(StrRegion(60, 65), 'print'),
+          [
+            AstBinOp(StrRegion(66, 79),
+              '..',
+              AstString(StrRegion(66, 69), 'q'),
+              AstItem(StrRegion(73, 79),
+                AstIdent(StrRegion(73, 76), 'msg'),
+                AstNumber(StrRegion(77, 78), 0)
+              )
+            )
+          ]
+        )
+      ]
     )
   ]
 )
