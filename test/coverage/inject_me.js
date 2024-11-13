@@ -36,9 +36,28 @@ function linkifyRow(tr) {
 function linkifyAll() {
   document.querySelectorAll('tr.region').forEach(linkifyRow);
 }
+const PREVENT_FILTER_TOTAL = true;
+function preventUpdateTotalCell(cell) {
+  let target = cell.classList;
+  let oldContains = target.contains.bind(target);
+  function newContains(value) {
+    // Tell the Coverage.py code that all entries in total row are 'name'
+    // so it doesn't try to modify them.
+    if (value == "name") return true;
+    return oldContains(value);
+  }
+  target.contains = newContains;
+}
+function preventUpdateTotal() {
+  [...document.querySelector('table.index').tFoot.rows[0].cells]
+    .forEach(preventUpdateTotalCell);
+}
 addEventListener('load', () => {
   if(document.body.classList.contains("indexfile")) {
     setColors();
     linkifyAll();
+    if(PREVENT_FILTER_TOTAL) {
+      preventUpdateTotal();
+    }
   }
 });
