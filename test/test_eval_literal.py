@@ -69,6 +69,13 @@ class TestEvalStringConsistency(CommonTestCase):
             r'tests would break}"', StrRegion(3, 3 + 73))
         self.assertContains(msg.lower(), "unknown unicode character name")
 
+    def test_bad_hex_escape_2(self):
+        msg = self._assert_err_and_region(r'"\x-9"', StrRegion(3, 7))
+        self.assertContains(msg, "expected 2")
+
+        msg = self._assert_err_and_region(r'"\u 4fe1"', StrRegion(3, 9))
+        self.assertContains(msg, "expected 4")
+
     def test_py_consistency(self):
         base = r'a\\\a\b\v\f\0\n\rq\t' '\\"' "\\'"
         for x in (*range(0, 34, 3), *range(34, 256, 9), 255):

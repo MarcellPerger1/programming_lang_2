@@ -64,13 +64,12 @@ class _EvalString:
             raise self.err(
                 f"Unterminated escape in string (expected {length}"
                 f" hex digits)", StrRegion(start_i, i))
-        try:
-            value = int(digits, base=16)
-        except ValueError:
+        if set(digits) - _HEX_DIGITS:
             # Just report entire escape as error region
             raise self.err(
                 f"Invalid escape in string (expected {length} hex digits)",
-                StrRegion(start_i, i)) from None
+                StrRegion(start_i, i))
+        value = int(digits, base=16)  # Should never be error here (only hex digits here)
         return chr(value), i
 
     # the Very Special Case: \N{......}
@@ -129,3 +128,4 @@ _HEX_ESCAPES = {  # Gives number of extra chars
     'u': 4,  # \uHHHH
     'U': 8,  # \Uhhhhhhhh
 }
+_HEX_DIGITS = set('0123456789abcdef')
