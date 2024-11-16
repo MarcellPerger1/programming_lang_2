@@ -28,6 +28,26 @@ class TreeGenTest(CommonTestCase):
     def test_decl_no_value(self):
         self.assertCstMatchesSnapshot('let b;')
 
+    def test_decl_multiple(self):
+        self.assertCstMatchesSnapshot(
+            'let a, b=9, c,d=w.1[2],e="w",f,g;\n'
+            'global z,y=-11, x , w="a".lower() ,v=o , u, t;')
+    
+    def test_decl(self):
+        self.assertCstMatchesSnapshot('let a,b=1+1,c;\n'
+                                      'global d = "STRING", e;\n'
+                                      'let[] local_list=list(), other;\n'
+                                      'global[] STACK;')
+
+    def test_decl_error(self):
+        err = self.assertFailsGracefullyCST('let[4] = 9;')
+        self.assertEqual(StrRegion(4, 5), err.region)
+        self.assertContains(err.msg.lower(), "expected ']' after '['")
+
+        err = self.assertFailsGracefullyCST('let[')
+        self.assertEqual(StrRegion(4, 4), err.region)
+        self.assertContains(err.msg.lower(), "expected ']' after '['")
+
 
 class TestBlocks(CommonTestCase):
     def test_while(self):
@@ -279,7 +299,7 @@ class TreeGenEofTest(CommonTestCase):
                 self.assertFailsGracefullyCST(f'a{op}b')
 
     def test__bin_op__success(self):
-        for op in set(BINARY_OPS):
+        for op in BINARY_OPS:
             with self.subTest(op=op):
                 self.assertValidParseCST(f'a{op}b;')
 

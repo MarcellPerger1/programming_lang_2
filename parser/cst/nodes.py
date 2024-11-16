@@ -6,19 +6,38 @@ from util import checked_cast
 from .named_node import (NamedLeafCls, NamedNodeCls, NamedSizedNodeCls,
                          register_corresponding_token)
 
-__all__ = [
-    "ProgramNode", "NumberNode", "StringNode", "AnyNameLeaf", "IdentNode",
-    "AttrNameNode", "AutocatNode", "GetattrNode", "GetitemNode", "ParenNode",
-    "CallNode", "CallArgs", "OperatorNode", "UnaryOpNode", "UPlusNode",
-    "UMinusNode", "NotNode", "BinOpNode", "AddNode", "SubNode", "MulNode",
-    "DivNode", "ModNode", "PowNode", "ConcatNode", "AndNode", "OrNode",
+__all__ = [  # Keep these sorted by category
+    "ProgramNode", "AnyNullNode",
+    # Atoms
+    "NumberNode", "StringNode", "AnyNameLeaf", "IdentNode", "AttrNameNode",
+    "AutocatNode",  # autocat is sorta atom-ish (it is in AST but not in CST?)
+    # Item chains
+    "GetattrNode", "GetitemNode", "ParenNode", "CallNode", "CallArgs",
+    # Operators
+    "OperatorNode",
+    "UnaryOpNode", "UPlusNode", "UMinusNode", "NotNode",  # Unary operators
+    # Binary operators
+    "BinOpNode", "AddNode", "SubNode", "MulNode", "DivNode", "ModNode",
+    "PowNode", "ConcatNode", "AndNode", "OrNode",
+    # Comparisons
     "ComparisonNode", "EqNode", "NeqNode", "LtNode", "LeNode", "GtNode",
-    "GeNode", "NopNode", "BlockNode", "ConditionalBlock", "IfBlock",
-    "ElseIfBlock", "ElseBlock", "NullElseBlock", "WhileBlock", "RepeatBlock",
-    "DefineNode", "ArgsDeclNode", "ArgDeclNode", "DeclItemNode", "LetNode",
-    "GlobalNode", "AssignOpNode", "AssignNode", "AddEqNode", "SubEqNode",
-    "MulEqNode", "DivEqNode", "ModEqNode", "PowEqNode", "ConcatEqNode",
-    "AndEqNode", "OrEqNode",
+    "GeNode",
+
+    "NopNode",
+    # Blocks
+    "BlockNode", "WhileBlock", "RepeatBlock",
+    # If blocks & related infrastructure
+    "ConditionalBlock", "IfBlock", "ElseIfBlock", "ElseBlock", "NullElseBlock",
+    # Function Definitions
+    "DefineNode", "ArgsDeclNode", "ArgDeclNode",
+    # Variable declarations & related infrastructure
+    "DeclNode", "DeclItemsList", "DeclItemNode",
+    "DeclScopeNode", "DeclScope_Let", "DeclScope_Global",
+    "DeclTypeNode", "DeclType_Variable", "DeclType_List",
+    # Assignment (regular and augmented)
+    "AssignOpNode", "AssignNode",
+    "AddEqNode", "SubEqNode", "MulEqNode", "DivEqNode", "ModEqNode",
+    "PowEqNode", "ConcatEqNode", "AndEqNode", "OrEqNode",
 ]
 
 
@@ -28,6 +47,11 @@ class ProgramNode(NamedNodeCls):
     @property
     def statements(self):
         return self.children
+
+
+class AnyNullNode(NamedLeafCls):
+    """For nodes whose presence denotes an absence of something in the syntax"""
+    size = 0  # Name should be set by subclasses
 
 
 # region ---- Expressions ----
@@ -305,9 +329,8 @@ class ElseBlock(NamedSizedNodeCls):
         return checked_cast(BlockNode, self.children[0])
 
 
-class NullElseBlock(NamedLeafCls):
+class NullElseBlock(AnyNullNode):
     name = 'else_null'
-    size = 0
 
 
 class WhileBlock(NamedSizedNodeCls):
@@ -375,6 +398,7 @@ class ArgDeclNode(NamedSizedNodeCls):
 # endregion
 
 
+# region ---- Variable Decls ----
 class DeclItemNode(NamedNodeCls):
     name = 'decl_item'  # 1 or 2 (name and optional value)
 
@@ -389,20 +413,58 @@ class DeclItemNode(NamedNodeCls):
         return self.children[1]
 
 
-class LetNode(NamedNodeCls):
-    name = 'let_decl'  # Varargs
+class DeclScopeNode(AnyNullNode):
+    pass
+
+
+# noinspection PyPep8Naming
+class DeclScope_Let(DeclScopeNode):
+    name = 'scope__let'
+
+
+# noinspection PyPep8Naming
+class DeclScope_Global(DeclScopeNode):
+    name = 'scope__global'
+
+
+class DeclTypeNode(AnyNullNode):
+    pass
+
+
+# noinspection PyPep8Naming
+class DeclType_Variable(DeclTypeNode):
+    name = 'decl_type__variable'
+
+
+# noinspection PyPep8Naming
+class DeclType_List(DeclTypeNode):
+    name = 'decl_type__list'
+
+
+class DeclNode(NamedSizedNodeCls):
+    name = 'var_decl'
+    size = 3  # scope, type (value/list), decl_list
+
+    @property
+    def decl_scope(self):
+        return checked_cast(DeclScopeNode, self.children[0])
+
+    @property
+    def decl_type(self):
+        return checked_cast(DeclTypeNode, self.children[1])
+
+    @property
+    def decl_list(self):
+        return cast(DeclItemsList, self.children[2])
+
+
+class DeclItemsList(NamedNodeCls):
+    name = 'decl_list'
 
     @property
     def decls(self):
         return cast(list[DeclItemNode], self.children)
-
-
-class GlobalNode(NamedNodeCls):
-    name = 'global_decl'  # Varargs
-
-    @property
-    def decls(self):
-        return cast(list[DeclItemNode], self.children)
+# endregion
 
 
 # region ---- Assignment-ops ----

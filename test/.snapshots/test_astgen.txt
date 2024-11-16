@@ -1,5 +1,5 @@
-"2","14","45","93","122","184","192","204"
-"TestAstGen::test_op_node:0","TestAstGen::test_nop_node:0","TestAstGen::test_aug_assign:0","TestAstGen::test_getattr:0","TestAstGen::test_while_block:0","TestAstGen::test_autocat:0","TestAstGen::test_string_basic:0","TestAstGen::test_unaries:0"
+"2","14","45","93","122","184","192","204","254"
+"TestAstGen::test_op_node:0","TestAstGen::test_nop_node:0","TestAstGen::test_aug_assign:0","TestAstGen::test_getattr:0","TestAstGen::test_while_block:0","TestAstGen::test_autocat:0","TestAstGen::test_string_basic:0","TestAstGen::test_unaries:0","TestAstGen::test_decl:0"
 AstProgramNode(StrRegion(0, 6),
   [
     AstAssign(StrRegion(0, 5),
@@ -249,6 +249,73 @@ AstProgramNode(StrRegion(0, 25),
           AstNumber(StrRegion(22, 23), 9)
         )
       )
+    )
+  ]
+)
+AstProgramNode(StrRegion(0, 86),
+  [
+    AstDeclNode(StrRegion(0, 13),
+      VarDeclScope.LET,
+      VarType.VARIABLE,
+      [
+        (
+          AstIdent(StrRegion(4, 5), 'a'),
+          None
+        ),
+        (
+          AstIdent(StrRegion(6, 7), 'b'),
+          AstBinOp(StrRegion(8, 11),
+            '+',
+            AstNumber(StrRegion(8, 9), 1),
+            AstNumber(StrRegion(10, 11), 1)
+          )
+        ),
+        (
+          AstIdent(StrRegion(12, 13), 'c'),
+          None
+        )
+      ]
+    ),
+    AstDeclNode(StrRegion(15, 37),
+      VarDeclScope.GLOBAL,
+      VarType.VARIABLE,
+      [
+        (
+          AstIdent(StrRegion(22, 23), 'd'),
+          AstString(StrRegion(26, 34), 'STRING')
+        ),
+        (
+          AstIdent(StrRegion(36, 37), 'e'),
+          None
+        )
+      ]
+    ),
+    AstDeclNode(StrRegion(39, 69),
+      VarDeclScope.LET,
+      VarType.LIST,
+      [
+        (
+          AstIdent(StrRegion(45, 55), 'local_list'),
+          AstCall(StrRegion(56, 62),
+            AstIdent(StrRegion(56, 60), 'list'),
+            []
+          )
+        ),
+        (
+          AstIdent(StrRegion(64, 69), 'other'),
+          None
+        )
+      ]
+    ),
+    AstDeclNode(StrRegion(71, 85),
+      VarDeclScope.GLOBAL,
+      VarType.LIST,
+      [
+        (
+          AstIdent(StrRegion(80, 85), 'STACK'),
+          None
+        )
+      ]
     )
   ]
 )

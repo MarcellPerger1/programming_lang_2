@@ -100,10 +100,8 @@ class TreeGen:
             smt, idx = self._parse_while(idx)
         elif self.matches(idx, KwdM('repeat')):
             smt, idx = self._parse_repeat(idx)
-        elif self.matches(idx, (KwdM('global'), IdentNameToken)):
-            smt, idx = self._parse_global(idx)
-        elif self.matches(idx, (KwdM('let'), IdentNameToken)):
-            smt, idx = self._parse_let(idx)
+        elif self.matches(idx, KwdM('let')) or self.matches(idx, KwdM('global')):
+            smt, idx = self._parse_decl(idx)  # Could be faster ^^
         elif self.matches(idx, SemicolonToken):
             smt = NopNode(self.tok_region(idx, idx + 1))
             idx += 1
@@ -132,37 +130,43 @@ class TreeGen:
         raise self.err(f"Expected semicolon at end of expr, "
                        f"got {self[idx].name}", self[idx])
 
-    def _parse_let(self, start: int) -> tuple[AnyNode, int]:
-        idx = start
-        assert self.matches(idx, KwdM('let'))
-        idx += 1
-        items, idx = self._parse_decl_item_list(idx)
+    def _parse_decl(self, idx: int):         # e.g. global [] foo=bar, ...;
+        scope, idx = self._parse_decl_scope(idx)  # ~~~~~^ ^^ ~~^~~~~~~~~~
+        tp_node, idx = self._parse_decl_sqb_or(idx)     # ~/    |
+        decl_items, idx = self._parse_decl_item_list(idx)  # ~~~/
         if not self.matches(idx, SemicolonToken):
             raise self.err(f"Expected ';' or ',' after decl_item,"
                            f" got {self[idx].name}", self[idx])
         idx += 1
-        return LetNode(self.tok_region(start, idx), None, items), idx
+        return self.node_from_children(DeclNode, [scope, tp_node, decl_items]), idx
 
-    def _parse_decl_item_list(self, idx):
+    def _parse_decl_scope(self, idx: int) -> tuple[AnyNode, int]:
+        if self.matches(idx, KwdM('let')):
+            return DeclScope_Let.of(self[idx]), idx + 1
+        if self.matches(idx, KwdM('global')):
+            return DeclScope_Global.of(self[idx]), idx + 1
+        assert 0, "Unknown decl scope"
+
+    def _parse_decl_sqb_or(self, idx: int) -> tuple[AnyNode, int]:
+        if not isinstance(self[idx], LSqBracket):
+            loc = self[idx - 1].region.end  # Have to give region, so say char after 'let'
+            return DeclType_Variable(StrRegion(loc, loc)), idx
+        sqb_start = idx
+        idx += 1
+        if not isinstance(self[idx], RSqBracket):
+            raise self.err("Expected ']' after '[' in list decl (eg. 'let[] a;')", self[idx])
+        idx += 1
+        return DeclType_List(self.tok_region(sqb_start, idx)), idx
+
+    def _parse_decl_item_list(self, idx: int) -> tuple[AnyNode, int]:
         items = []
         while True:
-            glob, idx = self._parse_decl_item(idx)
-            items.append(glob)
+            item, idx = self._parse_decl_item(idx)
+            items.append(item)
             if not self.matches(idx, CommaToken):
                 break
             idx += 1
-        return items, idx
-
-    def _parse_global(self, start: int) -> tuple[AnyNode, int]:
-        idx = start
-        assert self.matches(idx, KwdM('global'))
-        idx += 1
-        items, idx = self._parse_decl_item_list(idx)
-        if not self.matches(idx, SemicolonToken):
-            raise self.err(f"Expected ';' or ',' after decl_item,"
-                           f" got {self[idx].name}", self[idx])
-        idx += 1
-        return GlobalNode(self.tok_region(start, idx), None, items), idx
+        return self.node_from_children(DeclItemsList, items), idx
 
     def _parse_decl_item(self, start: int) -> tuple[AnyNode, int]:
         idx = start

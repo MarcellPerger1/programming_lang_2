@@ -26,8 +26,7 @@ ALLOWED_IN_SMT = (  # Note: use with isinstance
     WhileBlock,
     RepeatBlock,
     DefineNode,
-    LetNode,
-    GlobalNode,
+    DeclNode,
     AssignOpNode,
 )
 
@@ -101,10 +100,8 @@ class AstGen:
     def _walk_smt(self, smt: AnyNode) -> list[AstNode]:
         if isinstance(smt, NopNode):
             return []
-        elif isinstance(smt, LetNode):
-            return self._walk_var_decl(smt, VarDeclType.LET)
-        elif isinstance(smt, GlobalNode):
-            return self._walk_var_decl(smt, VarDeclType.GLOBAL)
+        elif isinstance(smt, DeclNode):
+            return self._walk_var_decl(smt)
         elif isinstance(smt, RepeatBlock):
             return [AstRepeat(smt.region, self._walk_expr(smt.count),
                               self._walk_block(smt.block))]
@@ -136,11 +133,15 @@ class AstGen:
                 f"expressions have no side-effect so are not allowed at "
                 f"the root level.", smt.region)
 
-    def _walk_var_decl(self, smt: LetNode | GlobalNode, decl_tp: VarDeclType):
+    def _walk_var_decl(self, smt: DeclNode):
         decls = [(self._walk_ident(d.ident),
                   None if d.value is None else self._walk_expr(d.value))
-                 for d in smt.decls]
-        return [AstDeclNode(smt.region, decl_tp, decls)]
+                 for d in smt.decl_list.decls]
+        scope = (VarDeclScope.LET if isinstance(smt.decl_scope, DeclScope_Let)
+                 else VarDeclScope.GLOBAL)
+        tp = (VarType.LIST if isinstance(smt.decl_type, DeclType_List)
+              else VarType.VARIABLE)
+        return [AstDeclNode(smt.region, scope, tp, decls)]
 
     def _walk_assign_left(self, lhs: AnyNode) -> AstNode:
         if isinstance(lhs, IdentNode):

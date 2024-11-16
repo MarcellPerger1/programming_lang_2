@@ -6,10 +6,10 @@ from enum import Enum
 from ..common import HasRegion, StrRegion
 
 __all__ = [
-    "AstNode", "AstProgramNode", "VarDeclType", "AstDeclNode", "AstRepeat",
-    "AstIf", "AstWhile", "AstAssign", "AstAugAssign", "AstDefine", "AstNumber",
-    "AstString", "AstAnyName", "AstIdent", "AstAttrName", "AstAttribute",
-    "AstItem", "AstCall", "AstOp", "AstBinOp", "AstUnaryOp",
+    "AstNode", "AstProgramNode", "VarDeclScope", "VarType", "AstDeclNode",
+    "AstRepeat", "AstIf", "AstWhile", "AstAssign", "AstAugAssign", "AstDefine",
+    "AstNumber", "AstString", "AstAnyName", "AstIdent", "AstAttrName",
+    "AstAttribute", "AstItem", "AstCall", "AstOp", "AstBinOp", "AstUnaryOp",
 ]
 
 
@@ -27,15 +27,21 @@ class AstProgramNode(AstNode):
 
 
 # region ---- <Statements> ----
-class VarDeclType(Enum):
+class VarDeclScope(Enum):
     LET = 'let'
     GLOBAL = 'global'
+
+
+class VarType(Enum):
+    VARIABLE = 'variable'
+    LIST = 'list'
 
 
 @dataclass
 class AstDeclNode(AstNode):
     name = 'var_decl'
-    type: VarDeclType
+    scope: VarDeclScope
+    type: VarType
     decls: list[tuple[AstIdent, AstNode | None]]
 
 

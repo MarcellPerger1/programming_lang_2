@@ -1,10 +1,14 @@
 "2"
 "MyTestCase::test_empty_expr_issue_04:0"
 ProgramNode(StrRegion(0, 9), [
-  LetNode(StrRegion(0, 8), [
-    DeclItemNode(StrRegion(4, 7), [
-      IdentNode(StrRegion(4, 5)),
-      NumberNode(StrRegion(6, 7))
+  DeclNode(StrRegion(0, 7), [
+    DeclScope_Let(StrRegion(0, 3)),
+    DeclType_Variable(StrRegion(3, 3)),
+    DeclItemsList(StrRegion(4, 7), [
+      DeclItemNode(StrRegion(4, 7), [
+        IdentNode(StrRegion(4, 5)),
+        NumberNode(StrRegion(6, 7))
+      ])
     ])
   ]),
   NopNode(StrRegion(8, 9))

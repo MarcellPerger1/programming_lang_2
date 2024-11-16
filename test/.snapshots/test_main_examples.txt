@@ -1,4 +1,4 @@
-"2","90","175","666","1042"
+"2","90","179","670","1094"
 "TestMain::test_example_0:tokens","TestMain::test_example_0:cst","TestMain::test_example_1:tokens","TestMain::test_example_1:cst","TestMain::test_example_1:ast"
 [IdentNameToken(region=StrRegion(start=0, end=3)),
  WhitespaceToken(region=StrRegion(start=3, end=4)),
@@ -89,16 +89,20 @@
  WhitespaceToken(region=StrRegion(start=144, end=145)),
  EofToken(region=StrRegion(start=145, end=145))]
 ProgramNode(StrRegion(0, 144), [
-  LetNode(StrRegion(0, 18), [
-    DeclItemNode(StrRegion(4, 17), [
-      IdentNode(StrRegion(4, 5)),
-      AddNode(StrRegion(8, 17), [
-        MulNode(StrRegion(8, 11), [
-          NumberNode(StrRegion(8, 9)),
-          NumberNode(StrRegion(10, 11))
-        ]),
-        UMinusNode(StrRegion(15, 17), [
-          NumberNode(StrRegion(16, 17))
+  DeclNode(StrRegion(0, 17), [
+    DeclScope_Let(StrRegion(0, 3)),
+    DeclType_Variable(StrRegion(3, 3)),
+    DeclItemsList(StrRegion(4, 17), [
+      DeclItemNode(StrRegion(4, 17), [
+        IdentNode(StrRegion(4, 5)),
+        AddNode(StrRegion(8, 17), [
+          MulNode(StrRegion(8, 11), [
+            NumberNode(StrRegion(8, 9)),
+            NumberNode(StrRegion(10, 11))
+          ]),
+          UMinusNode(StrRegion(15, 17), [
+            NumberNode(StrRegion(16, 17))
+          ])
         ])
       ])
     ])
@@ -665,19 +669,27 @@ ProgramNode(StrRegion(0, 144), [
  WhitespaceToken(region=StrRegion(start=1685, end=1688)),
  EofToken(region=StrRegion(start=1688, end=1688))]
 ProgramNode(StrRegion(0, 1685), [
-  GlobalNode(StrRegion(0, 22), [
-    DeclItemNode(StrRegion(7, 21), [
-      IdentNode(StrRegion(7, 12)),
-      CallNode(StrRegion(15, 21), [
-        IdentNode(StrRegion(15, 19)),
-        CallArgs(StrRegion(19, 21), [])
+  DeclNode(StrRegion(0, 21), [
+    DeclScope_Global(StrRegion(0, 6)),
+    DeclType_Variable(StrRegion(6, 6)),
+    DeclItemsList(StrRegion(7, 21), [
+      DeclItemNode(StrRegion(7, 21), [
+        IdentNode(StrRegion(7, 12)),
+        CallNode(StrRegion(15, 21), [
+          IdentNode(StrRegion(15, 19)),
+          CallArgs(StrRegion(19, 21), [])
+        ])
       ])
     ])
   ]),
-  GlobalNode(StrRegion(23, 49), [
-    DeclItemNode(StrRegion(30, 48), [
-      IdentNode(StrRegion(30, 40)),
-      IdentNode(StrRegion(43, 48))
+  DeclNode(StrRegion(23, 48), [
+    DeclScope_Global(StrRegion(23, 29)),
+    DeclType_Variable(StrRegion(29, 29)),
+    DeclItemsList(StrRegion(30, 48), [
+      DeclItemNode(StrRegion(30, 48), [
+        IdentNode(StrRegion(30, 40)),
+        IdentNode(StrRegion(43, 48))
+      ])
     ])
   ]),
   DefineNode(StrRegion(398, 508), [
@@ -724,23 +736,31 @@ ProgramNode(StrRegion(0, 1685), [
     IdentNode(StrRegion(514, 521)),
     ArgsDeclNode(StrRegion(521, 523), []),
     BlockNode(StrRegion(524, 660), [
-      LetNode(StrRegion(530, 555), [
-        DeclItemNode(StrRegion(534, 554), [
-          IdentNode(StrRegion(534, 541)),
-          CallNode(StrRegion(544, 554), [
-            IdentNode(StrRegion(544, 547)),
-            CallArgs(StrRegion(547, 554), [
-              IdentNode(StrRegion(548, 553))
+      DeclNode(StrRegion(530, 554), [
+        DeclScope_Let(StrRegion(530, 533)),
+        DeclType_Variable(StrRegion(533, 533)),
+        DeclItemsList(StrRegion(534, 554), [
+          DeclItemNode(StrRegion(534, 554), [
+            IdentNode(StrRegion(534, 541)),
+            CallNode(StrRegion(544, 554), [
+              IdentNode(StrRegion(544, 547)),
+              CallArgs(StrRegion(547, 554), [
+                IdentNode(StrRegion(548, 553))
+              ])
             ])
           ])
         ])
       ]),
-      LetNode(StrRegion(560, 586), [
-        DeclItemNode(StrRegion(564, 585), [
-          IdentNode(StrRegion(564, 568)),
-          GetitemNode(StrRegion(571, 585), [
-            IdentNode(StrRegion(571, 576)),
-            IdentNode(StrRegion(577, 584))
+      DeclNode(StrRegion(560, 585), [
+        DeclScope_Let(StrRegion(560, 563)),
+        DeclType_Variable(StrRegion(563, 563)),
+        DeclItemsList(StrRegion(564, 585), [
+          DeclItemNode(StrRegion(564, 585), [
+            IdentNode(StrRegion(564, 568)),
+            GetitemNode(StrRegion(571, 585), [
+              IdentNode(StrRegion(571, 576)),
+              IdentNode(StrRegion(577, 584))
+            ])
           ])
         ])
       ]),
@@ -773,23 +793,31 @@ ProgramNode(StrRegion(0, 1685), [
     IdentNode(StrRegion(666, 675)),
     ArgsDeclNode(StrRegion(675, 677), []),
     BlockNode(StrRegion(678, 972), [
-      LetNode(StrRegion(797, 822), [
-        DeclItemNode(StrRegion(801, 821), [
-          IdentNode(StrRegion(801, 808)),
-          CallNode(StrRegion(811, 821), [
-            IdentNode(StrRegion(811, 814)),
-            CallArgs(StrRegion(814, 821), [
-              IdentNode(StrRegion(815, 820))
+      DeclNode(StrRegion(797, 821), [
+        DeclScope_Let(StrRegion(797, 800)),
+        DeclType_Variable(StrRegion(800, 800)),
+        DeclItemsList(StrRegion(801, 821), [
+          DeclItemNode(StrRegion(801, 821), [
+            IdentNode(StrRegion(801, 808)),
+            CallNode(StrRegion(811, 821), [
+              IdentNode(StrRegion(811, 814)),
+              CallArgs(StrRegion(814, 821), [
+                IdentNode(StrRegion(815, 820))
+              ])
             ])
           ])
         ])
       ]),
-      LetNode(StrRegion(827, 853), [
-        DeclItemNode(StrRegion(831, 852), [
-          IdentNode(StrRegion(831, 835)),
-          GetitemNode(StrRegion(838, 852), [
-            IdentNode(StrRegion(838, 843)),
-            IdentNode(StrRegion(844, 851))
+      DeclNode(StrRegion(827, 852), [
+        DeclScope_Let(StrRegion(827, 830)),
+        DeclType_Variable(StrRegion(830, 830)),
+        DeclItemsList(StrRegion(831, 852), [
+          DeclItemNode(StrRegion(831, 852), [
+            IdentNode(StrRegion(831, 835)),
+            GetitemNode(StrRegion(838, 852), [
+              IdentNode(StrRegion(838, 843)),
+              IdentNode(StrRegion(844, 851))
+            ])
           ])
         ])
       ]),
@@ -838,15 +866,19 @@ ProgramNode(StrRegion(0, 1685), [
     IdentNode(StrRegion(978, 985)),
     ArgsDeclNode(StrRegion(985, 987), []),
     BlockNode(StrRegion(988, 1100), [
-      LetNode(StrRegion(994, 1024), [
-        DeclItemNode(StrRegion(998, 1023), [
-          IdentNode(StrRegion(998, 1003)),
-          GetitemNode(StrRegion(1006, 1023), [
-            IdentNode(StrRegion(1006, 1011)),
-            CallNode(StrRegion(1012, 1022), [
-              IdentNode(StrRegion(1012, 1015)),
-              CallArgs(StrRegion(1015, 1022), [
-                IdentNode(StrRegion(1016, 1021))
+      DeclNode(StrRegion(994, 1023), [
+        DeclScope_Let(StrRegion(994, 997)),
+        DeclType_Variable(StrRegion(997, 997)),
+        DeclItemsList(StrRegion(998, 1023), [
+          DeclItemNode(StrRegion(998, 1023), [
+            IdentNode(StrRegion(998, 1003)),
+            GetitemNode(StrRegion(1006, 1023), [
+              IdentNode(StrRegion(1006, 1011)),
+              CallNode(StrRegion(1012, 1022), [
+                IdentNode(StrRegion(1012, 1015)),
+                CallArgs(StrRegion(1015, 1022), [
+                  IdentNode(StrRegion(1016, 1021))
+                ])
               ])
             ])
           ])
@@ -881,34 +913,46 @@ ProgramNode(StrRegion(0, 1685), [
     IdentNode(StrRegion(1106, 1117)),
     ArgsDeclNode(StrRegion(1117, 1119), []),
     BlockNode(StrRegion(1120, 1358), [
-      LetNode(StrRegion(1126, 1151), [
-        DeclItemNode(StrRegion(1130, 1150), [
-          IdentNode(StrRegion(1130, 1137)),
-          CallNode(StrRegion(1140, 1150), [
-            IdentNode(StrRegion(1140, 1143)),
-            CallArgs(StrRegion(1143, 1150), [
-              IdentNode(StrRegion(1144, 1149))
+      DeclNode(StrRegion(1126, 1150), [
+        DeclScope_Let(StrRegion(1126, 1129)),
+        DeclType_Variable(StrRegion(1129, 1129)),
+        DeclItemsList(StrRegion(1130, 1150), [
+          DeclItemNode(StrRegion(1130, 1150), [
+            IdentNode(StrRegion(1130, 1137)),
+            CallNode(StrRegion(1140, 1150), [
+              IdentNode(StrRegion(1140, 1143)),
+              CallArgs(StrRegion(1143, 1150), [
+                IdentNode(StrRegion(1144, 1149))
+              ])
             ])
           ])
         ])
       ]),
-      LetNode(StrRegion(1156, 1182), [
-        DeclItemNode(StrRegion(1160, 1181), [
-          IdentNode(StrRegion(1160, 1164)),
-          GetitemNode(StrRegion(1167, 1181), [
-            IdentNode(StrRegion(1167, 1172)),
-            IdentNode(StrRegion(1173, 1180))
+      DeclNode(StrRegion(1156, 1181), [
+        DeclScope_Let(StrRegion(1156, 1159)),
+        DeclType_Variable(StrRegion(1159, 1159)),
+        DeclItemsList(StrRegion(1160, 1181), [
+          DeclItemNode(StrRegion(1160, 1181), [
+            IdentNode(StrRegion(1160, 1164)),
+            GetitemNode(StrRegion(1167, 1181), [
+              IdentNode(StrRegion(1167, 1172)),
+              IdentNode(StrRegion(1173, 1180))
+            ])
           ])
         ])
       ]),
-      LetNode(StrRegion(1187, 1217), [
-        DeclItemNode(StrRegion(1191, 1216), [
-          IdentNode(StrRegion(1191, 1195)),
-          GetitemNode(StrRegion(1198, 1216), [
-            IdentNode(StrRegion(1198, 1203)),
-            SubNode(StrRegion(1204, 1215), [
-              IdentNode(StrRegion(1204, 1211)),
-              NumberNode(StrRegion(1214, 1215))
+      DeclNode(StrRegion(1187, 1216), [
+        DeclScope_Let(StrRegion(1187, 1190)),
+        DeclType_Variable(StrRegion(1190, 1190)),
+        DeclItemsList(StrRegion(1191, 1216), [
+          DeclItemNode(StrRegion(1191, 1216), [
+            IdentNode(StrRegion(1191, 1195)),
+            GetitemNode(StrRegion(1198, 1216), [
+              IdentNode(StrRegion(1198, 1203)),
+              SubNode(StrRegion(1204, 1215), [
+                IdentNode(StrRegion(1204, 1211)),
+                NumberNode(StrRegion(1214, 1215))
+              ])
             ])
           ])
         ])
@@ -957,23 +1001,31 @@ ProgramNode(StrRegion(0, 1685), [
     IdentNode(StrRegion(1364, 1372)),
     ArgsDeclNode(StrRegion(1372, 1374), []),
     BlockNode(StrRegion(1375, 1671), [
-      LetNode(StrRegion(1455, 1480), [
-        DeclItemNode(StrRegion(1459, 1479), [
-          IdentNode(StrRegion(1459, 1466)),
-          CallNode(StrRegion(1469, 1479), [
-            IdentNode(StrRegion(1469, 1472)),
-            CallArgs(StrRegion(1472, 1479), [
-              IdentNode(StrRegion(1473, 1478))
+      DeclNode(StrRegion(1455, 1479), [
+        DeclScope_Let(StrRegion(1455, 1458)),
+        DeclType_Variable(StrRegion(1458, 1458)),
+        DeclItemsList(StrRegion(1459, 1479), [
+          DeclItemNode(StrRegion(1459, 1479), [
+            IdentNode(StrRegion(1459, 1466)),
+            CallNode(StrRegion(1469, 1479), [
+              IdentNode(StrRegion(1469, 1472)),
+              CallArgs(StrRegion(1472, 1479), [
+                IdentNode(StrRegion(1473, 1478))
+              ])
             ])
           ])
         ])
       ]),
-      LetNode(StrRegion(1485, 1507), [
-        DeclItemNode(StrRegion(1489, 1506), [
-          IdentNode(StrRegion(1489, 1493)),
-          GetitemNode(StrRegion(1496, 1506), [
-            IdentNode(StrRegion(1496, 1501)),
-            IdentNode(StrRegion(1502, 1505))
+      DeclNode(StrRegion(1485, 1506), [
+        DeclScope_Let(StrRegion(1485, 1488)),
+        DeclType_Variable(StrRegion(1488, 1488)),
+        DeclItemsList(StrRegion(1489, 1506), [
+          DeclItemNode(StrRegion(1489, 1506), [
+            IdentNode(StrRegion(1489, 1493)),
+            GetitemNode(StrRegion(1496, 1506), [
+              IdentNode(StrRegion(1496, 1501)),
+              IdentNode(StrRegion(1502, 1505))
+            ])
           ])
         ])
       ]),
@@ -1042,8 +1094,9 @@ ProgramNode(StrRegion(0, 1685), [
 ])
 AstProgramNode(StrRegion(0, 1685),
   [
-    AstDeclNode(StrRegion(0, 22),
-      VarDeclType.GLOBAL,
+    AstDeclNode(StrRegion(0, 21),
+      VarDeclScope.GLOBAL,
+      VarType.VARIABLE,
       [
         (
           AstIdent(StrRegion(7, 12), 'stack'),
@@ -1054,8 +1107,9 @@ AstProgramNode(StrRegion(0, 1685),
         )
       ]
     ),
-    AstDeclNode(StrRegion(23, 49),
-      VarDeclType.GLOBAL,
+    AstDeclNode(StrRegion(23, 48),
+      VarDeclScope.GLOBAL,
+      VarType.VARIABLE,
       [
         (
           AstIdent(StrRegion(30, 40), 'COUNT_REFS'),
@@ -1105,8 +1159,9 @@ AstProgramNode(StrRegion(0, 1685),
       AstIdent(StrRegion(514, 521), 'ROT_TWO'),
       [],
       [
-        AstDeclNode(StrRegion(530, 555),
-          VarDeclType.LET,
+        AstDeclNode(StrRegion(530, 554),
+          VarDeclScope.LET,
+          VarType.VARIABLE,
           [
             (
               AstIdent(StrRegion(534, 541), 'tos_idx'),
@@ -1119,8 +1174,9 @@ AstProgramNode(StrRegion(0, 1685),
             )
           ]
         ),
-        AstDeclNode(StrRegion(560, 586),
-          VarDeclType.LET,
+        AstDeclNode(StrRegion(560, 585),
+          VarDeclScope.LET,
+          VarType.VARIABLE,
           [
             (
               AstIdent(StrRegion(564, 568), 'tos0'),
@@ -1162,8 +1218,9 @@ AstProgramNode(StrRegion(0, 1685),
       AstIdent(StrRegion(666, 675), 'ROT_THREE'),
       [],
       [
-        AstDeclNode(StrRegion(797, 822),
-          VarDeclType.LET,
+        AstDeclNode(StrRegion(797, 821),
+          VarDeclScope.LET,
+          VarType.VARIABLE,
           [
             (
               AstIdent(StrRegion(801, 808), 'tos_idx'),
@@ -1176,8 +1233,9 @@ AstProgramNode(StrRegion(0, 1685),
             )
           ]
         ),
-        AstDeclNode(StrRegion(827, 853),
-          VarDeclType.LET,
+        AstDeclNode(StrRegion(827, 852),
+          VarDeclScope.LET,
+          VarType.VARIABLE,
           [
             (
               AstIdent(StrRegion(831, 835), 'tos0'),
@@ -1237,8 +1295,9 @@ AstProgramNode(StrRegion(0, 1685),
       AstIdent(StrRegion(978, 985), 'DUP_TOP'),
       [],
       [
-        AstDeclNode(StrRegion(994, 1024),
-          VarDeclType.LET,
+        AstDeclNode(StrRegion(994, 1023),
+          VarDeclScope.LET,
+          VarType.VARIABLE,
           [
             (
               AstIdent(StrRegion(998, 1003), 'value'),
@@ -1281,8 +1340,9 @@ AstProgramNode(StrRegion(0, 1685),
       AstIdent(StrRegion(1106, 1117), 'DUP_TOP_TWO'),
       [],
       [
-        AstDeclNode(StrRegion(1126, 1151),
-          VarDeclType.LET,
+        AstDeclNode(StrRegion(1126, 1150),
+          VarDeclScope.LET,
+          VarType.VARIABLE,
           [
             (
               AstIdent(StrRegion(1130, 1137), 'tos_idx'),
@@ -1295,8 +1355,9 @@ AstProgramNode(StrRegion(0, 1685),
             )
           ]
         ),
-        AstDeclNode(StrRegion(1156, 1182),
-          VarDeclType.LET,
+        AstDeclNode(StrRegion(1156, 1181),
+          VarDeclScope.LET,
+          VarType.VARIABLE,
           [
             (
               AstIdent(StrRegion(1160, 1164), 'tos0'),
@@ -1307,8 +1368,9 @@ AstProgramNode(StrRegion(0, 1685),
             )
           ]
         ),
-        AstDeclNode(StrRegion(1187, 1217),
-          VarDeclType.LET,
+        AstDeclNode(StrRegion(1187, 1216),
+          VarDeclScope.LET,
+          VarType.VARIABLE,
           [
             (
               AstIdent(StrRegion(1191, 1195), 'tos1'),
@@ -1365,8 +1427,9 @@ AstProgramNode(StrRegion(0, 1685),
       AstIdent(StrRegion(1364, 1372), 'ROT_FOUR'),
       [],
       [
-        AstDeclNode(StrRegion(1455, 1480),
-          VarDeclType.LET,
+        AstDeclNode(StrRegion(1455, 1479),
+          VarDeclScope.LET,
+          VarType.VARIABLE,
           [
             (
               AstIdent(StrRegion(1459, 1466), 'tos_idx'),
@@ -1379,8 +1442,9 @@ AstProgramNode(StrRegion(0, 1685),
             )
           ]
         ),
-        AstDeclNode(StrRegion(1485, 1507),
-          VarDeclType.LET,
+        AstDeclNode(StrRegion(1485, 1506),
+          VarDeclScope.LET,
+          VarType.VARIABLE,
           [
             (
               AstIdent(StrRegion(1489, 1493), 'tos0'),
