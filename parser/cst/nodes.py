@@ -38,9 +38,6 @@ __all__ = [  # Keep these sorted by category
     "AssignOpNode", "AssignNode",
     "AddEqNode", "SubEqNode", "MulEqNode", "DivEqNode", "ModEqNode",
     "PowEqNode", "ConcatEqNode", "AndEqNode", "OrEqNode",
-
-    # Outdated
-    "LetNode", "GlobalNode",
 ]
 
 
@@ -463,22 +460,6 @@ class DeclNode(NamedSizedNodeCls):
 
 class DeclItemsList(NamedNodeCls):
     name = 'decl_list'
-
-    @property
-    def decls(self):
-        return cast(list[DeclItemNode], self.children)
-
-
-class LetNode(NamedNodeCls):
-    name = 'let_decl'  # Varargs
-
-    @property
-    def decls(self):
-        return cast(list[DeclItemNode], self.children)
-
-
-class GlobalNode(NamedNodeCls):
-    name = 'global_decl'  # Varargs
 
     @property
     def decls(self):
