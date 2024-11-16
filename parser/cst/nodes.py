@@ -393,6 +393,55 @@ class DeclItemNode(NamedNodeCls):
         return self.children[1]
 
 
+class DeclScopeNode(AnyNullNode):
+    pass
+
+
+class DeclScopeLet(DeclScopeNode):
+    name = 'scope__let'
+
+
+class DeclScopeGlobal(DeclScopeNode):
+    name = 'scope__global'
+
+
+class DeclTypeNode(AnyNullNode):
+    pass
+
+
+class DeclTypeVariable(DeclTypeNode):
+    name = 'decl_type__variable'
+
+
+class DeclTypeList(DeclTypeNode):
+    name = 'decl_type__list'
+
+
+class DeclNode(NamedSizedNodeCls):
+    name = 'var_decl'
+    size = 3  # scope, type (value/list), decl_list
+
+    @property
+    def decl_scope(self):
+        return checked_cast(DeclScopeNode, self.children[0])
+
+    @property
+    def decl_type(self):
+        return checked_cast(DeclTypeNode, self.children[1])
+
+    @property
+    def decl_list(self):
+        return cast(DeclItemsList, self.children[2])
+
+
+class DeclItemsList(NamedNodeCls):
+    name = 'decl_list'
+
+    @property
+    def decls(self):
+        return cast(list[DeclItemNode], self.children)
+
+
 class LetNode(NamedNodeCls):
     name = 'let_decl'  # Varargs
 
