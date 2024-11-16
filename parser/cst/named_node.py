@@ -4,7 +4,7 @@ from dataclasses import dataclass, field
 from typing import TYPE_CHECKING, overload, Sequence, cast, Literal
 
 from .base_node import Leaf, AnyNode, Node
-from ..common import StrRegion
+from ..common import StrRegion, HasRegion
 
 if TYPE_CHECKING:
     from ..tokens import Token
@@ -26,7 +26,7 @@ class NamedLeafCls(Leaf):
 
     # noinspection PyMethodOverriding
     @classmethod
-    def of(cls, token: Token, parent: Node | None = None):
+    def of(cls, token: HasRegion, parent: Node | None = None):
         return cls(token.region, parent)
 
 
@@ -49,7 +49,7 @@ class _AnyNamedNodeT(AnyNode):
 
     # noinspection PyMethodOverriding
     @classmethod
-    def of(cls, token: Token, parent: Node | None = None):
+    def of(cls, token: HasRegion, parent: Node | None = None):
         return cls(token.region, parent)
 
 
@@ -70,7 +70,7 @@ class NamedNodeCls(Node, AnyNamedNode):
 
     # noinspection PyMethodOverriding
     @classmethod
-    def of(cls, token: Token, children: list[AnyNode] | None = None,
+    def of(cls, token: HasRegion, children: list[AnyNode] | None = None,
            parent: Node | None = None):
         return cls(token.region, parent, children or [])
 
