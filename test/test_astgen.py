@@ -46,3 +46,9 @@ class TestAstGen(CommonTestCase):
 
     def test_unaries(self):
         self.assertAstMatchesSnapshot('a=+(-!b==!-+c)-+--r+(-9);')
+
+    def test_decl(self):
+        self.assertAstMatchesSnapshot('let a,b=1+1,c;\n'
+                                      'global d = "STRING", e;\n'
+                                      'let[] local_list=list(), other;\n'
+                                      'global[] STACK;')

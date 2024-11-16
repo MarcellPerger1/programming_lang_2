@@ -32,6 +32,12 @@ class TreeGenTest(CommonTestCase):
         self.assertCstMatchesSnapshot(
             'let a, b=9, c,d=w.1[2],e="w",f,g;\n'
             'global z,y=-11, x , w="a".lower() ,v=o , u, t;')
+    
+    def test_decl(self):
+        self.assertCstMatchesSnapshot('let a,b=1+1,c;\n'
+                                      'global d = "STRING", e;\n'
+                                      'let[] local_list=list(), other;\n'
+                                      'global[] STACK;')
 
 
 class TestBlocks(CommonTestCase):
