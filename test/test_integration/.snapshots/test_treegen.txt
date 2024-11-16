@@ -1,4 +1,4 @@
-"2","45","93","105","114","121","135","154","181","198","225","242","269","297","315","348","367"
+"2","45","93","105","114","125","139","158","185","202","229","246","273","301","319","352","371"
 "TreeGenTest::test_item_chain:0","TreeGenTest::test_fn_call_in_lvalue:0","TreeGenTest::test_aug_assign:0","TreeGenTest::test__mod_supported:0","TreeGenTest::test_decl_no_value:0","TestFunctionDecl::test_no_params:0","TestFunctionDecl::test_one_param:0","TestFunctionDecl::test_two_param:0","TestBlocks::test_while:0","TestBlocks::test_while:1","TestBlocks::test_repeat:0","TestBlocks::test_repeat:1","TestBlocks::test_else_if_else:0","TestBlocks::test_else_if_else:1","TestBlocks::test_else_if_else:2","TestAutocat::test_autocat:0","TreeGenTest::test_decl_multiple:0"
 ProgramNode(StrRegion(0, 43), [
   AssignNode(StrRegion(0, 42), [
@@ -113,9 +113,13 @@ ProgramNode(StrRegion(0, 6), [
   ])
 ])
 ProgramNode(StrRegion(0, 6), [
-  LetNode(StrRegion(0, 6), [
-    DeclItemNode(StrRegion(4, 5), [
-      IdentNode(StrRegion(4, 5))
+  DeclNode(StrRegion(0, 5), [
+    DeclScope_Let(StrRegion(0, 3)),
+    DeclType_Variable(StrRegion(3, 3)),
+    DeclItemsList(StrRegion(4, 5), [
+      DeclItemNode(StrRegion(4, 5), [
+        IdentNode(StrRegion(4, 5))
+      ])
     ])
   ])
 ])
@@ -366,70 +370,78 @@ ProgramNode(StrRegion(0, 32), [
   ])
 ])
 ProgramNode(StrRegion(0, 80), [
-  LetNode(StrRegion(0, 33), [
-    DeclItemNode(StrRegion(4, 5), [
-      IdentNode(StrRegion(4, 5))
-    ]),
-    DeclItemNode(StrRegion(7, 10), [
-      IdentNode(StrRegion(7, 8)),
-      NumberNode(StrRegion(9, 10))
-    ]),
-    DeclItemNode(StrRegion(12, 13), [
-      IdentNode(StrRegion(12, 13))
-    ]),
-    DeclItemNode(StrRegion(14, 22), [
-      IdentNode(StrRegion(14, 15)),
-      GetitemNode(StrRegion(16, 22), [
-        GetattrNode(StrRegion(16, 19), [
-          IdentNode(StrRegion(16, 17)),
-          AttrNameNode(StrRegion(18, 19))
-        ]),
-        NumberNode(StrRegion(20, 21))
+  DeclNode(StrRegion(0, 32), [
+    DeclScope_Let(StrRegion(0, 3)),
+    DeclType_Variable(StrRegion(3, 3)),
+    DeclItemsList(StrRegion(4, 32), [
+      DeclItemNode(StrRegion(4, 5), [
+        IdentNode(StrRegion(4, 5))
+      ]),
+      DeclItemNode(StrRegion(7, 10), [
+        IdentNode(StrRegion(7, 8)),
+        NumberNode(StrRegion(9, 10))
+      ]),
+      DeclItemNode(StrRegion(12, 13), [
+        IdentNode(StrRegion(12, 13))
+      ]),
+      DeclItemNode(StrRegion(14, 22), [
+        IdentNode(StrRegion(14, 15)),
+        GetitemNode(StrRegion(16, 22), [
+          GetattrNode(StrRegion(16, 19), [
+            IdentNode(StrRegion(16, 17)),
+            AttrNameNode(StrRegion(18, 19))
+          ]),
+          NumberNode(StrRegion(20, 21))
+        ])
+      ]),
+      DeclItemNode(StrRegion(23, 28), [
+        IdentNode(StrRegion(23, 24)),
+        StringNode(StrRegion(25, 28))
+      ]),
+      DeclItemNode(StrRegion(29, 30), [
+        IdentNode(StrRegion(29, 30))
+      ]),
+      DeclItemNode(StrRegion(31, 32), [
+        IdentNode(StrRegion(31, 32))
       ])
-    ]),
-    DeclItemNode(StrRegion(23, 28), [
-      IdentNode(StrRegion(23, 24)),
-      StringNode(StrRegion(25, 28))
-    ]),
-    DeclItemNode(StrRegion(29, 30), [
-      IdentNode(StrRegion(29, 30))
-    ]),
-    DeclItemNode(StrRegion(31, 32), [
-      IdentNode(StrRegion(31, 32))
     ])
   ]),
-  GlobalNode(StrRegion(34, 80), [
-    DeclItemNode(StrRegion(41, 42), [
-      IdentNode(StrRegion(41, 42))
-    ]),
-    DeclItemNode(StrRegion(43, 48), [
-      IdentNode(StrRegion(43, 44)),
-      UMinusNode(StrRegion(45, 48), [
-        NumberNode(StrRegion(46, 48))
+  DeclNode(StrRegion(34, 79), [
+    DeclScope_Global(StrRegion(34, 40)),
+    DeclType_Variable(StrRegion(40, 40)),
+    DeclItemsList(StrRegion(41, 79), [
+      DeclItemNode(StrRegion(41, 42), [
+        IdentNode(StrRegion(41, 42))
+      ]),
+      DeclItemNode(StrRegion(43, 48), [
+        IdentNode(StrRegion(43, 44)),
+        UMinusNode(StrRegion(45, 48), [
+          NumberNode(StrRegion(46, 48))
+        ])
+      ]),
+      DeclItemNode(StrRegion(50, 51), [
+        IdentNode(StrRegion(50, 51))
+      ]),
+      DeclItemNode(StrRegion(54, 67), [
+        IdentNode(StrRegion(54, 55)),
+        CallNode(StrRegion(56, 67), [
+          GetattrNode(StrRegion(56, 65), [
+            StringNode(StrRegion(56, 59)),
+            AttrNameNode(StrRegion(60, 65))
+          ]),
+          CallArgs(StrRegion(65, 67), [])
+        ])
+      ]),
+      DeclItemNode(StrRegion(69, 72), [
+        IdentNode(StrRegion(69, 70)),
+        IdentNode(StrRegion(71, 72))
+      ]),
+      DeclItemNode(StrRegion(75, 76), [
+        IdentNode(StrRegion(75, 76))
+      ]),
+      DeclItemNode(StrRegion(78, 79), [
+        IdentNode(StrRegion(78, 79))
       ])
-    ]),
-    DeclItemNode(StrRegion(50, 51), [
-      IdentNode(StrRegion(50, 51))
-    ]),
-    DeclItemNode(StrRegion(54, 67), [
-      IdentNode(StrRegion(54, 55)),
-      CallNode(StrRegion(56, 67), [
-        GetattrNode(StrRegion(56, 65), [
-          StringNode(StrRegion(56, 59)),
-          AttrNameNode(StrRegion(60, 65))
-        ]),
-        CallArgs(StrRegion(65, 67), [])
-      ])
-    ]),
-    DeclItemNode(StrRegion(69, 72), [
-      IdentNode(StrRegion(69, 70)),
-      IdentNode(StrRegion(71, 72))
-    ]),
-    DeclItemNode(StrRegion(75, 76), [
-      IdentNode(StrRegion(75, 76))
-    ]),
-    DeclItemNode(StrRegion(78, 79), [
-      IdentNode(StrRegion(78, 79))
     ])
   ])
 ])
