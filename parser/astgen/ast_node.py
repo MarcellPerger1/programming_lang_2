@@ -32,10 +32,16 @@ class VarDeclScope(Enum):
     GLOBAL = 'global'
 
 
+class VarType(Enum):
+    VARIABLE = 'variable'
+    LIST = 'list'
+
+
 @dataclass
 class AstDeclNode(AstNode):
     name = 'var_decl'
-    type: VarDeclScope
+    scope: VarDeclScope
+    type: VarType
     decls: list[tuple[AstIdent, AstNode | None]]
 
 
