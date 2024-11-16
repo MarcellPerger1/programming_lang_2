@@ -39,6 +39,15 @@ class TreeGenTest(CommonTestCase):
                                       'let[] local_list=list(), other;\n'
                                       'global[] STACK;')
 
+    def test_decl_error(self):
+        err = self.assertFailsGracefullyCST('let[4] = 9;')
+        self.assertEqual(StrRegion(4, 5), err.region)
+        self.assertContains(err.msg.lower(), "expected ']' after '['")
+
+        err = self.assertFailsGracefullyCST('let[')
+        self.assertEqual(StrRegion(4, 4), err.region)
+        self.assertContains(err.msg.lower(), "expected ']' after '['")
+
 
 class TestBlocks(CommonTestCase):
     def test_while(self):
