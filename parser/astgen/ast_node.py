@@ -6,10 +6,10 @@ from enum import Enum
 from ..common import HasRegion, StrRegion
 
 __all__ = [
-    "AstNode", "AstProgramNode", "VarDeclScope", "AstDeclNode", "AstRepeat",
-    "AstIf", "AstWhile", "AstAssign", "AstAugAssign", "AstDefine", "AstNumber",
-    "AstString", "AstAnyName", "AstIdent", "AstAttrName", "AstAttribute",
-    "AstItem", "AstCall", "AstOp", "AstBinOp", "AstUnaryOp",
+    "AstNode", "AstProgramNode", "VarDeclScope", "VarType", "AstDeclNode",
+    "AstRepeat", "AstIf", "AstWhile", "AstAssign", "AstAugAssign", "AstDefine",
+    "AstNumber", "AstString", "AstAnyName", "AstIdent", "AstAttrName",
+    "AstAttribute", "AstItem", "AstCall", "AstOp", "AstBinOp", "AstUnaryOp",
 ]
 
 

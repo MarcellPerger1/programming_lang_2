@@ -101,6 +101,8 @@ class AstGen:
     def _walk_smt(self, smt: AnyNode) -> list[AstNode]:
         if isinstance(smt, NopNode):
             return []
+        elif isinstance(smt, DeclNode):
+            return self._walk_var_decl_v2(smt)
         elif isinstance(smt, LetNode):
             return self._walk_var_decl(smt, VarDeclScope.LET)
         elif isinstance(smt, GlobalNode):
@@ -135,6 +137,16 @@ class AstGen:
                 f"Expected statement, not {smt.name!r} expression. Hint: "
                 f"expressions have no side-effect so are not allowed at "
                 f"the root level.", smt.region)
+
+    def _walk_var_decl_v2(self, smt: DeclNode):
+        decls = [(self._walk_ident(d.ident),
+                  None if d.value is None else self._walk_expr(d.value))
+                 for d in smt.decl_list.decls]
+        scope = (VarDeclScope.LET if isinstance(smt.decl_scope, DeclScope_Let)
+                 else VarDeclScope.GLOBAL)
+        tp = (VarType.LIST if isinstance(smt.decl_type, DeclType_List)
+              else VarType.VARIABLE)
+        return [AstDeclNode(smt.region, scope, tp, decls)]
 
     def _walk_var_decl(self, smt: LetNode | GlobalNode, decl_tp: VarDeclScope):
         decls = [(self._walk_ident(d.ident),
