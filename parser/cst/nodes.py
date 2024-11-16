@@ -30,6 +30,11 @@ class ProgramNode(NamedNodeCls):
         return self.children
 
 
+class AnyNullNode(NamedLeafCls):
+    """For nodes whose presence denotes an absence of something in the syntax"""
+    size = 0  # Name should be set by subclasses
+
+
 # region ---- Expressions ----
 @register_corresponding_token
 class NumberNode(NamedLeafCls):
@@ -305,9 +310,8 @@ class ElseBlock(NamedSizedNodeCls):
         return checked_cast(BlockNode, self.children[0])
 
 
-class NullElseBlock(NamedLeafCls):
+class NullElseBlock(AnyNullNode):
     name = 'else_null'
-    size = 0
 
 
 class WhileBlock(NamedSizedNodeCls):
