@@ -1095,7 +1095,7 @@ ProgramNode(StrRegion(0, 1685), [
 AstProgramNode(StrRegion(0, 1685),
   [
     AstDeclNode(StrRegion(0, 22),
-      VarDeclType.GLOBAL,
+      VarDeclScope.GLOBAL,
       [
         (
           AstIdent(StrRegion(7, 12), 'stack'),
@@ -1107,7 +1107,7 @@ AstProgramNode(StrRegion(0, 1685),
       ]
     ),
     AstDeclNode(StrRegion(23, 49),
-      VarDeclType.GLOBAL,
+      VarDeclScope.GLOBAL,
       [
         (
           AstIdent(StrRegion(30, 40), 'COUNT_REFS'),
@@ -1158,7 +1158,7 @@ AstProgramNode(StrRegion(0, 1685),
       [],
       [
         AstDeclNode(StrRegion(530, 555),
-          VarDeclType.LET,
+          VarDeclScope.LET,
           [
             (
               AstIdent(StrRegion(534, 541), 'tos_idx'),
@@ -1172,7 +1172,7 @@ AstProgramNode(StrRegion(0, 1685),
           ]
         ),
         AstDeclNode(StrRegion(560, 586),
-          VarDeclType.LET,
+          VarDeclScope.LET,
           [
             (
               AstIdent(StrRegion(564, 568), 'tos0'),
@@ -1215,7 +1215,7 @@ AstProgramNode(StrRegion(0, 1685),
       [],
       [
         AstDeclNode(StrRegion(797, 822),
-          VarDeclType.LET,
+          VarDeclScope.LET,
           [
             (
               AstIdent(StrRegion(801, 808), 'tos_idx'),
@@ -1229,7 +1229,7 @@ AstProgramNode(StrRegion(0, 1685),
           ]
         ),
         AstDeclNode(StrRegion(827, 853),
-          VarDeclType.LET,
+          VarDeclScope.LET,
           [
             (
               AstIdent(StrRegion(831, 835), 'tos0'),
@@ -1290,7 +1290,7 @@ AstProgramNode(StrRegion(0, 1685),
       [],
       [
         AstDeclNode(StrRegion(994, 1024),
-          VarDeclType.LET,
+          VarDeclScope.LET,
           [
             (
               AstIdent(StrRegion(998, 1003), 'value'),
@@ -1334,7 +1334,7 @@ AstProgramNode(StrRegion(0, 1685),
       [],
       [
         AstDeclNode(StrRegion(1126, 1151),
-          VarDeclType.LET,
+          VarDeclScope.LET,
           [
             (
               AstIdent(StrRegion(1130, 1137), 'tos_idx'),
@@ -1348,7 +1348,7 @@ AstProgramNode(StrRegion(0, 1685),
           ]
         ),
         AstDeclNode(StrRegion(1156, 1182),
-          VarDeclType.LET,
+          VarDeclScope.LET,
           [
             (
               AstIdent(StrRegion(1160, 1164), 'tos0'),
@@ -1360,7 +1360,7 @@ AstProgramNode(StrRegion(0, 1685),
           ]
         ),
         AstDeclNode(StrRegion(1187, 1217),
-          VarDeclType.LET,
+          VarDeclScope.LET,
           [
             (
               AstIdent(StrRegion(1191, 1195), 'tos1'),
@@ -1418,7 +1418,7 @@ AstProgramNode(StrRegion(0, 1685),
       [],
       [
         AstDeclNode(StrRegion(1455, 1480),
-          VarDeclType.LET,
+          VarDeclScope.LET,
           [
             (
               AstIdent(StrRegion(1459, 1466), 'tos_idx'),
@@ -1432,7 +1432,7 @@ AstProgramNode(StrRegion(0, 1685),
           ]
         ),
         AstDeclNode(StrRegion(1485, 1507),
-          VarDeclType.LET,
+          VarDeclScope.LET,
           [
             (
               AstIdent(StrRegion(1489, 1493), 'tos0'),
