@@ -500,7 +500,8 @@ class CstGen:
         idx += 1
         # parse_unary_or -> parse_pow_or -> parse_unary_or -> parse_pow_or
         # This is right-recursion so is fine as progress will be made each call to get here
-        return self._parse_unary_or(idx)
+        right, idx = self._parse_unary_or(idx)
+        return self.node_from_children(PowNode, [leftmost, right]), idx
 
     def _parse_unary_or(self, idx: int) -> tuple[AnyNode, int]:
         unaries, idx = self._parse_unaries_into_tok_list(idx)
