@@ -1,7 +1,7 @@
 import unittest
 
 from parser.astgen.astgen import AstGen
-from parser.cst.treegen import TreeGen
+from parser.cst.cstgen import CstGen
 from parser.lexer import Tokenizer
 from test.common import CommonTestCase
 from util import readfile
@@ -16,7 +16,7 @@ class TestMain(CommonTestCase):
         src = readfile(f'./main_example_{n}.st')
         tk = Tokenizer(src).tokenize()
         self.assertMatchesSnapshot(tk.tokens, 'tokens')
-        t = TreeGen(tk)
+        t = CstGen(tk)
         self.assertMatchesSnapshot(t.parse(), 'cst')
         if do_ast:
             self.assertMatchesSnapshot(AstGen(t).parse(), 'ast')

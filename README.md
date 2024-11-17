@@ -41,7 +41,7 @@
   - Importing from outside this project: no (we don't know what extra stuff other projects put in their module namespace that might break our code).
   - Importing internally within the project:
     - Useful when you need *everything* from a module that has many *similar* classes
-    - (e.g. importing all the nodes (`parser/cst/nodes.py`) in the CST generation code (`parser/cst/treegen.py`) is good).
+    - (e.g. importing all the nodes (`parser/cst/nodes.py`) in the CST generation code (`parser/cst/cstgen.py`) is good).
     - The threshold for 'many' here is around 10-15 classes.
     - Otherwise (if the classes/functions are unrelated (e.g. in `utils.py`), or you don't need all/most of them, or the module has few classes), just list them out.
     - You must not `import *` from a module without a `__all__` (to avoid polluting your globals with their internal stuff, like the stuff they import from elsewhere). The one exception to this is re-exporting stuff (e.g. in `__init__.py`).

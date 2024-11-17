@@ -2,7 +2,7 @@ import time
 
 from parser.astgen.astgen import AstGen
 from parser.lexer.tokenizer import Tokenizer
-from parser.cst.treegen import TreeGen
+from parser.cst.cstgen import CstGen
 from parser.common.error import BaseParseError
 
 from pythonfuzz.fuzzer import Fuzzer
@@ -30,7 +30,7 @@ def fuzz(buf):
     try:
         string = buf.decode("ascii")
         try:
-            AstGen(TreeGen(Tokenizer(string))).parse()
+            AstGen(CstGen(Tokenizer(string))).parse()
         except BaseParseError:
             pass
     except UnicodeDecodeError:

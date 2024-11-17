@@ -2,7 +2,7 @@ import asyncio
 import unittest
 from pathlib import Path
 
-from parser.cst.treegen import TreeGen
+from parser.cst.cstgen import CstGen
 from parser.lexer.tokenizer import Tokenizer
 from test.common import CommonTestCase, TestCaseUtils
 from util import timeout_decor, timeout_decor_async
@@ -60,7 +60,7 @@ class FuzzerTimeoutTestCase(CommonTestCase):
     @staticmethod
     @timeout_decor(5, debug=0)
     def inner_ed988ae940f54542ec54fd3c402a009fe2fdb660bd558d76a3612781a5ef6aa2():
-        TreeGen(Tokenizer('a;//')).parse()
+        CstGen(Tokenizer('a;//')).parse()
         return CommonTestCase.raiseInternalErrorsOnlyCST('a<//')
 
     def test_ed988ae940f54542ec54fd3c402a009fe2fdb660bd558d76a3612781a5ef6aa2(self):
