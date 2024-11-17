@@ -6,23 +6,72 @@ from parser.common import StrRegion
 from test.common import CommonTestCase
 
 
-class TestAutocat(CommonTestCase):
+# region ---- <Test Expressions> ----
+class TestExpr(CommonTestCase):
     def test_autocat(self):
         self.assertCstMatchesSnapshot('"abc" "="\n  "1" .. a .. "b".d();')
 
+    def test_mod_supported(self):
+        self.assertCstMatchesSnapshot('c=a%b;')
 
-class TreeGenTest(CommonTestCase):
+
+class TestItemChain(CommonTestCase):
     def test_item_chain(self):
         self.assertCstMatchesSnapshot('a[7].b.0.fn["c" .. 2] = fn(9).k[7 + r](3,);')
 
     def test_fn_call_in_lvalue(self):
         self.assertCstMatchesSnapshot('a(7).b.0.fn()["c" .. 2] = fn(9).k[7 + r](3,);')
 
+    def test_empty_sqb_error(self):
+        with self.assertRaises(LocatedCstError) as err:
+            TreeGen(Tokenizer('v=a[]+b')).parse()
+        exc = err.exception
+        self.assertBetweenIncl(3, 4, exc.region.start)
+        self.assertEqual(4, exc.region.end - 1)
+
+    def test_getattr__issue_09(self):
+        t = Tokenizer('fn(call_arg).a;').tokenize()
+        node = CstGen(t).parse()
+        self.assertMatchesSnapshot(node, 'after_call')
+        t = Tokenizer('(paren + x).b;').tokenize()
+        node = CstGen(t).parse()
+        self.assertMatchesSnapshot(node, 'after_paren')
+        t = Tokenizer('"a string".b;').tokenize()
+        node = CstGen(t).parse()
+        self.assertMatchesSnapshot(node, 'after_string')
+
+    def test_getitem__issue_09(self):
+        t = Tokenizer('fn(call_arg)[1];').tokenize()
+        node = CstGen(t).parse()
+        self.assertMatchesSnapshot(node, 'after_call')
+        t = Tokenizer('(paren + x)[2];').tokenize()
+        node = CstGen(t).parse()
+        self.assertMatchesSnapshot(node, 'after_paren')
+        t = Tokenizer('"a string"["key_" .. 3];').tokenize()
+        node = CstGen(t).parse()
+        self.assertMatchesSnapshot(node, 'after_string')
+# endregion </Test Expressions>
+
+
+# region ---- <Test Statements> ----
+class TestSmt(CommonTestCase):
     def test_aug_assign(self):
         self.assertCstMatchesSnapshot('a[1] += a.2;')
 
-    def test__mod_supported(self):
-        self.assertCstMatchesSnapshot('c=a%b;')
+    def test_empty_smt__issue_04(self):
+        t = Tokenizer('let a=9;;').tokenize()
+        node = CstGen(t).parse()
+        self.assertMatchesSnapshot(node)
+
+
+class TestDecl(CommonTestCase):
+    def test_empty_assign_source_error(self):
+        t = Tokenizer('let a= ;').tokenize()
+        with self.assertRaises(LocatedCstError) as err:
+            CstGen(t).parse()
+        self.assertBetweenIncl(5, 7, err.exception.region.start)
+        self.assertBetweenIncl(7, 8, err.exception.region.end)
+        self.assertContains(str(err.exception), "semi")
 
     def test_decl_no_value(self):
         self.assertCstMatchesSnapshot('let b;')
@@ -57,6 +106,14 @@ class TestBlocks(CommonTestCase):
         self.assertCstMatchesSnapshot('repeat a || !b && c >= 6 {}')
         self.assertCstMatchesSnapshot('repeat!(7%8){(7.7).abc(6,7,8);}')
 
+    def test_empty_condition_error(self):
+        t = Tokenizer('if {x();}').tokenize()
+        with self.assertRaises(LocatedCstError) as err:
+            CstGen(t).parse()
+        self.assertBetweenIncl(0, 3, err.exception.region.start)
+        self.assertBetweenIncl(2, 4, err.exception.region.end)
+        self.assertContains(str(err.exception), "brace")
+
     def test_else_if_else(self):
         self.assertCstMatchesSnapshot('if(1){}else if(a||!b&&c!=6){}')
         self.assertCstMatchesSnapshot('if(1){}else{a();}')
@@ -83,62 +140,7 @@ class TestFunctionDecl(CommonTestCase):
 
     def test_two_param(self):
         self.assertCstMatchesSnapshot('def a(number a, string b){RESULT=a.."="..b;}')
-
-
-class TestTreeGenErrors(CommonTestCase):
-    def test_empty_sqb_error(self):
-        with self.assertRaises(LocatedCstError) as err:
-            TreeGen(Tokenizer('v=a[]+b')).parse()
-        exc = err.exception
-        self.assertBetweenIncl(3, 4, exc.region.start)
-        self.assertEqual(4, exc.region.end - 1)
-
-
-class TestItemChain(CommonTestCase):
-    def test_getattr__issue_09(self):
-        t = Tokenizer('fn(call_arg).a;').tokenize()
-        node = CstGen(t).parse()
-        self.assertMatchesSnapshot(node, 'after_call')
-        t = Tokenizer('(paren + x).b;').tokenize()
-        node = CstGen(t).parse()
-        self.assertMatchesSnapshot(node, 'after_paren')
-        t = Tokenizer('"a string".b;').tokenize()
-        node = CstGen(t).parse()
-        self.assertMatchesSnapshot(node, 'after_string')
-
-    def test_getitem__issue_09(self):
-        t = Tokenizer('fn(call_arg)[1];').tokenize()
-        node = CstGen(t).parse()
-        self.assertMatchesSnapshot(node, 'after_call')
-        t = Tokenizer('(paren + x)[2];').tokenize()
-        node = CstGen(t).parse()
-        self.assertMatchesSnapshot(node, 'after_paren')
-        t = Tokenizer('"a string"["key_" .. 3];').tokenize()
-        node = CstGen(t).parse()
-        self.assertMatchesSnapshot(node, 'after_string')
-
-
-class TestEmptyExpr(CommonTestCase):
-    def test_error_empty_assign_source(self):
-        t = Tokenizer('let a= ;').tokenize()
-        with self.assertRaises(LocatedCstError) as err:
-            CstGen(t).parse()
-        self.assertBetweenIncl(5, 7, err.exception.region.start)
-        self.assertBetweenIncl(7, 8, err.exception.region.end)
-        self.assertContains(str(err.exception), "semi")
-
-    def test_error_empty_condition(self):
-        t = Tokenizer('if {x();}').tokenize()
-        with self.assertRaises(LocatedCstError) as err:
-            CstGen(t).parse()
-        self.assertBetweenIncl(0, 3, err.exception.region.start)
-        self.assertBetweenIncl(2, 4, err.exception.region.end)
-        self.assertContains(str(err.exception), "brace")
-
-    def test_empty_expr_issue_04(self):
-        t = Tokenizer('let a=9;;').tokenize()
-        node = CstGen(t).parse()
-        self.assertMatchesSnapshot(node)
+# endregion </Test Statements>
 
 
 if __name__ == '__main__':
