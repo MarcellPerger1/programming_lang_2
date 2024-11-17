@@ -13,6 +13,7 @@ __all__ = [  # Keep these sorted by category
     "AutocatNode",  # autocat is sorta atom-ish (it is in AST but not in CST?)
     # Item chains
     "GetattrNode", "GetitemNode", "ParenNode", "CallNode", "CallArgs",
+    "ListNode",
     # Operators
     "OperatorNode",
     "UnaryOpNode", "UPlusNode", "UMinusNode", "NotNode",  # Unary operators
@@ -120,6 +121,14 @@ class ParenNode(NamedSizedNodeCls):
     @property
     def contents(self):
         return self.children[0]
+
+
+class ListNode(NamedNodeCls):
+    name = 'list'  # List literal, varargs
+
+    @property
+    def items(self):
+        return self.children
 
 
 class CallNode(NamedSizedNodeCls):
