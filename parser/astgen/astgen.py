@@ -196,6 +196,13 @@ class AstGen:
             attr_name.region, self.node_str(attr_name, intern=True))
 
     @_register_autowalk_expr
+    def _walk_list_literal(self, ls: ListNode):
+        # For now it is UB to use this anywhere but in variable decls
+        #  (until proper syntax desugar-ing for literal arrays is done).
+        # Anyway, for now the codegen/typechecker/desugar step will check this
+        return AstListLiteral(ls.region, [self._walk_expr(i) for i in ls.items])
+
+    @_register_autowalk_expr
     def _walk_getattr(self, node: GetattrNode) -> AstAttribute:
         return AstAttribute(node.region, self._walk_expr(node.target),
                             self._walk_attr_name(node.attr))

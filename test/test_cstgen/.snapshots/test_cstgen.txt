@@ -1,5 +1,5 @@
-"2","45","93","105","114","125","139","158","185","202","229","246","273","301","319","352","371","447","506","517","528","534","545","556","565"
-"TestItemChain::test_item_chain:0","TestItemChain::test_fn_call_in_lvalue:0","TestSmt::test_aug_assign:0","TestExpr::test_mod_supported:0","TestDecl::test_decl_no_value:0","TestFunctionDecl::test_no_params:0","TestFunctionDecl::test_one_param:0","TestFunctionDecl::test_two_param:0","TestBlocks::test_while:0","TestBlocks::test_while:1","TestBlocks::test_repeat:0","TestBlocks::test_repeat:1","TestBlocks::test_else_if_else:0","TestBlocks::test_else_if_else:1","TestBlocks::test_else_if_else:2","TestExpr::test_autocat:0","TestDecl::test_decl_multiple:0","TestDecl::test_decl:0","TestItemChain::test_getattr__issue_09:after_call","TestItemChain::test_getattr__issue_09:after_paren","TestItemChain::test_getattr__issue_09:after_string","TestItemChain::test_getitem__issue_09:after_call","TestItemChain::test_getitem__issue_09:after_paren","TestItemChain::test_getitem__issue_09:after_string","TestSmt::test_empty_smt__issue_04:0"
+"2","45","93","105","114","125","139","158","185","202","229","246","273","301","319","352","371","447","506","517","528","534","545","556","565","578","584","607","667"
+"TestItemChain::test_item_chain:0","TestItemChain::test_fn_call_in_lvalue:0","TestSmt::test_aug_assign:0","TestExpr::test_mod_supported:0","TestDecl::test_decl_no_value:0","TestFunctionDecl::test_no_params:0","TestFunctionDecl::test_one_param:0","TestFunctionDecl::test_two_param:0","TestBlocks::test_while:0","TestBlocks::test_while:1","TestBlocks::test_repeat:0","TestBlocks::test_repeat:1","TestBlocks::test_else_if_else:0","TestBlocks::test_else_if_else:1","TestBlocks::test_else_if_else:2","TestExpr::test_autocat:0","TestDecl::test_decl_multiple:0","TestDecl::test_decl:0","TestItemChain::test_getattr__issue_09:after_call","TestItemChain::test_getattr__issue_09:after_paren","TestItemChain::test_getattr__issue_09:after_string","TestItemChain::test_getitem__issue_09:after_call","TestItemChain::test_getitem__issue_09:after_paren","TestItemChain::test_getitem__issue_09:after_string","TestSmt::test_empty_smt__issue_04:0","TestExpr::test_pow:0","TestItemChain::test_list_literal_empty:0","TestItemChain::test_list_literal_multi_item:0","TestItemChain::test_list_literal_single_item:0"
 ProgramNode(StrRegion(0, 43), [
   AssignNode(StrRegion(0, 42), [
     GetitemNode(StrRegion(0, 21), [
@@ -575,4 +575,117 @@ ProgramNode(StrRegion(0, 9), [
     ])
   ]),
   NopNode(StrRegion(8, 9))
+])
+ProgramNode(StrRegion(0, 5), [
+  PowNode(StrRegion(0, 4), [
+    IdentNode(StrRegion(0, 1)),
+    IdentNode(StrRegion(3, 4))
+  ])
+])
+ProgramNode(StrRegion(0, 35), [
+  DeclNode(StrRegion(0, 10), [
+    DeclScope_Let(StrRegion(0, 3)),
+    DeclType_Variable(StrRegion(3, 3)),
+    DeclItemsList(StrRegion(4, 10), [
+      DeclItemNode(StrRegion(4, 10), [
+        IdentNode(StrRegion(4, 5)),
+        ListNode(StrRegion(8, 10), [])
+      ])
+    ])
+  ]),
+  CallNode(StrRegion(12, 34), [
+    IdentNode(StrRegion(12, 16)),
+    CallArgs(StrRegion(16, 34), [
+      ListNode(StrRegion(17, 19), []),
+      IdentNode(StrRegion(21, 22)),
+      GetattrNode(StrRegion(24, 33), [
+        ListNode(StrRegion(24, 26), []),
+        AttrNameNode(StrRegion(27, 33))
+      ])
+    ])
+  ])
+])
+ProgramNode(StrRegion(0, 100), [
+  DeclNode(StrRegion(0, 27), [
+    DeclScope_Global(StrRegion(0, 6)),
+    DeclType_List(StrRegion(6, 8)),
+    DeclItemsList(StrRegion(9, 27), [
+      DeclItemNode(StrRegion(9, 27), [
+        IdentNode(StrRegion(9, 14)),
+        ListNode(StrRegion(17, 27), [
+          StringNode(StrRegion(18, 23)),
+          NumberNode(StrRegion(25, 26))
+        ])
+      ])
+    ])
+  ]),
+  CallNode(StrRegion(29, 86), [
+    GetattrNode(StrRegion(29, 60), [
+      ParenNode(StrRegion(29, 53), [
+        AddNode(StrRegion(30, 52), [
+          IdentNode(StrRegion(30, 35)),
+          ListNode(StrRegion(38, 52), [
+            StringNode(StrRegion(39, 46)),
+            NumberNode(StrRegion(48, 50))
+          ])
+        ])
+      ]),
+      AttrNameNode(StrRegion(54, 60))
+    ]),
+    CallArgs(StrRegion(60, 86), [
+      GetitemNode(StrRegion(61, 85), [
+        ListNode(StrRegion(61, 81), [
+          NumberNode(StrRegion(62, 65)),
+          NumberNode(StrRegion(67, 68)),
+          GetitemNode(StrRegion(70, 77), [
+            CallNode(StrRegion(70, 74), [
+              IdentNode(StrRegion(70, 72)),
+              CallArgs(StrRegion(72, 74), [])
+            ]),
+            NumberNode(StrRegion(75, 76))
+          ]),
+          NumberNode(StrRegion(79, 80))
+        ]),
+        UMinusNode(StrRegion(82, 84), [
+          NumberNode(StrRegion(83, 84))
+        ])
+      ])
+    ])
+  ]),
+  AddEqNode(StrRegion(88, 99), [
+    IdentNode(StrRegion(88, 89)),
+    CallNode(StrRegion(91, 99), [
+      ListNode(StrRegion(91, 96), [
+        NumberNode(StrRegion(92, 93)),
+        NumberNode(StrRegion(94, 95))
+      ]),
+      CallArgs(StrRegion(96, 99), [
+        NumberNode(StrRegion(97, 98))
+      ])
+    ])
+  ])
+])
+ProgramNode(StrRegion(0, 25), [
+  CallNode(StrRegion(0, 24), [
+    GetattrNode(StrRegion(0, 12), [
+      ListNode(StrRegion(0, 5), [
+        StringNode(StrRegion(1, 4))
+      ]),
+      AttrNameNode(StrRegion(6, 12))
+    ]),
+    CallArgs(StrRegion(12, 24), [
+      ListNode(StrRegion(13, 23), [
+        UMinusNode(StrRegion(14, 21), [
+          PowNode(StrRegion(15, 21), [
+            NumberNode(StrRegion(15, 16)),
+            UMinusNode(StrRegion(18, 21), [
+              UMinusNode(StrRegion(19, 21), [
+                NumberNode(StrRegion(20, 21))
+              ])
+            ])
+          ])
+        ])
+      ])
+    ])
+  ])
 ])

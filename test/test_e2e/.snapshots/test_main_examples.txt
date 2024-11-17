@@ -1,4 +1,4 @@
-"2","90","179","672","1096"
+"2","90","188","680","1101"
 "TestMain::test_example_0:tokens","TestMain::test_example_0:cst","TestMain::test_example_1:tokens","TestMain::test_example_1:cst","TestMain::test_example_1:ast"
 [IdentNameToken(region=StrRegion(start=0, end=3)),
  WhitespaceToken(region=StrRegion(start=3, end=4)),
@@ -100,8 +100,11 @@ ProgramNode(StrRegion(0, 144), [
             NumberNode(StrRegion(8, 9)),
             NumberNode(StrRegion(10, 11))
           ]),
-          UMinusNode(StrRegion(15, 17), [
-            NumberNode(StrRegion(16, 17))
+          PowNode(StrRegion(12, 17), [
+            NumberNode(StrRegion(12, 13)),
+            UMinusNode(StrRegion(15, 17), [
+              NumberNode(StrRegion(16, 17))
+            ])
           ])
         ])
       ])
@@ -125,8 +128,14 @@ ProgramNode(StrRegion(0, 144), [
       ]),
       CallArgs(StrRegion(43, 62), [
         IdentNode(StrRegion(44, 50)),
-        UMinusNode(StrRegion(55, 60), [
-          NumberNode(StrRegion(59, 60))
+        PowNode(StrRegion(52, 60), [
+          IdentNode(StrRegion(52, 53)),
+          UMinusNode(StrRegion(55, 60), [
+            PowNode(StrRegion(56, 60), [
+              NumberNode(StrRegion(56, 57)),
+              NumberNode(StrRegion(59, 60))
+            ])
+          ])
         ])
       ])
     ])
@@ -185,532 +194,528 @@ ProgramNode(StrRegion(0, 144), [
  WhitespaceToken(region=StrRegion(start=14, end=15)),
  OpToken(region=StrRegion(start=15, end=16), op_str='='),
  WhitespaceToken(region=StrRegion(start=16, end=17)),
- IdentNameToken(region=StrRegion(start=17, end=21)),
- LParToken(region=StrRegion(start=21, end=22)),
- RParToken(region=StrRegion(start=22, end=23)),
- SemicolonToken(region=StrRegion(start=23, end=24)),
- WhitespaceToken(region=StrRegion(start=24, end=25)),
- IdentNameToken(region=StrRegion(start=25, end=31)),
- WhitespaceToken(region=StrRegion(start=31, end=32)),
- IdentNameToken(region=StrRegion(start=32, end=42)),
- WhitespaceToken(region=StrRegion(start=42, end=43)),
- OpToken(region=StrRegion(start=43, end=44), op_str='='),
- WhitespaceToken(region=StrRegion(start=44, end=45)),
- IdentNameToken(region=StrRegion(start=45, end=50)),
- SemicolonToken(region=StrRegion(start=50, end=51)),
- WhitespaceToken(region=StrRegion(start=51, end=53)),
- LineCommentToken(region=StrRegion(start=53, end=88)),
- WhitespaceToken(region=StrRegion(start=88, end=90)),
- LineCommentToken(region=StrRegion(start=90, end=149)),
- WhitespaceToken(region=StrRegion(start=149, end=150)),
- LineCommentToken(region=StrRegion(start=150, end=234)),
- WhitespaceToken(region=StrRegion(start=234, end=235)),
- LineCommentToken(region=StrRegion(start=235, end=318)),
- WhitespaceToken(region=StrRegion(start=318, end=319)),
- LineCommentToken(region=StrRegion(start=319, end=398)),
- WhitespaceToken(region=StrRegion(start=398, end=400)),
- IdentNameToken(region=StrRegion(start=400, end=403)),
- WhitespaceToken(region=StrRegion(start=403, end=404)),
- IdentNameToken(region=StrRegion(start=404, end=411)),
- LParToken(region=StrRegion(start=411, end=412)),
- RParToken(region=StrRegion(start=412, end=413)),
- WhitespaceToken(region=StrRegion(start=413, end=414)),
- LBrace(region=StrRegion(start=414, end=415)),
- WhitespaceToken(region=StrRegion(start=415, end=420)),
- IdentNameToken(region=StrRegion(start=420, end=422)),
- WhitespaceToken(region=StrRegion(start=422, end=423)),
- IdentNameToken(region=StrRegion(start=423, end=433)),
- WhitespaceToken(region=StrRegion(start=433, end=434)),
- LBrace(region=StrRegion(start=434, end=435)),
- WhitespaceToken(region=StrRegion(start=435, end=444)),
- IdentNameToken(region=StrRegion(start=444, end=450)),
- LParToken(region=StrRegion(start=450, end=451)),
- IdentNameToken(region=StrRegion(start=451, end=456)),
- LSqBracket(region=StrRegion(start=456, end=457)),
- IdentNameToken(region=StrRegion(start=457, end=460)),
- LParToken(region=StrRegion(start=460, end=461)),
- IdentNameToken(region=StrRegion(start=461, end=466)),
- RParToken(region=StrRegion(start=466, end=467)),
- RSqBracket(region=StrRegion(start=467, end=468)),
- RParToken(region=StrRegion(start=468, end=469)),
- SemicolonToken(region=StrRegion(start=469, end=470)),
- WhitespaceToken(region=StrRegion(start=470, end=475)),
- RBrace(region=StrRegion(start=475, end=476)),
- WhitespaceToken(region=StrRegion(start=476, end=481)),
- IdentNameToken(region=StrRegion(start=481, end=488)),
- LParToken(region=StrRegion(start=488, end=489)),
- IdentNameToken(region=StrRegion(start=489, end=494)),
- CommaToken(region=StrRegion(start=494, end=495)),
- WhitespaceToken(region=StrRegion(start=495, end=496)),
- IdentNameToken(region=StrRegion(start=496, end=499)),
- LParToken(region=StrRegion(start=499, end=500)),
- IdentNameToken(region=StrRegion(start=500, end=505)),
- RParToken(region=StrRegion(start=505, end=506)),
- RParToken(region=StrRegion(start=506, end=507)),
- SemicolonToken(region=StrRegion(start=507, end=508)),
- WhitespaceToken(region=StrRegion(start=508, end=509)),
- RBrace(region=StrRegion(start=509, end=510)),
- WhitespaceToken(region=StrRegion(start=510, end=512)),
- IdentNameToken(region=StrRegion(start=512, end=515)),
- WhitespaceToken(region=StrRegion(start=515, end=516)),
- IdentNameToken(region=StrRegion(start=516, end=523)),
- LParToken(region=StrRegion(start=523, end=524)),
- RParToken(region=StrRegion(start=524, end=525)),
- WhitespaceToken(region=StrRegion(start=525, end=526)),
- LBrace(region=StrRegion(start=526, end=527)),
- WhitespaceToken(region=StrRegion(start=527, end=532)),
- IdentNameToken(region=StrRegion(start=532, end=535)),
- WhitespaceToken(region=StrRegion(start=535, end=536)),
- IdentNameToken(region=StrRegion(start=536, end=543)),
- WhitespaceToken(region=StrRegion(start=543, end=544)),
- OpToken(region=StrRegion(start=544, end=545), op_str='='),
- WhitespaceToken(region=StrRegion(start=545, end=546)),
- IdentNameToken(region=StrRegion(start=546, end=549)),
- LParToken(region=StrRegion(start=549, end=550)),
- IdentNameToken(region=StrRegion(start=550, end=555)),
- RParToken(region=StrRegion(start=555, end=556)),
- SemicolonToken(region=StrRegion(start=556, end=557)),
- WhitespaceToken(region=StrRegion(start=557, end=562)),
- IdentNameToken(region=StrRegion(start=562, end=565)),
- WhitespaceToken(region=StrRegion(start=565, end=566)),
- IdentNameToken(region=StrRegion(start=566, end=570)),
- WhitespaceToken(region=StrRegion(start=570, end=571)),
- OpToken(region=StrRegion(start=571, end=572), op_str='='),
- WhitespaceToken(region=StrRegion(start=572, end=573)),
- IdentNameToken(region=StrRegion(start=573, end=578)),
- LSqBracket(region=StrRegion(start=578, end=579)),
- IdentNameToken(region=StrRegion(start=579, end=586)),
- RSqBracket(region=StrRegion(start=586, end=587)),
- SemicolonToken(region=StrRegion(start=587, end=588)),
- WhitespaceToken(region=StrRegion(start=588, end=593)),
- IdentNameToken(region=StrRegion(start=593, end=598)),
- LSqBracket(region=StrRegion(start=598, end=599)),
- IdentNameToken(region=StrRegion(start=599, end=606)),
- RSqBracket(region=StrRegion(start=606, end=607)),
- WhitespaceToken(region=StrRegion(start=607, end=608)),
- OpToken(region=StrRegion(start=608, end=609), op_str='='),
- WhitespaceToken(region=StrRegion(start=609, end=610)),
- IdentNameToken(region=StrRegion(start=610, end=615)),
- LSqBracket(region=StrRegion(start=615, end=616)),
- IdentNameToken(region=StrRegion(start=616, end=623)),
- WhitespaceToken(region=StrRegion(start=623, end=624)),
- OpToken(region=StrRegion(start=624, end=625), op_str='-'),
- WhitespaceToken(region=StrRegion(start=625, end=626)),
- NumberToken(region=StrRegion(start=626, end=627)),
- RSqBracket(region=StrRegion(start=627, end=628)),
- SemicolonToken(region=StrRegion(start=628, end=629)),
- WhitespaceToken(region=StrRegion(start=629, end=634)),
- IdentNameToken(region=StrRegion(start=634, end=639)),
- LSqBracket(region=StrRegion(start=639, end=640)),
- IdentNameToken(region=StrRegion(start=640, end=647)),
- WhitespaceToken(region=StrRegion(start=647, end=648)),
- OpToken(region=StrRegion(start=648, end=649), op_str='-'),
- WhitespaceToken(region=StrRegion(start=649, end=650)),
- NumberToken(region=StrRegion(start=650, end=651)),
- RSqBracket(region=StrRegion(start=651, end=652)),
- WhitespaceToken(region=StrRegion(start=652, end=653)),
- OpToken(region=StrRegion(start=653, end=654), op_str='='),
- WhitespaceToken(region=StrRegion(start=654, end=655)),
- IdentNameToken(region=StrRegion(start=655, end=659)),
- SemicolonToken(region=StrRegion(start=659, end=660)),
- WhitespaceToken(region=StrRegion(start=660, end=661)),
- RBrace(region=StrRegion(start=661, end=662)),
- WhitespaceToken(region=StrRegion(start=662, end=664)),
- IdentNameToken(region=StrRegion(start=664, end=667)),
- WhitespaceToken(region=StrRegion(start=667, end=668)),
- IdentNameToken(region=StrRegion(start=668, end=677)),
- LParToken(region=StrRegion(start=677, end=678)),
- RParToken(region=StrRegion(start=678, end=679)),
- WhitespaceToken(region=StrRegion(start=679, end=680)),
- LBrace(region=StrRegion(start=680, end=681)),
- WhitespaceToken(region=StrRegion(start=681, end=686)),
- LineCommentToken(region=StrRegion(start=686, end=702)),
- WhitespaceToken(region=StrRegion(start=702, end=707)),
- LineCommentToken(region=StrRegion(start=707, end=723)),
- WhitespaceToken(region=StrRegion(start=723, end=728)),
- LineCommentToken(region=StrRegion(start=728, end=742)),
- WhitespaceToken(region=StrRegion(start=742, end=747)),
- LineCommentToken(region=StrRegion(start=747, end=794)),
- WhitespaceToken(region=StrRegion(start=794, end=799)),
- IdentNameToken(region=StrRegion(start=799, end=802)),
- WhitespaceToken(region=StrRegion(start=802, end=803)),
- IdentNameToken(region=StrRegion(start=803, end=810)),
- WhitespaceToken(region=StrRegion(start=810, end=811)),
- OpToken(region=StrRegion(start=811, end=812), op_str='='),
- WhitespaceToken(region=StrRegion(start=812, end=813)),
- IdentNameToken(region=StrRegion(start=813, end=816)),
- LParToken(region=StrRegion(start=816, end=817)),
- IdentNameToken(region=StrRegion(start=817, end=822)),
- RParToken(region=StrRegion(start=822, end=823)),
- SemicolonToken(region=StrRegion(start=823, end=824)),
- WhitespaceToken(region=StrRegion(start=824, end=829)),
- IdentNameToken(region=StrRegion(start=829, end=832)),
- WhitespaceToken(region=StrRegion(start=832, end=833)),
- IdentNameToken(region=StrRegion(start=833, end=837)),
- WhitespaceToken(region=StrRegion(start=837, end=838)),
- OpToken(region=StrRegion(start=838, end=839), op_str='='),
- WhitespaceToken(region=StrRegion(start=839, end=840)),
- IdentNameToken(region=StrRegion(start=840, end=845)),
- LSqBracket(region=StrRegion(start=845, end=846)),
- IdentNameToken(region=StrRegion(start=846, end=853)),
- RSqBracket(region=StrRegion(start=853, end=854)),
- SemicolonToken(region=StrRegion(start=854, end=855)),
- WhitespaceToken(region=StrRegion(start=855, end=860)),
- IdentNameToken(region=StrRegion(start=860, end=865)),
- LSqBracket(region=StrRegion(start=865, end=866)),
- IdentNameToken(region=StrRegion(start=866, end=873)),
- RSqBracket(region=StrRegion(start=873, end=874)),
- WhitespaceToken(region=StrRegion(start=874, end=875)),
- OpToken(region=StrRegion(start=875, end=876), op_str='='),
- WhitespaceToken(region=StrRegion(start=876, end=877)),
- IdentNameToken(region=StrRegion(start=877, end=882)),
- LSqBracket(region=StrRegion(start=882, end=883)),
- IdentNameToken(region=StrRegion(start=883, end=890)),
- WhitespaceToken(region=StrRegion(start=890, end=891)),
- OpToken(region=StrRegion(start=891, end=892), op_str='-'),
- WhitespaceToken(region=StrRegion(start=892, end=893)),
- NumberToken(region=StrRegion(start=893, end=894)),
- RSqBracket(region=StrRegion(start=894, end=895)),
- SemicolonToken(region=StrRegion(start=895, end=896)),
- WhitespaceToken(region=StrRegion(start=896, end=901)),
- IdentNameToken(region=StrRegion(start=901, end=906)),
- LSqBracket(region=StrRegion(start=906, end=907)),
- IdentNameToken(region=StrRegion(start=907, end=914)),
- WhitespaceToken(region=StrRegion(start=914, end=915)),
- OpToken(region=StrRegion(start=915, end=916), op_str='-'),
- WhitespaceToken(region=StrRegion(start=916, end=917)),
- NumberToken(region=StrRegion(start=917, end=918)),
- RSqBracket(region=StrRegion(start=918, end=919)),
- WhitespaceToken(region=StrRegion(start=919, end=920)),
- OpToken(region=StrRegion(start=920, end=921), op_str='='),
- WhitespaceToken(region=StrRegion(start=921, end=922)),
- IdentNameToken(region=StrRegion(start=922, end=927)),
- LSqBracket(region=StrRegion(start=927, end=928)),
- IdentNameToken(region=StrRegion(start=928, end=935)),
- WhitespaceToken(region=StrRegion(start=935, end=936)),
- OpToken(region=StrRegion(start=936, end=937), op_str='-'),
- WhitespaceToken(region=StrRegion(start=937, end=938)),
- NumberToken(region=StrRegion(start=938, end=939)),
- RSqBracket(region=StrRegion(start=939, end=940)),
- SemicolonToken(region=StrRegion(start=940, end=941)),
- WhitespaceToken(region=StrRegion(start=941, end=946)),
- IdentNameToken(region=StrRegion(start=946, end=951)),
- LSqBracket(region=StrRegion(start=951, end=952)),
- IdentNameToken(region=StrRegion(start=952, end=959)),
- WhitespaceToken(region=StrRegion(start=959, end=960)),
- OpToken(region=StrRegion(start=960, end=961), op_str='-'),
- WhitespaceToken(region=StrRegion(start=961, end=962)),
- NumberToken(region=StrRegion(start=962, end=963)),
- RSqBracket(region=StrRegion(start=963, end=964)),
- WhitespaceToken(region=StrRegion(start=964, end=965)),
- OpToken(region=StrRegion(start=965, end=966), op_str='='),
- WhitespaceToken(region=StrRegion(start=966, end=967)),
- IdentNameToken(region=StrRegion(start=967, end=971)),
- SemicolonToken(region=StrRegion(start=971, end=972)),
- WhitespaceToken(region=StrRegion(start=972, end=973)),
- RBrace(region=StrRegion(start=973, end=974)),
- WhitespaceToken(region=StrRegion(start=974, end=976)),
- IdentNameToken(region=StrRegion(start=976, end=979)),
- WhitespaceToken(region=StrRegion(start=979, end=980)),
- IdentNameToken(region=StrRegion(start=980, end=987)),
- LParToken(region=StrRegion(start=987, end=988)),
- RParToken(region=StrRegion(start=988, end=989)),
- WhitespaceToken(region=StrRegion(start=989, end=990)),
- LBrace(region=StrRegion(start=990, end=991)),
- WhitespaceToken(region=StrRegion(start=991, end=996)),
- IdentNameToken(region=StrRegion(start=996, end=999)),
- WhitespaceToken(region=StrRegion(start=999, end=1000)),
- IdentNameToken(region=StrRegion(start=1000, end=1005)),
- WhitespaceToken(region=StrRegion(start=1005, end=1006)),
- OpToken(region=StrRegion(start=1006, end=1007), op_str='='),
- WhitespaceToken(region=StrRegion(start=1007, end=1008)),
- IdentNameToken(region=StrRegion(start=1008, end=1013)),
- LSqBracket(region=StrRegion(start=1013, end=1014)),
- IdentNameToken(region=StrRegion(start=1014, end=1017)),
- LParToken(region=StrRegion(start=1017, end=1018)),
- IdentNameToken(region=StrRegion(start=1018, end=1023)),
- RParToken(region=StrRegion(start=1023, end=1024)),
- RSqBracket(region=StrRegion(start=1024, end=1025)),
- SemicolonToken(region=StrRegion(start=1025, end=1026)),
- WhitespaceToken(region=StrRegion(start=1026, end=1031)),
- IdentNameToken(region=StrRegion(start=1031, end=1036)),
- DotToken(region=StrRegion(start=1036, end=1037)),
- AttrNameToken(region=StrRegion(start=1037, end=1043)),
- LParToken(region=StrRegion(start=1043, end=1044)),
- IdentNameToken(region=StrRegion(start=1044, end=1049)),
- RParToken(region=StrRegion(start=1049, end=1050)),
- SemicolonToken(region=StrRegion(start=1050, end=1051)),
- WhitespaceToken(region=StrRegion(start=1051, end=1056)),
- IdentNameToken(region=StrRegion(start=1056, end=1058)),
- WhitespaceToken(region=StrRegion(start=1058, end=1059)),
- IdentNameToken(region=StrRegion(start=1059, end=1069)),
- WhitespaceToken(region=StrRegion(start=1069, end=1070)),
- LBrace(region=StrRegion(start=1070, end=1071)),
- WhitespaceToken(region=StrRegion(start=1071, end=1080)),
- IdentNameToken(region=StrRegion(start=1080, end=1086)),
- LParToken(region=StrRegion(start=1086, end=1087)),
- IdentNameToken(region=StrRegion(start=1087, end=1092)),
- RParToken(region=StrRegion(start=1092, end=1093)),
- SemicolonToken(region=StrRegion(start=1093, end=1094)),
- WhitespaceToken(region=StrRegion(start=1094, end=1099)),
- RBrace(region=StrRegion(start=1099, end=1100)),
- WhitespaceToken(region=StrRegion(start=1100, end=1101)),
- RBrace(region=StrRegion(start=1101, end=1102)),
- WhitespaceToken(region=StrRegion(start=1102, end=1104)),
- IdentNameToken(region=StrRegion(start=1104, end=1107)),
- WhitespaceToken(region=StrRegion(start=1107, end=1108)),
- IdentNameToken(region=StrRegion(start=1108, end=1119)),
- LParToken(region=StrRegion(start=1119, end=1120)),
- RParToken(region=StrRegion(start=1120, end=1121)),
- WhitespaceToken(region=StrRegion(start=1121, end=1122)),
- LBrace(region=StrRegion(start=1122, end=1123)),
- WhitespaceToken(region=StrRegion(start=1123, end=1128)),
- IdentNameToken(region=StrRegion(start=1128, end=1131)),
- WhitespaceToken(region=StrRegion(start=1131, end=1132)),
- IdentNameToken(region=StrRegion(start=1132, end=1139)),
- WhitespaceToken(region=StrRegion(start=1139, end=1140)),
- OpToken(region=StrRegion(start=1140, end=1141), op_str='='),
- WhitespaceToken(region=StrRegion(start=1141, end=1142)),
- IdentNameToken(region=StrRegion(start=1142, end=1145)),
- LParToken(region=StrRegion(start=1145, end=1146)),
- IdentNameToken(region=StrRegion(start=1146, end=1151)),
- RParToken(region=StrRegion(start=1151, end=1152)),
- SemicolonToken(region=StrRegion(start=1152, end=1153)),
- WhitespaceToken(region=StrRegion(start=1153, end=1158)),
- IdentNameToken(region=StrRegion(start=1158, end=1161)),
- WhitespaceToken(region=StrRegion(start=1161, end=1162)),
- IdentNameToken(region=StrRegion(start=1162, end=1166)),
- WhitespaceToken(region=StrRegion(start=1166, end=1167)),
- OpToken(region=StrRegion(start=1167, end=1168), op_str='='),
- WhitespaceToken(region=StrRegion(start=1168, end=1169)),
- IdentNameToken(region=StrRegion(start=1169, end=1174)),
- LSqBracket(region=StrRegion(start=1174, end=1175)),
- IdentNameToken(region=StrRegion(start=1175, end=1182)),
- RSqBracket(region=StrRegion(start=1182, end=1183)),
- SemicolonToken(region=StrRegion(start=1183, end=1184)),
- WhitespaceToken(region=StrRegion(start=1184, end=1189)),
- IdentNameToken(region=StrRegion(start=1189, end=1192)),
- WhitespaceToken(region=StrRegion(start=1192, end=1193)),
- IdentNameToken(region=StrRegion(start=1193, end=1197)),
- WhitespaceToken(region=StrRegion(start=1197, end=1198)),
- OpToken(region=StrRegion(start=1198, end=1199), op_str='='),
- WhitespaceToken(region=StrRegion(start=1199, end=1200)),
- IdentNameToken(region=StrRegion(start=1200, end=1205)),
- LSqBracket(region=StrRegion(start=1205, end=1206)),
- IdentNameToken(region=StrRegion(start=1206, end=1213)),
- WhitespaceToken(region=StrRegion(start=1213, end=1214)),
- OpToken(region=StrRegion(start=1214, end=1215), op_str='-'),
- WhitespaceToken(region=StrRegion(start=1215, end=1216)),
- NumberToken(region=StrRegion(start=1216, end=1217)),
- RSqBracket(region=StrRegion(start=1217, end=1218)),
- SemicolonToken(region=StrRegion(start=1218, end=1219)),
- WhitespaceToken(region=StrRegion(start=1219, end=1224)),
- IdentNameToken(region=StrRegion(start=1224, end=1229)),
- DotToken(region=StrRegion(start=1229, end=1230)),
- AttrNameToken(region=StrRegion(start=1230, end=1236)),
- LParToken(region=StrRegion(start=1236, end=1237)),
- IdentNameToken(region=StrRegion(start=1237, end=1241)),
- RParToken(region=StrRegion(start=1241, end=1242)),
- SemicolonToken(region=StrRegion(start=1242, end=1243)),
- WhitespaceToken(region=StrRegion(start=1243, end=1248)),
- IdentNameToken(region=StrRegion(start=1248, end=1253)),
- DotToken(region=StrRegion(start=1253, end=1254)),
- AttrNameToken(region=StrRegion(start=1254, end=1260)),
- LParToken(region=StrRegion(start=1260, end=1261)),
- IdentNameToken(region=StrRegion(start=1261, end=1265)),
- RParToken(region=StrRegion(start=1265, end=1266)),
- SemicolonToken(region=StrRegion(start=1266, end=1267)),
- WhitespaceToken(region=StrRegion(start=1267, end=1269)),
- LineCommentToken(region=StrRegion(start=1269, end=1288)),
- WhitespaceToken(region=StrRegion(start=1288, end=1293)),
- IdentNameToken(region=StrRegion(start=1293, end=1295)),
- WhitespaceToken(region=StrRegion(start=1295, end=1296)),
- IdentNameToken(region=StrRegion(start=1296, end=1306)),
- WhitespaceToken(region=StrRegion(start=1306, end=1307)),
- LBrace(region=StrRegion(start=1307, end=1308)),
- WhitespaceToken(region=StrRegion(start=1308, end=1317)),
- IdentNameToken(region=StrRegion(start=1317, end=1323)),
- LParToken(region=StrRegion(start=1323, end=1324)),
- IdentNameToken(region=StrRegion(start=1324, end=1328)),
- RParToken(region=StrRegion(start=1328, end=1329)),
- SemicolonToken(region=StrRegion(start=1329, end=1330)),
- WhitespaceToken(region=StrRegion(start=1330, end=1339)),
- IdentNameToken(region=StrRegion(start=1339, end=1345)),
- LParToken(region=StrRegion(start=1345, end=1346)),
- IdentNameToken(region=StrRegion(start=1346, end=1350)),
- RParToken(region=StrRegion(start=1350, end=1351)),
- SemicolonToken(region=StrRegion(start=1351, end=1352)),
- WhitespaceToken(region=StrRegion(start=1352, end=1357)),
- RBrace(region=StrRegion(start=1357, end=1358)),
- WhitespaceToken(region=StrRegion(start=1358, end=1359)),
- RBrace(region=StrRegion(start=1359, end=1360)),
- WhitespaceToken(region=StrRegion(start=1360, end=1362)),
- IdentNameToken(region=StrRegion(start=1362, end=1365)),
- WhitespaceToken(region=StrRegion(start=1365, end=1366)),
- IdentNameToken(region=StrRegion(start=1366, end=1374)),
- LParToken(region=StrRegion(start=1374, end=1375)),
- RParToken(region=StrRegion(start=1375, end=1376)),
- WhitespaceToken(region=StrRegion(start=1376, end=1377)),
- LBrace(region=StrRegion(start=1377, end=1378)),
- WhitespaceToken(region=StrRegion(start=1378, end=1383)),
- LineCommentToken(region=StrRegion(start=1383, end=1396)),
- WhitespaceToken(region=StrRegion(start=1396, end=1401)),
- LineCommentToken(region=StrRegion(start=1401, end=1414)),
- WhitespaceToken(region=StrRegion(start=1414, end=1419)),
- LineCommentToken(region=StrRegion(start=1419, end=1433)),
- WhitespaceToken(region=StrRegion(start=1433, end=1438)),
- LineCommentToken(region=StrRegion(start=1438, end=1452)),
- WhitespaceToken(region=StrRegion(start=1452, end=1457)),
- IdentNameToken(region=StrRegion(start=1457, end=1460)),
- WhitespaceToken(region=StrRegion(start=1460, end=1461)),
- IdentNameToken(region=StrRegion(start=1461, end=1468)),
- WhitespaceToken(region=StrRegion(start=1468, end=1469)),
- OpToken(region=StrRegion(start=1469, end=1470), op_str='='),
- WhitespaceToken(region=StrRegion(start=1470, end=1471)),
- IdentNameToken(region=StrRegion(start=1471, end=1474)),
- LParToken(region=StrRegion(start=1474, end=1475)),
- IdentNameToken(region=StrRegion(start=1475, end=1480)),
- RParToken(region=StrRegion(start=1480, end=1481)),
- SemicolonToken(region=StrRegion(start=1481, end=1482)),
- WhitespaceToken(region=StrRegion(start=1482, end=1487)),
- IdentNameToken(region=StrRegion(start=1487, end=1490)),
- WhitespaceToken(region=StrRegion(start=1490, end=1491)),
- IdentNameToken(region=StrRegion(start=1491, end=1495)),
- WhitespaceToken(region=StrRegion(start=1495, end=1496)),
- OpToken(region=StrRegion(start=1496, end=1497), op_str='='),
- WhitespaceToken(region=StrRegion(start=1497, end=1498)),
- IdentNameToken(region=StrRegion(start=1498, end=1503)),
- LSqBracket(region=StrRegion(start=1503, end=1504)),
- IdentNameToken(region=StrRegion(start=1504, end=1507)),
- RSqBracket(region=StrRegion(start=1507, end=1508)),
- SemicolonToken(region=StrRegion(start=1508, end=1509)),
- WhitespaceToken(region=StrRegion(start=1509, end=1514)),
- IdentNameToken(region=StrRegion(start=1514, end=1519)),
- LSqBracket(region=StrRegion(start=1519, end=1520)),
- IdentNameToken(region=StrRegion(start=1520, end=1527)),
- RSqBracket(region=StrRegion(start=1527, end=1528)),
- WhitespaceToken(region=StrRegion(start=1528, end=1529)),
- OpToken(region=StrRegion(start=1529, end=1530), op_str='='),
- WhitespaceToken(region=StrRegion(start=1530, end=1531)),
- IdentNameToken(region=StrRegion(start=1531, end=1536)),
- LSqBracket(region=StrRegion(start=1536, end=1537)),
- IdentNameToken(region=StrRegion(start=1537, end=1544)),
- WhitespaceToken(region=StrRegion(start=1544, end=1545)),
- OpToken(region=StrRegion(start=1545, end=1546), op_str='-'),
- WhitespaceToken(region=StrRegion(start=1546, end=1547)),
- NumberToken(region=StrRegion(start=1547, end=1548)),
- RSqBracket(region=StrRegion(start=1548, end=1549)),
- SemicolonToken(region=StrRegion(start=1549, end=1550)),
- WhitespaceToken(region=StrRegion(start=1550, end=1555)),
- IdentNameToken(region=StrRegion(start=1555, end=1560)),
- LSqBracket(region=StrRegion(start=1560, end=1561)),
- IdentNameToken(region=StrRegion(start=1561, end=1568)),
- WhitespaceToken(region=StrRegion(start=1568, end=1569)),
- OpToken(region=StrRegion(start=1569, end=1570), op_str='-'),
- WhitespaceToken(region=StrRegion(start=1570, end=1571)),
- NumberToken(region=StrRegion(start=1571, end=1572)),
- RSqBracket(region=StrRegion(start=1572, end=1573)),
- WhitespaceToken(region=StrRegion(start=1573, end=1574)),
- OpToken(region=StrRegion(start=1574, end=1575), op_str='='),
- WhitespaceToken(region=StrRegion(start=1575, end=1576)),
- IdentNameToken(region=StrRegion(start=1576, end=1581)),
- LSqBracket(region=StrRegion(start=1581, end=1582)),
- IdentNameToken(region=StrRegion(start=1582, end=1589)),
- WhitespaceToken(region=StrRegion(start=1589, end=1590)),
- OpToken(region=StrRegion(start=1590, end=1591), op_str='-'),
- WhitespaceToken(region=StrRegion(start=1591, end=1592)),
- NumberToken(region=StrRegion(start=1592, end=1593)),
- RSqBracket(region=StrRegion(start=1593, end=1594)),
- SemicolonToken(region=StrRegion(start=1594, end=1595)),
- WhitespaceToken(region=StrRegion(start=1595, end=1600)),
- IdentNameToken(region=StrRegion(start=1600, end=1605)),
- LSqBracket(region=StrRegion(start=1605, end=1606)),
- IdentNameToken(region=StrRegion(start=1606, end=1613)),
- WhitespaceToken(region=StrRegion(start=1613, end=1614)),
- OpToken(region=StrRegion(start=1614, end=1615), op_str='-'),
- WhitespaceToken(region=StrRegion(start=1615, end=1616)),
- NumberToken(region=StrRegion(start=1616, end=1617)),
- RSqBracket(region=StrRegion(start=1617, end=1618)),
- WhitespaceToken(region=StrRegion(start=1618, end=1619)),
- OpToken(region=StrRegion(start=1619, end=1620), op_str='='),
- WhitespaceToken(region=StrRegion(start=1620, end=1621)),
- IdentNameToken(region=StrRegion(start=1621, end=1626)),
- LSqBracket(region=StrRegion(start=1626, end=1627)),
- IdentNameToken(region=StrRegion(start=1627, end=1634)),
- WhitespaceToken(region=StrRegion(start=1634, end=1635)),
- OpToken(region=StrRegion(start=1635, end=1636), op_str='-'),
- WhitespaceToken(region=StrRegion(start=1636, end=1637)),
- NumberToken(region=StrRegion(start=1637, end=1638)),
- RSqBracket(region=StrRegion(start=1638, end=1639)),
- SemicolonToken(region=StrRegion(start=1639, end=1640)),
- WhitespaceToken(region=StrRegion(start=1640, end=1645)),
- IdentNameToken(region=StrRegion(start=1645, end=1650)),
- LSqBracket(region=StrRegion(start=1650, end=1651)),
- IdentNameToken(region=StrRegion(start=1651, end=1658)),
- WhitespaceToken(region=StrRegion(start=1658, end=1659)),
- OpToken(region=StrRegion(start=1659, end=1660), op_str='-'),
- WhitespaceToken(region=StrRegion(start=1660, end=1661)),
- NumberToken(region=StrRegion(start=1661, end=1662)),
- RSqBracket(region=StrRegion(start=1662, end=1663)),
- WhitespaceToken(region=StrRegion(start=1663, end=1664)),
- OpToken(region=StrRegion(start=1664, end=1665), op_str='='),
- WhitespaceToken(region=StrRegion(start=1665, end=1666)),
- IdentNameToken(region=StrRegion(start=1666, end=1670)),
- SemicolonToken(region=StrRegion(start=1670, end=1671)),
- WhitespaceToken(region=StrRegion(start=1671, end=1672)),
- RBrace(region=StrRegion(start=1672, end=1673)),
- WhitespaceToken(region=StrRegion(start=1673, end=1675)),
+ LSqBracket(region=StrRegion(start=17, end=18)),
+ RSqBracket(region=StrRegion(start=18, end=19)),
+ SemicolonToken(region=StrRegion(start=19, end=20)),
+ WhitespaceToken(region=StrRegion(start=20, end=21)),
+ IdentNameToken(region=StrRegion(start=21, end=27)),
+ WhitespaceToken(region=StrRegion(start=27, end=28)),
+ IdentNameToken(region=StrRegion(start=28, end=38)),
+ WhitespaceToken(region=StrRegion(start=38, end=39)),
+ OpToken(region=StrRegion(start=39, end=40), op_str='='),
+ WhitespaceToken(region=StrRegion(start=40, end=41)),
+ IdentNameToken(region=StrRegion(start=41, end=46)),
+ SemicolonToken(region=StrRegion(start=46, end=47)),
+ WhitespaceToken(region=StrRegion(start=47, end=49)),
+ LineCommentToken(region=StrRegion(start=49, end=84)),
+ WhitespaceToken(region=StrRegion(start=84, end=86)),
+ LineCommentToken(region=StrRegion(start=86, end=145)),
+ WhitespaceToken(region=StrRegion(start=145, end=146)),
+ LineCommentToken(region=StrRegion(start=146, end=230)),
+ WhitespaceToken(region=StrRegion(start=230, end=231)),
+ LineCommentToken(region=StrRegion(start=231, end=314)),
+ WhitespaceToken(region=StrRegion(start=314, end=315)),
+ LineCommentToken(region=StrRegion(start=315, end=394)),
+ WhitespaceToken(region=StrRegion(start=394, end=396)),
+ IdentNameToken(region=StrRegion(start=396, end=399)),
+ WhitespaceToken(region=StrRegion(start=399, end=400)),
+ IdentNameToken(region=StrRegion(start=400, end=407)),
+ LParToken(region=StrRegion(start=407, end=408)),
+ RParToken(region=StrRegion(start=408, end=409)),
+ WhitespaceToken(region=StrRegion(start=409, end=410)),
+ LBrace(region=StrRegion(start=410, end=411)),
+ WhitespaceToken(region=StrRegion(start=411, end=416)),
+ IdentNameToken(region=StrRegion(start=416, end=418)),
+ WhitespaceToken(region=StrRegion(start=418, end=419)),
+ IdentNameToken(region=StrRegion(start=419, end=429)),
+ WhitespaceToken(region=StrRegion(start=429, end=430)),
+ LBrace(region=StrRegion(start=430, end=431)),
+ WhitespaceToken(region=StrRegion(start=431, end=440)),
+ IdentNameToken(region=StrRegion(start=440, end=446)),
+ LParToken(region=StrRegion(start=446, end=447)),
+ IdentNameToken(region=StrRegion(start=447, end=452)),
+ LSqBracket(region=StrRegion(start=452, end=453)),
+ IdentNameToken(region=StrRegion(start=453, end=456)),
+ LParToken(region=StrRegion(start=456, end=457)),
+ IdentNameToken(region=StrRegion(start=457, end=462)),
+ RParToken(region=StrRegion(start=462, end=463)),
+ RSqBracket(region=StrRegion(start=463, end=464)),
+ RParToken(region=StrRegion(start=464, end=465)),
+ SemicolonToken(region=StrRegion(start=465, end=466)),
+ WhitespaceToken(region=StrRegion(start=466, end=471)),
+ RBrace(region=StrRegion(start=471, end=472)),
+ WhitespaceToken(region=StrRegion(start=472, end=477)),
+ IdentNameToken(region=StrRegion(start=477, end=484)),
+ LParToken(region=StrRegion(start=484, end=485)),
+ IdentNameToken(region=StrRegion(start=485, end=490)),
+ CommaToken(region=StrRegion(start=490, end=491)),
+ WhitespaceToken(region=StrRegion(start=491, end=492)),
+ IdentNameToken(region=StrRegion(start=492, end=495)),
+ LParToken(region=StrRegion(start=495, end=496)),
+ IdentNameToken(region=StrRegion(start=496, end=501)),
+ RParToken(region=StrRegion(start=501, end=502)),
+ RParToken(region=StrRegion(start=502, end=503)),
+ SemicolonToken(region=StrRegion(start=503, end=504)),
+ WhitespaceToken(region=StrRegion(start=504, end=505)),
+ RBrace(region=StrRegion(start=505, end=506)),
+ WhitespaceToken(region=StrRegion(start=506, end=508)),
+ IdentNameToken(region=StrRegion(start=508, end=511)),
+ WhitespaceToken(region=StrRegion(start=511, end=512)),
+ IdentNameToken(region=StrRegion(start=512, end=519)),
+ LParToken(region=StrRegion(start=519, end=520)),
+ RParToken(region=StrRegion(start=520, end=521)),
+ WhitespaceToken(region=StrRegion(start=521, end=522)),
+ LBrace(region=StrRegion(start=522, end=523)),
+ WhitespaceToken(region=StrRegion(start=523, end=528)),
+ IdentNameToken(region=StrRegion(start=528, end=531)),
+ WhitespaceToken(region=StrRegion(start=531, end=532)),
+ IdentNameToken(region=StrRegion(start=532, end=539)),
+ WhitespaceToken(region=StrRegion(start=539, end=540)),
+ OpToken(region=StrRegion(start=540, end=541), op_str='='),
+ WhitespaceToken(region=StrRegion(start=541, end=542)),
+ IdentNameToken(region=StrRegion(start=542, end=545)),
+ LParToken(region=StrRegion(start=545, end=546)),
+ IdentNameToken(region=StrRegion(start=546, end=551)),
+ RParToken(region=StrRegion(start=551, end=552)),
+ SemicolonToken(region=StrRegion(start=552, end=553)),
+ WhitespaceToken(region=StrRegion(start=553, end=558)),
+ IdentNameToken(region=StrRegion(start=558, end=561)),
+ WhitespaceToken(region=StrRegion(start=561, end=562)),
+ IdentNameToken(region=StrRegion(start=562, end=566)),
+ WhitespaceToken(region=StrRegion(start=566, end=567)),
+ OpToken(region=StrRegion(start=567, end=568), op_str='='),
+ WhitespaceToken(region=StrRegion(start=568, end=569)),
+ IdentNameToken(region=StrRegion(start=569, end=574)),
+ LSqBracket(region=StrRegion(start=574, end=575)),
+ IdentNameToken(region=StrRegion(start=575, end=582)),
+ RSqBracket(region=StrRegion(start=582, end=583)),
+ SemicolonToken(region=StrRegion(start=583, end=584)),
+ WhitespaceToken(region=StrRegion(start=584, end=589)),
+ IdentNameToken(region=StrRegion(start=589, end=594)),
+ LSqBracket(region=StrRegion(start=594, end=595)),
+ IdentNameToken(region=StrRegion(start=595, end=602)),
+ RSqBracket(region=StrRegion(start=602, end=603)),
+ WhitespaceToken(region=StrRegion(start=603, end=604)),
+ OpToken(region=StrRegion(start=604, end=605), op_str='='),
+ WhitespaceToken(region=StrRegion(start=605, end=606)),
+ IdentNameToken(region=StrRegion(start=606, end=611)),
+ LSqBracket(region=StrRegion(start=611, end=612)),
+ IdentNameToken(region=StrRegion(start=612, end=619)),
+ WhitespaceToken(region=StrRegion(start=619, end=620)),
+ OpToken(region=StrRegion(start=620, end=621), op_str='-'),
+ WhitespaceToken(region=StrRegion(start=621, end=622)),
+ NumberToken(region=StrRegion(start=622, end=623)),
+ RSqBracket(region=StrRegion(start=623, end=624)),
+ SemicolonToken(region=StrRegion(start=624, end=625)),
+ WhitespaceToken(region=StrRegion(start=625, end=630)),
+ IdentNameToken(region=StrRegion(start=630, end=635)),
+ LSqBracket(region=StrRegion(start=635, end=636)),
+ IdentNameToken(region=StrRegion(start=636, end=643)),
+ WhitespaceToken(region=StrRegion(start=643, end=644)),
+ OpToken(region=StrRegion(start=644, end=645), op_str='-'),
+ WhitespaceToken(region=StrRegion(start=645, end=646)),
+ NumberToken(region=StrRegion(start=646, end=647)),
+ RSqBracket(region=StrRegion(start=647, end=648)),
+ WhitespaceToken(region=StrRegion(start=648, end=649)),
+ OpToken(region=StrRegion(start=649, end=650), op_str='='),
+ WhitespaceToken(region=StrRegion(start=650, end=651)),
+ IdentNameToken(region=StrRegion(start=651, end=655)),
+ SemicolonToken(region=StrRegion(start=655, end=656)),
+ WhitespaceToken(region=StrRegion(start=656, end=657)),
+ RBrace(region=StrRegion(start=657, end=658)),
+ WhitespaceToken(region=StrRegion(start=658, end=660)),
+ IdentNameToken(region=StrRegion(start=660, end=663)),
+ WhitespaceToken(region=StrRegion(start=663, end=664)),
+ IdentNameToken(region=StrRegion(start=664, end=673)),
+ LParToken(region=StrRegion(start=673, end=674)),
+ RParToken(region=StrRegion(start=674, end=675)),
+ WhitespaceToken(region=StrRegion(start=675, end=676)),
+ LBrace(region=StrRegion(start=676, end=677)),
+ WhitespaceToken(region=StrRegion(start=677, end=682)),
+ LineCommentToken(region=StrRegion(start=682, end=698)),
+ WhitespaceToken(region=StrRegion(start=698, end=703)),
+ LineCommentToken(region=StrRegion(start=703, end=719)),
+ WhitespaceToken(region=StrRegion(start=719, end=724)),
+ LineCommentToken(region=StrRegion(start=724, end=738)),
+ WhitespaceToken(region=StrRegion(start=738, end=743)),
+ LineCommentToken(region=StrRegion(start=743, end=790)),
+ WhitespaceToken(region=StrRegion(start=790, end=795)),
+ IdentNameToken(region=StrRegion(start=795, end=798)),
+ WhitespaceToken(region=StrRegion(start=798, end=799)),
+ IdentNameToken(region=StrRegion(start=799, end=806)),
+ WhitespaceToken(region=StrRegion(start=806, end=807)),
+ OpToken(region=StrRegion(start=807, end=808), op_str='='),
+ WhitespaceToken(region=StrRegion(start=808, end=809)),
+ IdentNameToken(region=StrRegion(start=809, end=812)),
+ LParToken(region=StrRegion(start=812, end=813)),
+ IdentNameToken(region=StrRegion(start=813, end=818)),
+ RParToken(region=StrRegion(start=818, end=819)),
+ SemicolonToken(region=StrRegion(start=819, end=820)),
+ WhitespaceToken(region=StrRegion(start=820, end=825)),
+ IdentNameToken(region=StrRegion(start=825, end=828)),
+ WhitespaceToken(region=StrRegion(start=828, end=829)),
+ IdentNameToken(region=StrRegion(start=829, end=833)),
+ WhitespaceToken(region=StrRegion(start=833, end=834)),
+ OpToken(region=StrRegion(start=834, end=835), op_str='='),
+ WhitespaceToken(region=StrRegion(start=835, end=836)),
+ IdentNameToken(region=StrRegion(start=836, end=841)),
+ LSqBracket(region=StrRegion(start=841, end=842)),
+ IdentNameToken(region=StrRegion(start=842, end=849)),
+ RSqBracket(region=StrRegion(start=849, end=850)),
+ SemicolonToken(region=StrRegion(start=850, end=851)),
+ WhitespaceToken(region=StrRegion(start=851, end=856)),
+ IdentNameToken(region=StrRegion(start=856, end=861)),
+ LSqBracket(region=StrRegion(start=861, end=862)),
+ IdentNameToken(region=StrRegion(start=862, end=869)),
+ RSqBracket(region=StrRegion(start=869, end=870)),
+ WhitespaceToken(region=StrRegion(start=870, end=871)),
+ OpToken(region=StrRegion(start=871, end=872), op_str='='),
+ WhitespaceToken(region=StrRegion(start=872, end=873)),
+ IdentNameToken(region=StrRegion(start=873, end=878)),
+ LSqBracket(region=StrRegion(start=878, end=879)),
+ IdentNameToken(region=StrRegion(start=879, end=886)),
+ WhitespaceToken(region=StrRegion(start=886, end=887)),
+ OpToken(region=StrRegion(start=887, end=888), op_str='-'),
+ WhitespaceToken(region=StrRegion(start=888, end=889)),
+ NumberToken(region=StrRegion(start=889, end=890)),
+ RSqBracket(region=StrRegion(start=890, end=891)),
+ SemicolonToken(region=StrRegion(start=891, end=892)),
+ WhitespaceToken(region=StrRegion(start=892, end=897)),
+ IdentNameToken(region=StrRegion(start=897, end=902)),
+ LSqBracket(region=StrRegion(start=902, end=903)),
+ IdentNameToken(region=StrRegion(start=903, end=910)),
+ WhitespaceToken(region=StrRegion(start=910, end=911)),
+ OpToken(region=StrRegion(start=911, end=912), op_str='-'),
+ WhitespaceToken(region=StrRegion(start=912, end=913)),
+ NumberToken(region=StrRegion(start=913, end=914)),
+ RSqBracket(region=StrRegion(start=914, end=915)),
+ WhitespaceToken(region=StrRegion(start=915, end=916)),
+ OpToken(region=StrRegion(start=916, end=917), op_str='='),
+ WhitespaceToken(region=StrRegion(start=917, end=918)),
+ IdentNameToken(region=StrRegion(start=918, end=923)),
+ LSqBracket(region=StrRegion(start=923, end=924)),
+ IdentNameToken(region=StrRegion(start=924, end=931)),
+ WhitespaceToken(region=StrRegion(start=931, end=932)),
+ OpToken(region=StrRegion(start=932, end=933), op_str='-'),
+ WhitespaceToken(region=StrRegion(start=933, end=934)),
+ NumberToken(region=StrRegion(start=934, end=935)),
+ RSqBracket(region=StrRegion(start=935, end=936)),
+ SemicolonToken(region=StrRegion(start=936, end=937)),
+ WhitespaceToken(region=StrRegion(start=937, end=942)),
+ IdentNameToken(region=StrRegion(start=942, end=947)),
+ LSqBracket(region=StrRegion(start=947, end=948)),
+ IdentNameToken(region=StrRegion(start=948, end=955)),
+ WhitespaceToken(region=StrRegion(start=955, end=956)),
+ OpToken(region=StrRegion(start=956, end=957), op_str='-'),
+ WhitespaceToken(region=StrRegion(start=957, end=958)),
+ NumberToken(region=StrRegion(start=958, end=959)),
+ RSqBracket(region=StrRegion(start=959, end=960)),
+ WhitespaceToken(region=StrRegion(start=960, end=961)),
+ OpToken(region=StrRegion(start=961, end=962), op_str='='),
+ WhitespaceToken(region=StrRegion(start=962, end=963)),
+ IdentNameToken(region=StrRegion(start=963, end=967)),
+ SemicolonToken(region=StrRegion(start=967, end=968)),
+ WhitespaceToken(region=StrRegion(start=968, end=969)),
+ RBrace(region=StrRegion(start=969, end=970)),
+ WhitespaceToken(region=StrRegion(start=970, end=972)),
+ IdentNameToken(region=StrRegion(start=972, end=975)),
+ WhitespaceToken(region=StrRegion(start=975, end=976)),
+ IdentNameToken(region=StrRegion(start=976, end=983)),
+ LParToken(region=StrRegion(start=983, end=984)),
+ RParToken(region=StrRegion(start=984, end=985)),
+ WhitespaceToken(region=StrRegion(start=985, end=986)),
+ LBrace(region=StrRegion(start=986, end=987)),
+ WhitespaceToken(region=StrRegion(start=987, end=992)),
+ IdentNameToken(region=StrRegion(start=992, end=995)),
+ WhitespaceToken(region=StrRegion(start=995, end=996)),
+ IdentNameToken(region=StrRegion(start=996, end=1001)),
+ WhitespaceToken(region=StrRegion(start=1001, end=1002)),
+ OpToken(region=StrRegion(start=1002, end=1003), op_str='='),
+ WhitespaceToken(region=StrRegion(start=1003, end=1004)),
+ IdentNameToken(region=StrRegion(start=1004, end=1009)),
+ LSqBracket(region=StrRegion(start=1009, end=1010)),
+ IdentNameToken(region=StrRegion(start=1010, end=1013)),
+ LParToken(region=StrRegion(start=1013, end=1014)),
+ IdentNameToken(region=StrRegion(start=1014, end=1019)),
+ RParToken(region=StrRegion(start=1019, end=1020)),
+ RSqBracket(region=StrRegion(start=1020, end=1021)),
+ SemicolonToken(region=StrRegion(start=1021, end=1022)),
+ WhitespaceToken(region=StrRegion(start=1022, end=1027)),
+ IdentNameToken(region=StrRegion(start=1027, end=1032)),
+ DotToken(region=StrRegion(start=1032, end=1033)),
+ AttrNameToken(region=StrRegion(start=1033, end=1039)),
+ LParToken(region=StrRegion(start=1039, end=1040)),
+ IdentNameToken(region=StrRegion(start=1040, end=1045)),
+ RParToken(region=StrRegion(start=1045, end=1046)),
+ SemicolonToken(region=StrRegion(start=1046, end=1047)),
+ WhitespaceToken(region=StrRegion(start=1047, end=1052)),
+ IdentNameToken(region=StrRegion(start=1052, end=1054)),
+ WhitespaceToken(region=StrRegion(start=1054, end=1055)),
+ IdentNameToken(region=StrRegion(start=1055, end=1065)),
+ WhitespaceToken(region=StrRegion(start=1065, end=1066)),
+ LBrace(region=StrRegion(start=1066, end=1067)),
+ WhitespaceToken(region=StrRegion(start=1067, end=1076)),
+ IdentNameToken(region=StrRegion(start=1076, end=1082)),
+ LParToken(region=StrRegion(start=1082, end=1083)),
+ IdentNameToken(region=StrRegion(start=1083, end=1088)),
+ RParToken(region=StrRegion(start=1088, end=1089)),
+ SemicolonToken(region=StrRegion(start=1089, end=1090)),
+ WhitespaceToken(region=StrRegion(start=1090, end=1095)),
+ RBrace(region=StrRegion(start=1095, end=1096)),
+ WhitespaceToken(region=StrRegion(start=1096, end=1097)),
+ RBrace(region=StrRegion(start=1097, end=1098)),
+ WhitespaceToken(region=StrRegion(start=1098, end=1100)),
+ IdentNameToken(region=StrRegion(start=1100, end=1103)),
+ WhitespaceToken(region=StrRegion(start=1103, end=1104)),
+ IdentNameToken(region=StrRegion(start=1104, end=1115)),
+ LParToken(region=StrRegion(start=1115, end=1116)),
+ RParToken(region=StrRegion(start=1116, end=1117)),
+ WhitespaceToken(region=StrRegion(start=1117, end=1118)),
+ LBrace(region=StrRegion(start=1118, end=1119)),
+ WhitespaceToken(region=StrRegion(start=1119, end=1124)),
+ IdentNameToken(region=StrRegion(start=1124, end=1127)),
+ WhitespaceToken(region=StrRegion(start=1127, end=1128)),
+ IdentNameToken(region=StrRegion(start=1128, end=1135)),
+ WhitespaceToken(region=StrRegion(start=1135, end=1136)),
+ OpToken(region=StrRegion(start=1136, end=1137), op_str='='),
+ WhitespaceToken(region=StrRegion(start=1137, end=1138)),
+ IdentNameToken(region=StrRegion(start=1138, end=1141)),
+ LParToken(region=StrRegion(start=1141, end=1142)),
+ IdentNameToken(region=StrRegion(start=1142, end=1147)),
+ RParToken(region=StrRegion(start=1147, end=1148)),
+ SemicolonToken(region=StrRegion(start=1148, end=1149)),
+ WhitespaceToken(region=StrRegion(start=1149, end=1154)),
+ IdentNameToken(region=StrRegion(start=1154, end=1157)),
+ WhitespaceToken(region=StrRegion(start=1157, end=1158)),
+ IdentNameToken(region=StrRegion(start=1158, end=1162)),
+ WhitespaceToken(region=StrRegion(start=1162, end=1163)),
+ OpToken(region=StrRegion(start=1163, end=1164), op_str='='),
+ WhitespaceToken(region=StrRegion(start=1164, end=1165)),
+ IdentNameToken(region=StrRegion(start=1165, end=1170)),
+ LSqBracket(region=StrRegion(start=1170, end=1171)),
+ IdentNameToken(region=StrRegion(start=1171, end=1178)),
+ RSqBracket(region=StrRegion(start=1178, end=1179)),
+ SemicolonToken(region=StrRegion(start=1179, end=1180)),
+ WhitespaceToken(region=StrRegion(start=1180, end=1185)),
+ IdentNameToken(region=StrRegion(start=1185, end=1188)),
+ WhitespaceToken(region=StrRegion(start=1188, end=1189)),
+ IdentNameToken(region=StrRegion(start=1189, end=1193)),
+ WhitespaceToken(region=StrRegion(start=1193, end=1194)),
+ OpToken(region=StrRegion(start=1194, end=1195), op_str='='),
+ WhitespaceToken(region=StrRegion(start=1195, end=1196)),
+ IdentNameToken(region=StrRegion(start=1196, end=1201)),
+ LSqBracket(region=StrRegion(start=1201, end=1202)),
+ IdentNameToken(region=StrRegion(start=1202, end=1209)),
+ WhitespaceToken(region=StrRegion(start=1209, end=1210)),
+ OpToken(region=StrRegion(start=1210, end=1211), op_str='-'),
+ WhitespaceToken(region=StrRegion(start=1211, end=1212)),
+ NumberToken(region=StrRegion(start=1212, end=1213)),
+ RSqBracket(region=StrRegion(start=1213, end=1214)),
+ SemicolonToken(region=StrRegion(start=1214, end=1215)),
+ WhitespaceToken(region=StrRegion(start=1215, end=1220)),
+ IdentNameToken(region=StrRegion(start=1220, end=1225)),
+ DotToken(region=StrRegion(start=1225, end=1226)),
+ AttrNameToken(region=StrRegion(start=1226, end=1232)),
+ LParToken(region=StrRegion(start=1232, end=1233)),
+ IdentNameToken(region=StrRegion(start=1233, end=1237)),
+ RParToken(region=StrRegion(start=1237, end=1238)),
+ SemicolonToken(region=StrRegion(start=1238, end=1239)),
+ WhitespaceToken(region=StrRegion(start=1239, end=1244)),
+ IdentNameToken(region=StrRegion(start=1244, end=1249)),
+ DotToken(region=StrRegion(start=1249, end=1250)),
+ AttrNameToken(region=StrRegion(start=1250, end=1256)),
+ LParToken(region=StrRegion(start=1256, end=1257)),
+ IdentNameToken(region=StrRegion(start=1257, end=1261)),
+ RParToken(region=StrRegion(start=1261, end=1262)),
+ SemicolonToken(region=StrRegion(start=1262, end=1263)),
+ WhitespaceToken(region=StrRegion(start=1263, end=1265)),
+ LineCommentToken(region=StrRegion(start=1265, end=1284)),
+ WhitespaceToken(region=StrRegion(start=1284, end=1289)),
+ IdentNameToken(region=StrRegion(start=1289, end=1291)),
+ WhitespaceToken(region=StrRegion(start=1291, end=1292)),
+ IdentNameToken(region=StrRegion(start=1292, end=1302)),
+ WhitespaceToken(region=StrRegion(start=1302, end=1303)),
+ LBrace(region=StrRegion(start=1303, end=1304)),
+ WhitespaceToken(region=StrRegion(start=1304, end=1313)),
+ IdentNameToken(region=StrRegion(start=1313, end=1319)),
+ LParToken(region=StrRegion(start=1319, end=1320)),
+ IdentNameToken(region=StrRegion(start=1320, end=1324)),
+ RParToken(region=StrRegion(start=1324, end=1325)),
+ SemicolonToken(region=StrRegion(start=1325, end=1326)),
+ WhitespaceToken(region=StrRegion(start=1326, end=1335)),
+ IdentNameToken(region=StrRegion(start=1335, end=1341)),
+ LParToken(region=StrRegion(start=1341, end=1342)),
+ IdentNameToken(region=StrRegion(start=1342, end=1346)),
+ RParToken(region=StrRegion(start=1346, end=1347)),
+ SemicolonToken(region=StrRegion(start=1347, end=1348)),
+ WhitespaceToken(region=StrRegion(start=1348, end=1353)),
+ RBrace(region=StrRegion(start=1353, end=1354)),
+ WhitespaceToken(region=StrRegion(start=1354, end=1355)),
+ RBrace(region=StrRegion(start=1355, end=1356)),
+ WhitespaceToken(region=StrRegion(start=1356, end=1358)),
+ IdentNameToken(region=StrRegion(start=1358, end=1361)),
+ WhitespaceToken(region=StrRegion(start=1361, end=1362)),
+ IdentNameToken(region=StrRegion(start=1362, end=1370)),
+ LParToken(region=StrRegion(start=1370, end=1371)),
+ RParToken(region=StrRegion(start=1371, end=1372)),
+ WhitespaceToken(region=StrRegion(start=1372, end=1373)),
+ LBrace(region=StrRegion(start=1373, end=1374)),
+ WhitespaceToken(region=StrRegion(start=1374, end=1379)),
+ LineCommentToken(region=StrRegion(start=1379, end=1392)),
+ WhitespaceToken(region=StrRegion(start=1392, end=1397)),
+ LineCommentToken(region=StrRegion(start=1397, end=1410)),
+ WhitespaceToken(region=StrRegion(start=1410, end=1415)),
+ LineCommentToken(region=StrRegion(start=1415, end=1429)),
+ WhitespaceToken(region=StrRegion(start=1429, end=1434)),
+ LineCommentToken(region=StrRegion(start=1434, end=1448)),
+ WhitespaceToken(region=StrRegion(start=1448, end=1453)),
+ IdentNameToken(region=StrRegion(start=1453, end=1456)),
+ WhitespaceToken(region=StrRegion(start=1456, end=1457)),
+ IdentNameToken(region=StrRegion(start=1457, end=1464)),
+ WhitespaceToken(region=StrRegion(start=1464, end=1465)),
+ OpToken(region=StrRegion(start=1465, end=1466), op_str='='),
+ WhitespaceToken(region=StrRegion(start=1466, end=1467)),
+ IdentNameToken(region=StrRegion(start=1467, end=1470)),
+ LParToken(region=StrRegion(start=1470, end=1471)),
+ IdentNameToken(region=StrRegion(start=1471, end=1476)),
+ RParToken(region=StrRegion(start=1476, end=1477)),
+ SemicolonToken(region=StrRegion(start=1477, end=1478)),
+ WhitespaceToken(region=StrRegion(start=1478, end=1483)),
+ IdentNameToken(region=StrRegion(start=1483, end=1486)),
+ WhitespaceToken(region=StrRegion(start=1486, end=1487)),
+ IdentNameToken(region=StrRegion(start=1487, end=1491)),
+ WhitespaceToken(region=StrRegion(start=1491, end=1492)),
+ OpToken(region=StrRegion(start=1492, end=1493), op_str='='),
+ WhitespaceToken(region=StrRegion(start=1493, end=1494)),
+ IdentNameToken(region=StrRegion(start=1494, end=1499)),
+ LSqBracket(region=StrRegion(start=1499, end=1500)),
+ IdentNameToken(region=StrRegion(start=1500, end=1503)),
+ RSqBracket(region=StrRegion(start=1503, end=1504)),
+ SemicolonToken(region=StrRegion(start=1504, end=1505)),
+ WhitespaceToken(region=StrRegion(start=1505, end=1510)),
+ IdentNameToken(region=StrRegion(start=1510, end=1515)),
+ LSqBracket(region=StrRegion(start=1515, end=1516)),
+ IdentNameToken(region=StrRegion(start=1516, end=1523)),
+ RSqBracket(region=StrRegion(start=1523, end=1524)),
+ WhitespaceToken(region=StrRegion(start=1524, end=1525)),
+ OpToken(region=StrRegion(start=1525, end=1526), op_str='='),
+ WhitespaceToken(region=StrRegion(start=1526, end=1527)),
+ IdentNameToken(region=StrRegion(start=1527, end=1532)),
+ LSqBracket(region=StrRegion(start=1532, end=1533)),
+ IdentNameToken(region=StrRegion(start=1533, end=1540)),
+ WhitespaceToken(region=StrRegion(start=1540, end=1541)),
+ OpToken(region=StrRegion(start=1541, end=1542), op_str='-'),
+ WhitespaceToken(region=StrRegion(start=1542, end=1543)),
+ NumberToken(region=StrRegion(start=1543, end=1544)),
+ RSqBracket(region=StrRegion(start=1544, end=1545)),
+ SemicolonToken(region=StrRegion(start=1545, end=1546)),
+ WhitespaceToken(region=StrRegion(start=1546, end=1551)),
+ IdentNameToken(region=StrRegion(start=1551, end=1556)),
+ LSqBracket(region=StrRegion(start=1556, end=1557)),
+ IdentNameToken(region=StrRegion(start=1557, end=1564)),
+ WhitespaceToken(region=StrRegion(start=1564, end=1565)),
+ OpToken(region=StrRegion(start=1565, end=1566), op_str='-'),
+ WhitespaceToken(region=StrRegion(start=1566, end=1567)),
+ NumberToken(region=StrRegion(start=1567, end=1568)),
+ RSqBracket(region=StrRegion(start=1568, end=1569)),
+ WhitespaceToken(region=StrRegion(start=1569, end=1570)),
+ OpToken(region=StrRegion(start=1570, end=1571), op_str='='),
+ WhitespaceToken(region=StrRegion(start=1571, end=1572)),
+ IdentNameToken(region=StrRegion(start=1572, end=1577)),
+ LSqBracket(region=StrRegion(start=1577, end=1578)),
+ IdentNameToken(region=StrRegion(start=1578, end=1585)),
+ WhitespaceToken(region=StrRegion(start=1585, end=1586)),
+ OpToken(region=StrRegion(start=1586, end=1587), op_str='-'),
+ WhitespaceToken(region=StrRegion(start=1587, end=1588)),
+ NumberToken(region=StrRegion(start=1588, end=1589)),
+ RSqBracket(region=StrRegion(start=1589, end=1590)),
+ SemicolonToken(region=StrRegion(start=1590, end=1591)),
+ WhitespaceToken(region=StrRegion(start=1591, end=1596)),
+ IdentNameToken(region=StrRegion(start=1596, end=1601)),
+ LSqBracket(region=StrRegion(start=1601, end=1602)),
+ IdentNameToken(region=StrRegion(start=1602, end=1609)),
+ WhitespaceToken(region=StrRegion(start=1609, end=1610)),
+ OpToken(region=StrRegion(start=1610, end=1611), op_str='-'),
+ WhitespaceToken(region=StrRegion(start=1611, end=1612)),
+ NumberToken(region=StrRegion(start=1612, end=1613)),
+ RSqBracket(region=StrRegion(start=1613, end=1614)),
+ WhitespaceToken(region=StrRegion(start=1614, end=1615)),
+ OpToken(region=StrRegion(start=1615, end=1616), op_str='='),
+ WhitespaceToken(region=StrRegion(start=1616, end=1617)),
+ IdentNameToken(region=StrRegion(start=1617, end=1622)),
+ LSqBracket(region=StrRegion(start=1622, end=1623)),
+ IdentNameToken(region=StrRegion(start=1623, end=1630)),
+ WhitespaceToken(region=StrRegion(start=1630, end=1631)),
+ OpToken(region=StrRegion(start=1631, end=1632), op_str='-'),
+ WhitespaceToken(region=StrRegion(start=1632, end=1633)),
+ NumberToken(region=StrRegion(start=1633, end=1634)),
+ RSqBracket(region=StrRegion(start=1634, end=1635)),
+ SemicolonToken(region=StrRegion(start=1635, end=1636)),
+ WhitespaceToken(region=StrRegion(start=1636, end=1641)),
+ IdentNameToken(region=StrRegion(start=1641, end=1646)),
+ LSqBracket(region=StrRegion(start=1646, end=1647)),
+ IdentNameToken(region=StrRegion(start=1647, end=1654)),
+ WhitespaceToken(region=StrRegion(start=1654, end=1655)),
+ OpToken(region=StrRegion(start=1655, end=1656), op_str='-'),
+ WhitespaceToken(region=StrRegion(start=1656, end=1657)),
+ NumberToken(region=StrRegion(start=1657, end=1658)),
+ RSqBracket(region=StrRegion(start=1658, end=1659)),
+ WhitespaceToken(region=StrRegion(start=1659, end=1660)),
+ OpToken(region=StrRegion(start=1660, end=1661), op_str='='),
+ WhitespaceToken(region=StrRegion(start=1661, end=1662)),
+ IdentNameToken(region=StrRegion(start=1662, end=1666)),
+ SemicolonToken(region=StrRegion(start=1666, end=1667)),
+ WhitespaceToken(region=StrRegion(start=1667, end=1668)),
+ RBrace(region=StrRegion(start=1668, end=1669)),
+ WhitespaceToken(region=StrRegion(start=1669, end=1671)),
+ IdentNameToken(region=StrRegion(start=1671, end=1674)),
+ WhitespaceToken(region=StrRegion(start=1674, end=1675)),
  IdentNameToken(region=StrRegion(start=1675, end=1678)),
- WhitespaceToken(region=StrRegion(start=1678, end=1679)),
- IdentNameToken(region=StrRegion(start=1679, end=1682)),
- LParToken(region=StrRegion(start=1682, end=1683)),
- RParToken(region=StrRegion(start=1683, end=1684)),
- WhitespaceToken(region=StrRegion(start=1684, end=1685)),
- LBrace(region=StrRegion(start=1685, end=1686)),
- RBrace(region=StrRegion(start=1686, end=1687)),
- WhitespaceToken(region=StrRegion(start=1687, end=1690)),
- EofToken(region=StrRegion(start=1690, end=1690))]
-ProgramNode(StrRegion(0, 1687), [
-  DeclNode(StrRegion(0, 23), [
+ LParToken(region=StrRegion(start=1678, end=1679)),
+ RParToken(region=StrRegion(start=1679, end=1680)),
+ WhitespaceToken(region=StrRegion(start=1680, end=1681)),
+ LBrace(region=StrRegion(start=1681, end=1682)),
+ RBrace(region=StrRegion(start=1682, end=1683)),
+ WhitespaceToken(region=StrRegion(start=1683, end=1686)),
+ EofToken(region=StrRegion(start=1686, end=1686))]
+ProgramNode(StrRegion(0, 1683), [
+  DeclNode(StrRegion(0, 19), [
     DeclScope_Global(StrRegion(0, 6)),
     DeclType_List(StrRegion(6, 8)),
-    DeclItemsList(StrRegion(9, 23), [
-      DeclItemNode(StrRegion(9, 23), [
+    DeclItemsList(StrRegion(9, 19), [
+      DeclItemNode(StrRegion(9, 19), [
         IdentNode(StrRegion(9, 14)),
-        CallNode(StrRegion(17, 23), [
-          IdentNode(StrRegion(17, 21)),
-          CallArgs(StrRegion(21, 23), [])
-        ])
+        ListNode(StrRegion(17, 19), [])
       ])
     ])
   ]),
-  DeclNode(StrRegion(25, 50), [
-    DeclScope_Global(StrRegion(25, 31)),
-    DeclType_Variable(StrRegion(31, 31)),
-    DeclItemsList(StrRegion(32, 50), [
-      DeclItemNode(StrRegion(32, 50), [
-        IdentNode(StrRegion(32, 42)),
-        IdentNode(StrRegion(45, 50))
+  DeclNode(StrRegion(21, 46), [
+    DeclScope_Global(StrRegion(21, 27)),
+    DeclType_Variable(StrRegion(27, 27)),
+    DeclItemsList(StrRegion(28, 46), [
+      DeclItemNode(StrRegion(28, 46), [
+        IdentNode(StrRegion(28, 38)),
+        IdentNode(StrRegion(41, 46))
       ])
     ])
   ]),
-  DefineNode(StrRegion(400, 510), [
-    IdentNode(StrRegion(404, 411)),
-    ArgsDeclNode(StrRegion(411, 413), []),
-    BlockNode(StrRegion(414, 510), [
-      ConditionalBlock(StrRegion(420, 476), [
-        IfBlock(StrRegion(420, 476), [
-          IdentNode(StrRegion(423, 433)),
-          BlockNode(StrRegion(434, 476), [
-            CallNode(StrRegion(444, 469), [
-              IdentNode(StrRegion(444, 450)),
-              CallArgs(StrRegion(450, 469), [
-                GetitemNode(StrRegion(451, 468), [
-                  IdentNode(StrRegion(451, 456)),
-                  CallNode(StrRegion(457, 467), [
-                    IdentNode(StrRegion(457, 460)),
-                    CallArgs(StrRegion(460, 467), [
-                      IdentNode(StrRegion(461, 466))
+  DefineNode(StrRegion(396, 506), [
+    IdentNode(StrRegion(400, 407)),
+    ArgsDeclNode(StrRegion(407, 409), []),
+    BlockNode(StrRegion(410, 506), [
+      ConditionalBlock(StrRegion(416, 472), [
+        IfBlock(StrRegion(416, 472), [
+          IdentNode(StrRegion(419, 429)),
+          BlockNode(StrRegion(430, 472), [
+            CallNode(StrRegion(440, 465), [
+              IdentNode(StrRegion(440, 446)),
+              CallArgs(StrRegion(446, 465), [
+                GetitemNode(StrRegion(447, 464), [
+                  IdentNode(StrRegion(447, 452)),
+                  CallNode(StrRegion(453, 463), [
+                    IdentNode(StrRegion(453, 456)),
+                    CallArgs(StrRegion(456, 463), [
+                      IdentNode(StrRegion(457, 462))
                     ])
                   ])
                 ])
@@ -718,423 +723,422 @@ ProgramNode(StrRegion(0, 1687), [
             ])
           ])
         ]),
-        NullElseBlock(StrRegion(475, 476))
+        NullElseBlock(StrRegion(471, 472))
       ]),
-      CallNode(StrRegion(481, 507), [
-        IdentNode(StrRegion(481, 488)),
-        CallArgs(StrRegion(488, 507), [
-          IdentNode(StrRegion(489, 494)),
-          CallNode(StrRegion(496, 506), [
-            IdentNode(StrRegion(496, 499)),
-            CallArgs(StrRegion(499, 506), [
-              IdentNode(StrRegion(500, 505))
+      CallNode(StrRegion(477, 503), [
+        IdentNode(StrRegion(477, 484)),
+        CallArgs(StrRegion(484, 503), [
+          IdentNode(StrRegion(485, 490)),
+          CallNode(StrRegion(492, 502), [
+            IdentNode(StrRegion(492, 495)),
+            CallArgs(StrRegion(495, 502), [
+              IdentNode(StrRegion(496, 501))
             ])
           ])
         ])
       ])
     ])
   ]),
-  DefineNode(StrRegion(512, 662), [
-    IdentNode(StrRegion(516, 523)),
-    ArgsDeclNode(StrRegion(523, 525), []),
-    BlockNode(StrRegion(526, 662), [
-      DeclNode(StrRegion(532, 556), [
-        DeclScope_Let(StrRegion(532, 535)),
-        DeclType_Variable(StrRegion(535, 535)),
-        DeclItemsList(StrRegion(536, 556), [
-          DeclItemNode(StrRegion(536, 556), [
-            IdentNode(StrRegion(536, 543)),
-            CallNode(StrRegion(546, 556), [
-              IdentNode(StrRegion(546, 549)),
-              CallArgs(StrRegion(549, 556), [
-                IdentNode(StrRegion(550, 555))
+  DefineNode(StrRegion(508, 658), [
+    IdentNode(StrRegion(512, 519)),
+    ArgsDeclNode(StrRegion(519, 521), []),
+    BlockNode(StrRegion(522, 658), [
+      DeclNode(StrRegion(528, 552), [
+        DeclScope_Let(StrRegion(528, 531)),
+        DeclType_Variable(StrRegion(531, 531)),
+        DeclItemsList(StrRegion(532, 552), [
+          DeclItemNode(StrRegion(532, 552), [
+            IdentNode(StrRegion(532, 539)),
+            CallNode(StrRegion(542, 552), [
+              IdentNode(StrRegion(542, 545)),
+              CallArgs(StrRegion(545, 552), [
+                IdentNode(StrRegion(546, 551))
               ])
             ])
           ])
         ])
       ]),
-      DeclNode(StrRegion(562, 587), [
-        DeclScope_Let(StrRegion(562, 565)),
-        DeclType_Variable(StrRegion(565, 565)),
-        DeclItemsList(StrRegion(566, 587), [
-          DeclItemNode(StrRegion(566, 587), [
-            IdentNode(StrRegion(566, 570)),
-            GetitemNode(StrRegion(573, 587), [
-              IdentNode(StrRegion(573, 578)),
-              IdentNode(StrRegion(579, 586))
+      DeclNode(StrRegion(558, 583), [
+        DeclScope_Let(StrRegion(558, 561)),
+        DeclType_Variable(StrRegion(561, 561)),
+        DeclItemsList(StrRegion(562, 583), [
+          DeclItemNode(StrRegion(562, 583), [
+            IdentNode(StrRegion(562, 566)),
+            GetitemNode(StrRegion(569, 583), [
+              IdentNode(StrRegion(569, 574)),
+              IdentNode(StrRegion(575, 582))
             ])
           ])
         ])
       ]),
-      AssignNode(StrRegion(593, 628), [
-        GetitemNode(StrRegion(593, 607), [
-          IdentNode(StrRegion(593, 598)),
-          IdentNode(StrRegion(599, 606))
+      AssignNode(StrRegion(589, 624), [
+        GetitemNode(StrRegion(589, 603), [
+          IdentNode(StrRegion(589, 594)),
+          IdentNode(StrRegion(595, 602))
         ]),
-        GetitemNode(StrRegion(610, 628), [
-          IdentNode(StrRegion(610, 615)),
-          SubNode(StrRegion(616, 627), [
-            IdentNode(StrRegion(616, 623)),
-            NumberNode(StrRegion(626, 627))
+        GetitemNode(StrRegion(606, 624), [
+          IdentNode(StrRegion(606, 611)),
+          SubNode(StrRegion(612, 623), [
+            IdentNode(StrRegion(612, 619)),
+            NumberNode(StrRegion(622, 623))
           ])
         ])
       ]),
-      AssignNode(StrRegion(634, 659), [
-        GetitemNode(StrRegion(634, 652), [
-          IdentNode(StrRegion(634, 639)),
-          SubNode(StrRegion(640, 651), [
-            IdentNode(StrRegion(640, 647)),
-            NumberNode(StrRegion(650, 651))
+      AssignNode(StrRegion(630, 655), [
+        GetitemNode(StrRegion(630, 648), [
+          IdentNode(StrRegion(630, 635)),
+          SubNode(StrRegion(636, 647), [
+            IdentNode(StrRegion(636, 643)),
+            NumberNode(StrRegion(646, 647))
           ])
         ]),
-        IdentNode(StrRegion(655, 659))
+        IdentNode(StrRegion(651, 655))
       ])
     ])
   ]),
-  DefineNode(StrRegion(664, 974), [
-    IdentNode(StrRegion(668, 677)),
-    ArgsDeclNode(StrRegion(677, 679), []),
-    BlockNode(StrRegion(680, 974), [
-      DeclNode(StrRegion(799, 823), [
-        DeclScope_Let(StrRegion(799, 802)),
-        DeclType_Variable(StrRegion(802, 802)),
-        DeclItemsList(StrRegion(803, 823), [
-          DeclItemNode(StrRegion(803, 823), [
-            IdentNode(StrRegion(803, 810)),
-            CallNode(StrRegion(813, 823), [
-              IdentNode(StrRegion(813, 816)),
-              CallArgs(StrRegion(816, 823), [
-                IdentNode(StrRegion(817, 822))
+  DefineNode(StrRegion(660, 970), [
+    IdentNode(StrRegion(664, 673)),
+    ArgsDeclNode(StrRegion(673, 675), []),
+    BlockNode(StrRegion(676, 970), [
+      DeclNode(StrRegion(795, 819), [
+        DeclScope_Let(StrRegion(795, 798)),
+        DeclType_Variable(StrRegion(798, 798)),
+        DeclItemsList(StrRegion(799, 819), [
+          DeclItemNode(StrRegion(799, 819), [
+            IdentNode(StrRegion(799, 806)),
+            CallNode(StrRegion(809, 819), [
+              IdentNode(StrRegion(809, 812)),
+              CallArgs(StrRegion(812, 819), [
+                IdentNode(StrRegion(813, 818))
               ])
             ])
           ])
         ])
       ]),
-      DeclNode(StrRegion(829, 854), [
-        DeclScope_Let(StrRegion(829, 832)),
-        DeclType_Variable(StrRegion(832, 832)),
-        DeclItemsList(StrRegion(833, 854), [
-          DeclItemNode(StrRegion(833, 854), [
-            IdentNode(StrRegion(833, 837)),
-            GetitemNode(StrRegion(840, 854), [
-              IdentNode(StrRegion(840, 845)),
-              IdentNode(StrRegion(846, 853))
+      DeclNode(StrRegion(825, 850), [
+        DeclScope_Let(StrRegion(825, 828)),
+        DeclType_Variable(StrRegion(828, 828)),
+        DeclItemsList(StrRegion(829, 850), [
+          DeclItemNode(StrRegion(829, 850), [
+            IdentNode(StrRegion(829, 833)),
+            GetitemNode(StrRegion(836, 850), [
+              IdentNode(StrRegion(836, 841)),
+              IdentNode(StrRegion(842, 849))
             ])
           ])
         ])
       ]),
-      AssignNode(StrRegion(860, 895), [
-        GetitemNode(StrRegion(860, 874), [
-          IdentNode(StrRegion(860, 865)),
-          IdentNode(StrRegion(866, 873))
+      AssignNode(StrRegion(856, 891), [
+        GetitemNode(StrRegion(856, 870), [
+          IdentNode(StrRegion(856, 861)),
+          IdentNode(StrRegion(862, 869))
         ]),
-        GetitemNode(StrRegion(877, 895), [
-          IdentNode(StrRegion(877, 882)),
-          SubNode(StrRegion(883, 894), [
-            IdentNode(StrRegion(883, 890)),
-            NumberNode(StrRegion(893, 894))
+        GetitemNode(StrRegion(873, 891), [
+          IdentNode(StrRegion(873, 878)),
+          SubNode(StrRegion(879, 890), [
+            IdentNode(StrRegion(879, 886)),
+            NumberNode(StrRegion(889, 890))
           ])
         ])
       ]),
-      AssignNode(StrRegion(901, 940), [
-        GetitemNode(StrRegion(901, 919), [
-          IdentNode(StrRegion(901, 906)),
-          SubNode(StrRegion(907, 918), [
-            IdentNode(StrRegion(907, 914)),
-            NumberNode(StrRegion(917, 918))
+      AssignNode(StrRegion(897, 936), [
+        GetitemNode(StrRegion(897, 915), [
+          IdentNode(StrRegion(897, 902)),
+          SubNode(StrRegion(903, 914), [
+            IdentNode(StrRegion(903, 910)),
+            NumberNode(StrRegion(913, 914))
           ])
         ]),
-        GetitemNode(StrRegion(922, 940), [
-          IdentNode(StrRegion(922, 927)),
-          SubNode(StrRegion(928, 939), [
-            IdentNode(StrRegion(928, 935)),
-            NumberNode(StrRegion(938, 939))
+        GetitemNode(StrRegion(918, 936), [
+          IdentNode(StrRegion(918, 923)),
+          SubNode(StrRegion(924, 935), [
+            IdentNode(StrRegion(924, 931)),
+            NumberNode(StrRegion(934, 935))
           ])
         ])
       ]),
-      AssignNode(StrRegion(946, 971), [
-        GetitemNode(StrRegion(946, 964), [
-          IdentNode(StrRegion(946, 951)),
-          SubNode(StrRegion(952, 963), [
-            IdentNode(StrRegion(952, 959)),
-            NumberNode(StrRegion(962, 963))
+      AssignNode(StrRegion(942, 967), [
+        GetitemNode(StrRegion(942, 960), [
+          IdentNode(StrRegion(942, 947)),
+          SubNode(StrRegion(948, 959), [
+            IdentNode(StrRegion(948, 955)),
+            NumberNode(StrRegion(958, 959))
           ])
         ]),
-        IdentNode(StrRegion(967, 971))
+        IdentNode(StrRegion(963, 967))
       ])
     ])
   ]),
-  DefineNode(StrRegion(976, 1102), [
-    IdentNode(StrRegion(980, 987)),
-    ArgsDeclNode(StrRegion(987, 989), []),
-    BlockNode(StrRegion(990, 1102), [
-      DeclNode(StrRegion(996, 1025), [
-        DeclScope_Let(StrRegion(996, 999)),
-        DeclType_Variable(StrRegion(999, 999)),
-        DeclItemsList(StrRegion(1000, 1025), [
-          DeclItemNode(StrRegion(1000, 1025), [
-            IdentNode(StrRegion(1000, 1005)),
-            GetitemNode(StrRegion(1008, 1025), [
-              IdentNode(StrRegion(1008, 1013)),
-              CallNode(StrRegion(1014, 1024), [
-                IdentNode(StrRegion(1014, 1017)),
-                CallArgs(StrRegion(1017, 1024), [
-                  IdentNode(StrRegion(1018, 1023))
+  DefineNode(StrRegion(972, 1098), [
+    IdentNode(StrRegion(976, 983)),
+    ArgsDeclNode(StrRegion(983, 985), []),
+    BlockNode(StrRegion(986, 1098), [
+      DeclNode(StrRegion(992, 1021), [
+        DeclScope_Let(StrRegion(992, 995)),
+        DeclType_Variable(StrRegion(995, 995)),
+        DeclItemsList(StrRegion(996, 1021), [
+          DeclItemNode(StrRegion(996, 1021), [
+            IdentNode(StrRegion(996, 1001)),
+            GetitemNode(StrRegion(1004, 1021), [
+              IdentNode(StrRegion(1004, 1009)),
+              CallNode(StrRegion(1010, 1020), [
+                IdentNode(StrRegion(1010, 1013)),
+                CallArgs(StrRegion(1013, 1020), [
+                  IdentNode(StrRegion(1014, 1019))
                 ])
               ])
             ])
           ])
         ])
       ]),
-      CallNode(StrRegion(1031, 1050), [
-        GetattrNode(StrRegion(1031, 1043), [
-          IdentNode(StrRegion(1031, 1036)),
-          AttrNameNode(StrRegion(1037, 1043))
+      CallNode(StrRegion(1027, 1046), [
+        GetattrNode(StrRegion(1027, 1039), [
+          IdentNode(StrRegion(1027, 1032)),
+          AttrNameNode(StrRegion(1033, 1039))
         ]),
-        CallArgs(StrRegion(1043, 1050), [
-          IdentNode(StrRegion(1044, 1049))
+        CallArgs(StrRegion(1039, 1046), [
+          IdentNode(StrRegion(1040, 1045))
         ])
       ]),
-      ConditionalBlock(StrRegion(1056, 1100), [
-        IfBlock(StrRegion(1056, 1100), [
-          IdentNode(StrRegion(1059, 1069)),
-          BlockNode(StrRegion(1070, 1100), [
-            CallNode(StrRegion(1080, 1093), [
-              IdentNode(StrRegion(1080, 1086)),
-              CallArgs(StrRegion(1086, 1093), [
-                IdentNode(StrRegion(1087, 1092))
+      ConditionalBlock(StrRegion(1052, 1096), [
+        IfBlock(StrRegion(1052, 1096), [
+          IdentNode(StrRegion(1055, 1065)),
+          BlockNode(StrRegion(1066, 1096), [
+            CallNode(StrRegion(1076, 1089), [
+              IdentNode(StrRegion(1076, 1082)),
+              CallArgs(StrRegion(1082, 1089), [
+                IdentNode(StrRegion(1083, 1088))
               ])
             ])
           ])
         ]),
-        NullElseBlock(StrRegion(1099, 1100))
+        NullElseBlock(StrRegion(1095, 1096))
       ])
     ])
   ]),
-  DefineNode(StrRegion(1104, 1360), [
-    IdentNode(StrRegion(1108, 1119)),
-    ArgsDeclNode(StrRegion(1119, 1121), []),
-    BlockNode(StrRegion(1122, 1360), [
-      DeclNode(StrRegion(1128, 1152), [
-        DeclScope_Let(StrRegion(1128, 1131)),
-        DeclType_Variable(StrRegion(1131, 1131)),
-        DeclItemsList(StrRegion(1132, 1152), [
-          DeclItemNode(StrRegion(1132, 1152), [
-            IdentNode(StrRegion(1132, 1139)),
-            CallNode(StrRegion(1142, 1152), [
-              IdentNode(StrRegion(1142, 1145)),
-              CallArgs(StrRegion(1145, 1152), [
-                IdentNode(StrRegion(1146, 1151))
+  DefineNode(StrRegion(1100, 1356), [
+    IdentNode(StrRegion(1104, 1115)),
+    ArgsDeclNode(StrRegion(1115, 1117), []),
+    BlockNode(StrRegion(1118, 1356), [
+      DeclNode(StrRegion(1124, 1148), [
+        DeclScope_Let(StrRegion(1124, 1127)),
+        DeclType_Variable(StrRegion(1127, 1127)),
+        DeclItemsList(StrRegion(1128, 1148), [
+          DeclItemNode(StrRegion(1128, 1148), [
+            IdentNode(StrRegion(1128, 1135)),
+            CallNode(StrRegion(1138, 1148), [
+              IdentNode(StrRegion(1138, 1141)),
+              CallArgs(StrRegion(1141, 1148), [
+                IdentNode(StrRegion(1142, 1147))
               ])
             ])
           ])
         ])
       ]),
-      DeclNode(StrRegion(1158, 1183), [
-        DeclScope_Let(StrRegion(1158, 1161)),
-        DeclType_Variable(StrRegion(1161, 1161)),
-        DeclItemsList(StrRegion(1162, 1183), [
-          DeclItemNode(StrRegion(1162, 1183), [
-            IdentNode(StrRegion(1162, 1166)),
-            GetitemNode(StrRegion(1169, 1183), [
-              IdentNode(StrRegion(1169, 1174)),
-              IdentNode(StrRegion(1175, 1182))
+      DeclNode(StrRegion(1154, 1179), [
+        DeclScope_Let(StrRegion(1154, 1157)),
+        DeclType_Variable(StrRegion(1157, 1157)),
+        DeclItemsList(StrRegion(1158, 1179), [
+          DeclItemNode(StrRegion(1158, 1179), [
+            IdentNode(StrRegion(1158, 1162)),
+            GetitemNode(StrRegion(1165, 1179), [
+              IdentNode(StrRegion(1165, 1170)),
+              IdentNode(StrRegion(1171, 1178))
             ])
           ])
         ])
       ]),
-      DeclNode(StrRegion(1189, 1218), [
-        DeclScope_Let(StrRegion(1189, 1192)),
-        DeclType_Variable(StrRegion(1192, 1192)),
-        DeclItemsList(StrRegion(1193, 1218), [
-          DeclItemNode(StrRegion(1193, 1218), [
-            IdentNode(StrRegion(1193, 1197)),
-            GetitemNode(StrRegion(1200, 1218), [
-              IdentNode(StrRegion(1200, 1205)),
-              SubNode(StrRegion(1206, 1217), [
-                IdentNode(StrRegion(1206, 1213)),
-                NumberNode(StrRegion(1216, 1217))
+      DeclNode(StrRegion(1185, 1214), [
+        DeclScope_Let(StrRegion(1185, 1188)),
+        DeclType_Variable(StrRegion(1188, 1188)),
+        DeclItemsList(StrRegion(1189, 1214), [
+          DeclItemNode(StrRegion(1189, 1214), [
+            IdentNode(StrRegion(1189, 1193)),
+            GetitemNode(StrRegion(1196, 1214), [
+              IdentNode(StrRegion(1196, 1201)),
+              SubNode(StrRegion(1202, 1213), [
+                IdentNode(StrRegion(1202, 1209)),
+                NumberNode(StrRegion(1212, 1213))
               ])
             ])
           ])
         ])
       ]),
-      CallNode(StrRegion(1224, 1242), [
-        GetattrNode(StrRegion(1224, 1236), [
-          IdentNode(StrRegion(1224, 1229)),
-          AttrNameNode(StrRegion(1230, 1236))
+      CallNode(StrRegion(1220, 1238), [
+        GetattrNode(StrRegion(1220, 1232), [
+          IdentNode(StrRegion(1220, 1225)),
+          AttrNameNode(StrRegion(1226, 1232))
         ]),
-        CallArgs(StrRegion(1236, 1242), [
-          IdentNode(StrRegion(1237, 1241))
+        CallArgs(StrRegion(1232, 1238), [
+          IdentNode(StrRegion(1233, 1237))
         ])
       ]),
-      CallNode(StrRegion(1248, 1266), [
-        GetattrNode(StrRegion(1248, 1260), [
-          IdentNode(StrRegion(1248, 1253)),
-          AttrNameNode(StrRegion(1254, 1260))
+      CallNode(StrRegion(1244, 1262), [
+        GetattrNode(StrRegion(1244, 1256), [
+          IdentNode(StrRegion(1244, 1249)),
+          AttrNameNode(StrRegion(1250, 1256))
         ]),
-        CallArgs(StrRegion(1260, 1266), [
-          IdentNode(StrRegion(1261, 1265))
+        CallArgs(StrRegion(1256, 1262), [
+          IdentNode(StrRegion(1257, 1261))
         ])
       ]),
-      ConditionalBlock(StrRegion(1293, 1358), [
-        IfBlock(StrRegion(1293, 1358), [
-          IdentNode(StrRegion(1296, 1306)),
-          BlockNode(StrRegion(1307, 1358), [
-            CallNode(StrRegion(1317, 1329), [
-              IdentNode(StrRegion(1317, 1323)),
-              CallArgs(StrRegion(1323, 1329), [
-                IdentNode(StrRegion(1324, 1328))
+      ConditionalBlock(StrRegion(1289, 1354), [
+        IfBlock(StrRegion(1289, 1354), [
+          IdentNode(StrRegion(1292, 1302)),
+          BlockNode(StrRegion(1303, 1354), [
+            CallNode(StrRegion(1313, 1325), [
+              IdentNode(StrRegion(1313, 1319)),
+              CallArgs(StrRegion(1319, 1325), [
+                IdentNode(StrRegion(1320, 1324))
               ])
             ]),
-            CallNode(StrRegion(1339, 1351), [
-              IdentNode(StrRegion(1339, 1345)),
-              CallArgs(StrRegion(1345, 1351), [
-                IdentNode(StrRegion(1346, 1350))
+            CallNode(StrRegion(1335, 1347), [
+              IdentNode(StrRegion(1335, 1341)),
+              CallArgs(StrRegion(1341, 1347), [
+                IdentNode(StrRegion(1342, 1346))
               ])
             ])
           ])
         ]),
-        NullElseBlock(StrRegion(1357, 1358))
+        NullElseBlock(StrRegion(1353, 1354))
       ])
     ])
   ]),
-  DefineNode(StrRegion(1362, 1673), [
-    IdentNode(StrRegion(1366, 1374)),
-    ArgsDeclNode(StrRegion(1374, 1376), []),
-    BlockNode(StrRegion(1377, 1673), [
-      DeclNode(StrRegion(1457, 1481), [
-        DeclScope_Let(StrRegion(1457, 1460)),
-        DeclType_Variable(StrRegion(1460, 1460)),
-        DeclItemsList(StrRegion(1461, 1481), [
-          DeclItemNode(StrRegion(1461, 1481), [
-            IdentNode(StrRegion(1461, 1468)),
-            CallNode(StrRegion(1471, 1481), [
-              IdentNode(StrRegion(1471, 1474)),
-              CallArgs(StrRegion(1474, 1481), [
-                IdentNode(StrRegion(1475, 1480))
+  DefineNode(StrRegion(1358, 1669), [
+    IdentNode(StrRegion(1362, 1370)),
+    ArgsDeclNode(StrRegion(1370, 1372), []),
+    BlockNode(StrRegion(1373, 1669), [
+      DeclNode(StrRegion(1453, 1477), [
+        DeclScope_Let(StrRegion(1453, 1456)),
+        DeclType_Variable(StrRegion(1456, 1456)),
+        DeclItemsList(StrRegion(1457, 1477), [
+          DeclItemNode(StrRegion(1457, 1477), [
+            IdentNode(StrRegion(1457, 1464)),
+            CallNode(StrRegion(1467, 1477), [
+              IdentNode(StrRegion(1467, 1470)),
+              CallArgs(StrRegion(1470, 1477), [
+                IdentNode(StrRegion(1471, 1476))
               ])
             ])
           ])
         ])
       ]),
-      DeclNode(StrRegion(1487, 1508), [
-        DeclScope_Let(StrRegion(1487, 1490)),
-        DeclType_Variable(StrRegion(1490, 1490)),
-        DeclItemsList(StrRegion(1491, 1508), [
-          DeclItemNode(StrRegion(1491, 1508), [
-            IdentNode(StrRegion(1491, 1495)),
-            GetitemNode(StrRegion(1498, 1508), [
-              IdentNode(StrRegion(1498, 1503)),
-              IdentNode(StrRegion(1504, 1507))
+      DeclNode(StrRegion(1483, 1504), [
+        DeclScope_Let(StrRegion(1483, 1486)),
+        DeclType_Variable(StrRegion(1486, 1486)),
+        DeclItemsList(StrRegion(1487, 1504), [
+          DeclItemNode(StrRegion(1487, 1504), [
+            IdentNode(StrRegion(1487, 1491)),
+            GetitemNode(StrRegion(1494, 1504), [
+              IdentNode(StrRegion(1494, 1499)),
+              IdentNode(StrRegion(1500, 1503))
             ])
           ])
         ])
       ]),
-      AssignNode(StrRegion(1514, 1549), [
-        GetitemNode(StrRegion(1514, 1528), [
-          IdentNode(StrRegion(1514, 1519)),
-          IdentNode(StrRegion(1520, 1527))
+      AssignNode(StrRegion(1510, 1545), [
+        GetitemNode(StrRegion(1510, 1524), [
+          IdentNode(StrRegion(1510, 1515)),
+          IdentNode(StrRegion(1516, 1523))
         ]),
-        GetitemNode(StrRegion(1531, 1549), [
-          IdentNode(StrRegion(1531, 1536)),
-          SubNode(StrRegion(1537, 1548), [
-            IdentNode(StrRegion(1537, 1544)),
-            NumberNode(StrRegion(1547, 1548))
+        GetitemNode(StrRegion(1527, 1545), [
+          IdentNode(StrRegion(1527, 1532)),
+          SubNode(StrRegion(1533, 1544), [
+            IdentNode(StrRegion(1533, 1540)),
+            NumberNode(StrRegion(1543, 1544))
           ])
         ])
       ]),
-      AssignNode(StrRegion(1555, 1594), [
-        GetitemNode(StrRegion(1555, 1573), [
-          IdentNode(StrRegion(1555, 1560)),
-          SubNode(StrRegion(1561, 1572), [
-            IdentNode(StrRegion(1561, 1568)),
-            NumberNode(StrRegion(1571, 1572))
+      AssignNode(StrRegion(1551, 1590), [
+        GetitemNode(StrRegion(1551, 1569), [
+          IdentNode(StrRegion(1551, 1556)),
+          SubNode(StrRegion(1557, 1568), [
+            IdentNode(StrRegion(1557, 1564)),
+            NumberNode(StrRegion(1567, 1568))
           ])
         ]),
-        GetitemNode(StrRegion(1576, 1594), [
-          IdentNode(StrRegion(1576, 1581)),
-          SubNode(StrRegion(1582, 1593), [
-            IdentNode(StrRegion(1582, 1589)),
-            NumberNode(StrRegion(1592, 1593))
+        GetitemNode(StrRegion(1572, 1590), [
+          IdentNode(StrRegion(1572, 1577)),
+          SubNode(StrRegion(1578, 1589), [
+            IdentNode(StrRegion(1578, 1585)),
+            NumberNode(StrRegion(1588, 1589))
           ])
         ])
       ]),
-      AssignNode(StrRegion(1600, 1639), [
-        GetitemNode(StrRegion(1600, 1618), [
-          IdentNode(StrRegion(1600, 1605)),
-          SubNode(StrRegion(1606, 1617), [
-            IdentNode(StrRegion(1606, 1613)),
-            NumberNode(StrRegion(1616, 1617))
+      AssignNode(StrRegion(1596, 1635), [
+        GetitemNode(StrRegion(1596, 1614), [
+          IdentNode(StrRegion(1596, 1601)),
+          SubNode(StrRegion(1602, 1613), [
+            IdentNode(StrRegion(1602, 1609)),
+            NumberNode(StrRegion(1612, 1613))
           ])
         ]),
-        GetitemNode(StrRegion(1621, 1639), [
-          IdentNode(StrRegion(1621, 1626)),
-          SubNode(StrRegion(1627, 1638), [
-            IdentNode(StrRegion(1627, 1634)),
-            NumberNode(StrRegion(1637, 1638))
+        GetitemNode(StrRegion(1617, 1635), [
+          IdentNode(StrRegion(1617, 1622)),
+          SubNode(StrRegion(1623, 1634), [
+            IdentNode(StrRegion(1623, 1630)),
+            NumberNode(StrRegion(1633, 1634))
           ])
         ])
       ]),
-      AssignNode(StrRegion(1645, 1670), [
-        GetitemNode(StrRegion(1645, 1663), [
-          IdentNode(StrRegion(1645, 1650)),
-          SubNode(StrRegion(1651, 1662), [
-            IdentNode(StrRegion(1651, 1658)),
-            NumberNode(StrRegion(1661, 1662))
+      AssignNode(StrRegion(1641, 1666), [
+        GetitemNode(StrRegion(1641, 1659), [
+          IdentNode(StrRegion(1641, 1646)),
+          SubNode(StrRegion(1647, 1658), [
+            IdentNode(StrRegion(1647, 1654)),
+            NumberNode(StrRegion(1657, 1658))
           ])
         ]),
-        IdentNode(StrRegion(1666, 1670))
+        IdentNode(StrRegion(1662, 1666))
       ])
     ])
   ]),
-  DefineNode(StrRegion(1675, 1687), [
-    IdentNode(StrRegion(1679, 1682)),
-    ArgsDeclNode(StrRegion(1682, 1684), []),
-    BlockNode(StrRegion(1685, 1687), [])
+  DefineNode(StrRegion(1671, 1683), [
+    IdentNode(StrRegion(1675, 1678)),
+    ArgsDeclNode(StrRegion(1678, 1680), []),
+    BlockNode(StrRegion(1681, 1683), [])
   ])
 ])
-AstProgramNode(StrRegion(0, 1687),
+AstProgramNode(StrRegion(0, 1683),
   [
-    AstDeclNode(StrRegion(0, 23),
+    AstDeclNode(StrRegion(0, 19),
       VarDeclScope.GLOBAL,
       VarType.LIST,
       [
         (
           AstIdent(StrRegion(9, 14), 'stack'),
-          AstCall(StrRegion(17, 23),
-            AstIdent(StrRegion(17, 21), 'list'),
+          AstListLiteral(StrRegion(17, 19),
             []
           )
         )
       ]
     ),
-    AstDeclNode(StrRegion(25, 50),
+    AstDeclNode(StrRegion(21, 46),
       VarDeclScope.GLOBAL,
       VarType.VARIABLE,
       [
         (
-          AstIdent(StrRegion(32, 42), 'COUNT_REFS'),
-          AstIdent(StrRegion(45, 50), 'false')
+          AstIdent(StrRegion(28, 38), 'COUNT_REFS'),
+          AstIdent(StrRegion(41, 46), 'false')
         )
       ]
     ),
-    AstDefine(StrRegion(400, 510),
-      AstIdent(StrRegion(404, 411), 'POP_TOP'),
+    AstDefine(StrRegion(396, 506),
+      AstIdent(StrRegion(400, 407), 'POP_TOP'),
       [],
       [
-        AstIf(StrRegion(420, 476),
-          AstIdent(StrRegion(423, 433), 'COUNT_REFS'),
+        AstIf(StrRegion(416, 472),
+          AstIdent(StrRegion(419, 429), 'COUNT_REFS'),
           [
-            AstCall(StrRegion(444, 469),
-              AstIdent(StrRegion(444, 450), 'decref'),
+            AstCall(StrRegion(440, 465),
+              AstIdent(StrRegion(440, 446), 'decref'),
               [
-                AstItem(StrRegion(451, 468),
-                  AstIdent(StrRegion(451, 456), 'stack'),
-                  AstCall(StrRegion(457, 467),
-                    AstIdent(StrRegion(457, 460), 'len'),
+                AstItem(StrRegion(447, 464),
+                  AstIdent(StrRegion(447, 452), 'stack'),
+                  AstCall(StrRegion(453, 463),
+                    AstIdent(StrRegion(453, 456), 'len'),
                     [
-                      AstIdent(StrRegion(461, 466), 'stack')
+                      AstIdent(StrRegion(457, 462), 'stack')
                     ]
                   )
                 )
@@ -1143,194 +1147,194 @@ AstProgramNode(StrRegion(0, 1687),
           ],
           None
         ),
-        AstCall(StrRegion(481, 507),
-          AstIdent(StrRegion(481, 488), 'delitem'),
+        AstCall(StrRegion(477, 503),
+          AstIdent(StrRegion(477, 484), 'delitem'),
           [
-            AstIdent(StrRegion(489, 494), 'stack'),
-            AstCall(StrRegion(496, 506),
-              AstIdent(StrRegion(496, 499), 'len'),
+            AstIdent(StrRegion(485, 490), 'stack'),
+            AstCall(StrRegion(492, 502),
+              AstIdent(StrRegion(492, 495), 'len'),
               [
-                AstIdent(StrRegion(500, 505), 'stack')
+                AstIdent(StrRegion(496, 501), 'stack')
               ]
             )
           ]
         )
       ]
     ),
-    AstDefine(StrRegion(512, 662),
-      AstIdent(StrRegion(516, 523), 'ROT_TWO'),
+    AstDefine(StrRegion(508, 658),
+      AstIdent(StrRegion(512, 519), 'ROT_TWO'),
       [],
       [
-        AstDeclNode(StrRegion(532, 556),
+        AstDeclNode(StrRegion(528, 552),
           VarDeclScope.LET,
           VarType.VARIABLE,
           [
             (
-              AstIdent(StrRegion(536, 543), 'tos_idx'),
-              AstCall(StrRegion(546, 556),
-                AstIdent(StrRegion(546, 549), 'len'),
+              AstIdent(StrRegion(532, 539), 'tos_idx'),
+              AstCall(StrRegion(542, 552),
+                AstIdent(StrRegion(542, 545), 'len'),
                 [
-                  AstIdent(StrRegion(550, 555), 'stack')
+                  AstIdent(StrRegion(546, 551), 'stack')
                 ]
               )
             )
           ]
         ),
-        AstDeclNode(StrRegion(562, 587),
+        AstDeclNode(StrRegion(558, 583),
           VarDeclScope.LET,
           VarType.VARIABLE,
           [
             (
-              AstIdent(StrRegion(566, 570), 'tos0'),
-              AstItem(StrRegion(573, 587),
-                AstIdent(StrRegion(573, 578), 'stack'),
-                AstIdent(StrRegion(579, 586), 'tos_idx')
+              AstIdent(StrRegion(562, 566), 'tos0'),
+              AstItem(StrRegion(569, 583),
+                AstIdent(StrRegion(569, 574), 'stack'),
+                AstIdent(StrRegion(575, 582), 'tos_idx')
               )
             )
           ]
         ),
-        AstAssign(StrRegion(593, 628),
-          AstItem(StrRegion(593, 607),
-            AstIdent(StrRegion(593, 598), 'stack'),
-            AstIdent(StrRegion(599, 606), 'tos_idx')
+        AstAssign(StrRegion(589, 624),
+          AstItem(StrRegion(589, 603),
+            AstIdent(StrRegion(589, 594), 'stack'),
+            AstIdent(StrRegion(595, 602), 'tos_idx')
           ),
-          AstItem(StrRegion(610, 628),
-            AstIdent(StrRegion(610, 615), 'stack'),
-            AstBinOp(StrRegion(616, 627),
+          AstItem(StrRegion(606, 624),
+            AstIdent(StrRegion(606, 611), 'stack'),
+            AstBinOp(StrRegion(612, 623),
               '-',
-              AstIdent(StrRegion(616, 623), 'tos_idx'),
-              AstNumber(StrRegion(626, 627), 1)
+              AstIdent(StrRegion(612, 619), 'tos_idx'),
+              AstNumber(StrRegion(622, 623), 1)
             )
           )
         ),
-        AstAssign(StrRegion(634, 659),
-          AstItem(StrRegion(634, 652),
-            AstIdent(StrRegion(634, 639), 'stack'),
-            AstBinOp(StrRegion(640, 651),
+        AstAssign(StrRegion(630, 655),
+          AstItem(StrRegion(630, 648),
+            AstIdent(StrRegion(630, 635), 'stack'),
+            AstBinOp(StrRegion(636, 647),
               '-',
-              AstIdent(StrRegion(640, 647), 'tos_idx'),
-              AstNumber(StrRegion(650, 651), 1)
+              AstIdent(StrRegion(636, 643), 'tos_idx'),
+              AstNumber(StrRegion(646, 647), 1)
             )
           ),
-          AstIdent(StrRegion(655, 659), 'tos0')
+          AstIdent(StrRegion(651, 655), 'tos0')
         )
       ]
     ),
-    AstDefine(StrRegion(664, 974),
-      AstIdent(StrRegion(668, 677), 'ROT_THREE'),
+    AstDefine(StrRegion(660, 970),
+      AstIdent(StrRegion(664, 673), 'ROT_THREE'),
       [],
       [
-        AstDeclNode(StrRegion(799, 823),
+        AstDeclNode(StrRegion(795, 819),
           VarDeclScope.LET,
           VarType.VARIABLE,
           [
             (
-              AstIdent(StrRegion(803, 810), 'tos_idx'),
-              AstCall(StrRegion(813, 823),
-                AstIdent(StrRegion(813, 816), 'len'),
+              AstIdent(StrRegion(799, 806), 'tos_idx'),
+              AstCall(StrRegion(809, 819),
+                AstIdent(StrRegion(809, 812), 'len'),
                 [
-                  AstIdent(StrRegion(817, 822), 'stack')
+                  AstIdent(StrRegion(813, 818), 'stack')
                 ]
               )
             )
           ]
         ),
-        AstDeclNode(StrRegion(829, 854),
+        AstDeclNode(StrRegion(825, 850),
           VarDeclScope.LET,
           VarType.VARIABLE,
           [
             (
-              AstIdent(StrRegion(833, 837), 'tos0'),
-              AstItem(StrRegion(840, 854),
-                AstIdent(StrRegion(840, 845), 'stack'),
-                AstIdent(StrRegion(846, 853), 'tos_idx')
+              AstIdent(StrRegion(829, 833), 'tos0'),
+              AstItem(StrRegion(836, 850),
+                AstIdent(StrRegion(836, 841), 'stack'),
+                AstIdent(StrRegion(842, 849), 'tos_idx')
               )
             )
           ]
         ),
-        AstAssign(StrRegion(860, 895),
-          AstItem(StrRegion(860, 874),
-            AstIdent(StrRegion(860, 865), 'stack'),
-            AstIdent(StrRegion(866, 873), 'tos_idx')
+        AstAssign(StrRegion(856, 891),
+          AstItem(StrRegion(856, 870),
+            AstIdent(StrRegion(856, 861), 'stack'),
+            AstIdent(StrRegion(862, 869), 'tos_idx')
           ),
-          AstItem(StrRegion(877, 895),
-            AstIdent(StrRegion(877, 882), 'stack'),
-            AstBinOp(StrRegion(883, 894),
+          AstItem(StrRegion(873, 891),
+            AstIdent(StrRegion(873, 878), 'stack'),
+            AstBinOp(StrRegion(879, 890),
               '-',
-              AstIdent(StrRegion(883, 890), 'tos_idx'),
-              AstNumber(StrRegion(893, 894), 1)
+              AstIdent(StrRegion(879, 886), 'tos_idx'),
+              AstNumber(StrRegion(889, 890), 1)
             )
           )
         ),
-        AstAssign(StrRegion(901, 940),
-          AstItem(StrRegion(901, 919),
-            AstIdent(StrRegion(901, 906), 'stack'),
-            AstBinOp(StrRegion(907, 918),
+        AstAssign(StrRegion(897, 936),
+          AstItem(StrRegion(897, 915),
+            AstIdent(StrRegion(897, 902), 'stack'),
+            AstBinOp(StrRegion(903, 914),
               '-',
-              AstIdent(StrRegion(907, 914), 'tos_idx'),
-              AstNumber(StrRegion(917, 918), 1)
+              AstIdent(StrRegion(903, 910), 'tos_idx'),
+              AstNumber(StrRegion(913, 914), 1)
             )
           ),
-          AstItem(StrRegion(922, 940),
-            AstIdent(StrRegion(922, 927), 'stack'),
-            AstBinOp(StrRegion(928, 939),
+          AstItem(StrRegion(918, 936),
+            AstIdent(StrRegion(918, 923), 'stack'),
+            AstBinOp(StrRegion(924, 935),
               '-',
-              AstIdent(StrRegion(928, 935), 'tos_idx'),
-              AstNumber(StrRegion(938, 939), 2)
+              AstIdent(StrRegion(924, 931), 'tos_idx'),
+              AstNumber(StrRegion(934, 935), 2)
             )
           )
         ),
-        AstAssign(StrRegion(946, 971),
-          AstItem(StrRegion(946, 964),
-            AstIdent(StrRegion(946, 951), 'stack'),
-            AstBinOp(StrRegion(952, 963),
+        AstAssign(StrRegion(942, 967),
+          AstItem(StrRegion(942, 960),
+            AstIdent(StrRegion(942, 947), 'stack'),
+            AstBinOp(StrRegion(948, 959),
               '-',
-              AstIdent(StrRegion(952, 959), 'tos_idx'),
-              AstNumber(StrRegion(962, 963), 2)
+              AstIdent(StrRegion(948, 955), 'tos_idx'),
+              AstNumber(StrRegion(958, 959), 2)
             )
           ),
-          AstIdent(StrRegion(967, 971), 'tos0')
+          AstIdent(StrRegion(963, 967), 'tos0')
         )
       ]
     ),
-    AstDefine(StrRegion(976, 1102),
-      AstIdent(StrRegion(980, 987), 'DUP_TOP'),
+    AstDefine(StrRegion(972, 1098),
+      AstIdent(StrRegion(976, 983), 'DUP_TOP'),
       [],
       [
-        AstDeclNode(StrRegion(996, 1025),
+        AstDeclNode(StrRegion(992, 1021),
           VarDeclScope.LET,
           VarType.VARIABLE,
           [
             (
-              AstIdent(StrRegion(1000, 1005), 'value'),
-              AstItem(StrRegion(1008, 1025),
-                AstIdent(StrRegion(1008, 1013), 'stack'),
-                AstCall(StrRegion(1014, 1024),
-                  AstIdent(StrRegion(1014, 1017), 'len'),
+              AstIdent(StrRegion(996, 1001), 'value'),
+              AstItem(StrRegion(1004, 1021),
+                AstIdent(StrRegion(1004, 1009), 'stack'),
+                AstCall(StrRegion(1010, 1020),
+                  AstIdent(StrRegion(1010, 1013), 'len'),
                   [
-                    AstIdent(StrRegion(1018, 1023), 'stack')
+                    AstIdent(StrRegion(1014, 1019), 'stack')
                   ]
                 )
               )
             )
           ]
         ),
-        AstCall(StrRegion(1031, 1050),
-          AstAttribute(StrRegion(1031, 1043),
-            AstIdent(StrRegion(1031, 1036), 'stack'),
-            AstAttrName(StrRegion(1037, 1043), 'append')
+        AstCall(StrRegion(1027, 1046),
+          AstAttribute(StrRegion(1027, 1039),
+            AstIdent(StrRegion(1027, 1032), 'stack'),
+            AstAttrName(StrRegion(1033, 1039), 'append')
           ),
           [
-            AstIdent(StrRegion(1044, 1049), 'value')
+            AstIdent(StrRegion(1040, 1045), 'value')
           ]
         ),
-        AstIf(StrRegion(1056, 1100),
-          AstIdent(StrRegion(1059, 1069), 'COUNT_REFS'),
+        AstIf(StrRegion(1052, 1096),
+          AstIdent(StrRegion(1055, 1065), 'COUNT_REFS'),
           [
-            AstCall(StrRegion(1080, 1093),
-              AstIdent(StrRegion(1080, 1086), 'incref'),
+            AstCall(StrRegion(1076, 1089),
+              AstIdent(StrRegion(1076, 1082), 'incref'),
               [
-                AstIdent(StrRegion(1087, 1092), 'value')
+                AstIdent(StrRegion(1083, 1088), 'value')
               ]
             )
           ],
@@ -1338,86 +1342,86 @@ AstProgramNode(StrRegion(0, 1687),
         )
       ]
     ),
-    AstDefine(StrRegion(1104, 1360),
-      AstIdent(StrRegion(1108, 1119), 'DUP_TOP_TWO'),
+    AstDefine(StrRegion(1100, 1356),
+      AstIdent(StrRegion(1104, 1115), 'DUP_TOP_TWO'),
       [],
       [
-        AstDeclNode(StrRegion(1128, 1152),
+        AstDeclNode(StrRegion(1124, 1148),
           VarDeclScope.LET,
           VarType.VARIABLE,
           [
             (
-              AstIdent(StrRegion(1132, 1139), 'tos_idx'),
-              AstCall(StrRegion(1142, 1152),
-                AstIdent(StrRegion(1142, 1145), 'len'),
+              AstIdent(StrRegion(1128, 1135), 'tos_idx'),
+              AstCall(StrRegion(1138, 1148),
+                AstIdent(StrRegion(1138, 1141), 'len'),
                 [
-                  AstIdent(StrRegion(1146, 1151), 'stack')
+                  AstIdent(StrRegion(1142, 1147), 'stack')
                 ]
               )
             )
           ]
         ),
-        AstDeclNode(StrRegion(1158, 1183),
+        AstDeclNode(StrRegion(1154, 1179),
           VarDeclScope.LET,
           VarType.VARIABLE,
           [
             (
-              AstIdent(StrRegion(1162, 1166), 'tos0'),
-              AstItem(StrRegion(1169, 1183),
-                AstIdent(StrRegion(1169, 1174), 'stack'),
-                AstIdent(StrRegion(1175, 1182), 'tos_idx')
+              AstIdent(StrRegion(1158, 1162), 'tos0'),
+              AstItem(StrRegion(1165, 1179),
+                AstIdent(StrRegion(1165, 1170), 'stack'),
+                AstIdent(StrRegion(1171, 1178), 'tos_idx')
               )
             )
           ]
         ),
-        AstDeclNode(StrRegion(1189, 1218),
+        AstDeclNode(StrRegion(1185, 1214),
           VarDeclScope.LET,
           VarType.VARIABLE,
           [
             (
-              AstIdent(StrRegion(1193, 1197), 'tos1'),
-              AstItem(StrRegion(1200, 1218),
-                AstIdent(StrRegion(1200, 1205), 'stack'),
-                AstBinOp(StrRegion(1206, 1217),
+              AstIdent(StrRegion(1189, 1193), 'tos1'),
+              AstItem(StrRegion(1196, 1214),
+                AstIdent(StrRegion(1196, 1201), 'stack'),
+                AstBinOp(StrRegion(1202, 1213),
                   '-',
-                  AstIdent(StrRegion(1206, 1213), 'tod_idx'),
-                  AstNumber(StrRegion(1216, 1217), 1)
+                  AstIdent(StrRegion(1202, 1209), 'tod_idx'),
+                  AstNumber(StrRegion(1212, 1213), 1)
                 )
               )
             )
           ]
         ),
-        AstCall(StrRegion(1224, 1242),
-          AstAttribute(StrRegion(1224, 1236),
-            AstIdent(StrRegion(1224, 1229), 'stack'),
-            AstAttrName(StrRegion(1230, 1236), 'append')
+        AstCall(StrRegion(1220, 1238),
+          AstAttribute(StrRegion(1220, 1232),
+            AstIdent(StrRegion(1220, 1225), 'stack'),
+            AstAttrName(StrRegion(1226, 1232), 'append')
           ),
           [
-            AstIdent(StrRegion(1237, 1241), 'tos1')
+            AstIdent(StrRegion(1233, 1237), 'tos1')
           ]
         ),
-        AstCall(StrRegion(1248, 1266),
-          AstAttribute(StrRegion(1248, 1260),
-            AstIdent(StrRegion(1248, 1253), 'stack'),
-            AstAttrName(StrRegion(1254, 1260), 'append')
+        AstCall(StrRegion(1244, 1262),
+          AstAttribute(StrRegion(1244, 1256),
+            AstIdent(StrRegion(1244, 1249), 'stack'),
+            AstAttrName(StrRegion(1250, 1256), 'append')
           ),
           [
-            AstIdent(StrRegion(1261, 1265), 'tos0')
+            AstIdent(StrRegion(1257, 1261), 'tos0')
           ]
         ),
-        AstIf(StrRegion(1293, 1358),
-          AstIdent(StrRegion(1296, 1306), 'COUNT_REFS'),
+        AstIf(StrRegion(1289, 1354),
+          AstIdent(StrRegion(1292, 1302), 'COUNT_REFS'),
           [
-            AstCall(StrRegion(1317, 1329),
-              AstIdent(StrRegion(1317, 1323), 'incref'),
+            AstCall(StrRegion(1313, 1325),
+              AstIdent(StrRegion(1313, 1319), 'incref'),
               [
-                AstIdent(StrRegion(1324, 1328), 'tos0')
+                AstIdent(StrRegion(1320, 1324), 'tos0')
               ]
             ),
-            AstCall(StrRegion(1339, 1351),
-              AstIdent(StrRegion(1339, 1345), 'incref'),
+            AstCall(StrRegion(1335, 1347),
+              AstIdent(StrRegion(1335, 1341), 'incref'),
               [
-                AstIdent(StrRegion(1346, 1350), 'tos1')
+                AstIdent(StrRegion(1342, 1346), 'tos1')
               ]
             )
           ],
@@ -1425,103 +1429,103 @@ AstProgramNode(StrRegion(0, 1687),
         )
       ]
     ),
-    AstDefine(StrRegion(1362, 1673),
-      AstIdent(StrRegion(1366, 1374), 'ROT_FOUR'),
+    AstDefine(StrRegion(1358, 1669),
+      AstIdent(StrRegion(1362, 1370), 'ROT_FOUR'),
       [],
       [
-        AstDeclNode(StrRegion(1457, 1481),
+        AstDeclNode(StrRegion(1453, 1477),
           VarDeclScope.LET,
           VarType.VARIABLE,
           [
             (
-              AstIdent(StrRegion(1461, 1468), 'tos_idx'),
-              AstCall(StrRegion(1471, 1481),
-                AstIdent(StrRegion(1471, 1474), 'len'),
+              AstIdent(StrRegion(1457, 1464), 'tos_idx'),
+              AstCall(StrRegion(1467, 1477),
+                AstIdent(StrRegion(1467, 1470), 'len'),
                 [
-                  AstIdent(StrRegion(1475, 1480), 'stack')
+                  AstIdent(StrRegion(1471, 1476), 'stack')
                 ]
               )
             )
           ]
         ),
-        AstDeclNode(StrRegion(1487, 1508),
+        AstDeclNode(StrRegion(1483, 1504),
           VarDeclScope.LET,
           VarType.VARIABLE,
           [
             (
-              AstIdent(StrRegion(1491, 1495), 'tos0'),
-              AstItem(StrRegion(1498, 1508),
-                AstIdent(StrRegion(1498, 1503), 'stack'),
-                AstIdent(StrRegion(1504, 1507), 'tos')
+              AstIdent(StrRegion(1487, 1491), 'tos0'),
+              AstItem(StrRegion(1494, 1504),
+                AstIdent(StrRegion(1494, 1499), 'stack'),
+                AstIdent(StrRegion(1500, 1503), 'tos')
               )
             )
           ]
         ),
-        AstAssign(StrRegion(1514, 1549),
-          AstItem(StrRegion(1514, 1528),
-            AstIdent(StrRegion(1514, 1519), 'stack'),
-            AstIdent(StrRegion(1520, 1527), 'tos_idx')
+        AstAssign(StrRegion(1510, 1545),
+          AstItem(StrRegion(1510, 1524),
+            AstIdent(StrRegion(1510, 1515), 'stack'),
+            AstIdent(StrRegion(1516, 1523), 'tos_idx')
           ),
-          AstItem(StrRegion(1531, 1549),
-            AstIdent(StrRegion(1531, 1536), 'stack'),
-            AstBinOp(StrRegion(1537, 1548),
+          AstItem(StrRegion(1527, 1545),
+            AstIdent(StrRegion(1527, 1532), 'stack'),
+            AstBinOp(StrRegion(1533, 1544),
               '-',
-              AstIdent(StrRegion(1537, 1544), 'tos_idx'),
-              AstNumber(StrRegion(1547, 1548), 1)
+              AstIdent(StrRegion(1533, 1540), 'tos_idx'),
+              AstNumber(StrRegion(1543, 1544), 1)
             )
           )
         ),
-        AstAssign(StrRegion(1555, 1594),
-          AstItem(StrRegion(1555, 1573),
-            AstIdent(StrRegion(1555, 1560), 'stack'),
-            AstBinOp(StrRegion(1561, 1572),
+        AstAssign(StrRegion(1551, 1590),
+          AstItem(StrRegion(1551, 1569),
+            AstIdent(StrRegion(1551, 1556), 'stack'),
+            AstBinOp(StrRegion(1557, 1568),
               '-',
-              AstIdent(StrRegion(1561, 1568), 'tos_idx'),
-              AstNumber(StrRegion(1571, 1572), 1)
+              AstIdent(StrRegion(1557, 1564), 'tos_idx'),
+              AstNumber(StrRegion(1567, 1568), 1)
             )
           ),
-          AstItem(StrRegion(1576, 1594),
-            AstIdent(StrRegion(1576, 1581), 'stack'),
-            AstBinOp(StrRegion(1582, 1593),
+          AstItem(StrRegion(1572, 1590),
+            AstIdent(StrRegion(1572, 1577), 'stack'),
+            AstBinOp(StrRegion(1578, 1589),
               '-',
-              AstIdent(StrRegion(1582, 1589), 'tos_idx'),
-              AstNumber(StrRegion(1592, 1593), 2)
+              AstIdent(StrRegion(1578, 1585), 'tos_idx'),
+              AstNumber(StrRegion(1588, 1589), 2)
             )
           )
         ),
-        AstAssign(StrRegion(1600, 1639),
-          AstItem(StrRegion(1600, 1618),
-            AstIdent(StrRegion(1600, 1605), 'stack'),
-            AstBinOp(StrRegion(1606, 1617),
+        AstAssign(StrRegion(1596, 1635),
+          AstItem(StrRegion(1596, 1614),
+            AstIdent(StrRegion(1596, 1601), 'stack'),
+            AstBinOp(StrRegion(1602, 1613),
               '-',
-              AstIdent(StrRegion(1606, 1613), 'tos_idx'),
-              AstNumber(StrRegion(1616, 1617), 2)
+              AstIdent(StrRegion(1602, 1609), 'tos_idx'),
+              AstNumber(StrRegion(1612, 1613), 2)
             )
           ),
-          AstItem(StrRegion(1621, 1639),
-            AstIdent(StrRegion(1621, 1626), 'stack'),
-            AstBinOp(StrRegion(1627, 1638),
+          AstItem(StrRegion(1617, 1635),
+            AstIdent(StrRegion(1617, 1622), 'stack'),
+            AstBinOp(StrRegion(1623, 1634),
               '-',
-              AstIdent(StrRegion(1627, 1634), 'tos_idx'),
-              AstNumber(StrRegion(1637, 1638), 3)
+              AstIdent(StrRegion(1623, 1630), 'tos_idx'),
+              AstNumber(StrRegion(1633, 1634), 3)
             )
           )
         ),
-        AstAssign(StrRegion(1645, 1670),
-          AstItem(StrRegion(1645, 1663),
-            AstIdent(StrRegion(1645, 1650), 'stack'),
-            AstBinOp(StrRegion(1651, 1662),
+        AstAssign(StrRegion(1641, 1666),
+          AstItem(StrRegion(1641, 1659),
+            AstIdent(StrRegion(1641, 1646), 'stack'),
+            AstBinOp(StrRegion(1647, 1658),
               '-',
-              AstIdent(StrRegion(1651, 1658), 'tos_idx'),
-              AstNumber(StrRegion(1661, 1662), 3)
+              AstIdent(StrRegion(1647, 1654), 'tos_idx'),
+              AstNumber(StrRegion(1657, 1658), 3)
             )
           ),
-          AstIdent(StrRegion(1666, 1670), 'tos0')
+          AstIdent(StrRegion(1662, 1666), 'tos0')
         )
       ]
     ),
-    AstDefine(StrRegion(1675, 1687),
-      AstIdent(StrRegion(1679, 1682), 'NOP'),
+    AstDefine(StrRegion(1671, 1683),
+      AstIdent(StrRegion(1675, 1678), 'NOP'),
       [],
       []
     )

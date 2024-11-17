@@ -1,4 +1,4 @@
-global[] stack = list();
+global[] stack = [];
 global COUNT_REFS = false;
 
 // opcodes from python version 3.8:

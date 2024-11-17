@@ -14,6 +14,9 @@ class TestExpr(CommonTestCase):
     def test_mod_supported(self):
         self.assertCstMatchesSnapshot('c=a%b;')
 
+    def test_pow(self):
+        self.assertCstMatchesSnapshot('a**b;')
+
 
 class TestItemChain(CommonTestCase):
     def test_item_chain(self):
@@ -24,10 +27,14 @@ class TestItemChain(CommonTestCase):
 
     def test_empty_sqb_error(self):
         with self.assertRaises(LocatedCstError) as err:
-            CstGen(Tokenizer('v=a[]+b')).parse()
+            CstGen(Tokenizer('v=a[]+b;')).parse()
         exc = err.exception
         self.assertBetweenIncl(3, 4, exc.region.start)
         self.assertEqual(4, exc.region.end - 1)
+
+    def test_empty_getitem_comma_error(self):
+        exc = self.assertFailsGracefullyCST('v=a[1,]+b;')
+        self.assertEqual(StrRegion(5, 6), exc.region)
 
     def test_getattr__issue_09(self):
         t = Tokenizer('fn(call_arg).a;').tokenize()
@@ -50,6 +57,23 @@ class TestItemChain(CommonTestCase):
         t = Tokenizer('"a string"["key_" .. 3];').tokenize()
         node = CstGen(t).parse()
         self.assertMatchesSnapshot(node, 'after_string')
+
+    def test_list_literal_empty(self):
+        self.assertCstMatchesSnapshot('let a = [];\n'
+                                      'join([], a, [].length);')
+        self.assertFailsGracefullyCST('let b = [,];')
+
+    def test_list_literal_single_item(self):
+        self.assertCstMatchesSnapshot('["a"].method([-2**--6,]);')
+
+    def test_list_literal_multi_item(self):
+        self.assertCstMatchesSnapshot(
+            'global[] STACK = ["int", 0];\n'
+            '(STACK + ["float", .2,]).extend([6.6, 1, fn()[0], 2][-1]);\n'
+            'v+=[1,2](3);')
+        e = self.assertFailsGracefullyCST('[1;')
+        self.assertEqual(StrRegion(2, 3), e.region)
+        self.assertContains(e.msg.lower(), "after item in list")
 # endregion </Test Expressions>
 
 

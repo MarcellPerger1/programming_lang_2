@@ -9,7 +9,8 @@ __all__ = [
     "AstNode", "AstProgramNode", "VarDeclScope", "VarType", "AstDeclNode",
     "AstRepeat", "AstIf", "AstWhile", "AstAssign", "AstAugAssign", "AstDefine",
     "AstNumber", "AstString", "AstAnyName", "AstIdent", "AstAttrName",
-    "AstAttribute", "AstItem", "AstCall", "AstOp", "AstBinOp", "AstUnaryOp",
+    "AstListLiteral", "AstAttribute", "AstItem", "AstCall", "AstOp", "AstBinOp",
+    "AstUnaryOp",
 ]
 
 
@@ -127,6 +128,12 @@ class AstIdent(AstAnyName):
 @dataclass
 class AstAttrName(AstAnyName):
     name = 'attr'
+
+
+@dataclass
+class AstListLiteral(AstNode):
+    name = 'list'
+    items: list[AstNode]
 
 
 @dataclass
