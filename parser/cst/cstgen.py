@@ -422,7 +422,7 @@ class CstGen:
         idx += 1
         if self.matches(idx, RSqBracket):
             idx += 1  # simple case, no args
-            return CallArgs(self.tok_region(start, idx)), idx
+            return ListNode(self.tok_region(start, idx)), idx
         arg1, idx = self._parse_expr(idx)
         args = [arg1]
         while not self.matches(idx, RSqBracket):
