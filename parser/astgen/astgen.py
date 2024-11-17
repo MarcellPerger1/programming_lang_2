@@ -134,26 +134,14 @@ class AstGen:
                 f"the root level.", smt.region)
 
     def _walk_var_decl(self, smt: DeclNode):
-        decls = [(self._walk_ident(d.ident), self._walk_decl_value(d.value))
+        decls = [(self._walk_ident(d.ident),
+                  None if d.value is None else self._walk_expr(d.value))
                  for d in smt.decl_list.decls]
         scope = (VarDeclScope.LET if isinstance(smt.decl_scope, DeclScope_Let)
                  else VarDeclScope.GLOBAL)
         tp = (VarType.LIST if isinstance(smt.decl_type, DeclType_List)
               else VarType.VARIABLE)
         return [AstDeclNode(smt.region, scope, tp, decls)]
-
-    def _walk_decl_value(self, value: AnyNode | None):
-        if value is None:
-            return None
-        if isinstance(value, ListNode):
-            # Special check (for now): list literals are disallowed everywhere
-            #  but here so _parse_expr raises an error when it finds a list
-            #  literal so we add this extra check as they *are* allowed here
-            return self._walk_list_literal_decl(value)
-        return self._walk_expr(value)
-
-    def _walk_list_literal_decl(self, ls: ListNode):
-        return AstListLiteral(ls.region, [self._walk_expr(i) for i in ls.items])
 
     def _walk_assign_left(self, lhs: AnyNode) -> AstNode:
         if isinstance(lhs, IdentNode):
@@ -207,11 +195,12 @@ class AstGen:
         return AstAttrName(
             attr_name.region, self.node_str(attr_name, intern=True))
 
-    @_register_autowalk_expr  # (we do a check in _parse_var_decl before calling _parse_expr)
-    def _walk_list_literal_expr(self, node: ListNode):
-        raise self.err("List literals are (for now) only supported in variable"
-                       " decls/initializers. (Note: nested list are not "
-                       "supported)", node)
+    @_register_autowalk_expr
+    def _walk_list_literal(self, ls: ListNode):
+        # For now it is UB to use this anywhere but in variable decls
+        #  (until proper syntax desugar-ing for literal arrays is done).
+        # Anyway, for now the codegen/typechecker/desugar step will check this
+        return AstListLiteral(ls.region, [self._walk_expr(i) for i in ls.items])
 
     @_register_autowalk_expr
     def _walk_getattr(self, node: GetattrNode) -> AstAttribute:

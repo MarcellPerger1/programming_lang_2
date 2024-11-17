@@ -1,3 +1,5 @@
+import unittest
+
 from parser.common import StrRegion
 from test.common import CommonTestCase
 
@@ -52,3 +54,12 @@ class TestAstGen(CommonTestCase):
                                       'global d = "STRING", e;\n'
                                       'let[] local_list=list(), other;\n'
                                       'global[] STACK;')
+
+    def test_list_literal_decl(self):
+        self.assertAstMatchesSnapshot('let[] loc = [5, 6.,], b, c=[];\n'
+                                      'global [] STACK = [foo(bar), 8];')
+
+    def test_list_literal_decl_paren(self):
+        self.assertAstMatchesSnapshot('let[] a = ([1]);')
+    # We only test for lists in variable decls (as them being allowed
+    # elsewhere is UB for now).
