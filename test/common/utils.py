@@ -69,7 +69,7 @@ class TestCaseUtils(unittest.TestCase):
             return
         self._old_cwd = os.getcwd()
         dirname = Path(__file__).parent
-        os.chdir(dirname.parent)
+        os.chdir(dirname.parent.parent)
         assert self.isProperCwdSet()
         self.addCleanup(self.resetCwd)
 

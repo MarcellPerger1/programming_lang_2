@@ -2,11 +2,9 @@ import asyncio
 import unittest
 from pathlib import Path
 
-from parser.lexer.tokenizer import Tokenizer
 from parser.cst.treegen import TreeGen
-from test.common import CommonTestCase
-
-from test.utils import TestCaseUtils
+from parser.lexer.tokenizer import Tokenizer
+from test.common import CommonTestCase, TestCaseUtils
 from util import timeout_decor, timeout_decor_async
 
 
