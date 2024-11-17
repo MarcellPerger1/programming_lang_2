@@ -11,7 +11,7 @@ from parser.astgen.errors import LocatedAstError
 from parser.common.error import BaseParseError
 from parser.common.tree_print import tformat
 from parser.cst.base_node import Leaf, AnyNode, Node
-from parser.cst.cstgen import CstGen, CstParseError
+from parser.cst.cstgen import CstGen, LocatedCstError
 from parser.lexer import Tokenizer
 from parser.lexer.tokens import Token, OpToken
 from test.common.snapshottest import SnapshotTestCase
@@ -87,7 +87,7 @@ class CommonTestCase(SnapshotTestCase, TestCaseUtils):
 
     def assertFailsGracefullyCST(self, src: str):
         t = CstGen(Tokenizer(src))
-        with self.assertRaises(CstParseError) as ctx:
+        with self.assertRaises(LocatedCstError) as ctx:
             t.parse()
         return ctx.exception
 

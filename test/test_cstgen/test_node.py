@@ -14,4 +14,3 @@ class Test(TestCase):
         self.assertEqual(IdentNode(None, None), node_from_token(IdentNameToken()))
         self.assertEqual(IdentNode(StrRegion(5, 7), None),
                          node_from_token(IdentNameToken(StrRegion(5, 7))))
-
