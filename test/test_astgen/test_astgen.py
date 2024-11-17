@@ -1,5 +1,3 @@
-import unittest
-
 from parser.common import StrRegion
 from test.common import CommonTestCase
 
