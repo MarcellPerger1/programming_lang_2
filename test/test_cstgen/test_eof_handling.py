@@ -2,7 +2,7 @@ from parser.operators import BINARY_OPS
 from test.common import CommonTestCase
 
 
-class TreeGenEofTest(CommonTestCase):
+class TestCstGenEof(CommonTestCase):
     def test__at_expr_end(self):
         self.assertFailsGracefullyCST('a.b()')
 
