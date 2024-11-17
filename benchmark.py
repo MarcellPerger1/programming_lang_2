@@ -27,7 +27,7 @@ class _Timer:
         return self._end - self._start
 
 
-class PerfOnce:
+class BenchOnce:
     _tokenizer: Tokenizer
     _cstgen: TreeGen
     _cst: ProgramNode
@@ -99,13 +99,13 @@ class PerfOnce:
         self._add_line(2.5, 'AST', t.get())
 
 
-def run(src: str, idx: int = -1, do_ast=True):
-    return PerfOnce(src, idx, do_ast).run()
+def benchmark(src: str, idx: int = -1, do_ast=True):
+    return BenchOnce(src, idx, do_ast).run()
 
 
 def main():
-    run(readfile('main_example_0.st'), 0, do_ast=False)
-    run(readfile('main_example_1.st'), 1)
+    benchmark(readfile('main_example_0.st'), 0, do_ast=False)
+    benchmark(readfile('main_example_1.st'), 1)
 
 
 if __name__ == '__main__':
