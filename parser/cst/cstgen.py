@@ -412,7 +412,31 @@ class CstGen:
             idx = self._expect_cls_consume(
                 idx, RParToken, f"Expected ')' at end of expr, got {self[idx].name}")
             return ParenNode(self.tok_region(start, idx), None, [inner]), idx
+        elif isinstance(self[idx], LSqBracket):
+            return self._parse_list_literal(idx)
         return self._parse_atom_or_autocat(idx)
+
+    def _parse_list_literal(self, idx: int) -> tuple[AnyNode, int]:
+        start = idx
+        assert self.matches(idx, LSqBracket)
+        idx += 1
+        if self.matches(idx, RSqBracket):
+            idx += 1  # simple case, no args
+            return CallArgs(self.tok_region(start, idx)), idx
+        arg1, idx = self._parse_expr(idx)
+        args = [arg1]
+        while not self.matches(idx, RSqBracket):
+            if not self.matches(idx, CommaToken):  # if not end, must be comma
+                raise self.err(f"Expected ',' or ']' after item in list"
+                               f" literal, got {self[idx].name}", self[idx])
+            idx += 1
+            if self.matches(idx, RSqBracket):  # trailing comma, no value
+                break
+            arg, idx = self._parse_expr(idx)
+            args.append(arg)
+        assert self.matches(idx, RSqBracket)
+        idx += 1
+        return ListNode(self.tok_region(start, idx), None, args), idx
 
     def _parse_basic_item(self, idx: int):
         left, new_idx = self._parse_parens_or(idx)
