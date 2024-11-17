@@ -1,7 +1,7 @@
 import unittest
 
 from parser.lexer.tokenizer import Tokenizer
-from parser.cst.treegen import TreeGen, LocatedCstError
+from parser.cst.treegen import TreeGen, LocatedCstError, CstGen
 from parser.common import StrRegion
 from test.common import CommonTestCase
 
@@ -92,6 +92,30 @@ class TestTreeGenErrors(CommonTestCase):
         exc = err.exception
         self.assertBetweenIncl(3, 4, exc.region.start)
         self.assertEqual(4, exc.region.end - 1)
+
+
+class TestItemChain(CommonTestCase):
+    def test_getattr__issue_09(self):
+        t = Tokenizer('fn(call_arg).a;').tokenize()
+        node = CstGen(t).parse()
+        self.assertMatchesSnapshot(node, 'after_call')
+        t = Tokenizer('(paren + x).b;').tokenize()
+        node = CstGen(t).parse()
+        self.assertMatchesSnapshot(node, 'after_paren')
+        t = Tokenizer('"a string".b;').tokenize()
+        node = CstGen(t).parse()
+        self.assertMatchesSnapshot(node, 'after_string')
+
+    def test_getitem__issue_09(self):
+        t = Tokenizer('fn(call_arg)[1];').tokenize()
+        node = CstGen(t).parse()
+        self.assertMatchesSnapshot(node, 'after_call')
+        t = Tokenizer('(paren + x)[2];').tokenize()
+        node = CstGen(t).parse()
+        self.assertMatchesSnapshot(node, 'after_paren')
+        t = Tokenizer('"a string"["key_" .. 3];').tokenize()
+        node = CstGen(t).parse()
+        self.assertMatchesSnapshot(node, 'after_string')
 
 
 if __name__ == '__main__':
