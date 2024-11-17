@@ -1,4 +1,4 @@
-"2","90","179","672","1096"
+"2","90","188","681","1105"
 "TestMain::test_example_0:tokens","TestMain::test_example_0:cst","TestMain::test_example_1:tokens","TestMain::test_example_1:cst","TestMain::test_example_1:ast"
 [IdentNameToken(region=StrRegion(start=0, end=3)),
  WhitespaceToken(region=StrRegion(start=3, end=4)),
@@ -100,8 +100,11 @@ ProgramNode(StrRegion(0, 144), [
             NumberNode(StrRegion(8, 9)),
             NumberNode(StrRegion(10, 11))
           ]),
-          UMinusNode(StrRegion(15, 17), [
-            NumberNode(StrRegion(16, 17))
+          PowNode(StrRegion(12, 17), [
+            NumberNode(StrRegion(12, 13)),
+            UMinusNode(StrRegion(15, 17), [
+              NumberNode(StrRegion(16, 17))
+            ])
           ])
         ])
       ])
@@ -125,8 +128,14 @@ ProgramNode(StrRegion(0, 144), [
       ]),
       CallArgs(StrRegion(43, 62), [
         IdentNode(StrRegion(44, 50)),
-        UMinusNode(StrRegion(55, 60), [
-          NumberNode(StrRegion(59, 60))
+        PowNode(StrRegion(52, 60), [
+          IdentNode(StrRegion(52, 53)),
+          UMinusNode(StrRegion(55, 60), [
+            PowNode(StrRegion(56, 60), [
+              NumberNode(StrRegion(56, 57)),
+              NumberNode(StrRegion(59, 60))
+            ])
+          ])
         ])
       ])
     ])
