@@ -86,7 +86,7 @@ class BenchOnce:
     def do_cst_fmt(self):
         with _Timer() as t:
             _s = tformat(self._cst)
-        self._add_line(1.5, 'CST', t.get())
+        self._add_line(1.5, 'CST_fmt', t.get())
 
     def do_ast(self):
         with _Timer() as t:
@@ -96,7 +96,7 @@ class BenchOnce:
     def do_ast_fmt(self):
         with _Timer() as t:
             _s = tformat(self._ast)
-        self._add_line(2.5, 'AST', t.get())
+        self._add_line(2.5, 'AST_fmt', t.get())
 
 
 def benchmark(src: str, idx: int = -1, do_ast=True):
