@@ -1,63 +1,106 @@
 import cProfile
+import contextlib
 import time
 
+from parser.astgen.ast_node import AstProgramNode
 from parser.astgen.astgen import AstGen
-from util import readfile
+from parser.common.tree_print import tformat
+from parser.cst.nodes import ProgramNode
 from parser.cst.treegen import TreeGen
-from parser.lexer import Tokenizer, print_tokens
-from parser.common.tree_print import tprint
-
-
-def make_tree(src: str):
-    return TreeGen(Tokenizer(src)).parse()
-
+from parser.lexer import Tokenizer, format_tokens
+from util import readfile
 
 PROFILER = True
 
 
+class _Timer:
+    _start = _end = None
+
+    def __enter__(self):
+        self._start = time.perf_counter()
+        return self
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        self._end = time.perf_counter()
+
+    def get(self):
+        return self._end - self._start
+
+
+class PerfOnce:
+    _tokenizer: Tokenizer
+    _cstgen: TreeGen
+    _cst: ProgramNode
+    _ast: AstProgramNode
+
+    def __init__(self, src: str, idx: int = -1, do_ast=True):
+        self.src = src
+        self.idx = idx
+        self.should_do_ast = do_ast
+        self.lines: list[tuple[float, str]] = []  # First item used as key
+
+    @classmethod
+    def _fmt_time_taken(cls, name: str, delta_sec: float):
+        return f'{name:<17} done in {delta_sec * 1000:.2f}ms'
+
+    @classmethod
+    def _maybe_profiler(cls):
+        if PROFILER:
+            return cProfile.Profile()
+        return contextlib.nullcontext(None)
+
+    def run(self):
+        with self._maybe_profiler() as p:
+            self.do_tokenize()
+            self.do_token_fmt()
+            self.do_cst()
+            self.do_cst_fmt()
+            if self.should_do_ast:
+                self.do_ast()
+                self.do_ast_fmt()
+        if p:
+            p.dump_stats(f'perf_dump_{self.idx}.prof')
+        print(f'Perf for idx={self.idx} ({PROFILER=}):')
+        for _k, s in sorted(self.lines):
+            print(f'  {s}')
+
+    def _add_line(self, sort_key: float, name: str, delta_sec: float):
+        self.lines.append((sort_key, self._fmt_time_taken(name, delta_sec)))
+
+    def do_tokenize(self):
+        with _Timer() as t:
+            self._tokenizer = Tokenizer(self.src).tokenize()
+        self._add_line(0.0, 'Tokens', t.get())
+
+    def do_token_fmt(self):
+        with _Timer() as t:
+            _s = format_tokens(self.src, self._tokenizer.tokens, True)
+        self._add_line(0.5, 'Tokens_fmt', t.get())
+
+    def do_cst(self):
+        with _Timer() as t:
+            self._cstgen = TreeGen(self._tokenizer)
+            self._cst = self._cstgen.parse()
+        self._add_line(1.0, 'CST', t.get())
+
+    def do_cst_fmt(self):
+        with _Timer() as t:
+            _s = tformat(self._cst)
+        self._add_line(1.5, 'CST', t.get())
+
+    def do_ast(self):
+        with _Timer() as t:
+            self._ast = AstGen(self._cstgen).parse()
+        self._add_line(2.0, 'AST', t.get())
+
+    def do_ast_fmt(self):
+        with _Timer() as t:
+            _s = tformat(self._ast)
+        self._add_line(2.5, 'AST', t.get())
+
+
 def run(src: str, idx: int = -1, do_ast=True):
-    node = ast_node = None
-    ta1 = tp1 = ta0 = 0.0  # will be overwritten
-
-    def doit_trees():
-        nonlocal node, tp1, ta0, ast_node, ta1
-        treegen = TreeGen(tn)
-        node = treegen.parse()
-        tp1 = time.perf_counter()
-        if do_ast:
-            ta0 = time.perf_counter()
-            ast_node = AstGen(treegen).parse()
-            ta1 = time.perf_counter()
-
-    tn0 = time.perf_counter()
-    tn = Tokenizer(src).tokenize()
-    tn1 = time.perf_counter()
-    print('Tokens:')
-    tpr_tk0 = time.perf_counter()
-    print_tokens(tn.src, tn.tokens)
-    tpr_tk1 = time.perf_counter()
-    tp0 = time.perf_counter()
-    if PROFILER:
-        with cProfile.Profile() as p:
-            doit_trees()
-        p.dump_stats(f'perf_dump_{idx}.prof')
-    else:
-        doit_trees()
-    print('CST:')
-    tpr_cst0 = time.perf_counter()
-    tprint(node)
-    tpr_cst1 = time.perf_counter()
-    tpr_ast0 = tpr_ast1 = time.perf_counter()
-    if do_ast:
-        tprint(ast_node)
-        tpr_ast1 = time.perf_counter()
-    print(rf'Tokens            done in {(tn1 - tn0) * 1000:.2f}ms')
-    print(rf'Tokens_print      done in {(tpr_tk1 - tpr_tk0) * 1000:.2f}ms')
-    print(rf'CST               done in {(tp1 - tp0) * 1000:.2f}ms')
-    print(rf'CST_print         done in {(tpr_cst1 - tpr_cst0) * 1000:.2f}ms')
-    if do_ast:
-        print(rf'AST               done in {(ta1 - ta0) * 1000:.2f}ms')
-        print(rf'AST_print         done in {(tpr_ast1 - tpr_ast0) * 1000:.2f}ms')
+    return PerfOnce(src, idx, do_ast).run()
 
 
 def main():
