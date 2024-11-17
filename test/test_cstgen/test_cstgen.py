@@ -14,6 +14,9 @@ class TestExpr(CommonTestCase):
     def test_mod_supported(self):
         self.assertCstMatchesSnapshot('c=a%b;')
 
+    def test_pow(self):
+        self.assertCstMatchesSnapshot('a**b;')
+
 
 class TestItemChain(CommonTestCase):
     def test_item_chain(self):
