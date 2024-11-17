@@ -14,8 +14,8 @@ from parser.cst.base_node import Leaf, AnyNode, Node
 from parser.cst.treegen import TreeGen, CstParseError
 from parser.lexer import Tokenizer
 from parser.lexer.tokens import Token, OpToken
-from test.snapshottest import SnapshotTestCase
-from test.utils import TestCaseUtils
+from test.common.snapshottest import SnapshotTestCase
+from test.common.utils import TestCaseUtils
 
 
 def _strict_boundary_kwargs():
