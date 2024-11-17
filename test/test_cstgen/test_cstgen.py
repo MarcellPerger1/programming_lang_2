@@ -71,6 +71,9 @@ class TestItemChain(CommonTestCase):
             'global[] STACK = ["int", 0];\n'
             '(STACK + ["float", .2,]).extend([6.6, 1, fn()[0], 2][-1]);\n'
             'v+=[1,2](3);')
+        e = self.assertFailsGracefullyCST('[1;')
+        self.assertEqual(StrRegion(2, 3), e.region)
+        self.assertContains(e.msg.lower(), "after item in list")
 # endregion </Test Expressions>
 
 
