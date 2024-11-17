@@ -1,7 +1,7 @@
 import unittest
 
 from parser.lexer.tokenizer import Tokenizer
-from parser.cst.treegen import TreeGen, LocatedCstError, CstGen
+from parser.cst.cstgen import CstGen, LocatedCstError
 from parser.common import StrRegion
 from test.common import CommonTestCase
 
@@ -24,7 +24,7 @@ class TestItemChain(CommonTestCase):
 
     def test_empty_sqb_error(self):
         with self.assertRaises(LocatedCstError) as err:
-            TreeGen(Tokenizer('v=a[]+b')).parse()
+            CstGen(Tokenizer('v=a[]+b')).parse()
         exc = err.exception
         self.assertBetweenIncl(3, 4, exc.region.start)
         self.assertEqual(4, exc.region.end - 1)
@@ -121,7 +121,7 @@ class TestBlocks(CommonTestCase):
 
     def test_else_cond_null(self):
         src = 'if 0==1{exit();  } startup();'
-        n = TreeGen(Tokenizer(src)).parse()
+        n = CstGen(Tokenizer(src)).parse()
         node = n.children[0].children[-1]
         self.assertLessEqual(node.region.start, node.region.end)
         self.assertEqual(StrRegion(17, 18), node.region)

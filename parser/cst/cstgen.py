@@ -27,7 +27,7 @@ class LocatedCstError(BaseLocatedError, CstParseError):
     pass
 
 
-class TreeGen:
+class CstGen:
     def __init__(self, tokenizer: Tokenizer):
         self.tokenizer = tokenizer
         self.src = self.tokenizer.src
@@ -540,9 +540,6 @@ class TreeGen:
         else:
             klass = name_or_type
         return klass(region, parent, children)
-
-
-CstGen = TreeGen
 
 
 # operator precedence (most to least binding):

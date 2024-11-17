@@ -6,7 +6,7 @@ from parser.astgen.ast_node import AstProgramNode
 from parser.astgen.astgen import AstGen
 from parser.common.tree_print import tformat
 from parser.cst.nodes import ProgramNode
-from parser.cst.treegen import TreeGen
+from parser.cst.cstgen import CstGen
 from parser.lexer import Tokenizer, format_tokens
 from util import readfile
 
@@ -29,7 +29,7 @@ class _Timer:
 
 class BenchOnce:
     _tokenizer: Tokenizer
-    _cstgen: TreeGen
+    _cstgen: CstGen
     _cst: ProgramNode
     _ast: AstProgramNode
 
@@ -79,7 +79,7 @@ class BenchOnce:
 
     def do_cst(self):
         with _Timer() as t:
-            self._cstgen = TreeGen(self._tokenizer)
+            self._cstgen = CstGen(self._tokenizer)
             self._cst = self._cstgen.parse()
         self._add_line(1.0, 'CST', t.get())
 

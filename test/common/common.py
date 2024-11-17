@@ -11,7 +11,7 @@ from parser.astgen.errors import LocatedAstError
 from parser.common.error import BaseParseError
 from parser.common.tree_print import tformat
 from parser.cst.base_node import Leaf, AnyNode, Node
-from parser.cst.treegen import TreeGen, CstParseError
+from parser.cst.cstgen import CstGen, CstParseError
 from parser.lexer import Tokenizer
 from parser.lexer.tokens import Token, OpToken
 from test.common.snapshottest import SnapshotTestCase
@@ -83,17 +83,17 @@ class CommonTestCase(SnapshotTestCase, TestCaseUtils):
             self.assertTokenStreamEquals(t.tokens, expected, check_regions)
 
     def assertValidParseCST(self, src: str):
-        self.assertIsNotNone(TreeGen(Tokenizer(src)).parse())
+        self.assertIsNotNone(CstGen(Tokenizer(src)).parse())
 
     def assertFailsGracefullyCST(self, src: str):
-        t = TreeGen(Tokenizer(src))
+        t = CstGen(Tokenizer(src))
         with self.assertRaises(CstParseError) as ctx:
             t.parse()
         return ctx.exception
 
     def assertNotInternalErrorCST(self, src: str):
         try:
-            TreeGen(Tokenizer(src)).parse()
+            CstGen(Tokenizer(src)).parse()
         except BaseParseError:
             self.assertTrue(True)
         self.assertTrue(True)
@@ -101,7 +101,7 @@ class CommonTestCase(SnapshotTestCase, TestCaseUtils):
     @classmethod
     def raiseInternalErrorsOnlyCST(cls, src: str):
         try:
-            TreeGen(Tokenizer(src)).parse()
+            CstGen(Tokenizer(src)).parse()
         except BaseParseError:
             return None
         except Exception:
@@ -109,18 +109,18 @@ class CommonTestCase(SnapshotTestCase, TestCaseUtils):
         return None
 
     def assertCstMatchesSnapshot(self, src: str):
-        t = TreeGen(Tokenizer(src))
+        t = CstGen(Tokenizer(src))
         self.assertMatchesSnapshot(t.parse())
 
     def assertAstMatchesSnapshot(self, src: str):
-        t = AstGen(TreeGen(Tokenizer(src)))
+        t = AstGen(CstGen(Tokenizer(src)))
         self.assertMatchesSnapshot(t.parse())
 
     def assertValidParseAST(self, src: str):
-        self.assertIsNotNone(AstGen(TreeGen(Tokenizer(src))).parse())
+        self.assertIsNotNone(AstGen(CstGen(Tokenizer(src))).parse())
 
     def assertFailsGracefullyAST(self, src: str):
-        a = AstGen(TreeGen(Tokenizer(src)))
+        a = AstGen(CstGen(Tokenizer(src)))
         with self.assertRaises(LocatedAstError) as ctx:
             a.parse()
         return ctx.exception

@@ -12,7 +12,7 @@ from ..common import region_union, RegionUnionArgT, HasRegion
 from ..cst.base_node import AnyNode, Node, Leaf
 from ..cst.named_node import NamedLeafCls, NamedNodeCls, NamedSizedNodeCls
 from ..cst.nodes import *
-from ..cst.treegen import CstGen
+from ..cst.cstgen import CstGen
 
 # Final syntax lowering/codegen: (???)
 # AST -> blocks, intrinsics, functions -> blocks & intrinsics -> intrinsics
