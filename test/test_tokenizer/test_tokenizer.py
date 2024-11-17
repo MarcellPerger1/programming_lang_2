@@ -1,13 +1,14 @@
 import unittest
 
 from parser.lexer import Tokenizer
-from parser.lexer.tokens import WhitespaceToken, StringToken, EofToken, NumberToken
+from parser.lexer.tokens import (
+    WhitespaceToken, StringToken, EofToken, NumberToken, SemicolonToken)
 from parser.common import StrRegion
 from parser.tokens import IdentNameToken, DotToken, AttrNameToken, OpToken
 from test.common import CommonTestCase, TokenStreamFlag
 
 
-class MyTestCase(CommonTestCase):
+class TestInternalFuncs(CommonTestCase):
     def test__t_ident_name__at_end(self):
         t = Tokenizer('abc')
         end = t._t_ident_name(0)
@@ -63,6 +64,8 @@ class MyTestCase(CommonTestCase):
         self.assertTokensEqual(t, [NumberToken(StrRegion(0, 2))])
         self.assertEqual(end, 2)
 
+
+class TestFullTokenizer(CommonTestCase):
     def test_mod_supported(self):
         t = Tokenizer('a+b%2')
         t.tokenize()
@@ -92,6 +95,20 @@ class MyTestCase(CommonTestCase):
             StringToken(StrRegion(6, 9)),
             EofToken(StrRegion(9, 9)),
         ], TokenStreamFlag.CONTENT)
+
+    def test_ws_at_end(self):
+        t = Tokenizer('let a =1; \n').tokenize()
+        self.assertTokensEqual(t, [
+            IdentNameToken(),
+            WhitespaceToken(),
+            IdentNameToken(),
+            WhitespaceToken(),
+            OpToken(op_str='='),
+            NumberToken(),
+            SemicolonToken(),
+            WhitespaceToken(),
+            EofToken()
+        ], TokenStreamFlag.FULL, check_regions=False)
 
 
 if __name__ == '__main__':
