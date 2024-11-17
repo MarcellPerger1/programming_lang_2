@@ -87,7 +87,7 @@ class AstGen:
     def __init__(self, cst: CstGen):
         self.cst = cst
         self.src = self.cst.src
-        self.result: AstNode | None = None
+        self.result: AstProgramNode | None = None
 
     def parse(self):
         if not self.result:
