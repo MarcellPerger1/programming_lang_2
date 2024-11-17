@@ -64,12 +64,15 @@
 				},
 				{
 					"comment": "constant declarations (TODO no keyword yet)",
-					"match": "(?:\\b|^)(global|let)\\s+(_*[A-Z][A-Z0-9_]*)\\b",
+					"match": "(?:\\b|^)(global|let)(?:\\s*(\\[\\])|\\s)\\s*(_*[A-Z][A-Z0-9_]*)\\b",
 					"captures": {
 						"1": {
 							"name": "storage.type.st"
 						},
 						"2": {
+							"name": "storage.modifier.list.st"
+						},
+						"3": {
 							"name": "constant.other.caps.st"
 						}
 					}
@@ -95,24 +98,36 @@
 			]
 		},
 		"escapes": {
-			"comment": "escapes: ASCII, byte, Unicode, quote, regex (TODO: better unicode?)",
+			"comment": "escapes: control chars, hex, unicode",
 			"name": "constant.character.escape.st",
-			"match": "(\\\\)(?:(?:(x[0-7a-fA-F]{2})|(u(\\{)[\\da-fA-F]{4,6}(\\}))|.))",
+			"match": "(\\\\)(?:([\\\\'\"abfnrtv0\\n])|(x[\\da-fA-F]{2})|(u[\\da-fA-F]{4})|(U[\\da-fA-F]{8})|(N(\\{)[^\\}]+(\\}))|(.))",
 			"captures": {
 				"1": {
 					"name": "constant.character.escape.backslash.st"
 				},
 				"2": {
-					"name": "constant.character.escape.bit.st"
+					"name": "constant.character.escape.char.st"
 				},
 				"3": {
-					"name": "constant.character.escape.unicode.st"
+					"name": "constant.character.escape.bit.st"
 				},
 				"4": {
-					"name": "constant.character.escape.unicode.punctuation.st"
+					"name": "constant.character.escape.unicode.short.st"
 				},
 				"5": {
+					"name": "constant.character.escape.unicode.long.st"
+				},
+				"6": {
+					"name": "constant.character.escape.unicode.named.st"
+				},
+				"7": {
 					"name": "constant.character.escape.unicode.punctuation.st"
+				},
+				"8": {
+					"name": "constant.character.escape.unicode.punctuation.st"
+				},
+				"9": {
+					"name": "invalid.illegal.character.escape"
 				}
 			}
 		},
@@ -352,7 +367,7 @@
 			"patterns": [
 				{
 					"comment": "variables (any char lowercase)",
-					"name": "variable.other.rust",
+					"name": "variable.other.st",
 					"match": "(\\b|^)(?<!(?<!\\.)\\.)([a-z][A-Za-z0-9_]*|_+[a-z0-9][A-Za-z0-9_]*)(\\b|$)"
 				}
 			]
