@@ -20,8 +20,8 @@ class WalkerCallType(Enum):
     POST = 'post'
 
 
-WalkableL0: TypeAlias = 'AstNode' | list['AstNode'] | tuple['AstNode', ...] | None
-WalkableT: TypeAlias = WalkableL0 | list[WalkableL0] | tuple[WalkableL0, ...]
+WalkableL0: TypeAlias = 'AstNode | list[AstNode] | tuple[AstNode, ...] | None'
+WalkableT: TypeAlias = 'WalkableL0 | list[WalkableL0] | tuple[WalkableL0, ...]'
 WalkerFnT: TypeAlias = Callable[[WalkableT, WalkerCallType], bool | None]
 """Returns True if skip"""
 
