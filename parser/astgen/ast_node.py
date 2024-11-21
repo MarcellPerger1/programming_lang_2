@@ -11,7 +11,7 @@ __all__ = [
     "AstRepeat", "AstIf", "AstWhile", "AstAssign", "AstAugAssign", "AstDefine",
     "AstNumber", "AstString", "AstAnyName", "AstIdent", "AstAttrName",
     "AstListLiteral", "AstAttribute", "AstItem", "AstCall", "AstOp", "AstBinOp",
-    "AstUnaryOp",
+    "AstUnaryOp", 'walk_ast', 'WalkableT', 'WalkerFnT', 'WalkerCallType'
 ]
 
 
