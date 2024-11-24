@@ -7,7 +7,7 @@ from typing import Callable, TypeAlias, Iterable
 from ..common import HasRegion, StrRegion
 
 __all__ = [
-    "AstNode", "AstProgramNode", "VarDeclScope", "VarType", "AstDeclNode",
+    "AstNode", "AstProgramNode", "VarDeclScope", "VarDeclType", "AstDeclNode",
     "AstRepeat", "AstIf", "AstWhile", "AstAssign", "AstAugAssign", "AstDefine",
     "AstNumber", "AstString", "AstAnyName", "AstIdent", "AstAttrName",
     "AstListLiteral", "AstAttribute", "AstItem", "AstCall", "AstOp", "AstBinOp",
@@ -90,7 +90,7 @@ class VarDeclScope(Enum):
     GLOBAL = 'global'
 
 
-class VarType(Enum):
+class VarDeclType(Enum):
     VARIABLE = 'variable'
     LIST = 'list'
 
@@ -99,7 +99,7 @@ class VarType(Enum):
 class AstDeclNode(AstNode):
     name = 'var_decl'
     scope: VarDeclScope
-    type: VarType
+    type: VarDeclType
     ident: AstIdent
     value: AstNode | None
 
