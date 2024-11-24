@@ -136,8 +136,8 @@ class AstGen:
     def _walk_var_decl(self, smt: DeclNode):
         scope = (VarDeclScope.LET if isinstance(smt.decl_scope, DeclScope_Let)
                  else VarDeclScope.GLOBAL)
-        tp = (VarType.LIST if isinstance(smt.decl_type, DeclType_List)
-              else VarType.VARIABLE)
+        tp = (VarDeclType.LIST if isinstance(smt.decl_type, DeclType_List)
+              else VarDeclType.VARIABLE)
         # Add the region from the keywords to first decl (to make single-var
         # decls a more sensible .region that includes the `let` keyword as well)
         extra_region_first = region_union(smt.decl_scope, smt.decl_type)
@@ -146,7 +146,7 @@ class AstGen:
                 for i, d in enumerate(smt.decl_list.decls)]
 
     def _walk_single_decl(self, d: DeclItemNode, scope: VarDeclScope,
-                          tp: VarType, extra_region: StrRegion | None):
+                          tp: VarDeclType, extra_region: StrRegion | None):
         return AstDeclNode(
             region_union(d.ident, d.value, extra_region),
             scope, tp, self._walk_ident(d.ident),
