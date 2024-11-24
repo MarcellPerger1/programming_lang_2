@@ -134,14 +134,17 @@ class AstGen:
                 f"the root level.", smt.region)
 
     def _walk_var_decl(self, smt: DeclNode):
-        decls = [(self._walk_ident(d.ident),
-                  None if d.value is None else self._walk_expr(d.value))
-                 for d in smt.decl_list.decls]
         scope = (VarDeclScope.LET if isinstance(smt.decl_scope, DeclScope_Let)
                  else VarDeclScope.GLOBAL)
         tp = (VarType.LIST if isinstance(smt.decl_type, DeclType_List)
               else VarType.VARIABLE)
-        return [AstDeclNode(smt.region, scope, tp, decls)]
+        return [self._walk_single_decl(d, scope, tp) for d in smt.decl_list.decls]
+
+    def _walk_single_decl(self, d: DeclItemNode, scope: VarDeclScope, tp: VarType):
+        return AstDeclNode(
+            region_union(d.ident, d.value),
+            scope, tp, self._walk_ident(d.ident),
+            None if d.value is None else self._walk_expr(d.value))
 
     def _walk_assign_left(self, lhs: AnyNode) -> AstNode:
         if isinstance(lhs, IdentNode):

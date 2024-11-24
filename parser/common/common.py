@@ -16,6 +16,8 @@ RegionUnionArgT: TypeAlias = RegionUnionFlatT | Sequence[RegionUnionFlatT]
 def region_union(*args: RegionUnionArgT):
     regs = []
     for loc in args:
+        if loc is None:
+            continue
         if getattr(loc, 'region', None) is not None:  # Duck-type HasRegion
             loc = loc.region
         if isinstance(loc, StrRegion):
