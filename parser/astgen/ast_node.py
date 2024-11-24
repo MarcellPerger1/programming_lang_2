@@ -100,10 +100,11 @@ class AstDeclNode(AstNode):
     name = 'var_decl'
     scope: VarDeclScope
     type: VarType
-    decls: list[tuple[AstIdent, AstNode | None]]
+    ident: AstIdent
+    value: AstNode | None
 
     def _walk_members(self, fn: WalkerFnT):
-        self.walk_multiple_objects(fn, (self.decls,))
+        self.walk_multiple_objects(fn, (self.ident, self.value))
 
 
 @dataclass

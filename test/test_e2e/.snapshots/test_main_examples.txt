@@ -1104,24 +1104,16 @@ AstProgramNode(StrRegion(0, 1683),
     AstDeclNode(StrRegion(0, 19),
       VarDeclScope.GLOBAL,
       VarType.LIST,
-      [
-        (
-          AstIdent(StrRegion(9, 14), 'stack'),
-          AstListLiteral(StrRegion(17, 19),
-            []
-          )
-        )
-      ]
+      AstIdent(StrRegion(9, 14), 'stack'),
+      AstListLiteral(StrRegion(17, 19),
+        []
+      )
     ),
     AstDeclNode(StrRegion(21, 46),
       VarDeclScope.GLOBAL,
       VarType.VARIABLE,
-      [
-        (
-          AstIdent(StrRegion(28, 38), 'COUNT_REFS'),
-          AstIdent(StrRegion(41, 46), 'false')
-        )
-      ]
+      AstIdent(StrRegion(28, 38), 'COUNT_REFS'),
+      AstIdent(StrRegion(41, 46), 'false')
     ),
     AstDefine(StrRegion(396, 506),
       AstIdent(StrRegion(400, 407), 'POP_TOP'),
@@ -1168,30 +1160,22 @@ AstProgramNode(StrRegion(0, 1683),
         AstDeclNode(StrRegion(528, 552),
           VarDeclScope.LET,
           VarType.VARIABLE,
-          [
-            (
-              AstIdent(StrRegion(532, 539), 'tos_idx'),
-              AstCall(StrRegion(542, 552),
-                AstIdent(StrRegion(542, 545), 'len'),
-                [
-                  AstIdent(StrRegion(546, 551), 'stack')
-                ]
-              )
-            )
-          ]
+          AstIdent(StrRegion(532, 539), 'tos_idx'),
+          AstCall(StrRegion(542, 552),
+            AstIdent(StrRegion(542, 545), 'len'),
+            [
+              AstIdent(StrRegion(546, 551), 'stack')
+            ]
+          )
         ),
         AstDeclNode(StrRegion(558, 583),
           VarDeclScope.LET,
           VarType.VARIABLE,
-          [
-            (
-              AstIdent(StrRegion(562, 566), 'tos0'),
-              AstItem(StrRegion(569, 583),
-                AstIdent(StrRegion(569, 574), 'stack'),
-                AstIdent(StrRegion(575, 582), 'tos_idx')
-              )
-            )
-          ]
+          AstIdent(StrRegion(562, 566), 'tos0'),
+          AstItem(StrRegion(569, 583),
+            AstIdent(StrRegion(569, 574), 'stack'),
+            AstIdent(StrRegion(575, 582), 'tos_idx')
+          )
         ),
         AstAssign(StrRegion(589, 624),
           AstItem(StrRegion(589, 603),
@@ -1227,30 +1211,22 @@ AstProgramNode(StrRegion(0, 1683),
         AstDeclNode(StrRegion(795, 819),
           VarDeclScope.LET,
           VarType.VARIABLE,
-          [
-            (
-              AstIdent(StrRegion(799, 806), 'tos_idx'),
-              AstCall(StrRegion(809, 819),
-                AstIdent(StrRegion(809, 812), 'len'),
-                [
-                  AstIdent(StrRegion(813, 818), 'stack')
-                ]
-              )
-            )
-          ]
+          AstIdent(StrRegion(799, 806), 'tos_idx'),
+          AstCall(StrRegion(809, 819),
+            AstIdent(StrRegion(809, 812), 'len'),
+            [
+              AstIdent(StrRegion(813, 818), 'stack')
+            ]
+          )
         ),
         AstDeclNode(StrRegion(825, 850),
           VarDeclScope.LET,
           VarType.VARIABLE,
-          [
-            (
-              AstIdent(StrRegion(829, 833), 'tos0'),
-              AstItem(StrRegion(836, 850),
-                AstIdent(StrRegion(836, 841), 'stack'),
-                AstIdent(StrRegion(842, 849), 'tos_idx')
-              )
-            )
-          ]
+          AstIdent(StrRegion(829, 833), 'tos0'),
+          AstItem(StrRegion(836, 850),
+            AstIdent(StrRegion(836, 841), 'stack'),
+            AstIdent(StrRegion(842, 849), 'tos_idx')
+          )
         ),
         AstAssign(StrRegion(856, 891),
           AstItem(StrRegion(856, 870),
@@ -1304,20 +1280,16 @@ AstProgramNode(StrRegion(0, 1683),
         AstDeclNode(StrRegion(992, 1021),
           VarDeclScope.LET,
           VarType.VARIABLE,
-          [
-            (
-              AstIdent(StrRegion(996, 1001), 'value'),
-              AstItem(StrRegion(1004, 1021),
-                AstIdent(StrRegion(1004, 1009), 'stack'),
-                AstCall(StrRegion(1010, 1020),
-                  AstIdent(StrRegion(1010, 1013), 'len'),
-                  [
-                    AstIdent(StrRegion(1014, 1019), 'stack')
-                  ]
-                )
-              )
+          AstIdent(StrRegion(996, 1001), 'value'),
+          AstItem(StrRegion(1004, 1021),
+            AstIdent(StrRegion(1004, 1009), 'stack'),
+            AstCall(StrRegion(1010, 1020),
+              AstIdent(StrRegion(1010, 1013), 'len'),
+              [
+                AstIdent(StrRegion(1014, 1019), 'stack')
+              ]
             )
-          ]
+          )
         ),
         AstCall(StrRegion(1027, 1046),
           AstAttribute(StrRegion(1027, 1039),
@@ -1349,47 +1321,35 @@ AstProgramNode(StrRegion(0, 1683),
         AstDeclNode(StrRegion(1124, 1148),
           VarDeclScope.LET,
           VarType.VARIABLE,
-          [
-            (
-              AstIdent(StrRegion(1128, 1135), 'tos_idx'),
-              AstCall(StrRegion(1138, 1148),
-                AstIdent(StrRegion(1138, 1141), 'len'),
-                [
-                  AstIdent(StrRegion(1142, 1147), 'stack')
-                ]
-              )
-            )
-          ]
+          AstIdent(StrRegion(1128, 1135), 'tos_idx'),
+          AstCall(StrRegion(1138, 1148),
+            AstIdent(StrRegion(1138, 1141), 'len'),
+            [
+              AstIdent(StrRegion(1142, 1147), 'stack')
+            ]
+          )
         ),
         AstDeclNode(StrRegion(1154, 1179),
           VarDeclScope.LET,
           VarType.VARIABLE,
-          [
-            (
-              AstIdent(StrRegion(1158, 1162), 'tos0'),
-              AstItem(StrRegion(1165, 1179),
-                AstIdent(StrRegion(1165, 1170), 'stack'),
-                AstIdent(StrRegion(1171, 1178), 'tos_idx')
-              )
-            )
-          ]
+          AstIdent(StrRegion(1158, 1162), 'tos0'),
+          AstItem(StrRegion(1165, 1179),
+            AstIdent(StrRegion(1165, 1170), 'stack'),
+            AstIdent(StrRegion(1171, 1178), 'tos_idx')
+          )
         ),
         AstDeclNode(StrRegion(1185, 1214),
           VarDeclScope.LET,
           VarType.VARIABLE,
-          [
-            (
-              AstIdent(StrRegion(1189, 1193), 'tos1'),
-              AstItem(StrRegion(1196, 1214),
-                AstIdent(StrRegion(1196, 1201), 'stack'),
-                AstBinOp(StrRegion(1202, 1213),
-                  '-',
-                  AstIdent(StrRegion(1202, 1209), 'tod_idx'),
-                  AstNumber(StrRegion(1212, 1213), 1)
-                )
-              )
+          AstIdent(StrRegion(1189, 1193), 'tos1'),
+          AstItem(StrRegion(1196, 1214),
+            AstIdent(StrRegion(1196, 1201), 'stack'),
+            AstBinOp(StrRegion(1202, 1213),
+              '-',
+              AstIdent(StrRegion(1202, 1209), 'tod_idx'),
+              AstNumber(StrRegion(1212, 1213), 1)
             )
-          ]
+          )
         ),
         AstCall(StrRegion(1220, 1238),
           AstAttribute(StrRegion(1220, 1232),
@@ -1436,30 +1396,22 @@ AstProgramNode(StrRegion(0, 1683),
         AstDeclNode(StrRegion(1453, 1477),
           VarDeclScope.LET,
           VarType.VARIABLE,
-          [
-            (
-              AstIdent(StrRegion(1457, 1464), 'tos_idx'),
-              AstCall(StrRegion(1467, 1477),
-                AstIdent(StrRegion(1467, 1470), 'len'),
-                [
-                  AstIdent(StrRegion(1471, 1476), 'stack')
-                ]
-              )
-            )
-          ]
+          AstIdent(StrRegion(1457, 1464), 'tos_idx'),
+          AstCall(StrRegion(1467, 1477),
+            AstIdent(StrRegion(1467, 1470), 'len'),
+            [
+              AstIdent(StrRegion(1471, 1476), 'stack')
+            ]
+          )
         ),
         AstDeclNode(StrRegion(1483, 1504),
           VarDeclScope.LET,
           VarType.VARIABLE,
-          [
-            (
-              AstIdent(StrRegion(1487, 1491), 'tos0'),
-              AstItem(StrRegion(1494, 1504),
-                AstIdent(StrRegion(1494, 1499), 'stack'),
-                AstIdent(StrRegion(1500, 1503), 'tos')
-              )
-            )
-          ]
+          AstIdent(StrRegion(1487, 1491), 'tos0'),
+          AstItem(StrRegion(1494, 1504),
+            AstIdent(StrRegion(1494, 1499), 'stack'),
+            AstIdent(StrRegion(1500, 1503), 'tos')
+          )
         ),
         AstAssign(StrRegion(1510, 1545),
           AstItem(StrRegion(1510, 1524),

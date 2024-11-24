@@ -8,7 +8,7 @@ from util import flatten_force, is_strict_subclass
 from .ast_node import *
 from .eval_literal import eval_number, eval_string
 from .errors import LocatedAstError
-from ..common import region_union, RegionUnionArgT, HasRegion
+from ..common import region_union, RegionUnionArgT, HasRegion, StrRegion
 from ..cst.base_node import AnyNode, Node, Leaf
 from ..cst.named_node import NamedLeafCls, NamedNodeCls, NamedSizedNodeCls
 from ..cst.nodes import *
@@ -134,14 +134,23 @@ class AstGen:
                 f"the root level.", smt.region)
 
     def _walk_var_decl(self, smt: DeclNode):
-        decls = [(self._walk_ident(d.ident),
-                  None if d.value is None else self._walk_expr(d.value))
-                 for d in smt.decl_list.decls]
         scope = (VarDeclScope.LET if isinstance(smt.decl_scope, DeclScope_Let)
                  else VarDeclScope.GLOBAL)
         tp = (VarType.LIST if isinstance(smt.decl_type, DeclType_List)
               else VarType.VARIABLE)
-        return [AstDeclNode(smt.region, scope, tp, decls)]
+        # Add the region from the keywords to first decl (to make single-var
+        # decls a more sensible .region that includes the `let` keyword as well)
+        extra_region_first = region_union(smt.decl_scope, smt.decl_type)
+        return [self._walk_single_decl(d, scope, tp,
+                                       extra_region_first if i == 0 else None)
+                for i, d in enumerate(smt.decl_list.decls)]
+
+    def _walk_single_decl(self, d: DeclItemNode, scope: VarDeclScope,
+                          tp: VarType, extra_region: StrRegion | None):
+        return AstDeclNode(
+            region_union(d.ident, d.value, extra_region),
+            scope, tp, self._walk_ident(d.ident),
+            None if d.value is None else self._walk_expr(d.value))
 
     def _walk_assign_left(self, lhs: AnyNode) -> AstNode:
         if isinstance(lhs, IdentNode):
