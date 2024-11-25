@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import sys
 from dataclasses import dataclass, field
 from enum import Enum
 from typing import Callable, TypeVar
@@ -104,6 +105,11 @@ class NameResolutionError(BaseLocatedError):
     pass
 
 
+# A very permissive list of possible parameter types - TODO: figure out which one to keep!
+PARAM_TYPES = set(map(sys.intern, (
+    'int', 'number', 'float', 'string', 'let', 'value', 'val', 'var', 'bool')))
+
+
 # Variables:
 #  - We can prevent usages before the variable is declared in 2 ways:
 #    - Based on time: very sensible, like JS, but requires too many runtime features
@@ -126,10 +132,11 @@ class NameResolver:
         if self.top_scope:
             return self.top_scope
         self._init()
-        self.top_scope = self.run_on_new_scope(self.ast.statements, scope_stack=[])
+        self.top_scope = self.run_on_new_scope(self.ast.statements)
         return self.top_scope
 
-    def run_on_new_scope(self, block: list[AstNode], scope_stack: list[Scope] = None):
+    def run_on_new_scope(self, block: list[AstNode], scope_stack: list[Scope] = None,
+                         curr_scope: Scope = None):
         def enter_ident(n: AstIdent):
             for s in scope_stack[::-1]:  # Inefficient, creates a copy!
                 if info := s.declared.get(n.id):
@@ -156,13 +163,22 @@ class NameResolver:
             ident = n.ident.id
             if ident in scope.declared:
                 raise self.err("Function already declared", n.region)
-            scope.declared[ident] = info = FuncInfo(scope, ident)
-            # Skip walking children (only walking inner after we've collected
+            subscope = Scope()
+            # TODO: add stuff to be able to identify params (different codegen)
+            scope.declared[ident] = info = FuncInfo(scope, ident, subscope)
+            for tp, param in n.params:
+                if tp.id not in PARAM_TYPES:
+                    raise self.err("Unknown parameter type", tp.region)
+                if param.id in subscope.declared:
+                    raise self.err("There is already a parameter of this name", param.region)
+                subscope.declared[param.id] = VarInfo(subscope, param.id)
+            # Skip walking body (only walking inner after we've collected
             # all the declared variables in current scope)
             inner_funcs.append((info, n))
             return True
 
-        scope = Scope()
+        scope = curr_scope or Scope()
+        # Can't use `or` because need to preserve reference if arg is `[]`
         scope_stack = scope_stack if scope_stack is not None else []
         scope_stack.append(scope)
         inner_funcs: list[tuple[FuncInfo, AstDefine]] = []
@@ -174,7 +190,8 @@ class NameResolver:
         walk_ast(block, walker)
         # Walk sub-functions
         for fn_info, fn_decl in inner_funcs:
-            fn_info.subscope = self.run_on_new_scope(fn_decl.body, scope_stack)
+            fn_info.subscope = self.run_on_new_scope(fn_decl.body, scope_stack,
+                                                     fn_info.subscope)
         return scope_stack.pop()  # Remove current scope from stack & return it
 
     def err(self, msg: str, region: StrRegion):
