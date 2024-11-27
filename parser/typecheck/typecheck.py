@@ -70,7 +70,8 @@ class NameInfo:
     ident: str
     # node: AstNode  # <-- Why do we need this?
     type = None  # type: NameType
-    del type
+    is_param = None  # type: bool
+    del type, is_param
 
     def __post_init__(self):
         assert type(self) != NameInfo, ("Cannot instantiate NameInfo directly,"
@@ -82,16 +83,19 @@ class FuncInfo(NameInfo):
     type = NameType.FUNC
     # Can't just pass default_factory=Scope as it is only defined below
     subscope: Scope = field(default_factory=lambda: Scope())
+    is_param = False  # Functions aren't values in scratch (yet???)
 
 
 @dataclass
 class VarInfo(NameInfo):
     type = NameType.VAR
+    is_param: bool = False
 
 
 @dataclass
 class ListInfo(NameInfo):
     type = NameType.LIST
+    is_param = False  # Cannot pass lists as arguments (yet?)
 
 
 @dataclass
@@ -165,14 +169,13 @@ class NameResolver:
             if ident in curr_scope.declared:
                 raise self.err("Function already declared", n.region)
             subscope = Scope()
-            # TODO: add stuff to be able to identify params (different codegen)
             curr_scope.declared[ident] = info = FuncInfo(curr_scope, ident, subscope)
             for tp, param in n.params:
                 if tp.id not in PARAM_TYPES:
                     raise self.err("Unknown parameter type", tp.region)
                 if param.id in subscope.declared:
                     raise self.err("There is already a parameter of this name", param.region)
-                subscope.declared[param.id] = VarInfo(subscope, param.id)
+                subscope.declared[param.id] = VarInfo(subscope, param.id, is_param=True)
             # Skip walking body (only walking inner after we've collected
             # all the declared variables in current scope)
             inner_funcs.append((info, n))
