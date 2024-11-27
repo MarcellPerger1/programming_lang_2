@@ -86,10 +86,13 @@ class FuncInfo(NameInfo):
     is_param = False  # Functions aren't values in scratch (yet???)
 
 
+# TODO: this is a bit of a mess - the `type` attribute AND `is_bool`
+#  (bool should be its own class?)
 @dataclass
 class VarInfo(NameInfo):
     type = NameType.VAR
     is_param: bool = False
+    is_bool: bool = False
 
 
 @dataclass
@@ -177,7 +180,8 @@ class NameResolver:
                     raise self.err("Unknown parameter type", tp.region)
                 if param.id in subscope.declared:
                     raise self.err("There is already a parameter of this name", param.region)
-                subscope.declared[param.id] = VarInfo(subscope, param.id, is_param=True)
+                subscope.declared[param.id] = VarInfo(
+                    subscope, param.id, is_param=True, is_bool=param.id == 'bool')
             # Skip walking body (only walking inner after we've collected
             # all the declared variables in current scope)
             inner_funcs.append((info, n))
