@@ -132,12 +132,13 @@ class NameResolver:
 
     def _init(self):
         self.ast = self.astgen.parse()
+        self.top_scope = Scope()
 
     def run(self):
         if self.top_scope:
             return self.top_scope
         self._init()
-        self.top_scope = self.run_on_new_scope(self.ast.statements)
+        self.run_on_new_scope(self.ast.statements, curr_scope=self.top_scope)
         return self.top_scope
 
     def run_on_new_scope(self, block: list[AstNode], scope_stack: list[Scope] = None,
