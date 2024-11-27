@@ -6,7 +6,7 @@ from enum import Enum
 from typing import Callable, TypeVar
 
 from parser.astgen.ast_node import AstNode, walk_ast, WalkableT, WalkerCallType, AstIdent, \
-    AstDeclNode, AstDefine, VarDeclType
+    AstDeclNode, AstDefine, VarDeclType, VarDeclScope
 from parser.astgen.astgen import AstGen
 from parser.common import BaseLocatedError, StrRegion
 from util import flatten_force
@@ -140,7 +140,7 @@ class NameResolver:
         def enter_ident(n: AstIdent):
             for s in scope_stack[::-1]:  # Inefficient, creates a copy!
                 if info := s.declared.get(n.id):
-                    scope.used[n.id] = info
+                    curr_scope.used[n.id] = info
                     return
             raise self.err(f"Name '{n.id}' is not defined", n.region)
 
@@ -150,22 +150,23 @@ class NameResolver:
             AstNode.walk_obj(n.value, walker)  # Don't walk `n.ident`
             # Do this after walking (that is when the name is bound)
             ident = n.ident.id
-            if ident in scope.declared:
+            target_scope = curr_scope if n.scope == VarDeclScope.LET else self.top_scope
+            if ident in target_scope.declared:
                 raise self.err("Variable already declared", n.region)
-            scope.declared[ident] = (
-                VarInfo(scope, ident) if n.type == VarDeclType.VARIABLE
-                else ListInfo(scope, ident))
+            target_scope.declared[ident] = (
+                VarInfo(target_scope, ident) if n.type == VarDeclType.VARIABLE
+                else ListInfo(target_scope, ident))
             return True
 
         def enter_fn_decl(n: AstDefine):
             # Call this on enter (not evaluated right away and it the name can
             # be immediately used within the function i.e. recursion works)
             ident = n.ident.id
-            if ident in scope.declared:
+            if ident in curr_scope.declared:
                 raise self.err("Function already declared", n.region)
             subscope = Scope()
             # TODO: add stuff to be able to identify params (different codegen)
-            scope.declared[ident] = info = FuncInfo(scope, ident, subscope)
+            curr_scope.declared[ident] = info = FuncInfo(curr_scope, ident, subscope)
             for tp, param in n.params:
                 if tp.id not in PARAM_TYPES:
                     raise self.err("Unknown parameter type", tp.region)
@@ -177,10 +178,10 @@ class NameResolver:
             inner_funcs.append((info, n))
             return True
 
-        scope = curr_scope or Scope()
+        curr_scope = curr_scope or Scope()
         # Can't use `or` because need to preserve reference if arg is `[]`
         scope_stack = scope_stack if scope_stack is not None else []
-        scope_stack.append(scope)
+        scope_stack.append(curr_scope)
         inner_funcs: list[tuple[FuncInfo, AstDefine]] = []
         # Walk self
         walker = (FilteredWalker()
