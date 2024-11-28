@@ -97,9 +97,12 @@ class NameResolutionError(BaseLocatedError):
 
 
 # The reason `let` isn't used is because we don't want to imply similarity
-#  between parameters as local variables (where none exists in Scratch).
-#  Also, we might want to use `let` later as a modifier to bind it to an actual local var.
-PARAM_TYPES = set(map(sys.intern, ('number', 'string', 'val', 'bool')))
+#   between parameters as local variables (where none exists in Scratch).
+#   Also, we might want to use `let` later as a modifier to bind it to
+#     an actual local var.
+# Don't need to `sys.intern` these manually as Python automatically does
+#   this for literals.
+PARAM_TYPES = {'number', 'string', 'val', 'bool'}
 
 
 # Variables:
