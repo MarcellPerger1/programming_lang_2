@@ -51,12 +51,48 @@ class FilteredWalker:
 
 
 @dataclass
+class TypeInfo:
+    def __post_init__(self):
+        assert type(self) != TypeInfo, "Cannot instantiate TypeInfo directly,use a subclass"
+
+
+@dataclass
+class ValType(TypeInfo):
+    pass
+
+
+@dataclass
+class BoolType(TypeInfo):
+    pass
+
+
+@dataclass
+class ListType(TypeInfo):
+    pass
+
+
+@dataclass
+class VoidType(TypeInfo):
+    """The ``void`` type - represents 'there must not be a value here'.
+
+    For example, this is the return type of function that don't return anything
+    (e.g. all regular user-defined scratch functions).
+    """
+
+
+@dataclass
+class FunctionType(TypeInfo):
+    arg_types: list[TypeInfo]
+    ret_type: TypeInfo
+
+
+@dataclass
 class NameInfo:
     decl_scope: Scope
     ident: str
+    tp_info: TypeInfo
     # node: AstNode  # <-- Why do we need this?
-    is_param = None  # type: bool
-    del is_param
+    is_param: bool = field(default=False, kw_only=True)
 
     def __post_init__(self):
         assert type(self) != NameInfo, ("Cannot instantiate NameInfo directly,"
@@ -65,24 +101,9 @@ class NameInfo:
 
 @dataclass
 class FuncInfo(NameInfo):
+    tp_info: FunctionType  # Overrides types (doesn't change order)
     # Can't just pass default_factory=Scope as it is only defined below
     subscope: Scope = field(default_factory=lambda: Scope())
-    is_param = False  # Functions aren't values in scratch (yet???)
-
-
-@dataclass
-class ValInfo(NameInfo):
-    is_param: bool = False
-
-
-@dataclass
-class BoolInfo(NameInfo):
-    is_param: bool = True
-
-
-@dataclass
-class ListInfo(NameInfo):
-    is_param = False  # Cannot pass lists as arguments (yet?)
 
 
 @dataclass
@@ -149,9 +170,8 @@ class NameResolver:
             target_scope = curr_scope if n.scope == VarDeclScope.LET else self.top_scope
             if ident in target_scope.declared:
                 raise self.err("Variable already declared", n.region)
-            target_scope.declared[ident] = (
-                ValInfo(target_scope, ident) if n.type == VarDeclType.VARIABLE
-                else ListInfo(target_scope, ident))
+            target_scope.declared[ident] = NameInfo(target_scope, ident, (
+                ValType() if n.type == VarDeclType.VARIABLE else ListType()))
             return True
 
         def enter_fn_decl(n: AstDefine):
@@ -161,15 +181,17 @@ class NameResolver:
             if ident in curr_scope.declared:
                 raise self.err("Function already declared", n.region)
             subscope = Scope()
-            curr_scope.declared[ident] = info = FuncInfo(curr_scope, ident, subscope)
+            curr_scope.declared[ident] = info = FuncInfo(  # TODO this!
+                curr_scope, ident, FunctionType(..., ...), subscope)
             for tp, param in n.params:
                 if tp.id not in PARAM_TYPES:
                     raise self.err("Unknown parameter type", tp.region)
                 if param.id in subscope.declared:
                     raise self.err("There is already a parameter of this name", param.region)
-                subscope.declared[param.id] = (
-                    BoolInfo(subscope, param.id, is_param=True) if param.id == 'bool'
-                    else ValInfo(subscope, param.id, is_param=True))
+                subscope.declared[param.id] = NameInfo(
+                    subscope, param.id, (
+                        BoolType() if param.id == 'bool' else ValType()
+                    ), is_param=True)
             # Skip walking body (only walking inner after we've collected
             # all the declared variables in current scope)
             inner_funcs.append((info, n))
