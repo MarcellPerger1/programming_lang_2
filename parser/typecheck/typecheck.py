@@ -50,28 +50,13 @@ class FilteredWalker:
         return flatten_force(mapping.get(sub, []) for sub in tp.mro())
 
 
-class NameType(Enum):
-    VAR = 'var'
-    LIST = 'list'
-    FUNC = 'func'
-
-    @classmethod
-    def from_node(cls, n: AstNode):
-        if isinstance(n, AstDefine):
-            return cls.FUNC
-        if not isinstance(n, AstDeclNode):
-            raise TypeError(f"No corresponding NameType for '{n.name}' node")
-        return cls.LIST if n.type == VarDeclType.LIST else cls.VAR
-
-
 @dataclass
 class NameInfo:
-    scope: Scope
+    decl_scope: Scope
     ident: str
     # node: AstNode  # <-- Why do we need this?
-    type = None  # type: NameType
     is_param = None  # type: bool
-    del type, is_param
+    del is_param
 
     def __post_init__(self):
         assert type(self) != NameInfo, ("Cannot instantiate NameInfo directly,"
@@ -80,24 +65,23 @@ class NameInfo:
 
 @dataclass
 class FuncInfo(NameInfo):
-    type = NameType.FUNC
     # Can't just pass default_factory=Scope as it is only defined below
     subscope: Scope = field(default_factory=lambda: Scope())
     is_param = False  # Functions aren't values in scratch (yet???)
 
 
-# TODO: this is a bit of a mess - the `type` attribute AND `is_bool`
-#  (bool should be its own class?)
 @dataclass
-class VarInfo(NameInfo):
-    type = NameType.VAR
+class ValInfo(NameInfo):
     is_param: bool = False
-    is_bool: bool = False
+
+
+@dataclass
+class BoolInfo(NameInfo):
+    is_param: bool = True
 
 
 @dataclass
 class ListInfo(NameInfo):
-    type = NameType.LIST
     is_param = False  # Cannot pass lists as arguments (yet?)
 
 
@@ -163,7 +147,7 @@ class NameResolver:
             if ident in target_scope.declared:
                 raise self.err("Variable already declared", n.region)
             target_scope.declared[ident] = (
-                VarInfo(target_scope, ident) if n.type == VarDeclType.VARIABLE
+                ValInfo(target_scope, ident) if n.type == VarDeclType.VARIABLE
                 else ListInfo(target_scope, ident))
             return True
 
@@ -180,8 +164,9 @@ class NameResolver:
                     raise self.err("Unknown parameter type", tp.region)
                 if param.id in subscope.declared:
                     raise self.err("There is already a parameter of this name", param.region)
-                subscope.declared[param.id] = VarInfo(
-                    subscope, param.id, is_param=True, is_bool=param.id == 'bool')
+                subscope.declared[param.id] = (
+                    BoolInfo(subscope, param.id, is_param=True) if param.id == 'bool'
+                    else ValInfo(subscope, param.id, is_param=True))
             # Skip walking body (only walking inner after we've collected
             # all the declared variables in current scope)
             inner_funcs.append((info, n))
