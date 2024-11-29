@@ -101,9 +101,23 @@ class NameInfo:
 @dataclass
 class FuncInfo(NameInfo):
     tp_info: FunctionType  # Overrides types (doesn't change order)
+    params_info: list[ParamInfo]
     # Can't just pass default_factory=Scope as it is only defined below
     subscope: Scope = field(default_factory=lambda: Scope())
-    # TODO: add way to associate arg names with positions/types
+
+    @classmethod
+    def from_param_info(
+            cls, decl_scope: Scope, ident: str, params_info: list[ParamInfo],
+            ret_type: TypeInfo, subscope: Scope = None):
+        subscope = subscope or Scope()
+        tp_info = FunctionType([p.tp for p in params_info], ret_type)
+        return cls(decl_scope, ident, tp_info, params_info, subscope)
+
+
+@dataclass
+class ParamInfo:
+    name: str
+    tp: TypeInfo
 
 
 @dataclass
@@ -175,13 +189,11 @@ class NameResolver:
             return True
 
         def enter_fn_decl(fn: AstDefine):
-            # Call this on enter (not evaluated right away and it the name can
-            # be immediately used within the function i.e. recursion works)
             ident = fn.ident.id
             if ident in curr_scope.declared:
                 raise self.err("Function already declared", fn.ident.region)
             subscope = Scope()
-            arg_types = []
+            params: list[ParamInfo] = []
             for tp, param in fn.params:
                 if tp.id not in PARAM_TYPES:
                     raise self.err("Unknown parameter type", tp.region)
@@ -189,12 +201,13 @@ class NameResolver:
                     raise self.err("There is already a parameter of this name", param.region)
                 tp = BoolType() if param.id == 'bool' else ValType()
                 subscope.declared[param.id] = NameInfo(subscope, param.id, tp, is_param=True)
-                arg_types.append(tp)
-            curr_scope.declared[ident] = info = FuncInfo(
-                curr_scope, ident, FunctionType(arg_types, VoidType()), subscope)
-            # Skip walking body (only walking inner after we've collected
-            # all the declared variables in current scope)
-            inner_funcs.append((info, fn))
+                params.append(ParamInfo(param.id, tp))
+            curr_scope.declared[ident] = info = FuncInfo.from_param_info(
+                curr_scope, ident, params, VoidType(), subscope)
+            inner_funcs.append((info, fn))  # Store funcs for later walking
+            # Skip walking body, only walk inner after collecting all declared
+            #  variables in outer scope so function can use all variables
+            #  declared in outer scope - even the ones declared below it)
             return True
 
         curr_scope = curr_scope or Scope()
