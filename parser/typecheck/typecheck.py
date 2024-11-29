@@ -93,10 +93,6 @@ class NameInfo:
     # node: AstNode  # <-- Why do we need this?
     is_param: bool = field(default=False, kw_only=True)
 
-    def __post_init__(self):
-        assert type(self) != NameInfo, ("Cannot instantiate NameInfo directly,"
-                                        " use a subclass or NameInfo.new()")
-
 
 @dataclass
 class FuncInfo(NameInfo):
