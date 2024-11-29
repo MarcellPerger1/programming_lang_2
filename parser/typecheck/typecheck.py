@@ -3,8 +3,9 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 from typing import Callable, TypeVar
 
-from parser.astgen.ast_node import AstNode, walk_ast, WalkableT, WalkerCallType, AstIdent, \
-    AstDeclNode, AstDefine, VarDeclType, VarDeclScope
+from parser.astgen.ast_node import (
+    AstNode, walk_ast, WalkableT, WalkerCallType, AstIdent, AstDeclNode,
+    AstDefine, VarDeclType, VarDeclScope)
 from parser.astgen.astgen import AstGen
 from parser.common import BaseLocatedError, StrRegion
 from util import flatten_force
@@ -102,6 +103,7 @@ class FuncInfo(NameInfo):
     tp_info: FunctionType  # Overrides types (doesn't change order)
     # Can't just pass default_factory=Scope as it is only defined below
     subscope: Scope = field(default_factory=lambda: Scope())
+    # TODO: add way to associate arg names with positions/types
 
 
 @dataclass
@@ -172,27 +174,27 @@ class NameResolver:
                 ValType() if n.type == VarDeclType.VARIABLE else ListType()))
             return True
 
-        def enter_fn_decl(n: AstDefine):
+        def enter_fn_decl(fn: AstDefine):
             # Call this on enter (not evaluated right away and it the name can
             # be immediately used within the function i.e. recursion works)
-            ident = n.ident.id
+            ident = fn.ident.id
             if ident in curr_scope.declared:
-                raise self.err("Function already declared", n.region)
+                raise self.err("Function already declared", fn.ident.region)
             subscope = Scope()
-            curr_scope.declared[ident] = info = FuncInfo(  # TODO this!
-                curr_scope, ident, FunctionType(..., ...), subscope)
-            for tp, param in n.params:
+            arg_types = []
+            for tp, param in fn.params:
                 if tp.id not in PARAM_TYPES:
                     raise self.err("Unknown parameter type", tp.region)
                 if param.id in subscope.declared:
                     raise self.err("There is already a parameter of this name", param.region)
-                subscope.declared[param.id] = NameInfo(
-                    subscope, param.id, (
-                        BoolType() if param.id == 'bool' else ValType()
-                    ), is_param=True)
+                tp = BoolType() if param.id == 'bool' else ValType()
+                subscope.declared[param.id] = NameInfo(subscope, param.id, tp, is_param=True)
+                arg_types.append(tp)
+            curr_scope.declared[ident] = info = FuncInfo(
+                curr_scope, ident, FunctionType(arg_types, VoidType()), subscope)
             # Skip walking body (only walking inner after we've collected
             # all the declared variables in current scope)
-            inner_funcs.append((info, n))
+            inner_funcs.append((info, fn))
             return True
 
         curr_scope = curr_scope or Scope()
