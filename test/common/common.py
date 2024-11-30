@@ -14,7 +14,7 @@ from parser.cst.base_node import Leaf, AnyNode, Node
 from parser.cst.cstgen import CstGen, LocatedCstError
 from parser.lexer import Tokenizer
 from parser.lexer.tokens import Token, OpToken
-from parser.typecheck.typecheck import Scope
+from parser.typecheck.typecheck import Scope, NameResolver, NameResolutionError
 from test.common.snapshottest import SnapshotTestCase
 from test.common.utils import TestCaseUtils
 from util.pformat import pformat
@@ -126,4 +126,14 @@ class CommonTestCase(SnapshotTestCase, TestCaseUtils):
         a = AstGen(CstGen(Tokenizer(src)))
         with self.assertRaises(LocatedAstError) as ctx:
             a.parse()
+        return ctx.exception
+
+    # noinspection PyMethodMayBeStatic
+    def getNameResolver(self, src: str):
+        return NameResolver(AstGen(CstGen(Tokenizer(src))))
+
+    def assertNameResolveError(self, src: str):
+        nr = self.getNameResolver(src)
+        with self.assertRaises(NameResolutionError) as ctx:
+            nr.run()
         return ctx.exception
