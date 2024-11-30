@@ -14,12 +14,14 @@ import enum
 from dataclasses import dataclass
 from typing import Sequence, Any, IO
 
+__all__ = ['PrettyFormatter', 'pformat', 'pprint']
+
 
 def pformat(o: object, indent: int = 2, max_simple_len: int = 64):
     return PrettyFormatter(indent, max_simple_len).format(o)
 
 
-def pprint(o: object, stream: IO[str], indent: int = 2, max_simple_len = 64):
+def pprint(o: object, stream: IO[str], indent: int = 2, max_simple_len: int = 64):
     return PrettyFormatter(indent, max_simple_len).print(o, stream)
 
 
