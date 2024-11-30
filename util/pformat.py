@@ -11,6 +11,7 @@ from __future__ import annotations
 import contextlib
 import dataclasses
 import enum
+import sys
 from dataclasses import dataclass
 from typing import Sequence, Any, IO
 
@@ -21,7 +22,7 @@ def pformat(o: object, indent: int = 2, max_simple_len: int = 64):
     return PrettyFormatter(indent, max_simple_len).format(o)
 
 
-def pprint(o: object, stream: IO[str], indent: int = 2, max_simple_len: int = 64):
+def pprint(o: object, stream: IO[str] = None, indent: int = 2, max_simple_len: int = 64):
     return PrettyFormatter(indent, max_simple_len).print(o, stream)
 
 
@@ -35,9 +36,10 @@ class PrettyFormatter:
         self.indent = indent
         self.max_simple_len = max_simple_len
 
-    def print(self, o: object, stream: IO[str]):
+    def print(self, o: object, stream: IO[str] = None):
         # TODO: this could be optimised by just passing a custom StreamDest
         #  that just delegates .write() to underlying stream
+        stream = stream or sys.stdout
         stream.write(self.format(o))
 
     def format(self, o: object):
