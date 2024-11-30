@@ -14,8 +14,10 @@ from parser.cst.base_node import Leaf, AnyNode, Node
 from parser.cst.cstgen import CstGen, LocatedCstError
 from parser.lexer import Tokenizer
 from parser.lexer.tokens import Token, OpToken
+from parser.typecheck.typecheck import Scope, NameResolver, NameResolutionError
 from test.common.snapshottest import SnapshotTestCase
 from test.common.utils import TestCaseUtils
+from util.pformat import pformat
 
 
 def _strict_boundary_kwargs():
@@ -53,6 +55,7 @@ class CommonTestCase(SnapshotTestCase, TestCaseUtils):
         cls.format_dispatch.setdefault(Leaf, cls._tree_format)
         cls.format_dispatch.setdefault(Node, cls._tree_format)
         cls.format_dispatch.setdefault(AstNode, cls._tree_format)
+        cls.format_dispatch.setdefault(Scope, pformat)
         super().setUpClass()
 
     @classmethod
@@ -123,4 +126,14 @@ class CommonTestCase(SnapshotTestCase, TestCaseUtils):
         a = AstGen(CstGen(Tokenizer(src)))
         with self.assertRaises(LocatedAstError) as ctx:
             a.parse()
+        return ctx.exception
+
+    # noinspection PyMethodMayBeStatic
+    def getNameResolver(self, src: str):
+        return NameResolver(AstGen(CstGen(Tokenizer(src))))
+
+    def assertNameResolveError(self, src: str):
+        nr = self.getNameResolver(src)
+        with self.assertRaises(NameResolutionError) as ctx:
+            nr.run()
         return ctx.exception
