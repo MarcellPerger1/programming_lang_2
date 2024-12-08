@@ -45,6 +45,7 @@ class TestNameResolve(CommonTestCase):
             m.assert_called_once()
             v2 = nr.run()
             self.assertIs(v2, v)
+            self.assertIs(v2, nr.top_scope)
             m.assert_called_once()  # Still only once
 
 
