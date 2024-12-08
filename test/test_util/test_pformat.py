@@ -93,3 +93,15 @@ class TestPFormat(CommonTestCase):
         })'''), pformat(frozenset({(1, 3), (1, 3, 4), (1, 2)}), indent=4))
         self.assertEqual("frozenset({-8, -1, 2, 'abc', 'ad'})",
                          pformat(frozenset({-8, 'abc', 2, -1, 'ad'})))
+
+    def test_long_simple(self):
+        self.assertEqual(dedent('''
+        [
+          3.14159265358979,
+          2.7182818284509
+        ]'''), pformat([3.14159265358979, 2.71828182845090], max_simple_len=28))
+        self.assertEqual(dedent('''
+        [
+          3.14159265358979,
+          2.7182818284509
+        ]'''), pformat([3.14159265358979, 2.71828182845090], max_simple_len=34))
