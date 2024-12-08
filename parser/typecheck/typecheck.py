@@ -120,7 +120,8 @@ class ParamInfo:
 class Scope:
     declared: dict[str, NameInfo] = field(default_factory=dict)
     used: dict[str, NameInfo] = field(default_factory=dict)
-    # Add references to outer scopes' variables that we use
+    """Add references to outer scopes' variables that we use.
+    (so type codegen/type-checker knows what each AstIdent refers to)"""
 
 
 class NameResolutionError(BaseLocatedError):
