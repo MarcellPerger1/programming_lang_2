@@ -262,14 +262,14 @@
 					"match": "(\\+=|-=|\\*=|/=|%=)"
 				},
 				{
-					"comment": "single equal",
-					"name": "keyword.operator.assignment.equal.st",
-					"match": "(?<![<!=>])="
-				},
-				{
 					"comment": "comparison operators",
 					"name": "keyword.operator.comparison.st",
-					"match": "[!<>=]=|[<>]"
+					"match": "[<!=>]=|[<>]"
+				},
+				{
+					"comment": "single equal",
+					"name": "keyword.operator.assignment.equal.st",
+					"match": "(?<![<!>])="
 				},
 				{
 					"comment": "math operators",
