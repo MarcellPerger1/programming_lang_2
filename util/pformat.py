@@ -81,7 +81,7 @@ class PrettyFormatter:
                                  trailing_comma_if_unitary=True,
                                  indent_start=indent_start)
         if isinstance(o, set):
-            if len(o):
+            if len(o) == 0:
                 return self._indented_write(dest, indent if indent_start else 0, 'set()')
             keys = sorted(o, key=_SafeSortKey)
             return self._fmt_seq(dest, indent, ctx, keys, '{', '}',
