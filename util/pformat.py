@@ -47,95 +47,90 @@ class PrettyFormatter:
         self._fmt(dest, 0, ContextStack(), o)
         return dest.get_value()
 
-    def _fmt(self, dest: Dest, indent: int, ctx: ContextStack, o: object, indent_start=True):
+    def _fmt(self, dest: Dest, indent: int, ctx: ContextStack, o: object):
         # Handle internal hacks (to make _get_seq work) before the entering
         # the ctx as we don't want our internals showing up on the stack
         # and ruining the `up` values in circular refs
         if isinstance(o, DontReprMe):
-            return self._indented_write(dest, indent if indent_start else 0, o.string)
+            return dest.write(o.string)  # Don't write indent - handled by parent
         if isinstance(o, StringJoin):
             return self._fmt_string_join(dest, indent, ctx, o)
         if (idx := ctx.get_idx(o)) is not None:
-            return self._fmt_circular(dest, indent if indent_start else 0, ctx, idx)
+            return self._fmt_circular(dest, indent, ctx, idx)
         with ctx.enter_context(o):
-            return self._fmt_inner(dest, indent, ctx, o, indent_start)
+            return self._fmt_inner(dest, indent, ctx, o)
 
-    def _fmt_string_join(self, dest: Dest, indent: int, ctx: ContextStack, join: StringJoin,
-                         indent_start=True):
-        self._write_indent(dest, indent if indent_start else 0)
+    def _fmt_string_join(self, dest: Dest, indent: int, ctx: ContextStack, join: StringJoin):
+        # Don't write indent on first line (handled by parent)
         for v in join.parts:
             # Only indent first thing (done above)
-            self._fmt(dest, indent, ctx, v, indent_start=False)
+            self._fmt(dest, indent, ctx, v)
         return
 
-    def _fmt_inner(self, dest: Dest, indent: int, ctx: ContextStack, o: object,
-                   indent_start=True):
+    def _fmt_inner(self, dest: Dest, indent: int, ctx: ContextStack, o: object):
         if isinstance(o, enum.Enum):
-            return self._indented_write(dest, indent if indent_start else 0,
-                                        f'{type(o).__name__}.{o.name}')
+            # Don't write indent on first line (handled by parent)
+            return dest.write(f'{type(o).__name__}.{o.name}')
         if isinstance(o, list):
-            return self._fmt_seq(dest, indent, ctx, o, '[', ']',
-                                 indent_start=indent_start)
+            return self._fmt_seq(dest, indent, ctx, o, '[', ']')
         if isinstance(o, tuple):
             return self._fmt_seq(dest, indent, ctx, o, '(', ')',
-                                 trailing_comma_if_unitary=True,
-                                 indent_start=indent_start)
+                                 trailing_comma_if_unitary=True)
         if isinstance(o, set):
             if len(o) == 0:
-                return self._indented_write(dest, indent if indent_start else 0, 'set()')
+                return dest.write('set()')
             keys = sorted(o, key=_SafeSortKey)
-            return self._fmt_seq(dest, indent, ctx, keys, '{', '}',
-                                 indent_start=indent_start)
+            return self._fmt_seq(dest, indent, ctx, keys, '{', '}')
         if isinstance(o, dict):
-            return self._fmt_dict(dest, indent, ctx, o, indent_start)
+            return self._fmt_dict(dest, indent, ctx, o)
         if isinstance(o, frozenset):
             if len(o) == 0:
-                return self._indented_write(
-                    dest, indent if indent_start else 0, 'frozenset()')
+                return dest.write('frozenset()')
             keys = sorted(o, key=_SafeSortKey)
             return self._fmt_seq(dest, indent, ctx, keys, 'frozenset({', '})')
         # is_dataclass returns True for the class itself so check for that
         if dataclasses.is_dataclass(o) and not isinstance(o, type):
-            return self._fmt_dataclass(dest, indent, ctx, o, indent_start)
-        return self._fmt_fallback(dest, indent if indent_start else 0, ctx, o)
+            return self._fmt_dataclass(dest, indent, ctx, o)
+        return self._fmt_fallback(dest, o)
 
-    # _ctx is here for consistency w/ the other _fmt_* methods
-    def _fmt_fallback(self, dest: Dest, indent: int, _ctx: ContextStack, o: object):
+    # noinspection PyMethodMayBeStatic
+    def _fmt_fallback(self, dest: Dest, o: object):
         # We will have to be fine with it all being on one line
-        return self._indented_write(dest, indent, repr(o))
+        return dest.write(repr(o))
 
     # Any is used for `dcls` as type system is too basic to represent all dataclasses as one
     def _fmt_dataclass(self, dest: Dest, indent: int, ctx: ContextStack,
-                       dcls: Any, indent_start=True):
+                       dcls: Any):
         # Dataclasses have a reliable key order so don't sort them here
         # (For now also add the keys, TODO later might have an option for it?)
         self._fmt_seq(dest, indent, ctx, [
             StringJoin(DontReprMe(f'{f.name}='), getattr(dcls, f.name))
             for f in dataclasses.fields(dcls)
             if f.repr  # TODO maybe could be slightly cleverer than this (e.g. `or .compare`)
-        ], f'{type(dcls).__name__}(', ')', indent_start=indent_start)
+        ], f'{type(dcls).__name__}(', ')')
 
-    def _fmt_circular(self, dest: Dest, indent: int, ctx: ContextStack, idx: int):
+    # noinspection PyMethodMayBeStatic
+    def _fmt_circular(self, dest: Dest, _indent: int, ctx: ContextStack, idx: int):
         # We would be inserted at ctx.len() so difference/how many to go up is the difference
         n_up = ctx.len() - idx
-        self._indented_write(dest, indent, f'<Circular: {n_up} up>')
+        dest.write(f'<Circular: {n_up} up>')
 
-    def _fmt_dict(self, dest: Dest, indent: int, ctx: ContextStack, d: dict,
-                  indent_start=True):
+    def _fmt_dict(self, dest: Dest, indent: int, ctx: ContextStack, d: dict):
         items = sorted(d.items(), key=_dict_kv_sort_key)
         self._fmt_seq(dest, indent, ctx, [
             StringJoin(k, DontReprMe(': '), v)
             for k, v in items
-        ], '{', '}', indent_start=indent_start)
+        ], '{', '}')
 
     def _fmt_seq(self, dest: Dest, indent: int, ctx: ContextStack,
                  items: Sequence[object], start: str, end: str,
-                 trailing_comma_if_unitary=False, indent_start=True):
-        self._write_indent(dest, indent if indent_start else 0)
+                 trailing_comma_if_unitary=False):
+        # (Don't write indent on first line - handled by parent)
         if d := self._try_fmt_seq_short(ctx, items, start, end, trailing_comma_if_unitary):
             return dest.extend(d)
         dest.write(start, '\n')
         for i, v in enumerate(items):
+            self._write_indent(dest, indent + 1)
             self._fmt(dest, indent + 1, ctx, v)
             if i != len(items) - 1:
                 # No space after ',' if it's trailing
