@@ -199,7 +199,8 @@ class NameResolver:
                 subscope.declared[param.id] = NameInfo(subscope, param.id, tp, is_param=True)
                 params.append(ParamInfo(param.id, tp))
             curr_scope.declared[ident] = info = FuncInfo.from_param_info(
-                curr_scope, ident, params, VoidType(), subscope)
+                curr_scope, ident, params,
+                ret_type=VoidType(), subscope=subscope)
             inner_funcs.append((info, fn))  # Store funcs for later walking
             # Skip walking body, only walk inner after collecting all declared
             #  variables in outer scope so function can use all variables
