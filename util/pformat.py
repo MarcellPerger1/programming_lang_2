@@ -156,8 +156,8 @@ class PrettyFormatter:
         dest = Dest()
         dest.write(start)
         # ^ Unlikely that `start` is already over the limit so don't check if we go over here
-        for i in items:
-            self._fmt(dest, 0, ctx, i)
+        for i, v in enumerate(items):
+            self._fmt(dest, 0, ctx, v)
             if i != len(items) - 1:
                 dest.write(', ')
             if dest.length() > self.max_simple_len:
