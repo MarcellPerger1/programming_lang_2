@@ -73,3 +73,23 @@ class TestPFormat(CommonTestCase):
     def test_set(self):
         self.assertEqual('set()', pformat(set()))
         self.assertEqual('{-8, -2, 1, 2, 5}', pformat({2, 5, -8, 1, -2}))
+        self.assertEqual(dedent('''
+        {
+            (1, 2),
+            (1, 3),
+            (1, 3, 4)
+        }'''), pformat({(1, 3), (1, 3, 4), (1, 2)}, indent=4))
+        self.assertEqual("{-8, -1, 2, 'abc', 'ad'}", pformat({-8, 'abc', 2, -1, 'ad'}))
+
+    def test_frozenset(self):
+        self.assertEqual('frozenset()', pformat(frozenset()))
+        self.assertEqual('frozenset({-8, -2, 1, 2, 5})',
+                         pformat(frozenset({2, 5, -8, 1, -2})))
+        self.assertEqual(dedent('''
+        frozenset({
+            (1, 2),
+            (1, 3),
+            (1, 3, 4)
+        })'''), pformat(frozenset({(1, 3), (1, 3, 4), (1, 2)}), indent=4))
+        self.assertEqual("frozenset({-8, -1, 2, 'abc', 'ad'})",
+                         pformat(frozenset({-8, 'abc', 2, -1, 'ad'})))
