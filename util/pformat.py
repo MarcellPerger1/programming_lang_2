@@ -89,6 +89,9 @@ class PrettyFormatter:
         if isinstance(o, dict):
             return self._fmt_dict(dest, indent, ctx, o, indent_start)
         if isinstance(o, frozenset):
+            if len(o) == 0:
+                return self._indented_write(
+                    dest, indent if indent_start else 0, 'frozenset()')
             keys = sorted(o, key=_SafeSortKey)
             return self._fmt_seq(dest, indent, ctx, keys, 'frozenset({', '})')
         # is_dataclass returns True for the class itself so check for that
