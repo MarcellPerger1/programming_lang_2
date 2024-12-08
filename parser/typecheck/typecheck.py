@@ -162,7 +162,7 @@ class NameResolver:
         self.run_on_new_scope(self.ast.statements, curr_scope=self.top_scope)
         return self.top_scope
 
-    def run_on_new_scope(self, block: list[AstNode], scope_stack: list[Scope] = None,
+    def run_on_new_scope(self, block: list[AstNode], parent_scopes: list[Scope] = None,
                          curr_scope: Scope = None):
         def enter_ident(n: AstIdent):
             for s in scope_stack[::-1]:  # Inefficient, creates a copy!
@@ -207,8 +207,7 @@ class NameResolver:
             return True
 
         curr_scope = curr_scope or Scope()
-        # Can't use `or` because need to preserve reference if arg is `[]`
-        scope_stack = scope_stack if scope_stack is not None else []
+        scope_stack = parent_scopes or []
         scope_stack.append(curr_scope)
         inner_funcs: list[tuple[FuncInfo, AstDefine]] = []
         # Walk self
@@ -219,8 +218,8 @@ class NameResolver:
         walk_ast(block, walker)
         # Walk sub-functions
         for fn_info, fn_decl in inner_funcs:
-            fn_info.subscope = self.run_on_new_scope(fn_decl.body, scope_stack,
-                                                     fn_info.subscope)
+            fn_info.subscope = self.run_on_new_scope(
+                fn_decl.body, scope_stack, fn_info.subscope)
         return scope_stack.pop()  # Remove current scope from stack & return it
 
     def err(self, msg: str, region: StrRegion):
