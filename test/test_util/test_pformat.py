@@ -69,3 +69,7 @@ class TestPFormat(CommonTestCase):
                 (4,)
             ),
         )'''), pformat(((2, 3, (4,)),), indent=4))
+
+    def test_set(self):
+        self.assertEqual('set()', pformat(set()))
+        self.assertEqual('{-8, -2, 1, 2, 5}', pformat({2, 5, -8, 1, -2}))
