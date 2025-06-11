@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import functools
 from dataclasses import dataclass, field
 from typing import Callable, TypeVar
 
@@ -13,13 +14,22 @@ from util import flatten_force
 WT = TypeVar('WT', bound=WalkableT)
 VT = TypeVar('VT')
 
+SpecificCbT = Callable[[WT], bool | None]
+SpecificCbsDict = dict[type[WT] | type, list[Callable[[WT], bool | None]]]
+BothCbT = Callable[[WT, WalkerCallType], bool | None]
+BothCbsDict = dict[type[WT] | type, list[Callable[[WT, WalkerCallType], bool | None]]]
 
-class FilteredWalker:
-    def __init__(self):
-        self.enter_cbs: dict[type[WT] | type, list[Callable[[WT], bool | None]]] = {}
-        self.exit_cbs: dict[type[WT] | type, list[Callable[[WT], bool | None]]] = {}
-        self.both_cbs: dict[type[WT] | type, list[
-            Callable[[WT, WalkerCallType], bool | None]]] = {}
+
+class _WalkerRegistry:
+    def __init__(self, enter_cbs: SpecificCbsDict = (),
+                 exit_cbs: SpecificCbsDict = (),
+                 both_sbc: BothCbsDict = ()):
+        self.enter_cbs: SpecificCbsDict = dict(enter_cbs)  # Copy them,
+        self.exit_cbs: SpecificCbsDict = dict(exit_cbs)    # also converts default () -> {}
+        self.both_cbs: BothCbsDict = dict(both_sbc)
+
+    def copy(self):
+        return _WalkerRegistry(self.enter_cbs, self.exit_cbs, self.both_cbs)
 
     def register_both(self, t: type[WT], fn: Callable[[WT, WalkerCallType], bool | None]):
         self.both_cbs.setdefault(t, []).append(fn)
@@ -32,6 +42,74 @@ class FilteredWalker:
     def register_exit(self, t: type[WT], fn: Callable[[WT], bool | None]):
         self.exit_cbs.setdefault(t, []).append(fn)
         return self
+
+    def __call__(self, *args, **kwargs):
+        return self
+
+    def on_enter(self, *tps: type[WT] | type):
+        """Decorator version of register_enter."""
+        def decor(fn: SpecificCbT):
+            for t in tps:
+                self.register_enter(t, fn)
+            return fn
+        return decor
+
+    def on_exit(self, *tps: type[WT] | type):
+        """Decorator version of register_exit."""
+        def decor(fn: SpecificCbT):
+            for t in tps:
+                self.register_exit(t, fn)
+            return fn
+        return decor
+
+    def on_both(self, *tps: type[WT] | type):
+        """Decorator version of register_both."""
+        def decor(fn: BothCbT):
+            for t in tps:
+                self.register_both(t, fn)
+            return fn
+        return decor
+
+
+# TODO: This does not belong in this module!
+class FilteredWalker(_WalkerRegistry):
+    def __init__(self):
+        cls_reg = self.class_registry()
+        super().__init__(cls_reg.enter_cbs, cls_reg.exit_cbs, cls_reg.both_cbs)
+
+    @classmethod
+    def class_registry(cls) -> _WalkerRegistry:
+        return _WalkerRegistry()
+
+    @classmethod
+    def create_cls_registry(cls, fn=None):
+        """Create a class-level registry that can be added to using decorators.
+
+        This can be used in two ways (at the top of your class)::
+
+            # MUST be this name
+            class_registry = FilteredWalker.create_cls_registry()
+
+        or::
+
+            @classmethod
+            @FilteredWalker.create_cls_registry
+            def class_registry(cls):  # MUST be this name
+                pass
+
+        and when registering methods::
+
+            @class_registry.on_enter(AstDefine)
+            def enter_define(self, ...):
+                ...
+
+        The restrictions on name are because we have no other way of detecting
+         it (without metaclass dark magic) as we can't refer to the class while
+         its namespace is being evaluated
+        """
+        if fn is not None and (parent := fn(cls)) is not None:
+            return _WalkerRegistry.copy(parent)
+        return _WalkerRegistry()
 
     def __call__(self, o: WalkableT, call_type: WalkerCallType):
         result = None
@@ -226,3 +304,30 @@ class NameResolver:
 
     def err(self, msg: str, region: StrRegion):
         return NameResolutionError(msg, region, self.src)
+
+
+class Typechecker:
+    def __init__(self, name_resolver: NameResolver):
+        self.resolver = name_resolver
+        self.src = self.resolver.src
+        self.is_ok: bool | None = None
+
+    def _init(self):
+        self.resolver.run()
+        self.ast = self.resolver.ast
+        self.top_scope = self.resolver.top_scope
+
+    def run(self):
+        if self.is_ok is None:
+            return self.is_ok
+        self._typecheck()
+        self.is_ok = True
+        return self.is_ok
+
+    def _typecheck(self):
+        walker = FilteredWalker()
+
+        self.ast.walk(walker)
+        ...
+
+
