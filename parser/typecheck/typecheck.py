@@ -2,11 +2,11 @@ from __future__ import annotations
 
 from dataclasses import dataclass, field
 
-from parser.astgen.ast_node import (
+from ..astgen.ast_node import (
     AstNode, walk_ast, AstIdent, AstDeclNode, AstDefine, VarDeclType,
     VarDeclScope, FilteredWalker)
-from parser.astgen.astgen import AstGen
-from parser.common import BaseLocatedError, StrRegion
+from ..astgen.astgen import AstGen
+from ..common import BaseLocatedError, StrRegion
 
 
 @dataclass
