@@ -8,7 +8,9 @@ from parser.common.tree_print import tformat
 from parser.cst.nodes import ProgramNode
 from parser.cst.cstgen import CstGen
 from parser.lexer import Tokenizer, format_tokens
+from parser.typecheck.typecheck import NameResolver, Scope
 from util import readfile
+from util.pformat import pformat
 
 PROFILER = True
 
@@ -31,12 +33,17 @@ class BenchOnce:
     _tokenizer: Tokenizer
     _cstgen: CstGen
     _cst: ProgramNode
+    _astgen: AstGen
     _ast: AstProgramNode
+    _nr: NameResolver
+    _top_scope: Scope
 
-    def __init__(self, src: str, idx: int = -1, do_ast=True):
+    def __init__(self, src: str, idx: int = -1, do_ast=True,
+                 do_name_resolve=True):
         self.src = src
         self.idx = idx
         self.should_do_ast = do_ast
+        self.should_name_resolve = do_name_resolve
         self.lines: list[tuple[float, str]] = []  # First item used as key
 
     @classmethod
@@ -58,6 +65,9 @@ class BenchOnce:
             if self.should_do_ast:
                 self.do_ast()
                 self.do_ast_fmt()
+                if self.should_name_resolve:
+                    self.do_name_resolve()
+                    self.do_name_resolve_fmt()
         if p:
             p.dump_stats(f'perf_dump_{self.idx}.prof')
         print(f'Perf for idx={self.idx} ({PROFILER=}):')
@@ -90,7 +100,8 @@ class BenchOnce:
 
     def do_ast(self):
         with _Timer() as t:
-            self._ast = AstGen(self._cstgen).parse()
+            self._astgen = AstGen(self._cstgen)
+            self._ast = self._astgen.parse()
         self._add_line(2.0, 'AST', t.get())
 
     def do_ast_fmt(self):
@@ -98,14 +109,26 @@ class BenchOnce:
             _s = tformat(self._ast)
         self._add_line(2.5, 'AST_fmt', t.get())
 
+    def do_name_resolve(self):
+        with _Timer() as t:
+            self._nr = NameResolver(self._astgen)
+            self._top_scope = self._nr.run()
+        self._add_line(3.0, 'NameRes', t.get())
 
-def benchmark(src: str, idx: int = -1, do_ast=True):
-    return BenchOnce(src, idx, do_ast).run()
+    def do_name_resolve_fmt(self):
+        with _Timer() as t:
+            _s = pformat(self._top_scope)
+        self._add_line(3.5, 'NameRes_fmt', t.get())
+
+
+def benchmark(src: str, idx: int = -1, do_ast=True, do_name_resolve=True):
+    return BenchOnce(src, idx, do_ast, do_name_resolve).run()
 
 
 def main():
     benchmark(readfile('main_example_0.st'), 0, do_ast=False)
-    benchmark(readfile('main_example_1.st'), 1)
+    benchmark(readfile('main_example_1.st'), 1, do_name_resolve=False)
+    benchmark(readfile('main_example_2.st'), 2)
 
 
 if __name__ == '__main__':
