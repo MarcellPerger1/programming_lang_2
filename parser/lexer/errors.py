@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from parser.common import BaseParseError, BaseLocatedError
+from ..common import BaseParseError, BaseLocatedError
 
 
 class TokenizerError(BaseParseError):

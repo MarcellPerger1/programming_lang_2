@@ -1,52 +1,13 @@
 from __future__ import annotations
 
 from dataclasses import dataclass, field
-from typing import Callable, TypeVar
 
-from parser.astgen.ast_node import (
-    AstNode, walk_ast, WalkableT, WalkerCallType, AstIdent, AstDeclNode,
-    AstDefine, VarDeclType, VarDeclScope)
-from parser.astgen.astgen import AstGen
-from parser.common import BaseLocatedError, StrRegion
-from util import flatten_force
-
-WT = TypeVar('WT', bound=WalkableT)
-VT = TypeVar('VT')
-
-
-class FilteredWalker:
-    def __init__(self):
-        self.enter_cbs: dict[type[WT] | type, list[Callable[[WT], bool | None]]] = {}
-        self.exit_cbs: dict[type[WT] | type, list[Callable[[WT], bool | None]]] = {}
-        self.both_cbs: dict[type[WT] | type, list[
-            Callable[[WT, WalkerCallType], bool | None]]] = {}
-
-    def register_both(self, t: type[WT], fn: Callable[[WT, WalkerCallType], bool | None]):
-        self.both_cbs.setdefault(t, []).append(fn)
-        return self
-
-    def register_enter(self, t: type[WT], fn: Callable[[WT], bool | None]):
-        self.enter_cbs.setdefault(t, []).append(fn)
-        return self
-
-    def register_exit(self, t: type[WT], fn: Callable[[WT], bool | None]):
-        self.exit_cbs.setdefault(t, []).append(fn)
-        return self
-
-    def __call__(self, o: WalkableT, call_type: WalkerCallType):
-        result = None
-        # Call more specific ones first
-        specific_cbs = self.enter_cbs if call_type == WalkerCallType.PRE else self.exit_cbs
-        for fn in self._get_funcs(specific_cbs, type(o)):
-            result = fn(o) or result
-        for fn in self._get_funcs(self.both_cbs, type(o)):
-            result = fn(o, call_type) or result
-        return result
-
-    @classmethod
-    def _get_funcs(cls, mapping: dict[type[WT] | type, list[VT]], tp: type[WT]) -> list[VT]:
-        """Also looks at superclasses/MRO"""
-        return flatten_force(mapping.get(sub, []) for sub in tp.mro())
+from util.recursive_eq import recursive_eq
+from ..astgen.ast_node import (
+    AstNode, walk_ast, AstIdent, AstDeclNode, AstDefine, VarDeclType,
+    VarDeclScope, FilteredWalker)
+from ..astgen.astgen import AstGen
+from ..common import BaseLocatedError, StrRegion
 
 
 @dataclass
@@ -124,6 +85,9 @@ class Scope:
     (so type codegen/type-checker knows what each AstIdent refers to)"""
 
 
+Scope.__eq__ = recursive_eq(Scope.__eq__)
+
+
 class NameResolutionError(BaseLocatedError):
     pass
 
@@ -191,14 +155,15 @@ class NameResolver:
                 raise self.err("Function already declared", fn.ident.region)
             subscope = Scope()
             params: list[ParamInfo] = []
-            for tp, param in fn.params:
-                if tp.id not in PARAM_TYPES:
-                    raise self.err("Unknown parameter type", tp.region)
-                if param.id in subscope.declared:
-                    raise self.err("There is already a parameter of this name", param.region)
-                tp = BoolType() if param.id == 'bool' else ValType()
-                subscope.declared[param.id] = NameInfo(subscope, param.id, tp, is_param=True)
-                params.append(ParamInfo(param.id, tp))
+            for tp_node, name_node in fn.params:
+                if tp_node.id not in PARAM_TYPES:
+                    raise self.err("Unknown parameter type", tp_node.region)
+                if (name := name_node.id) in subscope.declared:
+                    raise self.err("There is already a parameter of this name",
+                                   name_node.region)
+                tp = BoolType() if tp_node.id == 'bool' else ValType()
+                subscope.declared[name] = NameInfo(subscope, name, tp, is_param=True)
+                params.append(ParamInfo(name, tp))
             curr_scope.declared[ident] = info = FuncInfo.from_param_info(
                 curr_scope, ident, params,
                 ret_type=VoidType(), subscope=subscope)
@@ -226,3 +191,30 @@ class NameResolver:
 
     def err(self, msg: str, region: StrRegion):
         return NameResolutionError(msg, region, self.src)
+
+
+class Typechecker:
+    def __init__(self, name_resolver: NameResolver):
+        self.resolver = name_resolver
+        self.src = self.resolver.src
+        self.is_ok: bool | None = None
+
+    def _init(self):
+        self.resolver.run()
+        self.ast = self.resolver.ast
+        self.top_scope = self.resolver.top_scope
+
+    def run(self):
+        if self.is_ok is None:
+            return self.is_ok
+        self._typecheck()
+        self.is_ok = True
+        return self.is_ok
+
+    def _typecheck(self):
+        walker = FilteredWalker()
+
+        self.ast.walk(walker)
+        ...
+
+

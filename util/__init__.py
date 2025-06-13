@@ -3,6 +3,7 @@ from __future__ import annotations
 from os import PathLike
 from typing import TypeVar, Any, overload, Iterable
 
+from .recursive_eq import recursive_eq
 from .simple_process_pool import *
 from .timeouts import *
 
