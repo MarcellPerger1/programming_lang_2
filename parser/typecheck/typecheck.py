@@ -155,14 +155,15 @@ class NameResolver:
                 raise self.err("Function already declared", fn.ident.region)
             subscope = Scope()
             params: list[ParamInfo] = []
-            for tp, param in fn.params:
-                if tp.id not in PARAM_TYPES:
-                    raise self.err("Unknown parameter type", tp.region)
-                if param.id in subscope.declared:
-                    raise self.err("There is already a parameter of this name", param.region)
-                tp = BoolType() if param.id == 'bool' else ValType()
-                subscope.declared[param.id] = NameInfo(subscope, param.id, tp, is_param=True)
-                params.append(ParamInfo(param.id, tp))
+            for tp_node, name_node in fn.params:
+                if tp_node.id not in PARAM_TYPES:
+                    raise self.err("Unknown parameter type", tp_node.region)
+                if (name := name_node.id) in subscope.declared:
+                    raise self.err("There is already a parameter of this name",
+                                   name_node.region)
+                tp = BoolType() if tp_node.id == 'bool' else ValType()
+                subscope.declared[name] = NameInfo(subscope, name, tp, is_param=True)
+                params.append(ParamInfo(name, tp))
             curr_scope.declared[ident] = info = FuncInfo.from_param_info(
                 curr_scope, ident, params,
                 ret_type=VoidType(), subscope=subscope)
