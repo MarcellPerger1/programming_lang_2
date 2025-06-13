@@ -1,7 +1,9 @@
 from unittest.mock import Mock, patch
 
 from parser.common import StrRegion
-from parser.typecheck.typecheck import NameResolver
+from parser.typecheck.typecheck import (
+    NameResolver, Scope, NameInfo, BoolType, ValType, VoidType,
+    FuncInfo, ParamInfo)
 from test.common import CommonTestCase
 
 
@@ -47,6 +49,29 @@ class TestNameResolve(CommonTestCase):
             self.assertIs(v2, v)
             self.assertIs(v2, nr.top_scope)
             m.assert_called_once()  # Still only once
+
+    def test_params(self):
+        src = ('def f1(bool b0, val v0, string s0, number n0) {let L0=s0..v0;};'
+               'def f2() {}')
+        sc = Scope()
+        f1_scope = Scope()
+        f1_scope.declared = {
+            'b0': NameInfo(f1_scope, 'b0', BoolType(), is_param=True),
+            'v0': (v0 := NameInfo(f1_scope, 'v0', ValType(), is_param=True)),
+            's0': (s0 := NameInfo(f1_scope, 's0', ValType(), is_param=True)),
+            'n0': NameInfo(f1_scope, 'n0', ValType(), is_param=True),
+        }
+        f1_scope.used = {'v0': v0, 's0': s0}
+        sc.declared = {
+            'f1': FuncInfo.from_param_info(sc, 'f1', [
+                ParamInfo('b0', BoolType()),
+                ParamInfo('v0', ValType()),
+                ParamInfo('s0', ValType()),  # val == string  ==  number for now
+                ParamInfo('n0', ValType()),
+            ], VoidType(), f1_scope),
+            'f2': FuncInfo.from_param_info(sc, 'f2', [], VoidType(), Scope())
+        }
+        self.assertEqual(self.getNameResolver(src).run(), sc)
 
 
 class TestNameResolveErrors(CommonTestCase):
