@@ -60,18 +60,19 @@ class TestNameResolve(CommonTestCase):
             'v0': (v0 := NameInfo(f1_scope, 'v0', ValType(), is_param=True)),
             's0': (s0 := NameInfo(f1_scope, 's0', ValType(), is_param=True)),
             'n0': NameInfo(f1_scope, 'n0', ValType(), is_param=True),
+            'L0': NameInfo(f1_scope, 'L0', ValType())
         }
         f1_scope.used = {'v0': v0, 's0': s0}
         sc.declared = {
             'f1': FuncInfo.from_param_info(sc, 'f1', [
                 ParamInfo('b0', BoolType()),
                 ParamInfo('v0', ValType()),
-                ParamInfo('s0', ValType()),  # val == string  ==  number for now
+                ParamInfo('s0', ValType()),  # val == string == number for now
                 ParamInfo('n0', ValType()),
             ], VoidType(), f1_scope),
             'f2': FuncInfo.from_param_info(sc, 'f2', [], VoidType(), Scope())
         }
-        self.assertEqual(self.getNameResolver(src).run(), sc)
+        self.assertEqual(sc, self.getNameResolver(src).run())
 
 
 class TestNameResolveErrors(CommonTestCase):
