@@ -8,6 +8,8 @@ from parser.common.error import BaseParseError
 from pythonfuzz.fuzzer import Fuzzer
 import pythonfuzz.fuzzer as fuzzer_ns  # For patching pythonfuzz
 
+from parser.typecheck.typecheck import NameResolver
+
 
 class UsePerfCounterInsteadOfTime:
     """Hack to avoid overwriting everyone's time module so we only
@@ -30,7 +32,7 @@ def fuzz(buf):
     try:
         string = buf.decode("ascii")
         try:
-            AstGen(CstGen(Tokenizer(string))).parse()
+            NameResolver(AstGen(CstGen(Tokenizer(string)))).run()
         except BaseParseError:
             pass
     except UnicodeDecodeError:
