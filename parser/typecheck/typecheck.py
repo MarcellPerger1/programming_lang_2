@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass, field
 
+from util.recursive_eq import recursive_eq
 from ..astgen.ast_node import (
     AstNode, walk_ast, AstIdent, AstDeclNode, AstDefine, VarDeclType,
     VarDeclScope, FilteredWalker)
@@ -82,6 +83,9 @@ class Scope:
     used: dict[str, NameInfo] = field(default_factory=dict)
     """Add references to outer scopes' variables that we use.
     (so type codegen/type-checker knows what each AstIdent refers to)"""
+
+
+Scope.__eq__ = recursive_eq(Scope.__eq__)
 
 
 class NameResolutionError(BaseLocatedError):
