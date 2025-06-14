@@ -124,4 +124,8 @@ class FilteredWalker(WalkerFilterRegistry):
     @classmethod
     def _get_funcs(cls, mapping: dict[type[WT] | type, list[VT]], tp: type[WT]) -> list[VT]:
         """Also looks at superclasses/MRO"""
-        return flatten_force(mapping.get(sub, []) for sub in tp.mro())
+        return flatten_force([mapping.get(sub, []) for sub in _get_mro(tp)])
+
+
+def _get_mro(tp: type) -> tuple[type, ...]:  # tp.__mro__ but with proper types
+    return tp.__mro__  # .mro() recalculates it every time, hence is slow
