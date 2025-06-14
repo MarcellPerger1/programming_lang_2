@@ -114,9 +114,11 @@ class FilteredWalker(WalkerFilterRegistry):
         # Call more specific ones first
         specific_cbs = self.enter_cbs if call_type == WalkerCallType.PRE else self.exit_cbs
         for fn in self._get_funcs(specific_cbs, type(o)):
-            result = fn(o) or result
+            if result := result or fn(o):
+                return result  # Don't call later ones if already skipped
         for fn in self._get_funcs(self.both_cbs, type(o)):
-            result = fn(o, call_type) or result
+            if result := result or fn(o, call_type):
+                return result
         return result
 
     @classmethod
