@@ -3,10 +3,10 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 
 from util.recursive_eq import recursive_eq
-from ..astgen.ast_node import walk_ast, FilteredWalker
 from ..astgen.ast_nodes import (
     AstNode, AstIdent, AstDeclNode, AstDefine, VarDeclType, VarDeclScope)
 from ..astgen.astgen import AstGen
+from ..astgen.filtered_walker import FilteredWalker
 from ..common import BaseLocatedError, StrRegion
 
 
@@ -182,7 +182,7 @@ class NameResolver:
                   .register_enter(AstIdent, enter_ident)
                   .register_enter(AstDeclNode, enter_decl)
                   .register_enter(AstDefine, enter_fn_decl))
-        walk_ast(block, walker)
+        walker.walk(block)
         # Walk sub-functions
         for fn_info, fn_decl in inner_funcs:
             fn_info.subscope = self.run_on_new_scope(
@@ -216,5 +216,3 @@ class Typechecker:
 
         self.ast.walk(walker)
         ...
-
-
