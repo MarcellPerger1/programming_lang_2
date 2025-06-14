@@ -112,6 +112,7 @@ class AstGen:
         elif isinstance(smt, ConditionalBlock):
             return self._walk_conditional(smt)
         elif isinstance(smt, AssignNode):  # Simple assignment
+            # TODO: maybe separate SetAttr, SetItem, SetVar nodes?
             return [AstAssign(smt.region, self._walk_assign_left(smt.target),
                               self._walk_expr(smt.source))]
         elif isinstance(smt, AssignOpNode):  # Other (aug.) assignment
