@@ -3,9 +3,9 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 
 from util.recursive_eq import recursive_eq
-from ..astgen.ast_node import (
-    AstNode, walk_ast, AstIdent, AstDeclNode, AstDefine, VarDeclType,
-    VarDeclScope, FilteredWalker)
+from ..astgen.ast_node import walk_ast, FilteredWalker
+from ..astgen.ast_nodes import (
+    AstNode, AstIdent, AstDeclNode, AstDefine, VarDeclType, VarDeclScope)
 from ..astgen.astgen import AstGen
 from ..common import BaseLocatedError, StrRegion
 

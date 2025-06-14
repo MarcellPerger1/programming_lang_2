@@ -5,7 +5,7 @@ import sys
 from typing import Callable, overload, TypeVar, TypeAlias
 
 from util import flatten_force, is_strict_subclass
-from .ast_node import *
+from .ast_nodes import *
 from .eval_literal import eval_number, eval_string
 from .errors import LocatedAstError
 from ..common import region_union, RegionUnionArgT, HasRegion, StrRegion
@@ -68,6 +68,7 @@ def _detect_autowalk_type_from_annot(fn):
         bound = sig.bind(0, 1)  # simulate call w/ 2 args
     except TypeError as e:  # pragma: no cover
         raise TypeError("Unable to detect node_type (signature may be incompatible)") from e
+    # noinspection PyTypeChecker
     arg2_name: str = (*bound.arguments,)[1]  # get name it's bound to
     param = sig.parameters[arg2_name]  # lookup the param by name
     if param.kind not in (param.POSITIONAL_ONLY,
