@@ -2,7 +2,7 @@ import cProfile
 import contextlib
 import time
 
-from parser.astgen.ast_node import AstProgramNode
+from parser.astgen.ast_nodes import AstProgramNode
 from parser.astgen.astgen import AstGen
 from parser.common.tree_print import tformat
 from parser.cst.nodes import ProgramNode
