@@ -203,6 +203,7 @@ NodeTypecheckFn: TypeAlias = 'Callable[[Typechecker, AstNode], TypeInfo | None]'
 _typecheck_dispatch: dict[type[AstNode], NodeTypecheckFn] = {}
 
 
+# TODO: output typed AST
 class Typechecker:
     _curr_scope: Scope
 
@@ -319,6 +320,83 @@ class Typechecker:
             self._typecheck_block(n.body)
         finally:
             self._curr_scope = old_scope
+
+    @_node_typechecker(AstNumber)
+    def _typecheck_number(self, _n: AstNumber):
+        return ValType()
+
+    @_node_typechecker(AstString)
+    def _typecheck_string(self, _n: AstString):
+        return ValType()
+
+    @_node_typechecker(AstListLiteral)
+    def _typecheck_list(self, n: AstListLiteral):
+        for item in n.items:
+            if self._typecheck(item) != ValType():
+                raise self.err("Can only have ValType()s in list", item)
+        return ListType()
+
+    @_node_typechecker(AstIdent)
+    def _typecheck_ident(self, n: AstIdent):
+        return self._curr_scope.used[n.id].tp_info
+
+    @_node_typechecker(AstAttrName)
+    def _typecheck_attr_name(self, _n: AstAttrName):
+        assert 0, "AstAttrName has no type, cannot be checked on its own"
+
+    @_node_typechecker(AstAttribute)
+    def _typecheck_attribute(self, n: AstAttribute):
+        # TODO: implement this properly, with better types and stuff
+        raise self.err("Attributes are not implemented yet", n)
+
+    @_node_typechecker(AstItem)
+    def _typecheck_item(self, n: AstItem):
+        # TODO: this will require different intrinsics for string vs list getitem
+        container_tp = self._typecheck(n.obj)
+        if container_tp not in (ListType(), ValType()):
+            raise self.err(f"Cannot get item of {container_tp}", n)
+        self.expect_type(self._typecheck(n.index), ValType(), n.index)
+
+    @_node_typechecker(AstCall)
+    def _typecheck_call(self, n: AstCall):
+        called_tp = self._typecheck(n.obj)
+        if not isinstance(called_tp, FunctionType):
+            raise self.err(f"Cannot call {called_tp}", n.obj)
+        if len(called_tp.arg_types) != len(n.args):
+            if n.args and len(n.args) > len(called_tp.arg_types):
+                region = n.args[-1].region  # Highlight extraneous arg
+            else:
+                region = n.region
+            raise self.err(f"Incorrect number of arguments, expected "
+                           f"{len(called_tp.arg_types)}, got {len(n.args)}",
+                           region)
+        for decl_t, arg_node in zip(called_tp.arg_types, n.args):
+            self.expect_type(self._typecheck(arg_node), decl_t, arg_node)
+        return called_tp.ret_type
+
+    _BINARY_OP_TYPES = dict.fromkeys([
+        *'+-*/%', '**', '..', '==', '!=', '<', '>', '<=', '>='
+    ], ValType()) | dict.fromkeys([
+        '&&', '||'
+    ], BoolType())
+
+    _UNARY_OP_TYPES = dict.fromkeys([
+        *'+-'
+    ], ValType()) | dict.fromkeys([
+        '!'
+    ], BoolType())
+
+    # TODO: allow casting bool to val? - auto-cast or explicit?
+    @_node_typechecker(AstBinOp)
+    def _typecheck_bin_op(self, n: AstBinOp):
+        expect_tp = self._BINARY_OP_TYPES[n.op]
+        self.expect_type(self._typecheck(n.left), expect_tp, n.left)
+        self.expect_type(self._typecheck(n.right), expect_tp, n.right)
+
+    @_node_typechecker(AstUnaryOp)
+    def _typecheck_unary_op(self, n: AstUnaryOp):
+        expect_tp = self._UNARY_OP_TYPES[n.op]
+        self.expect_type(self._typecheck(n.operand), expect_tp, n.operand)
 
     def _resolve_scope(self, scope_tp: VarDeclScope):
         return self.top_scope if scope_tp == VarDeclScope.GLOBAL else self._curr_scope
