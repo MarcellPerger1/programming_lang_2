@@ -53,8 +53,7 @@ class _AnyNamedNodeT(AnyNode):
         return cls(token.region, parent)
 
 
-AnyNamedNode: type[_AnyNamedNodeT] | type[NamedLeafCls] = cast(
-    type[_AnyNamedNodeT], NamedLeafCls)
+AnyNamedNode: type[_AnyNamedNodeT] | type[NamedLeafCls] = NamedLeafCls
 
 
 @dataclass
