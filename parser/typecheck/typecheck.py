@@ -14,22 +14,25 @@ from ..common import BaseLocatedError, StrRegion, region_union, RegionUnionArgT
 @dataclass
 class TypeInfo:
     def __post_init__(self):
-        assert type(self) != TypeInfo, "Cannot instantiate TypeInfo directly,use a subclass"
+        assert type(self) != TypeInfo, "Cannot instantiate TypeInfo directly, use a subclass"
 
 
 @dataclass
 class ValType(TypeInfo):
-    pass
+    def __str__(self):
+        return 'val'
 
 
 @dataclass
 class BoolType(TypeInfo):
-    pass
+    def __str__(self):
+        return 'bool'
 
 
 @dataclass
 class ListType(TypeInfo):
-    pass
+    def __str__(self):
+        return 'list'
 
 
 @dataclass
@@ -40,11 +43,17 @@ class VoidType(TypeInfo):
     (e.g. all regular user-defined scratch functions).
     """
 
+    def __str__(self):
+        return 'void'
+
 
 @dataclass
 class FunctionType(TypeInfo):
     arg_types: list[TypeInfo]
     ret_type: TypeInfo
+
+    def __str__(self):
+        return f'({", ".join(map(str, self.arg_types))}) -> {self.ret_type}'
 
 
 @dataclass
@@ -406,5 +415,4 @@ class Typechecker:
 
     def expect_type(self, actual: TypeInfo, exp: TypeInfo, loc: RegionUnionArgT):
         if exp != actual:
-            # TODO: maybe better type formatting
             raise self.err(f"Expected type {exp}, got type {actual}", loc)
