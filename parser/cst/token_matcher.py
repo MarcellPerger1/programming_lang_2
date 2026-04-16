@@ -125,7 +125,7 @@ def _issubclass(cls: object, cls_or_tuple: type | tuple[type, ...]):
 class Matcher:
     # start argument is to save memory as then the list slices
     # don't have to be stored separately
-    def __init__(self, pattern: Iterable | type[Token] | Token | BaseMatcher,
+    def __init__(self, pattern: Iterable[BaseMatcher] | type[Token] | Token | BaseMatcher,
                  tokens: list[Token], start: int, src: str):
         self.src = src
         self.pattern = pattern
@@ -161,13 +161,13 @@ class Matcher:
         self.result = self.pattern.matches(self.tokens, self.start, self.src)
 
 
-def matches(pattern: Iterable | type[Token] | Token | BaseMatcher,
+def matches(pattern: Iterable[BaseMatcher] | type[Token] | Token | BaseMatcher,
             tokens: list[Token], start: int, src: str,
             want_complete: bool = False) -> bool:
     return Matcher(pattern, tokens, start, src).match(want_complete).success
 
 
-def match(pattern: Iterable | type[Token] | Token | BaseMatcher,
+def match(pattern: Iterable[BaseMatcher] | type[Token] | Token | BaseMatcher,
           tokens: list[Token], start: int, src: str,
           want_complete: bool = False) -> MatchResult:
     return Matcher(pattern, tokens, start, src).match(want_complete).result

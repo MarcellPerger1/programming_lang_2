@@ -530,7 +530,7 @@ class CstGen:
 
     def _parse_comp(self, idx: int) -> tuple[AnyNode, int]:
         first, idx = self._parse_cat(idx)
-        parts = [first]
+        parts: list[AnyNode | OpToken] = [first]
         while self.match_ops(idx, COMPARISONS):
             op_tok = cast(OpToken, self[idx])
             idx += 1
