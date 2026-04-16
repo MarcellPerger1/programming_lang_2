@@ -9,12 +9,6 @@ from ..common import HasRegion, StrRegion
 __all__ = ['AstNode', 'walk_ast', 'WalkableT', 'WalkerFnT', 'WalkerCallType',]
 
 
-WalkableL0: TypeAlias = 'AstNode | list[AstNode] | tuple[AstNode, ...] | None'
-WalkableT: TypeAlias = 'WalkableL0 | list[WalkableL0] | tuple[WalkableL0, ...]'
-WalkerFnT: TypeAlias = Callable[[WalkableT, 'WalkerCallType'], bool | None]
-"""Returns True if skip"""
-
-
 class WalkerCallType(Enum):
     PRE = 'pre'
     POST = 'post'
@@ -66,3 +60,9 @@ class AstNode(HasRegion):
 
 
 walk_ast = AstNode.walk_obj
+
+
+WalkableL0: TypeAlias = AstNode | list[AstNode] | tuple[AstNode, ...] | None
+WalkableT: TypeAlias = WalkableL0 | list[WalkableL0] | tuple[WalkableL0, ...]
+WalkerFnT: TypeAlias = Callable[[WalkableT, WalkerCallType], bool | None]
+"""Returns True if skip"""
