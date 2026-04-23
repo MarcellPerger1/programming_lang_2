@@ -1,5 +1,7 @@
+
 from __future__ import annotations
 
+import functools
 from collections.abc import Callable
 from dataclasses import dataclass, field
 from typing import TypeAlias
@@ -208,8 +210,14 @@ class TypecheckError(BaseLocatedError):
 
 
 NodeTypecheckFn: TypeAlias = 'Callable[[Typechecker, AstNode], TypeInfo | None]'
+NodeTypecheckFnStrict: TypeAlias = 'Callable[[Typechecker, AstNode], TypeInfo]'
 
-_typecheck_dispatch: dict[type[AstNode], NodeTypecheckFn] = {}
+_typecheck_dispatch: dict[type[AstNode], NodeTypecheckFnStrict] = {}
+
+
+@dataclass
+class TypeMetadata:
+    type: TypeInfo
 
 
 # TODO: output typed AST
@@ -223,6 +231,8 @@ class Typechecker:
 
     def _init(self):
         self.resolver.run()
+        # TODO: sort out type changing at runtime (Lard have mercy!)
+        #  from AstNode[None] to AstNode[TypeMetadata]
         self.ast = self.resolver.ast
         self.top_scope = self.resolver.top_scope
         self._curr_scope = self.top_scope
@@ -241,8 +251,13 @@ class Typechecker:
             tp = self  # Called as decor in this class
 
         def decor(fn: NodeTypecheckFn):
-            _typecheck_dispatch[tp] = fn
-            return fn
+            @functools.wraps(fn)
+            def new_fn(self_inner: Typechecker, n: AstNode) -> TypeInfo:
+                n_type = fn(self_inner, n) or VoidType()  # return None = void
+                n.meta = TypeMetadata(n_type)
+                return n_type
+            _typecheck_dispatch[tp] = new_fn
+            return new_fn
         return decor
 
     def _typecheck(self, n: AstNode):
@@ -262,8 +277,7 @@ class Typechecker:
 
     def _typecheck_block(self, block: list[AstNode]):
         for smt in block:
-            if (tp := self._typecheck(smt)) is not None:
-                self.expect_type(tp, VoidType(), smt)
+            self.expect_type(self._typecheck(smt), VoidType(), smt)
 
     @_node_typechecker(AstDeclNode)
     def _typecheck_decl(self, n: AstDeclNode):
