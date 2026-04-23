@@ -220,7 +220,6 @@ class TypeMetadata:
     type: TypeInfo
 
 
-# TODO: output typed AST
 class Typechecker:
     _curr_scope: Scope
 
@@ -228,22 +227,22 @@ class Typechecker:
         self.resolver = name_resolver
         self.src = self.resolver.src
         self.is_ok: bool | None = None
+        self.typed_ast: AstProgramNode[TypeMetadata] | None = None
 
     def _init(self):
         self.resolver.run()
-        # TODO: sort out type changing at runtime (Lard have mercy!)
-        #  from AstNode[None] to AstNode[TypeMetadata]
-        self.ast = self.resolver.ast
+        self.orig_ast = self.resolver.ast
         self.top_scope = self.resolver.top_scope
         self._curr_scope = self.top_scope
 
-    def run(self):
-        if self.is_ok is None:
-            return self.is_ok
+    def run(self) -> AstProgramNode[TypeMetadata]:
+        if self.typed_ast is not None:
+            return self.typed_ast
         self._init()
-        self._typecheck(self.ast)
-        self.is_ok = True  # didn't raise any errors
-        return self.is_ok
+        self._typecheck(self.orig_ast)
+        # TODO: tests for the output types
+        self.typed_ast = self.orig_ast  # should now have the types
+        return self.typed_ast
 
     def _node_typechecker(self, tp=None):
         if tp is None:
