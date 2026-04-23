@@ -3,7 +3,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 from enum import Enum
 
-from .ast_node import AstNode, WalkerFnT
+from .ast_node import AstNode, WalkerFnT, MetadataT
 
 __all__ = [
     "AstNode", "AstProgramNode", "VarDeclScope", "VarDeclType", "AstDeclNode",
@@ -15,9 +15,9 @@ __all__ = [
 
 
 @dataclass
-class AstProgramNode(AstNode):
+class AstProgramNode(AstNode[MetadataT]):
     name = 'program'
-    statements: list[AstNode]
+    statements: list[AstNode[MetadataT]]
 
     def _walk_members(self, fn: WalkerFnT):
         self.walk_multiple_objects(fn, (self.statements,))
@@ -35,34 +35,34 @@ class VarDeclType(Enum):
 
 
 @dataclass
-class AstDeclNode(AstNode):
+class AstDeclNode(AstNode[MetadataT]):
     name = 'var_decl'
     scope: VarDeclScope
     type: VarDeclType
     ident: AstIdent
-    value: AstNode | None
+    value: AstNode[MetadataT] | None
 
     def _walk_members(self, fn: WalkerFnT):
         self.walk_multiple_objects(fn, (self.ident, self.value))
 
 
 @dataclass
-class AstRepeat(AstNode):
+class AstRepeat(AstNode[MetadataT]):
     name = 'repeat'
-    count: AstNode
-    body: list[AstNode]
+    count: AstNode[MetadataT]
+    body: list[AstNode[MetadataT]]
 
     def _walk_members(self, fn: WalkerFnT):
         self.walk_multiple_objects(fn, (self.count, self.body))
 
 
 @dataclass
-class AstIf(AstNode):
+class AstIf(AstNode[MetadataT]):
     name = 'if'
-    cond: AstNode
-    if_body: list[AstNode]
+    cond: AstNode[MetadataT]
+    if_body: list[AstNode[MetadataT]]
     # elseif = else{if
-    else_body: list[AstNode] | None = None
+    else_body: list[AstNode[MetadataT]] | None = None
     # ^ Separate cases for no block and empty block (can be else {} to easily
     # add extra blocks in scratch interface)
 
@@ -71,30 +71,30 @@ class AstIf(AstNode):
 
 
 @dataclass
-class AstWhile(AstNode):
+class AstWhile(AstNode[MetadataT]):
     name = 'while'
-    cond: AstNode
-    body: list[AstNode]
+    cond: AstNode[MetadataT]
+    body: list[AstNode[MetadataT]]
 
     def _walk_members(self, fn: WalkerFnT):
         self.walk_multiple_objects(fn, (self.cond, self.body))
 
 
 @dataclass
-class AstAssign(AstNode):
+class AstAssign(AstNode[MetadataT]):
     name = '='
-    target: AstNode
-    source: AstNode
+    target: AstNode[MetadataT]
+    source: AstNode[MetadataT]
 
     def _walk_members(self, fn: WalkerFnT):
         self.walk_multiple_objects(fn, (self.target, self.source))
 
 
 @dataclass
-class AstAugAssign(AstNode):
+class AstAugAssign(AstNode[MetadataT]):
     op: str  # maybe attach a StrRegion to the location of the op??
-    target: AstNode
-    source: AstNode
+    target: AstNode[MetadataT]
+    source: AstNode[MetadataT]
 
     @property
     def name(self):
@@ -105,12 +105,12 @@ class AstAugAssign(AstNode):
 
 
 @dataclass
-class AstDefine(AstNode):
+class AstDefine(AstNode[MetadataT]):
     name = 'def'
 
     ident: AstIdent
     params: list[tuple[AstIdent, AstIdent]]  # type, ident
-    body: list[AstNode]
+    body: list[AstNode[MetadataT]]
 
     def _walk_members(self, fn: WalkerFnT):
         self.walk_multiple_objects(fn, (self.ident, self.params, self.body))
@@ -119,18 +119,18 @@ class AstDefine(AstNode):
 
 # region ---- <Expressions> ----
 @dataclass
-class AstNumber(AstNode):
+class AstNumber(AstNode[MetadataT]):
     # No real point in storing the string representation (could always StrRegion.resolve())
     value: float | int
 
 
 @dataclass
-class AstString(AstNode):
+class AstString(AstNode[MetadataT]):
     value: str  # Values with escapes, etc. resolved
 
 
 @dataclass
-class AstAnyName(AstNode):
+class AstAnyName(AstNode[MetadataT]):
     id: str
 
     def __post_init__(self):
@@ -149,18 +149,18 @@ class AstAttrName(AstAnyName):
 
 
 @dataclass
-class AstListLiteral(AstNode):
+class AstListLiteral(AstNode[MetadataT]):
     name = 'list'
-    items: list[AstNode]
+    items: list[AstNode[MetadataT]]
 
     def _walk_members(self, fn: WalkerFnT):
         self.walk_multiple_objects(fn, (self.items,))
 
 
 @dataclass
-class AstAttribute(AstNode):
+class AstAttribute(AstNode[MetadataT]):
     name = '.'
-    obj: AstNode
+    obj: AstNode[MetadataT]
     attr: AstAttrName
 
     def _walk_members(self, fn: WalkerFnT):
@@ -168,34 +168,34 @@ class AstAttribute(AstNode):
 
 
 @dataclass
-class AstItem(AstNode):
+class AstItem(AstNode[MetadataT]):
     name = 'item'
-    obj: AstNode
-    index: AstNode
+    obj: AstNode[MetadataT]
+    index: AstNode[MetadataT]
 
     def _walk_members(self, fn: WalkerFnT):
         self.walk_multiple_objects(fn, (self.obj, self.index))
 
 
 @dataclass
-class AstCall(AstNode):
+class AstCall(AstNode[MetadataT]):
     name = 'call'
-    obj: AstNode
-    args: list[AstNode]
+    obj: AstNode[MetadataT]
+    args: list[AstNode[MetadataT]]
 
     def _walk_members(self, fn: WalkerFnT):
         self.walk_multiple_objects(fn, (self.obj, self.args))
 
 
 @dataclass
-class AstOp(AstNode):
+class AstOp(AstNode[MetadataT]):
     op: str
 
 
 @dataclass
-class AstBinOp(AstOp):
-    left: AstNode
-    right: AstNode
+class AstBinOp(AstOp[MetadataT]):
+    left: AstNode[MetadataT]
+    right: AstNode[MetadataT]
 
     valid_ops = [*'+-*/%', '**', '..', '||', '&&',  # ops
                  '==', '!=', '<', '>', '<=', '>='  # comparisons
@@ -213,8 +213,8 @@ class AstBinOp(AstOp):
 
 
 @dataclass
-class AstUnaryOp(AstOp):
-    operand: AstNode
+class AstUnaryOp(AstOp[MetadataT]):
+    operand: AstNode[MetadataT]
 
     valid_ops = ('+', '-', '!')
 
