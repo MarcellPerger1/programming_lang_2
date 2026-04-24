@@ -2,6 +2,12 @@
 import functools
 
 
+# TODO: this probably has a bug when `a is b` (thanks gpt-5.5 - it's literally
+#  the only model that spots it (I made 12 models them generate tests to see
+#  how they' doing nowadays via LMArena, with somewhat adequate results),
+#  no other one even thinks to test this case. If gpt has the intuition to
+#  think 'what is their identical', then that is genuinely terrifying for
+#  my job prospects.
 def recursive_eq(fn):
     """Must be used as decorator, like reprlib.recursive_repr.
     Works by hypothesising that 2 ids are equal. Then, it tries to compare
