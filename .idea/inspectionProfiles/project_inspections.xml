@@ -22,7 +22,7 @@
         </list>
       </option>
     </inspection_tool>
-    <inspection_tool class="PyUnresolvedReferencesInspection" enabled="true" level="WARNING" enabled_by_default="true">
+    <inspection_tool class="PyUnresolvedReferencesInspection" enabled="true" level="WARNING" enabled_by_default="true" editorAttributes="WARNING_ATTRIBUTES">
       <option name="ignoredIdentifiers">
         <list>
           <option value="unittest.case._subtest_msg_sentinel" />
