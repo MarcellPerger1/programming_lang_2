@@ -127,7 +127,7 @@ def register_corresponding_token(*args, include_attr=False,
             NAME_REGISTRY[name, cls.size] = cls
         else:
             # Cast required because Pycharm stupid
-            NAME_REGISTRY[name, cast(int, arity)] = cls
+            NAME_REGISTRY[name, arity] = cls
 
     def decor(cls: type[AnyNamedNode]):
         for n in names:
