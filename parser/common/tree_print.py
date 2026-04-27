@@ -8,6 +8,7 @@ from collections import UserString
 from io import StringIO
 from typing import IO, Sequence
 
+from util import dcls_field_default
 from ..astgen.ast_node import AstNode
 from ..cst.base_node import Leaf, AnyNode, Node
 from .str_region import StrRegion
@@ -131,9 +132,16 @@ class TreePrinter:
 
     def _write_ast_node(self, obj: AstNode, indent: IndentInfo):
         # TODO Not the ideal formatting (but I don't know what is.
-        # TODO: more general: remove kw-only stuff or stuff at end if same as default
-        values = [(f.name if f.kw_only else None, getattr(obj, f.name))
-                  for f in dcls.fields(obj)]
+        field_values = [(f, getattr(obj, f.name)) for f in dcls.fields(obj)]
+        pos_field_values = [(f, v) for f, v in field_values if not f.kw_only]
+        while (pos_field_values and
+               dcls_field_default(pos_field_values[-1][0])
+               == pos_field_values[-1][1]):
+            pos_field_values.pop(-1)  # start from last, remove default ones
+        pos_values = [(None, v) for _f, v in pos_field_values]
+        kw_values = [(f.name, v) for f, v in field_values
+                     if f.kw_only and v != dcls_field_default(f)]
+        values = pos_values + kw_values
         # Put the named ones at end. NOTE: relies on sort stability
         values.sort(key=lambda pair: pair[0] is not None)
         if ('meta', None) in values:  # special case: remove meta= if no metadata

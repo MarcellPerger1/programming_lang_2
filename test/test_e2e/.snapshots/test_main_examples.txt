@@ -1,4 +1,4 @@
-"2","90","188","680","1101","1485","2373","3125","3813"
+"2","90","188","680","1101","1482","2370","3122","3801"
 "TestMain::test_example_0:tokens","TestMain::test_example_0:cst","TestMain::test_example_1:tokens","TestMain::test_example_1:cst","TestMain::test_example_1:ast","TestMain::test_example_2:tokens","TestMain::test_example_2:cst","TestMain::test_example_2:ast","TestMain::test_example_2:name_resolve"
 [IdentNameToken(region=StrRegion(start=0, end=3)),
  WhitespaceToken(region=StrRegion(start=3, end=4)),
@@ -1136,8 +1136,7 @@ AstProgramNode(StrRegion(0, 1683),
                 )
               ]
             )
-          ],
-          None
+          ]
         ),
         AstCall(StrRegion(477, 503),
           AstIdent(StrRegion(477, 484), 'delitem'),
@@ -1309,8 +1308,7 @@ AstProgramNode(StrRegion(0, 1683),
                 AstIdent(StrRegion(1083, 1088), 'value')
               ]
             )
-          ],
-          None
+          ]
         )
       ]
     ),
@@ -1384,8 +1382,7 @@ AstProgramNode(StrRegion(0, 1683),
                 AstIdent(StrRegion(1342, 1346), 'tos1')
               ]
             )
-          ],
-          None
+          ]
         )
       ]
     ),
@@ -3233,8 +3230,7 @@ AstProgramNode(StrRegion(0, 3169),
                   ),
                   AstNumber(StrRegion(554, 555), 1)
                 )
-              ],
-              None
+              ]
             )
           ],
           [
@@ -3268,8 +3264,7 @@ AstProgramNode(StrRegion(0, 3169),
                     AstNumber(StrRegion(733, 734), 1)
                   ]
                 )
-              ],
-              None
+              ]
             )
           ]
         )
@@ -3301,8 +3296,7 @@ AstProgramNode(StrRegion(0, 3169),
               ),
               AstNumber(StrRegion(927, 928), 0)
             )
-          ],
-          None
+          ]
         ),
         AstCall(StrRegion(940, 968),
           AstAttribute(StrRegion(940, 963),
@@ -3389,11 +3383,9 @@ AstProgramNode(StrRegion(0, 3169),
                     AstIdent(StrRegion(1283, 1286), 'ptr')
                   ]
                 )
-              ],
-              None
+              ]
             )
-          ],
-          None
+          ]
         )
       ]
     ),
@@ -3424,8 +3416,7 @@ AstProgramNode(StrRegion(0, 3169),
               ),
               AstNumber(StrRegion(1434, 1435), 1)
             )
-          ],
-          None
+          ]
         )
       ]
     ),
@@ -3469,8 +3460,7 @@ AstProgramNode(StrRegion(0, 3169),
                 )
               ]
             )
-          ],
-          None
+          ]
         ),
         AstCall(StrRegion(1973, 1999),
           AstIdent(StrRegion(1973, 1980), 'delitem'),
@@ -3642,8 +3632,7 @@ AstProgramNode(StrRegion(0, 3169),
                 AstIdent(StrRegion(2579, 2584), 'value')
               ]
             )
-          ],
-          None
+          ]
         )
       ]
     ),
@@ -3717,8 +3706,7 @@ AstProgramNode(StrRegion(0, 3169),
                 AstIdent(StrRegion(2838, 2842), 'tos1')
               ]
             )
-          ],
-          None
+          ]
         )
       ]
     ),
