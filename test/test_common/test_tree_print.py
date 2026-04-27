@@ -5,7 +5,7 @@ from parser.common import StrRegion
 from parser.common.tree_print import tformat
 from parser.cst import nodes as cst_nodes
 from parser.astgen import ast_nodes
-from parser.typecheck.typecheck import ValType, FunctionType, ListType, VoidType
+from parser.typecheck.types import ValType, ListType, VoidType, FunctionType
 
 
 class _DummyEnum(enum.Enum):

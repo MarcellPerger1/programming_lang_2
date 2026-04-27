@@ -1,9 +1,8 @@
 from unittest.mock import Mock, patch
 
 from parser.common import StrRegion
-from parser.typecheck.typecheck import (
-    NameResolver, Scope, NameInfo, BoolType, ValType, VoidType,
-    FuncInfo, ParamInfo)
+from parser.typecheck.name_resolver import NameInfo, FuncInfo, ParamInfo, Scope, NameResolver
+from parser.typecheck.types import ValType, BoolType, VoidType
 from test.common import CommonTestCase
 
 
@@ -72,6 +71,7 @@ class TestNameResolve(CommonTestCase):
             ], VoidType(), f1_scope),
             'f2': FuncInfo.from_param_info(sc, 'f2', [], VoidType(), Scope())
         }
+        # TODO: recursion error during cmp - how/when did this break??
         self.assertEqual(sc, self.getNameResolver(src).run())
 
 

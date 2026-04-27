@@ -14,7 +14,7 @@ from parser.cst.base_node import Leaf, AnyNode, Node
 from parser.cst.cstgen import CstGen, LocatedCstError
 from parser.lexer import Tokenizer
 from parser.lexer.tokens import Token, OpToken
-from parser.typecheck.typecheck import Scope, NameResolver, NameResolutionError
+from parser.typecheck.name_resolver import Scope, NameResolutionError, NameResolver
 from test.common.snapshottest import SnapshotTestCase
 from test.common.utils import TestCaseUtils
 from util.pformat import pformat

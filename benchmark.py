@@ -8,7 +8,7 @@ from parser.common.tree_print import tformat
 from parser.cst.nodes import ProgramNode
 from parser.cst.cstgen import CstGen
 from parser.lexer import Tokenizer, format_tokens
-from parser.typecheck.typecheck import NameResolver, Scope
+from parser.typecheck.name_resolver import Scope, NameResolver
 from util import readfile
 from util.pformat import pformat
 

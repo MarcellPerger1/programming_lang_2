@@ -4,11 +4,11 @@ from parser.astgen.astgen import AstGen
 from parser.lexer.tokenizer import Tokenizer
 from parser.cst.cstgen import CstGen
 from parser.common.error import BaseParseError
+from parser.typecheck.typecheck import Typechecker
+from parser.typecheck.name_resolver import NameResolver
 
 from pythonfuzz.fuzzer import Fuzzer
 import pythonfuzz.fuzzer as fuzzer_ns  # For patching pythonfuzz
-
-from parser.typecheck.typecheck import NameResolver
 
 
 class UsePerfCounterInsteadOfTime:
@@ -32,7 +32,7 @@ def fuzz(buf):
     try:
         string = buf.decode("ascii")
         try:
-            NameResolver(AstGen(CstGen(Tokenizer(string)))).run()
+            Typechecker(NameResolver(AstGen(CstGen(Tokenizer(string))))).run()
         except BaseParseError:
             pass
     except UnicodeDecodeError:
