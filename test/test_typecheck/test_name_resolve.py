@@ -79,24 +79,34 @@ class TestNameResolveErrors(CommonTestCase):
     def test_undefined_var(self):
         err = self.assertNameResolveError('foo = 9;')
         self.assertContains(err.msg, "Name 'foo' is not defined")
-        self.assertEqual(StrRegion(0, 3), err.region)
+        self.assertErrorRegion(StrRegion(0, 3), err)
 
     def test_var_already_declared(self):
         err = self.assertNameResolveError('let foo = 9; let foo;')
         self.assertContains(err.msg, "Variable already declared")
-        self.assertEqual(StrRegion(13, 20), err.region)
+        self.assertErrorRegion(StrRegion(13, 20), err)
 
     def test_fn_already_declared(self):
         err = self.assertNameResolveError('def foo(){}; def foo(){}')
         self.assertContains(err.msg, "Function already declared")
-        self.assertEqual(StrRegion(17, 20), err.region)
+        self.assertErrorRegion(StrRegion(17, 20), err)
 
     def test_unknown_param_type(self):
         err = self.assertNameResolveError('def foo(not_a_type name){};')
         self.assertContains(err.msg, "Unknown parameter type")
-        self.assertEqual(StrRegion(8, 18), err.region)
+        self.assertErrorRegion(StrRegion(8, 18), err)
 
     def test_duplicate_param_name(self):
         err = self.assertNameResolveError('def foo(bool a, val a){};')
         self.assertContains(err.msg, "There is already a parameter of this name")
-        self.assertEqual(StrRegion(20, 21), err.region)
+        self.assertErrorRegion(StrRegion(20, 21), err)
+
+    def test_fn_resued_as_var(self):
+        err = self.assertNameResolveError('def foo(){}; let foo;')
+        self.assertContains(err.msg, "Variable already declared")
+        self.assertErrorRegion(StrRegion(17, 20), err)
+
+    def test_var_resued_as_fn(self):
+        err = self.assertNameResolveError('let foo = 9; def foo(){}')
+        self.assertContains(err.msg, "Variable already declared")
+        self.assertErrorRegion(StrRegion(13, 20), err)

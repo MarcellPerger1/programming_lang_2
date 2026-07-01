@@ -8,7 +8,9 @@ from typing import Sequence, TypeVar
 from parser.astgen.ast_node import AstNode
 from parser.astgen.astgen import AstGen
 from parser.astgen.errors import LocatedAstError
+from parser.common import BaseLocatedError
 from parser.common.error import BaseParseError
+from parser.common.str_region import StrRegion
 from parser.common.tree_print import tformat
 from parser.cst.base_node import Leaf, AnyNode, Node
 from parser.cst.cstgen import CstGen, LocatedCstError
@@ -137,3 +139,16 @@ class CommonTestCase(SnapshotTestCase, TestCaseUtils):
         with self.assertRaises(NameResolutionError) as ctx:
             nr.run()
         return ctx.exception
+
+    def assertRegionEquals(self, expected: StrRegion, actual: StrRegion, src: str | None):
+        if expected == actual:
+            return
+        # Newlines added so that <lhs> != <rhs> output by unittest looks reasonable
+        self.assertEqual(f'\n{expected.display(src)}\n',
+                         f'\n{actual.display(src)}\n ',
+                         "Expected regions to be equal (showing displayed)")
+        self.assertEqual(expected, actual,  # Fallback in case display equal
+                         "Expected regions to be equal (displayed as same)")
+
+    def assertErrorRegion(self, expected: StrRegion, err: BaseLocatedError):
+        self.assertRegionEquals(expected, err.region, err._src_text)
