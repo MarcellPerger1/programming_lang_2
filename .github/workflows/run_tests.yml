@@ -31,4 +31,4 @@ jobs:
           ./scripts/run_tests.sh --verbose
       - name: Run mini-benchmark
         run: |
-          python ./benchmark.py
+          python scripts/benchmark.py
