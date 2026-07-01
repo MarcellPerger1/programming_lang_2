@@ -86,6 +86,11 @@ class TestNameResolveErrors(CommonTestCase):
         self.assertContains(err.msg, "Variable already declared")
         self.assertErrorRegion(StrRegion(17, 20), err)
 
+    def test_var_already_declared_once_with_value(self):
+        err = self.assertNameResolveError('let foo = 9; let foo = 55;')
+        self.assertContains(err.msg, "Variable already declared")
+        self.assertErrorRegion(StrRegion(17, 20), err)
+
     def test_var_already_declared_many_first(self):
         err = self.assertNameResolveError('let foo = 9; let foo, bar;')
         self.assertContains(err.msg, "Variable already declared")
