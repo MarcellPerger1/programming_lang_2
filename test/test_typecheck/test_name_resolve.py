@@ -81,10 +81,25 @@ class TestNameResolveErrors(CommonTestCase):
         self.assertContains(err.msg, "Name 'foo' is not defined")
         self.assertErrorRegion(StrRegion(0, 3), err)
 
-    def test_var_already_declared(self):
+    def test_var_already_declared_once(self):
         err = self.assertNameResolveError('let foo = 9; let foo;')
         self.assertContains(err.msg, "Variable already declared")
-        self.assertErrorRegion(StrRegion(13, 20), err)
+        self.assertErrorRegion(StrRegion(17, 20), err)
+
+    def test_var_already_declared_many_first(self):
+        err = self.assertNameResolveError('let foo = 9; let foo, bar;')
+        self.assertContains(err.msg, "Variable already declared")
+        self.assertErrorRegion(StrRegion(17, 20), err)
+
+    def test_var_already_declared_many_mid(self):
+        err = self.assertNameResolveError('let bar = 9; let foo, bar, baz;')
+        self.assertContains(err.msg, "Variable already declared")
+        self.assertErrorRegion(StrRegion(22, 25), err)
+
+    def test_var_already_declared_many_last(self):
+        err = self.assertNameResolveError('let baz = 9; let foo, bar, baz;')
+        self.assertContains(err.msg, "Variable already declared")
+        self.assertErrorRegion(StrRegion(27, 30), err)
 
     def test_fn_already_declared(self):
         err = self.assertNameResolveError('def foo(){}; def foo(){}')
@@ -107,6 +122,6 @@ class TestNameResolveErrors(CommonTestCase):
         self.assertErrorRegion(StrRegion(17, 20), err)
 
     def test_var_resued_as_fn(self):
-        err = self.assertNameResolveError('let foo = 9; def foo(){}')
-        self.assertContains(err.msg, "Variable already declared")
-        self.assertErrorRegion(StrRegion(13, 20), err)
+        err = self.assertNameResolveError('let foo = 9; def foo(){/*hi*/}')
+        self.assertContains(err.msg, "Function already declared")
+        self.assertErrorRegion(StrRegion(17, 20), err)
