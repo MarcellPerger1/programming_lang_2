@@ -8,7 +8,7 @@ from ..astgen.ast_nodes import AstIdent, AstDeclNode, VarDeclScope, VarDeclType,
 from ..astgen.astgen import AstGen
 from ..astgen.filtered_walker import FilteredWalker
 
-from ..common import BaseLocatedError, StrRegion
+from ..common import BaseLocatedError, StrRegion, RegionUnionArgT, region_union
 from .types import TypeInfo, FunctionType, ValType, ListType, BoolType, VoidType, PARAM_TYPES
 
 
@@ -89,11 +89,11 @@ class NameResolver:
                          curr_scope: Scope = None):
         # TODO: this could be done cleaner with a separate class for the walker
         def enter_ident(n: AstIdent):
-            for s in scope_stack[::-1]:  # Inefficient, creates a copy!
+            for s in reversed(scope_stack):
                 if info := s.declared.get(n.id):
                     curr_scope.used[n.id] = info
                     return
-            raise self.err(f"Name '{n.id}' is not defined", n.region)
+            raise self.err(f"Name '{n.id}' is not defined", n)
 
         def enter_decl(n: AstDeclNode):
             # Need semi-special logic here to prevent walking it walking
@@ -103,7 +103,7 @@ class NameResolver:
             ident = n.ident.id
             target_scope = curr_scope if n.scope == VarDeclScope.LET else self.top_scope
             if ident in target_scope.declared:
-                raise self.err("Variable already declared", n.region)
+                raise self.err("Variable already declared", n.ident)
             target_scope.declared[ident] = NameInfo(target_scope, ident, (
                 ValType() if n.type == VarDeclType.VARIABLE else ListType()))
             return True
@@ -111,15 +111,14 @@ class NameResolver:
         def enter_fn_decl(fn: AstDefine):
             ident = fn.ident.id
             if ident in curr_scope.declared:
-                raise self.err("Function already declared", fn.ident.region)
+                raise self.err("Function already declared", fn.ident)
             subscope = Scope()
             params: list[ParamInfo] = []
             for tp_node, name_node in fn.params:
                 if tp_node.id not in PARAM_TYPES:
-                    raise self.err("Unknown parameter type", tp_node.region)
+                    raise self.err("Unknown parameter type", tp_node)
                 if (name := name_node.id) in subscope.declared:
-                    raise self.err("There is already a parameter of this name",
-                                   name_node.region)
+                    raise self.err("There is already a parameter of this name", name_node)
                 tp = BoolType() if tp_node.id == 'bool' else ValType()
                 subscope.declared[name] = NameInfo(subscope, name, tp, is_param=True)
                 params.append(ParamInfo(name, tp))
@@ -148,5 +147,5 @@ class NameResolver:
                 fn_decl.body, scope_stack, fn_info.subscope)
         return scope_stack.pop()  # Remove current scope from stack & return it
 
-    def err(self, msg: str, region: StrRegion):
-        return NameResolutionError(msg, region, self.src)
+    def err(self, msg: str, loc: RegionUnionArgT):
+        return NameResolutionError(msg, region_union(loc), self.src)
