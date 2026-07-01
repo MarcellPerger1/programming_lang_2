@@ -28,8 +28,7 @@ jobs:
           python-version: ${{ matrix.py_version }}
       - name: Run tests
         run: |
-          chmod +x ./run_tests.sh
-          ./run_tests.sh --verbose
+          ./scripts/run_tests.sh --verbose
       - name: Run mini-benchmark
         run: |
           python ./benchmark.py
