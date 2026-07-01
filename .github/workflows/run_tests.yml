@@ -26,9 +26,14 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.py_version }}
+      - name: Setup pythonfuzz
+        run: pip install -r requirements-dev.txt
       - name: Run tests
         run: |
           ./scripts/run_tests.sh --verbose
       - name: Run mini-benchmark
         run: |
           python -m scripts.benchmark
+      # Just to detect ultra-obvious bugs that our tests missed
+      - name: Run quick fuzzing (20000 iterations)
+        run: python -m scripts.fuzz -n 20000
