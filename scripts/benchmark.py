@@ -12,7 +12,7 @@ from parser.typecheck.name_resolver import Scope, NameResolver
 from util import readfile
 from util.pformat import pformat
 
-PROFILER = True
+PROFILER = False
 
 
 class _Timer:
@@ -69,7 +69,7 @@ class BenchOnce:
                     self.do_name_resolve()
                     self.do_name_resolve_fmt()
         if p:
-            p.dump_stats(f'perf_dump_{self.idx}.prof')
+            p.dump_stats(f'./_exclude/prof/perf_dump_{self.idx}.prof')
         print(f'Perf for idx={self.idx} ({PROFILER=}):')
         for _k, s in sorted(self.lines):
             print(f'  {s}')
@@ -132,20 +132,20 @@ def bench_full(n=200):
         for _ in range(n):
             t0 = time.perf_counter()
             _sc = NameResolver(AstGen(CstGen(Tokenizer(
-                readfile('main_example_2.st'))))).run()
+                readfile('./examples/main_example_2.st'))))).run()
             t1 = time.perf_counter()
             times.append(t1 - t0)
     if p:
-        p.dump_stats('./long_perf.prof')
+        p.dump_stats('./_exclude/prof/bench_full.prof')
     print(f'Bench main_example_2.st, {n} iterations, ({PROFILER=}):')
     print(f'  Min: {min(times)*1000:.2f}ms')
     print(f'  Avg: {sum(times)/n*1000:.2f}ms')
 
 
 def main():
-    benchmark(readfile('main_example_0.st'), 0, do_ast=False)
-    benchmark(readfile('main_example_1.st'), 1, do_name_resolve=False)
-    benchmark(readfile('main_example_2.st'), 2)
+    benchmark(readfile('./examples/main_example_0.st'), 0, do_ast=False)
+    benchmark(readfile('./examples/main_example_1.st'), 1, do_name_resolve=False)
+    benchmark(readfile('./examples/main_example_2.st'), 2)
     bench_full(200)
 
 

@@ -14,7 +14,7 @@ class TestMain(CommonTestCase):
         super().setUp()
 
     def _test_main_example_n(self, n: int, do_ast=True, do_name_resolve=True):
-        src = readfile(f'./main_example_{n}.st')
+        src = readfile(f'./examples/main_example_{n}.st')
         tk = Tokenizer(src).tokenize()
         self.assertMatchesSnapshot(tk.tokens, 'tokens')
         t = CstGen(tk)
