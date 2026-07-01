@@ -71,7 +71,6 @@ class TestNameResolve(CommonTestCase):
             ], VoidType(), f1_scope),
             'f2': FuncInfo.from_param_info(sc, 'f2', [], VoidType(), Scope())
         }
-        # TODO: recursion error during cmp - how/when did this break??
         self.assertEqual(sc, self.getNameResolver(src).run())
 
 

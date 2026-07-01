@@ -2,14 +2,13 @@
 import functools
 
 
-# TODO: this probably has a bug when `a is b` (thanks gpt-5.5 - it's literally
-#  the only model that spots it (I made 12 models them generate tests to see
-#  how they' doing nowadays via LMArena, with somewhat adequate results),
-#  no other one even thinks to test this case. If gpt has the intuition to
-#  think 'what is their identical', then that is genuinely terrifying for
-#  my job prospects.
 def recursive_eq(fn):
-    """Must be used as decorator, like reprlib.recursive_repr.
+    """Allows safe recursive equality comparisons also cnosidering reference
+    identity (like if I modify a will b change?). Must be used as decorator,
+    like reprlib.recursive_repr. Note: may break with multi-threading or
+    super-weird reentrancy (comparing unrelated objects still of the same
+    type in the __eq__ where it has no relation to the current comparison).
+
     Works by hypothesising that 2 ids are equal. Then, it tries to compare
     them. If it encounters one of them again, it checks that the corresponding
     value is the hypothesised value. If so, they're equal. If not, they're
@@ -18,6 +17,8 @@ def recursive_eq(fn):
 
     @functools.wraps(fn)
     def eq(a, b):
+        if a is b:
+            return True  # Prevents nasty stuff like deleting same key twice
         if (bid_exp := hypotheses.get(id(a))) is not None:
             return bid_exp == id(b)
         if (aid_exp := hypotheses.get(id(b))) is not None:
