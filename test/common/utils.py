@@ -75,3 +75,23 @@ class TestCaseUtils(unittest.TestCase):
 
     def resetCwd(self):
         os.chdir(self._old_cwd)
+
+    def assertHasSingleItem(self, container: Iterable[T]) -> T:
+        # Overcomplicated for better error messages and generality
+        it = iter(container)
+        try:
+            v = next(it)
+        except StopIteration:
+            self.fail(f"Expected iterable to contain one item, was empty: {safe_repr(it)}")
+        try:
+            v2 = next(it)
+        except StopIteration:
+            return v  # ok, ran out of items so list is singleton
+        try:
+            # noinspection PyTypeChecker
+            length = len(it)
+        except (TypeError, NotImplementedError):
+            self.fail(f"Expected iterable to contain one item, got at least "
+                      f"one extra (iterable: {container}, extra: {v2})")
+        self.fail(f"Expected iterable to contain one item, got {length} items"
+                  f"(iterable: {container})")

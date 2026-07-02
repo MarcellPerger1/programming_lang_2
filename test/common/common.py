@@ -17,6 +17,8 @@ from parser.cst.cstgen import CstGen, LocatedCstError
 from parser.lexer import Tokenizer
 from parser.lexer.tokens import Token, OpToken
 from parser.typecheck.name_resolver import Scope, NameResolutionError, NameResolver
+from parser.typecheck.typecheck import Typechecker, TypeMetadata
+from parser.typecheck.types import TypeInfo
 from test.common.snapshottest import SnapshotTestCase
 from test.common.utils import TestCaseUtils
 from util.pformat import pformat
@@ -139,6 +141,13 @@ class CommonTestCase(SnapshotTestCase, TestCaseUtils):
         with self.assertRaises(NameResolutionError) as ctx:
             nr.run()
         return ctx.exception
+
+    def getTypechecker(self, src: str):
+        return Typechecker(self.getNameResolver(src))
+
+    def assertTypecheckedTo(self, node: AstNode[TypeMetadata], expected: TypeInfo):
+        self.assertIsNotNone(node.meta, "Expected type metadata")
+        self.assertEqual(expected, node.meta.type)
 
     def assertRegionEquals(self, expected: StrRegion, actual: StrRegion, src: str | None):
         if expected == actual:
