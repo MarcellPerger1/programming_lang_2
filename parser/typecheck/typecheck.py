@@ -3,7 +3,7 @@ from __future__ import annotations
 import functools
 from collections.abc import Callable
 from dataclasses import dataclass
-from typing import TypeAlias
+from typing import TypeAlias, TypeVar
 
 from .name_resolver import FuncInfo, Scope, NameResolver
 from .types import TypeInfo, ValType, BoolType, ListType, VoidType, FunctionType
@@ -11,19 +11,34 @@ from ..astgen.ast_nodes import *
 from ..common import BaseLocatedError, region_union, RegionUnionArgT
 
 
-class TypecheckError(BaseLocatedError):
-    """Errors raised by the typechecker"""
-
-
+T = TypeVar('T')
+C = TypeVar('C', bound=Callable)
 NodeTypecheckFn: TypeAlias = 'Callable[[Typechecker, AstNode], TypeInfo | None]'
 NodeTypecheckFnStrict: TypeAlias = 'Callable[[Typechecker, AstNode], TypeInfo]'
 
-_typecheck_dispatch: dict[type[AstNode], NodeTypecheckFnStrict] = {}
+
+class TypecheckError(BaseLocatedError):
+    """Errors raised by the typechecker"""
 
 
 @dataclass
 class TypeMetadata:
     type: TypeInfo
+
+
+class _TypecheckerInitVars:
+    """Stores variables needed at time of initialising the Typechecker class
+    (yes the class itself you read that right ;-)"""
+    typecheck_dispatch: dict[type[AstNode], NodeTypecheckFnStrict] = {}
+    and_set_type_metadata: Callable[[NodeTypecheckFn], NodeTypecheckFnStrict]
+
+    @classmethod
+    def method(cls, attr: str):
+        """To be used as decorator, like @_TypecheckerInitVars.method('attr')"""
+        def decor(f: T) -> T:
+            setattr(cls, attr, f)
+            return f
+        return decor
 
 
 class Typechecker:
@@ -50,24 +65,33 @@ class Typechecker:
         self.typed_ast = self.orig_ast  # should now have the types
         return self.typed_ast
 
+    @_TypecheckerInitVars.method('and_set_type_metadata')  # Such Java vibes
+    def _and_set_type_metadata(self: C, fn: C = None) -> C:
+        if fn is None:
+            assert callable(self)
+            fn = self  # Called as decor in this class
+
+        @functools.wraps(fn)
+        def new_fn(self_inner: Typechecker, n: AstNode, *args, **kwargs) -> TypeInfo:
+            n_type = fn(self_inner, n, *args, **kwargs) or VoidType()  # return None = void
+            n.meta = TypeMetadata(n_type)
+            return n_type
+        return new_fn
+
     def _node_typechecker(self, tp=None):
         if tp is None:
             assert callable(self)
             tp = self  # Called as decor in this class
 
         def decor(fn: NodeTypecheckFn):
-            @functools.wraps(fn)
-            def new_fn(self_inner: Typechecker, n: AstNode) -> TypeInfo:
-                n_type = fn(self_inner, n) or VoidType()  # return None = void
-                n.meta = TypeMetadata(n_type)
-                return n_type
-            _typecheck_dispatch[tp] = new_fn
+            new_fn = _TypecheckerInitVars.typecheck_dispatch[tp] = (
+                _TypecheckerInitVars.and_set_type_metadata(fn))
             return new_fn
         return decor
 
     def _typecheck(self, n: AstNode):
         try:
-            fn = _typecheck_dispatch[type(n)]
+            fn = _TypecheckerInitVars.typecheck_dispatch[type(n)]
         except KeyError:
             fn = type(self)._typecheck_node_fallback
         return fn(self, n)
@@ -86,10 +110,14 @@ class Typechecker:
 
     @_node_typechecker(AstDeclNode)
     def _typecheck_decl(self, n: AstDeclNode):
-        if not n.value:  # Nothing to check
-            return
-        expect = self._resolve_scope(n.scope).declared[n.ident.id].tp_info
-        self.expect_type(self._typecheck(n.value), expect, n)
+        # Note: must come before 'if' so always set n.ident.meta.type
+        expect = self._typecheck_ident_declared(n.ident, decl=n)
+        if n.value:
+            self.expect_type(self._typecheck(n.value), expect, n)
+
+    @_and_set_type_metadata
+    def _typecheck_ident_declared(self, n: AstIdent, decl: AstDeclNode):
+        return self._resolve_scope(decl.scope).declared[n.id].tp_info
 
     @_node_typechecker(AstRepeat)
     def _typecheck_repeat(self, n: AstRepeat):
@@ -112,7 +140,8 @@ class Typechecker:
     @_node_typechecker(AstAssign)
     def _typecheck_assign(self, n: AstAssign):  # super tempted to call this _typecheck_ass
         if isinstance(n.target, AstIdent):
-            target_tp = self._curr_scope.used[n.target.id].tp_info
+            # Assignment-to also counts as a type of usage (also sets .meta)
+            target_tp = self._typecheck_ident_used(n.target)
         elif isinstance(n.target, AstItem):  # ls[i] = v
             target_tp = self._typecheck(n.target)  # Also checks that `ls` is a list
         elif isinstance(n.target, AstAttribute):
@@ -165,7 +194,7 @@ class Typechecker:
         return ListType()
 
     @_node_typechecker(AstIdent)
-    def _typecheck_ident(self, n: AstIdent):
+    def _typecheck_ident_used(self, n: AstIdent):
         return self._curr_scope.used[n.id].tp_info
 
     @_node_typechecker(AstAttrName)
