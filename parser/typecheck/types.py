@@ -44,6 +44,11 @@ class TypeType(TypeInfo):
     """The equivalent of Java's Class<T> or Python's type[T]"""
     tp: TypeInfo
 
+    def __str__(self):
+        # Now we come to the decision: how to display this: OCaml, Java/C++, or
+        #  Python style? I'll just go with the standard angle brackets for now
+        return f'type<{self.tp}>'
+
 
 @dataclass
 class FunctionType(TypeInfo):
