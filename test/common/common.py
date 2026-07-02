@@ -2,12 +2,14 @@
 used in all projects should go in utils.py"""
 from __future__ import annotations
 
+import sys
 from enum import IntFlag, Enum
-from typing import Sequence, TypeVar
+from typing import Sequence, TypeVar, Any
 
 from parser.astgen.ast_node import AstNode
 from parser.astgen.astgen import AstGen
 from parser.astgen.errors import LocatedAstError
+from parser.astgen.filtered_walker import FilteredWalker
 from parser.common import BaseLocatedError
 from parser.common.error import BaseParseError
 from parser.common.str_region import StrRegion
@@ -19,9 +21,9 @@ from parser.lexer.tokens import Token, OpToken
 from parser.typecheck.name_resolver import Scope, NameResolutionError, NameResolver
 from parser.typecheck.typecheck import Typechecker, TypeMetadata
 from parser.typecheck.types import TypeInfo
-from test.common.snapshottest import SnapshotTestCase
-from test.common.utils import TestCaseUtils
 from util.pformat import pformat
+from .snapshottest import SnapshotTestCase
+from .utils import TestCaseUtils
 
 
 def _strict_boundary_kwargs():
@@ -38,6 +40,7 @@ class TokenStreamFlag(IntFlag, **_strict_boundary_kwargs()):
     BOTH = CONTENT | FULL
 
 
+T = TypeVar('T')
 EnumTV = TypeVar('EnumTV', bound=Enum)
 
 
@@ -66,7 +69,7 @@ class CommonTestCase(SnapshotTestCase, TestCaseUtils):
     def _token_as_tuple_no_region(cls, t: Token):
         if isinstance(t, OpToken):
             return t.name, t.op_str
-        return (t.name, )
+        return (t.name,)
 
     def assertTokenStreamEquals(
             self, actual: Sequence[Token], expected: Sequence[Token],
@@ -148,6 +151,21 @@ class CommonTestCase(SnapshotTestCase, TestCaseUtils):
     def assertTypecheckedTo(self, node: AstNode[TypeMetadata], expected: TypeInfo):
         self.assertIsNotNone(node.meta, "Expected type metadata")
         self.assertEqual(expected, node.meta.type)
+
+    def assertAllMetadata(self, n: AstNode[Any], expected_type: type[T]) -> AstNode[T]:
+        def on_exit_node(nd: AstNode[Any]):
+            if isinstance(nd, expected_type):
+                return
+            msg_extra = f"root={tformat(n)}\nnode={tformat(nd)}"
+            self.assertIsNotNone(
+                nd.meta, f"Expected node to have metadata:\n{msg_extra}")
+            self.assertIsInstance(
+                nd.meta, expected_type,
+                f"Bad metadata type for node:\n{msg_extra}")
+
+        # Report error with deepest one so on_exit
+        FilteredWalker().register_exit(AstNode, on_exit_node).walk(n)
+        return n
 
     def assertRegionEquals(self, expected: StrRegion, actual: StrRegion, src: str | None):
         if expected == actual:
