@@ -40,6 +40,12 @@ class VoidType(TypeInfo):
 
 
 @dataclass
+class TypeType(TypeInfo):
+    """The equivalent of Java's Class<T> or Python's type[T]"""
+    tp: TypeInfo
+
+
+@dataclass
 class FunctionType(TypeInfo):
     arg_types: list[TypeInfo]
     ret_type: TypeInfo
