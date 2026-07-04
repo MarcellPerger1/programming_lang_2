@@ -1,12 +1,13 @@
 from __future__ import annotations
 
+import contextlib
 import functools
 from collections.abc import Callable
 from dataclasses import dataclass
 from typing import TypeAlias, TypeVar
 
 from .name_resolver import FuncInfo, Scope, NameResolver
-from .types import TypeInfo, ValType, BoolType, ListType, VoidType, FunctionType
+from .types import TypeInfo, ValType, BoolType, ListType, VoidType, FunctionType, TypeType
 from ..astgen.ast_nodes import *
 from ..common import BaseLocatedError, region_union, RegionUnionArgT
 
@@ -167,14 +168,24 @@ class Typechecker:
 
     @_node_typechecker(AstDefine)
     def _typecheck_define(self, n: AstDefine):
-        # Don't really need to check much here - type is generated from the
-        # syntax so must be correct. Set _curr_scope and check body
         func_info = self._curr_scope.declared[n.ident.id]
         assert isinstance(func_info, FuncInfo)
-        old_scope = self._curr_scope
-        self._curr_scope = func_info.subscope
-        try:
+        f_type = func_info.tp_info
+        n.ident.meta = TypeMetadata(f_type)
+        # Could also use .param_info here - should be same either way
+        for (type_node, name_node), param_type in zip(n.params, f_type.arg_types):
+            name_node.meta = TypeMetadata(param_type)
+            type_node.meta = TypeMetadata(TypeType(param_type))
+        # noinspection PyArgumentList
+        with self._enter_scope(func_info.subscope):
             self._typecheck_block(n.body)
+
+    @contextlib.contextmanager
+    def _enter_scope(self, scope: Scope):
+        old_scope = self._curr_scope
+        self._curr_scope = scope
+        try:
+            yield scope
         finally:
             self._curr_scope = old_scope
 
