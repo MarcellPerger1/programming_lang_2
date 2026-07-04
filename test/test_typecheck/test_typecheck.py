@@ -25,3 +25,7 @@ class TestGivenTypes(CommonTestCase):
     def test_operators(self):
         prog = self.getTypechecker("let a = (1 + 1) * 2.2;").run()
         self.assertAllMetadata(prog, TypeMetadata)
+
+    def test_bools(self):
+        prog = self.getTypechecker("if(!(6==7) && (8==9 || 7<2) || 4>=2){}").run()
+        self.assertAllMetadata(prog, TypeMetadata)
