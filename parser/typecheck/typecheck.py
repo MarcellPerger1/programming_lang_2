@@ -227,35 +227,45 @@ class Typechecker:
             raise self.err(f"Incorrect number of arguments, expected "
                            f"{len(called_tp.arg_types)}, got {len(n.args)}",
                            region)
-        for decl_t, arg_node in zip(called_tp.arg_types, n.args):
+        return self._check_abstract_op_types_only(n.args, called_tp)
+
+    _BINARY_OP_TYPES = dict.fromkeys(
+        [*'+-*/%', '**', '..'],
+        FunctionType([ValType(), ValType()], ValType())
+    ) | dict.fromkeys(
+        ['==', '!=', '<', '>', '<=', '>='],
+        FunctionType([ValType(), ValType()], BoolType())
+    ) | dict.fromkeys(
+        ['&&', '||'],
+        FunctionType([BoolType(), BoolType()], BoolType())
+    )
+
+    _UNARY_OP_TYPES = dict.fromkeys(
+        [*'+-'],
+        FunctionType([ValType()], ValType())
+    ) | dict.fromkeys(
+        ['!'],
+        FunctionType([BoolType()], BoolType())
+    )
+
+    def _check_abstract_op_types_only(
+            self, arg_types: list[AstNode], op_type: FunctionType):
+        """Arity should be checked before invoking as that allow better error highlighting"""
+        assert len(op_type.arg_types) == len(arg_types)
+        for decl_t, arg_node in zip(op_type.arg_types, arg_types):
             self.expect_type(self._typecheck(arg_node), decl_t, arg_node)
-        return called_tp.ret_type
-
-    # TODO: this doesn't work properly for <= as arg=Val, ret=Bool.
-    #  Need to treat them as actual functions.
-    _BINARY_OP_TYPES = dict.fromkeys([
-        *'+-*/%', '**', '..', '==', '!=', '<', '>', '<=', '>='
-    ], ValType()) | dict.fromkeys([
-        '&&', '||'
-    ], BoolType())
-
-    _UNARY_OP_TYPES = dict.fromkeys([
-        *'+-'
-    ], ValType()) | dict.fromkeys([
-        '!'
-    ], BoolType())
+        return op_type.ret_type
 
     # TODO: allow casting bool to val? - auto-cast or explicit?
     @_node_typechecker(AstBinOp)
     def _typecheck_bin_op(self, n: AstBinOp):
-        expect_tp = self._BINARY_OP_TYPES[n.op]
-        self.expect_type(self._typecheck(n.left), expect_tp, n.left)
-        self.expect_type(self._typecheck(n.right), expect_tp, n.right)
+        return self._check_abstract_op_types_only(
+            [n.left, n.right], self._BINARY_OP_TYPES[n.op])
 
     @_node_typechecker(AstUnaryOp)
     def _typecheck_unary_op(self, n: AstUnaryOp):
-        expect_tp = self._UNARY_OP_TYPES[n.op]
-        self.expect_type(self._typecheck(n.operand), expect_tp, n.operand)
+        return self._check_abstract_op_types_only(
+            [n.operand], self._UNARY_OP_TYPES[n.op])
 
     def _resolve_scope(self, scope_tp: VarDeclScope):
         return self.top_scope if scope_tp == VarDeclScope.GLOBAL else self._curr_scope
