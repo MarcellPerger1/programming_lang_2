@@ -231,6 +231,8 @@ class Typechecker:
             self.expect_type(self._typecheck(arg_node), decl_t, arg_node)
         return called_tp.ret_type
 
+    # TODO: this doesn't work properly for <= as arg=Val, ret=Bool.
+    #  Need to treat them as actual functions.
     _BINARY_OP_TYPES = dict.fromkeys([
         *'+-*/%', '**', '..', '==', '!=', '<', '>', '<=', '>='
     ], ValType()) | dict.fromkeys([
