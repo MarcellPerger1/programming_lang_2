@@ -1,6 +1,6 @@
-from parser.astgen.ast_nodes import AstDeclNode
+from parser.astgen.ast_nodes import AstDeclNode, AstDefine
 from parser.typecheck.typecheck import TypeMetadata
-from parser.typecheck.types import ValType, VoidType
+from parser.typecheck.types import ValType, VoidType, BoolType, TypeType
 from test.common import CommonTestCase
 
 
@@ -20,6 +20,12 @@ class TestGivenTypes(CommonTestCase):
     def test_function(self):
         prog = self.getTypechecker("def f(val a, bool b, number c, string d){}").run()
         self.assertAllMetadata(prog, TypeMetadata)
+        f = self.assertAsInstance(self.assertHasSingleItem(prog.statements), AstDefine)
+        expected_types = [ValType(), BoolType(), ValType(), ValType()]
+        self.assertEqual(len(expected_types), len(f.params))
+        for expect_t, (type_ident, name_ident) in zip(expected_types, f.params):
+            self.assertTypecheckedTo(name_ident, expect_t)
+            self.assertTypecheckedTo(type_ident, TypeType(expect_t))
         # self.assertMatchesSnapshot(prog)
 
     def test_operators(self):

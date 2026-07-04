@@ -95,3 +95,7 @@ class TestCaseUtils(unittest.TestCase):
                       f"one extra (iterable: {container}, extra: {v2})")
         self.fail(f"Expected iterable to contain one item, got {length} items"
                   f"(iterable: {container})")
+
+    def assertAsInstance(self, o: object, cls: type[T], msg: str | None = None) -> T:
+        self.assertIsInstance(o, cls, msg)
+        return o
