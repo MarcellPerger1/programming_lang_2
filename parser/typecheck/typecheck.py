@@ -3,13 +3,13 @@ from __future__ import annotations
 import contextlib
 import functools
 from collections.abc import Callable
-from dataclasses import dataclass
 from typing import TypeAlias, TypeVar, ParamSpec
 
 from util import assert_not_none
 from .name_resolver import NameResolver
 from .scope import FuncInfo, Scope
-from .types import TypeInfo, ValType, BoolType, ListType, VoidType, FunctionType, TypeType
+from .types import (TypeInfo, ValType, BoolType, ListType, VoidType,
+                    FunctionType, TypeType, TypeMetadata)
 from ..astgen.ast_nodes import *
 from ..common import BaseLocatedError, region_union, RegionUnionArgT
 
@@ -21,11 +21,6 @@ NodeTypecheckFnStrict: TypeAlias = 'Callable[[Typechecker, AstNode], TypeInfo]'
 
 class TypecheckError(BaseLocatedError):
     """Errors raised by the typechecker"""
-
-
-@dataclass
-class TypeMetadata:
-    type: TypeInfo
 
 
 class _TypecheckerInitVars:

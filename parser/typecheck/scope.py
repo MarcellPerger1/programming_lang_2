@@ -25,7 +25,7 @@ class FuncInfo(NameInfo):
     @classmethod
     def from_param_info(
             cls, decl_scope: Scope, ident: str, params_info: list[ParamInfo],
-            ret_type: TypeInfo, subscope: Scope = None):
+            ret_type: TypeInfo, subscope: Scope | None = None):
         subscope = subscope or Scope()
         tp_info = FunctionType([p.tp for p in params_info], ret_type)
         return cls(decl_scope, ident, tp_info, params_info, subscope)

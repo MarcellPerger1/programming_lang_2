@@ -1,7 +1,6 @@
 from parser.astgen.ast_nodes import AstDeclNode, AstDefine
 from parser.common import StrRegion
-from parser.typecheck.typecheck import TypeMetadata
-from parser.typecheck.types import ValType, VoidType, BoolType, TypeType
+from parser.typecheck.types import ValType, VoidType, BoolType, TypeType, TypeMetadata
 from test.common import CommonTestCase
 
 

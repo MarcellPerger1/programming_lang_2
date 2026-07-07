@@ -4,6 +4,11 @@ from dataclasses import dataclass
 
 
 @dataclass
+class TypeMetadata:
+    type: TypeInfo
+
+
+@dataclass
 class TypeInfo:
     def __post_init__(self):
         assert type(self) != TypeInfo, "Cannot instantiate TypeInfo directly, use a subclass"
@@ -66,3 +71,4 @@ class FunctionType(TypeInfo):
 # Don't need to `sys.intern` these manually as Python automatically does
 #   this for literals.
 PARAM_TYPES = {'number', 'string', 'val', 'bool'}
+
