@@ -37,8 +37,15 @@ class TestGivenTypes(CommonTestCase):
         prog = self.getTypechecker("if(!(6==7) && (8==9 || 7<2) || 4>=2){}").run()
         self.assertAllMetadata(prog, TypeMetadata)
 
+    def test_assign_list_getitem(self):
+        # TODO: check region for assignment
+        prog = self.getTypechecker("global AA = 9; let[] bb = [7]; AA = bb[1];").run()
+        self.assertAllMetadata(prog, TypeMetadata)
+
 
 class TestErrors(CommonTestCase):
     def test_cant_pass_list_to_val_param(self):
         exc = self.assertTypecheckError("def f(val v){}\nglobal[] L=[];\nf(L);")
-        self.assertErrorRegion(StrRegion(18, 19), exc)
+        self.assertErrorRegion(StrRegion(32, 33), exc)
+        exc = self.assertTypecheckError("def f(val v){}\nglobal[] L=[];\ndef g(){f(L);}")
+        self.assertErrorRegion(StrRegion(40, 41), exc)
