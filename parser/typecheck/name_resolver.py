@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass, field
 
+from util import assert_not_none
 from util.recursive_eq import recursive_eq
 from ..astgen.ast_node import AstNode
 from ..astgen.ast_nodes import AstIdent, AstDeclNode, VarDeclScope, VarDeclType, AstDefine
@@ -78,12 +79,12 @@ class NameResolver:
         self.ast = self.astgen.parse()
         self.top_scope = Scope()
 
-    def run(self):
+    def run(self) -> Scope:
         if self.top_scope:
             return self.top_scope
         self._init()
         self.run_on_new_scope(self.ast.statements, curr_scope=self.top_scope)
-        return self.top_scope
+        return assert_not_none(self.top_scope)
 
     def run_on_new_scope(self, block: list[AstNode], parent_scopes: list[Scope] = None,
                          curr_scope: Scope = None):

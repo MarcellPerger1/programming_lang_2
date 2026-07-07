@@ -53,3 +53,8 @@ def dcls_field_default(f: dataclasses.Field[T]) -> T | DataclassesMissingT:
     if (factory := f.default_factory) is not dataclasses.MISSING:
         return factory()
     return dataclasses.MISSING
+
+
+def assert_not_none(x: T | None) -> T:
+    assert x is not None, "Expected non-None value, got None"
+    return x

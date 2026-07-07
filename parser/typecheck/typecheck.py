@@ -4,8 +4,9 @@ import contextlib
 import functools
 from collections.abc import Callable
 from dataclasses import dataclass
-from typing import TypeAlias, TypeVar
+from typing import TypeAlias, TypeVar, ParamSpec
 
+from util import assert_not_none
 from .name_resolver import FuncInfo, Scope, NameResolver
 from .types import TypeInfo, ValType, BoolType, ListType, VoidType, FunctionType, TypeType
 from ..astgen.ast_nodes import *
@@ -13,7 +14,7 @@ from ..common import BaseLocatedError, region_union, RegionUnionArgT
 
 
 T = TypeVar('T')
-C = TypeVar('C', bound=Callable)
+P = ParamSpec('P')
 NodeTypecheckFn: TypeAlias = 'Callable[[Typechecker, AstNode], TypeInfo | None]'
 NodeTypecheckFnStrict: TypeAlias = 'Callable[[Typechecker, AstNode], TypeInfo]'
 
@@ -52,10 +53,8 @@ class Typechecker:
         self.typed_ast: AstProgramNode[TypeMetadata] | None = None
 
     def _init(self):
-        self.resolver.run()
+        self.top_scope = self._curr_scope = self.resolver.run()
         self.orig_ast = self.resolver.ast
-        self.top_scope = self.resolver.top_scope
-        self._curr_scope = self.top_scope
 
     def run(self) -> AstProgramNode[TypeMetadata]:
         if self.typed_ast is not None:
@@ -64,18 +63,21 @@ class Typechecker:
         self._typecheck(self.orig_ast)
         # TODO: tests for the output types
         self.typed_ast = self.orig_ast  # should now have the types
-        return self.typed_ast
+        return assert_not_none(self.typed_ast)
 
     @_TypecheckerInitVars.method('and_set_type_metadata')  # Such Java vibes
-    def _and_set_type_metadata(self: C, fn: C = None) -> C:
+    def _and_set_type_metadata(
+            self: Callable[[Typechecker, AstNode, P], TypeInfo | None],
+            fn: Callable[[Typechecker, AstNode, P], TypeInfo | None] | None = None
+    ) -> Callable[[Typechecker, AstNode, P], TypeInfo]:
         if fn is None:
             assert callable(self)
             fn = self  # Called as decor in this class
 
         @functools.wraps(fn)
         def new_fn(self_inner: Typechecker, n: AstNode, *args, **kwargs) -> TypeInfo:
-            n_type = fn(self_inner, n, *args, **kwargs) or VoidType()  # return None = void
-            n.meta = TypeMetadata(n_type)
+            n_type: TypeInfo = fn(self_inner, n, *args, **kwargs) or VoidType()
+            n.meta = TypeMetadata(n_type)  # ^^ checker return None = void type
             return n_type
         return new_fn
 
@@ -176,7 +178,6 @@ class Typechecker:
         for (type_node, name_node), param_type in zip(n.params, f_type.arg_types):
             name_node.meta = TypeMetadata(param_type)
             type_node.meta = TypeMetadata(TypeType(param_type))
-        # noinspection PyArgumentList
         with self._enter_scope(func_info.subscope):
             self._typecheck_block(n.body)
 
