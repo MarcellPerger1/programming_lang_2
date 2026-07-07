@@ -89,10 +89,11 @@ class AstGen:
         self.src = self.cst.src
         self.result: AstProgramNode | None = None
 
-    def parse(self):
-        if not self.result:
-            self.result = self._walk_program(self.cst.parse())
-        return self.result
+    def parse(self) -> AstProgramNode:
+        if self.result:
+            return self.result
+        result = self.result = self._walk_program(self.cst.parse())
+        return result
 
     def _walk_program(self, root: ProgramNode):
         return AstProgramNode(root.region, self._walk_block(root.statements))

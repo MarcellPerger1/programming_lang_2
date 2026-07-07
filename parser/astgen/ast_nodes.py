@@ -39,7 +39,7 @@ class AstDeclNode(AstNode[MetadataT]):
     name = 'var_decl'
     scope: VarDeclScope
     type: VarDeclType
-    ident: AstIdent
+    ident: AstIdent[MetadataT]
     value: AstNode[MetadataT] | None
 
     def _walk_members(self, fn: WalkerFnT):
@@ -110,7 +110,7 @@ class AstDefine(AstNode[MetadataT]):
 
     ident: AstIdent
     # TODO: this should be list[AstDefineParam] where AstParam is an AstNode
-    params: list[tuple[AstIdent, AstIdent]]  # type, ident
+    params: list[tuple[AstIdent[MetadataT], AstIdent[MetadataT]]]  # type, ident
     body: list[AstNode[MetadataT]]
 
     def _walk_members(self, fn: WalkerFnT):
@@ -141,12 +141,12 @@ class AstAnyName(AstNode[MetadataT]):
 
 # TODO: AstIdent[MetadataT] here!!!
 @dataclass
-class AstIdent(AstAnyName):
+class AstIdent(AstAnyName[MetadataT]):
     name = 'ident'
 
 
 @dataclass
-class AstAttrName(AstAnyName):
+class AstAttrName(AstAnyName[MetadataT]):
     name = 'attr'
 
 
@@ -163,7 +163,7 @@ class AstListLiteral(AstNode[MetadataT]):
 class AstAttribute(AstNode[MetadataT]):
     name = '.'
     obj: AstNode[MetadataT]
-    attr: AstAttrName
+    attr: AstAttrName[MetadataT]
 
     def _walk_members(self, fn: WalkerFnT):
         self.walk_multiple_objects(fn, (self.obj, self.attr))

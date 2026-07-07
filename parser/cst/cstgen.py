@@ -3,7 +3,7 @@ from __future__ import annotations
 from typing import (TypeVar, cast, Sequence, overload, Iterable, Callable)
 
 from .base_node import AnyNode, Node
-from .named_node import AnyNamedNode, node_from_token, node_cls_from_name
+from .named_node import AnyNamedNode, node_from_token, node_cls_from_name, NamedNodeCls
 from .nodes import *
 from .token_matcher import OpM, KwdM, Matcher, PatternT
 from ..common import StrRegion, region_union, RegionUnionArgT
@@ -270,7 +270,7 @@ class CstGen:
         idx += 1
         return BlockNode(self.tok_region(start, idx), None, smts), idx
 
-    def _parse_block_with_header(self, start: int, cls: type[AnyNamedNode],
+    def _parse_block_with_header(self, start: int, cls: type[NamedNodeCls],
                                  name: str = None) -> tuple[AnyNode, int]:
         name = name or cls.name
         idx = start

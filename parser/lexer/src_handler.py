@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import Sequence
+from typing import Sequence, cast
 
 from .errors import LocatedTokenizerError
 from .tokens import Token
@@ -27,11 +27,12 @@ class UsesSrc:
 
     def err(self, msg: str,
             loc: int | Token | StrRegion | Sequence[int | Token | StrRegion],
-            tp: type[BaseLocatedError] = None):
+            tp: type[BaseLocatedError] | None = None):
         try:
+            # noinspection PyTypeChecker
             seq: tuple[int | Token | StrRegion, ...] = tuple(loc)
         except TypeError:
-            seq = (loc,)
+            seq = (cast(int | Token | StrRegion, loc),)
         region = region_union([
             StrRegion(o, o + 1) if isinstance(o, int) else o
             for o in seq])

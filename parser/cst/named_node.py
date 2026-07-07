@@ -165,5 +165,5 @@ def node_from_token(token: Token, children: Sequence[Node] = None,
                     parent: Node | None = None, arity: int = None):
     cls = node_cls_from_name(token.name, children, arity)
     if children:
-        return cls(token.region, parent, children)
+        return cast(type[NamedNodeCls], cls)(token.region, parent, list(children))
     return cls(token.region, parent)
