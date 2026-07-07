@@ -19,7 +19,7 @@ from parser.cst.cstgen import CstGen, LocatedCstError
 from parser.lexer import Tokenizer
 from parser.lexer.tokens import Token, OpToken
 from parser.typecheck.name_resolver import Scope, NameResolutionError, NameResolver
-from parser.typecheck.typecheck import Typechecker, TypeMetadata
+from parser.typecheck.typecheck import Typechecker, TypeMetadata, TypecheckError
 from parser.typecheck.types import TypeInfo
 from util.pformat import pformat
 from .snapshottest import SnapshotTestCase
@@ -151,6 +151,12 @@ class CommonTestCase(SnapshotTestCase, TestCaseUtils):
     def assertTypecheckedTo(self, node: AstNode[TypeMetadata], expected: TypeInfo):
         self.assertIsNotNone(node.meta, "Expected type metadata")
         self.assertEqual(expected, node.meta.type)
+
+    def assertTypecheckError(self, src: str):
+        tc = self.getTypechecker(src)
+        with self.assertRaises(TypecheckError) as ctx:
+            tc.run()
+        return ctx.exception
 
     def assertAllMetadata(self, n: AstNode[Any], expected_type: type[T]) -> AstNode[T]:
         def on_exit_node(nd: AstNode[Any]):

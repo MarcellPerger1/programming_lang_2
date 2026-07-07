@@ -40,5 +40,5 @@ class TestGivenTypes(CommonTestCase):
 
 class TestErrors(CommonTestCase):
     def test_cant_pass_list_to_val_param(self):
-        exc = self.assertTypecheckError("def f(val v){}\nf(9);")
+        exc = self.assertTypecheckError("def f(val v){}\nglobal[] L=[];\nf(L);")
         self.assertErrorRegion(StrRegion(18, 19), exc)
