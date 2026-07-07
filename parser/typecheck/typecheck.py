@@ -225,6 +225,7 @@ class Typechecker:
         if container_tp not in (ListType(), ValType()):
             raise self.err(f"Cannot get item of {container_tp}", n)
         self.expect_type(self._typecheck(n.index), ValType(), n.index)
+        return ValType()  # no list-in-list
 
     @_node_typechecker(AstCall)
     def _typecheck_call(self, n: AstCall):
