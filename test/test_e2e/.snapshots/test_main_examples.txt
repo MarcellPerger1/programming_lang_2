@@ -1,5 +1,5 @@
-"2","90","188","680","1101","1482","2370","3122","3801"
-"TestMain::test_example_0:tokens","TestMain::test_example_0:cst","TestMain::test_example_1:tokens","TestMain::test_example_1:cst","TestMain::test_example_1:ast","TestMain::test_example_2:tokens","TestMain::test_example_2:cst","TestMain::test_example_2:ast","TestMain::test_example_2:name_resolve"
+"2","90","188","680","1101","1482","2370","3122","3801","5188","6216","7036","7789"
+"TestMain::test_example_0:tokens","TestMain::test_example_0:cst","TestMain::test_example_1:tokens","TestMain::test_example_1:cst","TestMain::test_example_1:ast","TestMain::test_example_2:tokens","TestMain::test_example_2:cst","TestMain::test_example_2:ast","TestMain::test_example_2:name_resolve","TestMain::test_example_3:tokens","TestMain::test_example_3:cst","TestMain::test_example_3:ast","TestMain::test_example_3:name_resolve"
 [IdentNameToken(region=StrRegion(start=0, end=3)),
  WhitespaceToken(region=StrRegion(start=3, end=4)),
  IdentNameToken(region=StrRegion(start=4, end=5)),
@@ -5169,6 +5169,4340 @@ Scope(
       ident='stack',
       tp_info=ListType(),
       is_param=False
+    ),
+    'true': NameInfo(
+      decl_scope=<Circular: 3 up>,
+      ident='true',
+      tp_info=ValType(),
+      is_param=False
+    )
+  },
+  used={
+    'false': NameInfo(
+      decl_scope=<Circular: 3 up>,
+      ident='false',
+      tp_info=ValType(),
+      is_param=False
+    )
+  }
+)
+[IdentNameToken(region=StrRegion(start=0, end=6)),
+ WhitespaceToken(region=StrRegion(start=6, end=7)),
+ IdentNameToken(region=StrRegion(start=7, end=12)),
+ WhitespaceToken(region=StrRegion(start=12, end=13)),
+ OpToken(region=StrRegion(start=13, end=14), op_str='='),
+ WhitespaceToken(region=StrRegion(start=14, end=15)),
+ NumberToken(region=StrRegion(start=15, end=16)),
+ SemicolonToken(region=StrRegion(start=16, end=17)),
+ WhitespaceToken(region=StrRegion(start=17, end=18)),
+ IdentNameToken(region=StrRegion(start=18, end=24)),
+ WhitespaceToken(region=StrRegion(start=24, end=25)),
+ IdentNameToken(region=StrRegion(start=25, end=29)),
+ WhitespaceToken(region=StrRegion(start=29, end=30)),
+ OpToken(region=StrRegion(start=30, end=31), op_str='='),
+ WhitespaceToken(region=StrRegion(start=31, end=32)),
+ NumberToken(region=StrRegion(start=32, end=33)),
+ SemicolonToken(region=StrRegion(start=33, end=34)),
+ WhitespaceToken(region=StrRegion(start=34, end=36)),
+ LineCommentToken(region=StrRegion(start=36, end=48)),
+ WhitespaceToken(region=StrRegion(start=48, end=49)),
+ BlockCommentToken(region=StrRegion(start=49, end=62)),
+ IdentNameToken(region=StrRegion(start=62, end=65)),
+ WhitespaceToken(region=StrRegion(start=65, end=66)),
+ IdentNameToken(region=StrRegion(start=66, end=69)),
+ LParToken(region=StrRegion(start=69, end=70)),
+ BlockCommentToken(region=StrRegion(start=70, end=78)),
+ IdentNameToken(region=StrRegion(start=78, end=81)),
+ WhitespaceToken(region=StrRegion(start=81, end=82)),
+ IdentNameToken(region=StrRegion(start=82, end=83)),
+ RParToken(region=StrRegion(start=83, end=84)),
+ WhitespaceToken(region=StrRegion(start=84, end=85)),
+ LBrace(region=StrRegion(start=85, end=86)),
+ RBrace(region=StrRegion(start=86, end=87)),
+ WhitespaceToken(region=StrRegion(start=87, end=88)),
+ BlockCommentToken(region=StrRegion(start=88, end=101)),
+ IdentNameToken(region=StrRegion(start=101, end=104)),
+ WhitespaceToken(region=StrRegion(start=104, end=105)),
+ IdentNameToken(region=StrRegion(start=105, end=112)),
+ LParToken(region=StrRegion(start=112, end=113)),
+ BlockCommentToken(region=StrRegion(start=113, end=121)),
+ IdentNameToken(region=StrRegion(start=121, end=124)),
+ WhitespaceToken(region=StrRegion(start=124, end=125)),
+ IdentNameToken(region=StrRegion(start=125, end=126)),
+ CommaToken(region=StrRegion(start=126, end=127)),
+ WhitespaceToken(region=StrRegion(start=127, end=128)),
+ IdentNameToken(region=StrRegion(start=128, end=134)),
+ WhitespaceToken(region=StrRegion(start=134, end=135)),
+ IdentNameToken(region=StrRegion(start=135, end=138)),
+ RParToken(region=StrRegion(start=138, end=139)),
+ WhitespaceToken(region=StrRegion(start=139, end=140)),
+ LBrace(region=StrRegion(start=140, end=141)),
+ RBrace(region=StrRegion(start=141, end=142)),
+ WhitespaceToken(region=StrRegion(start=142, end=144)),
+ IdentNameToken(region=StrRegion(start=144, end=150)),
+ LSqBracket(region=StrRegion(start=150, end=151)),
+ RSqBracket(region=StrRegion(start=151, end=152)),
+ WhitespaceToken(region=StrRegion(start=152, end=153)),
+ IdentNameToken(region=StrRegion(start=153, end=159)),
+ WhitespaceToken(region=StrRegion(start=159, end=160)),
+ OpToken(region=StrRegion(start=160, end=161), op_str='='),
+ WhitespaceToken(region=StrRegion(start=161, end=162)),
+ LSqBracket(region=StrRegion(start=162, end=163)),
+ RSqBracket(region=StrRegion(start=163, end=164)),
+ SemicolonToken(region=StrRegion(start=164, end=165)),
+ WhitespaceToken(region=StrRegion(start=165, end=166)),
+ IdentNameToken(region=StrRegion(start=166, end=172)),
+ LSqBracket(region=StrRegion(start=172, end=173)),
+ RSqBracket(region=StrRegion(start=173, end=174)),
+ WhitespaceToken(region=StrRegion(start=174, end=175)),
+ IdentNameToken(region=StrRegion(start=175, end=191)),
+ WhitespaceToken(region=StrRegion(start=191, end=192)),
+ OpToken(region=StrRegion(start=192, end=193), op_str='='),
+ WhitespaceToken(region=StrRegion(start=193, end=194)),
+ LSqBracket(region=StrRegion(start=194, end=195)),
+ RSqBracket(region=StrRegion(start=195, end=196)),
+ SemicolonToken(region=StrRegion(start=196, end=197)),
+ WhitespaceToken(region=StrRegion(start=197, end=199)),
+ IdentNameToken(region=StrRegion(start=199, end=202)),
+ WhitespaceToken(region=StrRegion(start=202, end=203)),
+ IdentNameToken(region=StrRegion(start=203, end=222)),
+ LParToken(region=StrRegion(start=222, end=223)),
+ IdentNameToken(region=StrRegion(start=223, end=229)),
+ WhitespaceToken(region=StrRegion(start=229, end=230)),
+ IdentNameToken(region=StrRegion(start=230, end=233)),
+ RParToken(region=StrRegion(start=233, end=234)),
+ WhitespaceToken(region=StrRegion(start=234, end=235)),
+ LBrace(region=StrRegion(start=235, end=236)),
+ WhitespaceToken(region=StrRegion(start=236, end=241)),
+ LineCommentToken(region=StrRegion(start=241, end=292)),
+ WhitespaceToken(region=StrRegion(start=292, end=293)),
+ RBrace(region=StrRegion(start=293, end=294)),
+ WhitespaceToken(region=StrRegion(start=294, end=296)),
+ IdentNameToken(region=StrRegion(start=296, end=302)),
+ WhitespaceToken(region=StrRegion(start=302, end=303)),
+ IdentNameToken(region=StrRegion(start=303, end=313)),
+ SemicolonToken(region=StrRegion(start=313, end=314)),
+ WhitespaceToken(region=StrRegion(start=314, end=316)),
+ LineCommentToken(region=StrRegion(start=316, end=354)),
+ WhitespaceToken(region=StrRegion(start=354, end=355)),
+ IdentNameToken(region=StrRegion(start=355, end=358)),
+ WhitespaceToken(region=StrRegion(start=358, end=359)),
+ IdentNameToken(region=StrRegion(start=359, end=375)),
+ LParToken(region=StrRegion(start=375, end=376)),
+ RParToken(region=StrRegion(start=376, end=377)),
+ WhitespaceToken(region=StrRegion(start=377, end=378)),
+ LBrace(region=StrRegion(start=378, end=379)),
+ WhitespaceToken(region=StrRegion(start=379, end=384)),
+ IdentNameToken(region=StrRegion(start=384, end=405)),
+ LParToken(region=StrRegion(start=405, end=406)),
+ RParToken(region=StrRegion(start=406, end=407)),
+ SemicolonToken(region=StrRegion(start=407, end=408)),
+ WhitespaceToken(region=StrRegion(start=408, end=413)),
+ IdentNameToken(region=StrRegion(start=413, end=415)),
+ WhitespaceToken(region=StrRegion(start=415, end=416)),
+ IdentNameToken(region=StrRegion(start=416, end=426)),
+ WhitespaceToken(region=StrRegion(start=426, end=427)),
+ OpToken(region=StrRegion(start=427, end=428), op_str='>'),
+ WhitespaceToken(region=StrRegion(start=428, end=429)),
+ NumberToken(region=StrRegion(start=429, end=430)),
+ WhitespaceToken(region=StrRegion(start=430, end=431)),
+ LBrace(region=StrRegion(start=431, end=432)),
+ WhitespaceToken(region=StrRegion(start=432, end=441)),
+ IdentNameToken(region=StrRegion(start=441, end=451)),
+ WhitespaceToken(region=StrRegion(start=451, end=452)),
+ OpToken(region=StrRegion(start=452, end=453), op_str='='),
+ WhitespaceToken(region=StrRegion(start=453, end=454)),
+ IdentNameToken(region=StrRegion(start=454, end=470)),
+ LSqBracket(region=StrRegion(start=470, end=471)),
+ NumberToken(region=StrRegion(start=471, end=472)),
+ RSqBracket(region=StrRegion(start=472, end=473)),
+ SemicolonToken(region=StrRegion(start=473, end=474)),
+ WhitespaceToken(region=StrRegion(start=474, end=483)),
+ IdentNameToken(region=StrRegion(start=483, end=508)),
+ LParToken(region=StrRegion(start=508, end=509)),
+ NumberToken(region=StrRegion(start=509, end=510)),
+ RParToken(region=StrRegion(start=510, end=511)),
+ SemicolonToken(region=StrRegion(start=511, end=512)),
+ WhitespaceToken(region=StrRegion(start=512, end=521)),
+ IdentNameToken(region=StrRegion(start=521, end=523)),
+ WhitespaceToken(region=StrRegion(start=523, end=524)),
+ IdentNameToken(region=StrRegion(start=524, end=534)),
+ WhitespaceToken(region=StrRegion(start=534, end=535)),
+ OpToken(region=StrRegion(start=535, end=537), op_str='!='),
+ WhitespaceToken(region=StrRegion(start=537, end=538)),
+ NumberToken(region=StrRegion(start=538, end=539)),
+ WhitespaceToken(region=StrRegion(start=539, end=540)),
+ LBrace(region=StrRegion(start=540, end=541)),
+ WhitespaceToken(region=StrRegion(start=541, end=554)),
+ IdentNameToken(region=StrRegion(start=554, end=562)),
+ LSqBracket(region=StrRegion(start=562, end=563)),
+ IdentNameToken(region=StrRegion(start=563, end=573)),
+ RSqBracket(region=StrRegion(start=573, end=574)),
+ WhitespaceToken(region=StrRegion(start=574, end=575)),
+ OpToken(region=StrRegion(start=575, end=576), op_str='='),
+ WhitespaceToken(region=StrRegion(start=576, end=577)),
+ NumberToken(region=StrRegion(start=577, end=578)),
+ SemicolonToken(region=StrRegion(start=578, end=579)),
+ WhitespaceToken(region=StrRegion(start=579, end=588)),
+ RBrace(region=StrRegion(start=588, end=589)),
+ WhitespaceToken(region=StrRegion(start=589, end=594)),
+ RBrace(region=StrRegion(start=594, end=595)),
+ WhitespaceToken(region=StrRegion(start=595, end=596)),
+ IdentNameToken(region=StrRegion(start=596, end=600)),
+ WhitespaceToken(region=StrRegion(start=600, end=601)),
+ LBrace(region=StrRegion(start=601, end=602)),
+ WhitespaceToken(region=StrRegion(start=602, end=611)),
+ LineCommentToken(region=StrRegion(start=611, end=642)),
+ WhitespaceToken(region=StrRegion(start=642, end=651)),
+ IdentNameToken(region=StrRegion(start=651, end=665)),
+ LParToken(region=StrRegion(start=665, end=666)),
+ StringToken(region=StrRegion(start=666, end=668)),
+ RParToken(region=StrRegion(start=668, end=669)),
+ SemicolonToken(region=StrRegion(start=669, end=670)),
+ WhitespaceToken(region=StrRegion(start=670, end=679)),
+ IdentNameToken(region=StrRegion(start=679, end=690)),
+ LParToken(region=StrRegion(start=690, end=691)),
+ RParToken(region=StrRegion(start=691, end=692)),
+ SemicolonToken(region=StrRegion(start=692, end=693)),
+ WhitespaceToken(region=StrRegion(start=693, end=695)),
+ LineCommentToken(region=StrRegion(start=695, end=713)),
+ WhitespaceToken(region=StrRegion(start=713, end=722)),
+ IdentNameToken(region=StrRegion(start=722, end=724)),
+ WhitespaceToken(region=StrRegion(start=724, end=725)),
+ IdentNameToken(region=StrRegion(start=725, end=735)),
+ WhitespaceToken(region=StrRegion(start=735, end=736)),
+ OpToken(region=StrRegion(start=736, end=738), op_str='!='),
+ WhitespaceToken(region=StrRegion(start=738, end=739)),
+ NumberToken(region=StrRegion(start=739, end=740)),
+ WhitespaceToken(region=StrRegion(start=740, end=741)),
+ LBrace(region=StrRegion(start=741, end=742)),
+ WhitespaceToken(region=StrRegion(start=742, end=755)),
+ IdentNameToken(region=StrRegion(start=755, end=771)),
+ LParToken(region=StrRegion(start=771, end=772)),
+ NumberToken(region=StrRegion(start=772, end=773)),
+ RParToken(region=StrRegion(start=773, end=774)),
+ SemicolonToken(region=StrRegion(start=774, end=775)),
+ WhitespaceToken(region=StrRegion(start=775, end=784)),
+ RBrace(region=StrRegion(start=784, end=785)),
+ WhitespaceToken(region=StrRegion(start=785, end=790)),
+ RBrace(region=StrRegion(start=790, end=791)),
+ WhitespaceToken(region=StrRegion(start=791, end=792)),
+ RBrace(region=StrRegion(start=792, end=793)),
+ WhitespaceToken(region=StrRegion(start=793, end=794)),
+ BlockCommentToken(region=StrRegion(start=794, end=824)),
+ WhitespaceToken(region=StrRegion(start=824, end=825)),
+ IdentNameToken(region=StrRegion(start=825, end=828)),
+ WhitespaceToken(region=StrRegion(start=828, end=829)),
+ IdentNameToken(region=StrRegion(start=829, end=844)),
+ LParToken(region=StrRegion(start=844, end=845)),
+ IdentNameToken(region=StrRegion(start=845, end=851)),
+ WhitespaceToken(region=StrRegion(start=851, end=852)),
+ IdentNameToken(region=StrRegion(start=852, end=855)),
+ RParToken(region=StrRegion(start=855, end=856)),
+ WhitespaceToken(region=StrRegion(start=856, end=857)),
+ LBrace(region=StrRegion(start=857, end=858)),
+ WhitespaceToken(region=StrRegion(start=858, end=863)),
+ IdentNameToken(region=StrRegion(start=863, end=869)),
+ LSqBracket(region=StrRegion(start=869, end=870)),
+ IdentNameToken(region=StrRegion(start=870, end=873)),
+ RSqBracket(region=StrRegion(start=873, end=874)),
+ WhitespaceToken(region=StrRegion(start=874, end=875)),
+ OpToken(region=StrRegion(start=875, end=876), op_str='='),
+ WhitespaceToken(region=StrRegion(start=876, end=877)),
+ StringToken(region=StrRegion(start=877, end=879)),
+ SemicolonToken(region=StrRegion(start=879, end=880)),
+ WhitespaceToken(region=StrRegion(start=880, end=882)),
+ LineCommentToken(region=StrRegion(start=882, end=921)),
+ WhitespaceToken(region=StrRegion(start=921, end=926)),
+ IdentNameToken(region=StrRegion(start=926, end=928)),
+ WhitespaceToken(region=StrRegion(start=928, end=929)),
+ IdentNameToken(region=StrRegion(start=929, end=939)),
+ WhitespaceToken(region=StrRegion(start=939, end=940)),
+ OpToken(region=StrRegion(start=940, end=942), op_str='!='),
+ WhitespaceToken(region=StrRegion(start=942, end=943)),
+ NumberToken(region=StrRegion(start=943, end=944)),
+ WhitespaceToken(region=StrRegion(start=944, end=945)),
+ LBrace(region=StrRegion(start=945, end=946)),
+ WhitespaceToken(region=StrRegion(start=946, end=955)),
+ IdentNameToken(region=StrRegion(start=955, end=963)),
+ LSqBracket(region=StrRegion(start=963, end=964)),
+ IdentNameToken(region=StrRegion(start=964, end=967)),
+ RSqBracket(region=StrRegion(start=967, end=968)),
+ WhitespaceToken(region=StrRegion(start=968, end=969)),
+ OpToken(region=StrRegion(start=969, end=970), op_str='='),
+ WhitespaceToken(region=StrRegion(start=970, end=971)),
+ NumberToken(region=StrRegion(start=971, end=972)),
+ SemicolonToken(region=StrRegion(start=972, end=973)),
+ WhitespaceToken(region=StrRegion(start=973, end=978)),
+ RBrace(region=StrRegion(start=978, end=979)),
+ WhitespaceToken(region=StrRegion(start=979, end=984)),
+ IdentNameToken(region=StrRegion(start=984, end=1008)),
+ LParToken(region=StrRegion(start=1008, end=1009)),
+ IdentNameToken(region=StrRegion(start=1009, end=1012)),
+ RParToken(region=StrRegion(start=1012, end=1013)),
+ SemicolonToken(region=StrRegion(start=1013, end=1014)),
+ WhitespaceToken(region=StrRegion(start=1014, end=1015)),
+ RBrace(region=StrRegion(start=1015, end=1016)),
+ WhitespaceToken(region=StrRegion(start=1016, end=1017)),
+ IdentNameToken(region=StrRegion(start=1017, end=1020)),
+ WhitespaceToken(region=StrRegion(start=1020, end=1021)),
+ IdentNameToken(region=StrRegion(start=1021, end=1038)),
+ LParToken(region=StrRegion(start=1038, end=1039)),
+ IdentNameToken(region=StrRegion(start=1039, end=1045)),
+ WhitespaceToken(region=StrRegion(start=1045, end=1046)),
+ IdentNameToken(region=StrRegion(start=1046, end=1049)),
+ RParToken(region=StrRegion(start=1049, end=1050)),
+ WhitespaceToken(region=StrRegion(start=1050, end=1051)),
+ LBrace(region=StrRegion(start=1051, end=1052)),
+ WhitespaceToken(region=StrRegion(start=1052, end=1057)),
+ IdentNameToken(region=StrRegion(start=1057, end=1076)),
+ LParToken(region=StrRegion(start=1076, end=1077)),
+ IdentNameToken(region=StrRegion(start=1077, end=1080)),
+ RParToken(region=StrRegion(start=1080, end=1081)),
+ SemicolonToken(region=StrRegion(start=1081, end=1082)),
+ WhitespaceToken(region=StrRegion(start=1082, end=1087)),
+ IdentNameToken(region=StrRegion(start=1087, end=1102)),
+ LParToken(region=StrRegion(start=1102, end=1103)),
+ IdentNameToken(region=StrRegion(start=1103, end=1106)),
+ RParToken(region=StrRegion(start=1106, end=1107)),
+ SemicolonToken(region=StrRegion(start=1107, end=1108)),
+ WhitespaceToken(region=StrRegion(start=1108, end=1109)),
+ RBrace(region=StrRegion(start=1109, end=1110)),
+ WhitespaceToken(region=StrRegion(start=1110, end=1112)),
+ IdentNameToken(region=StrRegion(start=1112, end=1118)),
+ LSqBracket(region=StrRegion(start=1118, end=1119)),
+ RSqBracket(region=StrRegion(start=1119, end=1120)),
+ WhitespaceToken(region=StrRegion(start=1120, end=1121)),
+ IdentNameToken(region=StrRegion(start=1121, end=1129)),
+ WhitespaceToken(region=StrRegion(start=1129, end=1130)),
+ OpToken(region=StrRegion(start=1130, end=1131), op_str='='),
+ WhitespaceToken(region=StrRegion(start=1131, end=1132)),
+ LSqBracket(region=StrRegion(start=1132, end=1133)),
+ RSqBracket(region=StrRegion(start=1133, end=1134)),
+ SemicolonToken(region=StrRegion(start=1134, end=1135)),
+ WhitespaceToken(region=StrRegion(start=1135, end=1136)),
+ BlockCommentToken(region=StrRegion(start=1136, end=1156)),
+ IdentNameToken(region=StrRegion(start=1156, end=1159)),
+ WhitespaceToken(region=StrRegion(start=1159, end=1160)),
+ IdentNameToken(region=StrRegion(start=1160, end=1176)),
+ LParToken(region=StrRegion(start=1176, end=1177)),
+ IdentNameToken(region=StrRegion(start=1177, end=1180)),
+ WhitespaceToken(region=StrRegion(start=1180, end=1181)),
+ IdentNameToken(region=StrRegion(start=1181, end=1182)),
+ RParToken(region=StrRegion(start=1182, end=1183)),
+ WhitespaceToken(region=StrRegion(start=1183, end=1184)),
+ LBrace(region=StrRegion(start=1184, end=1185)),
+ RBrace(region=StrRegion(start=1185, end=1186)),
+ WhitespaceToken(region=StrRegion(start=1186, end=1187)),
+ BlockCommentToken(region=StrRegion(start=1187, end=1207)),
+ IdentNameToken(region=StrRegion(start=1207, end=1210)),
+ WhitespaceToken(region=StrRegion(start=1210, end=1211)),
+ IdentNameToken(region=StrRegion(start=1211, end=1224)),
+ LParToken(region=StrRegion(start=1224, end=1225)),
+ IdentNameToken(region=StrRegion(start=1225, end=1228)),
+ WhitespaceToken(region=StrRegion(start=1228, end=1229)),
+ IdentNameToken(region=StrRegion(start=1229, end=1230)),
+ RParToken(region=StrRegion(start=1230, end=1231)),
+ WhitespaceToken(region=StrRegion(start=1231, end=1232)),
+ LBrace(region=StrRegion(start=1232, end=1233)),
+ RBrace(region=StrRegion(start=1233, end=1234)),
+ WhitespaceToken(region=StrRegion(start=1234, end=1235)),
+ BlockCommentToken(region=StrRegion(start=1235, end=1255)),
+ IdentNameToken(region=StrRegion(start=1255, end=1258)),
+ WhitespaceToken(region=StrRegion(start=1258, end=1259)),
+ IdentNameToken(region=StrRegion(start=1259, end=1267)),
+ LParToken(region=StrRegion(start=1267, end=1268)),
+ RParToken(region=StrRegion(start=1268, end=1269)),
+ WhitespaceToken(region=StrRegion(start=1269, end=1270)),
+ LBrace(region=StrRegion(start=1270, end=1271)),
+ RBrace(region=StrRegion(start=1271, end=1272)),
+ WhitespaceToken(region=StrRegion(start=1272, end=1273)),
+ BlockCommentToken(region=StrRegion(start=1273, end=1293)),
+ IdentNameToken(region=StrRegion(start=1293, end=1296)),
+ WhitespaceToken(region=StrRegion(start=1296, end=1297)),
+ IdentNameToken(region=StrRegion(start=1297, end=1309)),
+ LParToken(region=StrRegion(start=1309, end=1310)),
+ IdentNameToken(region=StrRegion(start=1310, end=1313)),
+ WhitespaceToken(region=StrRegion(start=1313, end=1314)),
+ IdentNameToken(region=StrRegion(start=1314, end=1315)),
+ RParToken(region=StrRegion(start=1315, end=1316)),
+ WhitespaceToken(region=StrRegion(start=1316, end=1317)),
+ LBrace(region=StrRegion(start=1317, end=1318)),
+ RBrace(region=StrRegion(start=1318, end=1319)),
+ WhitespaceToken(region=StrRegion(start=1319, end=1320)),
+ BlockCommentToken(region=StrRegion(start=1320, end=1340)),
+ IdentNameToken(region=StrRegion(start=1340, end=1343)),
+ WhitespaceToken(region=StrRegion(start=1343, end=1344)),
+ IdentNameToken(region=StrRegion(start=1344, end=1358)),
+ LParToken(region=StrRegion(start=1358, end=1359)),
+ IdentNameToken(region=StrRegion(start=1359, end=1362)),
+ WhitespaceToken(region=StrRegion(start=1362, end=1363)),
+ IdentNameToken(region=StrRegion(start=1363, end=1364)),
+ RParToken(region=StrRegion(start=1364, end=1365)),
+ WhitespaceToken(region=StrRegion(start=1365, end=1366)),
+ LBrace(region=StrRegion(start=1366, end=1367)),
+ RBrace(region=StrRegion(start=1367, end=1368)),
+ WhitespaceToken(region=StrRegion(start=1368, end=1369)),
+ BlockCommentToken(region=StrRegion(start=1369, end=1389)),
+ IdentNameToken(region=StrRegion(start=1389, end=1392)),
+ WhitespaceToken(region=StrRegion(start=1392, end=1393)),
+ IdentNameToken(region=StrRegion(start=1393, end=1417)),
+ LParToken(region=StrRegion(start=1417, end=1418)),
+ IdentNameToken(region=StrRegion(start=1418, end=1421)),
+ WhitespaceToken(region=StrRegion(start=1421, end=1422)),
+ IdentNameToken(region=StrRegion(start=1422, end=1423)),
+ RParToken(region=StrRegion(start=1423, end=1424)),
+ WhitespaceToken(region=StrRegion(start=1424, end=1425)),
+ LBrace(region=StrRegion(start=1425, end=1426)),
+ RBrace(region=StrRegion(start=1426, end=1427)),
+ WhitespaceToken(region=StrRegion(start=1427, end=1428)),
+ BlockCommentToken(region=StrRegion(start=1428, end=1448)),
+ IdentNameToken(region=StrRegion(start=1448, end=1451)),
+ WhitespaceToken(region=StrRegion(start=1451, end=1452)),
+ IdentNameToken(region=StrRegion(start=1452, end=1477)),
+ LParToken(region=StrRegion(start=1477, end=1478)),
+ IdentNameToken(region=StrRegion(start=1478, end=1481)),
+ WhitespaceToken(region=StrRegion(start=1481, end=1482)),
+ IdentNameToken(region=StrRegion(start=1482, end=1483)),
+ RParToken(region=StrRegion(start=1483, end=1484)),
+ WhitespaceToken(region=StrRegion(start=1484, end=1485)),
+ LBrace(region=StrRegion(start=1485, end=1486)),
+ RBrace(region=StrRegion(start=1486, end=1487)),
+ WhitespaceToken(region=StrRegion(start=1487, end=1488)),
+ BlockCommentToken(region=StrRegion(start=1488, end=1508)),
+ IdentNameToken(region=StrRegion(start=1508, end=1511)),
+ WhitespaceToken(region=StrRegion(start=1511, end=1512)),
+ IdentNameToken(region=StrRegion(start=1512, end=1533)),
+ LParToken(region=StrRegion(start=1533, end=1534)),
+ RParToken(region=StrRegion(start=1534, end=1535)),
+ WhitespaceToken(region=StrRegion(start=1535, end=1536)),
+ LBrace(region=StrRegion(start=1536, end=1537)),
+ RBrace(region=StrRegion(start=1537, end=1538)),
+ WhitespaceToken(region=StrRegion(start=1538, end=1539)),
+ BlockCommentToken(region=StrRegion(start=1539, end=1559)),
+ IdentNameToken(region=StrRegion(start=1559, end=1562)),
+ WhitespaceToken(region=StrRegion(start=1562, end=1563)),
+ IdentNameToken(region=StrRegion(start=1563, end=1574)),
+ LParToken(region=StrRegion(start=1574, end=1575)),
+ RParToken(region=StrRegion(start=1575, end=1576)),
+ WhitespaceToken(region=StrRegion(start=1576, end=1577)),
+ LBrace(region=StrRegion(start=1577, end=1578)),
+ RBrace(region=StrRegion(start=1578, end=1579)),
+ WhitespaceToken(region=StrRegion(start=1579, end=1581)),
+ IdentNameToken(region=StrRegion(start=1581, end=1584)),
+ WhitespaceToken(region=StrRegion(start=1584, end=1585)),
+ IdentNameToken(region=StrRegion(start=1585, end=1591)),
+ LParToken(region=StrRegion(start=1591, end=1592)),
+ IdentNameToken(region=StrRegion(start=1592, end=1598)),
+ WhitespaceToken(region=StrRegion(start=1598, end=1599)),
+ IdentNameToken(region=StrRegion(start=1599, end=1602)),
+ RParToken(region=StrRegion(start=1602, end=1603)),
+ WhitespaceToken(region=StrRegion(start=1603, end=1604)),
+ LBrace(region=StrRegion(start=1604, end=1605)),
+ WhitespaceToken(region=StrRegion(start=1605, end=1610)),
+ IdentNameToken(region=StrRegion(start=1610, end=1612)),
+ WhitespaceToken(region=StrRegion(start=1612, end=1613)),
+ IdentNameToken(region=StrRegion(start=1613, end=1621)),
+ LSqBracket(region=StrRegion(start=1621, end=1622)),
+ IdentNameToken(region=StrRegion(start=1622, end=1625)),
+ RSqBracket(region=StrRegion(start=1625, end=1626)),
+ WhitespaceToken(region=StrRegion(start=1626, end=1627)),
+ OpToken(region=StrRegion(start=1627, end=1629), op_str='>='),
+ WhitespaceToken(region=StrRegion(start=1629, end=1630)),
+ NumberToken(region=StrRegion(start=1630, end=1631)),
+ WhitespaceToken(region=StrRegion(start=1631, end=1632)),
+ LBrace(region=StrRegion(start=1632, end=1633)),
+ WhitespaceToken(region=StrRegion(start=1633, end=1635)),
+ LineCommentToken(region=StrRegion(start=1635, end=1682)),
+ WhitespaceToken(region=StrRegion(start=1682, end=1691)),
+ IdentNameToken(region=StrRegion(start=1691, end=1699)),
+ LSqBracket(region=StrRegion(start=1699, end=1700)),
+ IdentNameToken(region=StrRegion(start=1700, end=1703)),
+ RSqBracket(region=StrRegion(start=1703, end=1704)),
+ WhitespaceToken(region=StrRegion(start=1704, end=1705)),
+ OpToken(region=StrRegion(start=1705, end=1706), op_str='='),
+ WhitespaceToken(region=StrRegion(start=1706, end=1707)),
+ IdentNameToken(region=StrRegion(start=1707, end=1715)),
+ LSqBracket(region=StrRegion(start=1715, end=1716)),
+ IdentNameToken(region=StrRegion(start=1716, end=1719)),
+ RSqBracket(region=StrRegion(start=1719, end=1720)),
+ WhitespaceToken(region=StrRegion(start=1720, end=1721)),
+ OpToken(region=StrRegion(start=1721, end=1722), op_str='-'),
+ WhitespaceToken(region=StrRegion(start=1722, end=1723)),
+ NumberToken(region=StrRegion(start=1723, end=1724)),
+ SemicolonToken(region=StrRegion(start=1724, end=1725)),
+ WhitespaceToken(region=StrRegion(start=1725, end=1734)),
+ IdentNameToken(region=StrRegion(start=1734, end=1736)),
+ WhitespaceToken(region=StrRegion(start=1736, end=1737)),
+ IdentNameToken(region=StrRegion(start=1737, end=1745)),
+ LSqBracket(region=StrRegion(start=1745, end=1746)),
+ IdentNameToken(region=StrRegion(start=1746, end=1749)),
+ RSqBracket(region=StrRegion(start=1749, end=1750)),
+ WhitespaceToken(region=StrRegion(start=1750, end=1751)),
+ OpToken(region=StrRegion(start=1751, end=1753), op_str='=='),
+ WhitespaceToken(region=StrRegion(start=1753, end=1754)),
+ NumberToken(region=StrRegion(start=1754, end=1755)),
+ WhitespaceToken(region=StrRegion(start=1755, end=1756)),
+ LBrace(region=StrRegion(start=1756, end=1757)),
+ WhitespaceToken(region=StrRegion(start=1757, end=1770)),
+ IdentNameToken(region=StrRegion(start=1770, end=1787)),
+ LParToken(region=StrRegion(start=1787, end=1788)),
+ IdentNameToken(region=StrRegion(start=1788, end=1791)),
+ RParToken(region=StrRegion(start=1791, end=1792)),
+ SemicolonToken(region=StrRegion(start=1792, end=1793)),
+ WhitespaceToken(region=StrRegion(start=1793, end=1802)),
+ RBrace(region=StrRegion(start=1802, end=1803)),
+ WhitespaceToken(region=StrRegion(start=1803, end=1808)),
+ RBrace(region=StrRegion(start=1808, end=1809)),
+ WhitespaceToken(region=StrRegion(start=1809, end=1810)),
+ RBrace(region=StrRegion(start=1810, end=1811)),
+ WhitespaceToken(region=StrRegion(start=1811, end=1812)),
+ IdentNameToken(region=StrRegion(start=1812, end=1815)),
+ WhitespaceToken(region=StrRegion(start=1815, end=1816)),
+ IdentNameToken(region=StrRegion(start=1816, end=1822)),
+ LParToken(region=StrRegion(start=1822, end=1823)),
+ IdentNameToken(region=StrRegion(start=1823, end=1829)),
+ WhitespaceToken(region=StrRegion(start=1829, end=1830)),
+ IdentNameToken(region=StrRegion(start=1830, end=1833)),
+ RParToken(region=StrRegion(start=1833, end=1834)),
+ WhitespaceToken(region=StrRegion(start=1834, end=1835)),
+ LBrace(region=StrRegion(start=1835, end=1836)),
+ WhitespaceToken(region=StrRegion(start=1836, end=1841)),
+ IdentNameToken(region=StrRegion(start=1841, end=1843)),
+ WhitespaceToken(region=StrRegion(start=1843, end=1844)),
+ IdentNameToken(region=StrRegion(start=1844, end=1852)),
+ LSqBracket(region=StrRegion(start=1852, end=1853)),
+ IdentNameToken(region=StrRegion(start=1853, end=1856)),
+ RSqBracket(region=StrRegion(start=1856, end=1857)),
+ WhitespaceToken(region=StrRegion(start=1857, end=1858)),
+ OpToken(region=StrRegion(start=1858, end=1860), op_str='>='),
+ WhitespaceToken(region=StrRegion(start=1860, end=1861)),
+ NumberToken(region=StrRegion(start=1861, end=1862)),
+ WhitespaceToken(region=StrRegion(start=1862, end=1863)),
+ LBrace(region=StrRegion(start=1863, end=1864)),
+ WhitespaceToken(region=StrRegion(start=1864, end=1866)),
+ LineCommentToken(region=StrRegion(start=1866, end=1913)),
+ WhitespaceToken(region=StrRegion(start=1913, end=1922)),
+ IdentNameToken(region=StrRegion(start=1922, end=1930)),
+ LSqBracket(region=StrRegion(start=1930, end=1931)),
+ IdentNameToken(region=StrRegion(start=1931, end=1934)),
+ RSqBracket(region=StrRegion(start=1934, end=1935)),
+ WhitespaceToken(region=StrRegion(start=1935, end=1936)),
+ OpToken(region=StrRegion(start=1936, end=1937), op_str='='),
+ WhitespaceToken(region=StrRegion(start=1937, end=1938)),
+ IdentNameToken(region=StrRegion(start=1938, end=1946)),
+ LSqBracket(region=StrRegion(start=1946, end=1947)),
+ IdentNameToken(region=StrRegion(start=1947, end=1950)),
+ RSqBracket(region=StrRegion(start=1950, end=1951)),
+ WhitespaceToken(region=StrRegion(start=1951, end=1952)),
+ OpToken(region=StrRegion(start=1952, end=1953), op_str='+'),
+ WhitespaceToken(region=StrRegion(start=1953, end=1954)),
+ NumberToken(region=StrRegion(start=1954, end=1955)),
+ SemicolonToken(region=StrRegion(start=1955, end=1956)),
+ WhitespaceToken(region=StrRegion(start=1956, end=1958)),
+ LineCommentToken(region=StrRegion(start=1958, end=1994)),
+ WhitespaceToken(region=StrRegion(start=1994, end=1999)),
+ RBrace(region=StrRegion(start=1999, end=2000)),
+ WhitespaceToken(region=StrRegion(start=2000, end=2001)),
+ RBrace(region=StrRegion(start=2001, end=2002)),
+ WhitespaceToken(region=StrRegion(start=2002, end=2003)),
+ LineCommentToken(region=StrRegion(start=2003, end=2037)),
+ WhitespaceToken(region=StrRegion(start=2037, end=2040)),
+ IdentNameToken(region=StrRegion(start=2040, end=2046)),
+ LSqBracket(region=StrRegion(start=2046, end=2047)),
+ RSqBracket(region=StrRegion(start=2047, end=2048)),
+ WhitespaceToken(region=StrRegion(start=2048, end=2049)),
+ IdentNameToken(region=StrRegion(start=2049, end=2054)),
+ WhitespaceToken(region=StrRegion(start=2054, end=2055)),
+ OpToken(region=StrRegion(start=2055, end=2056), op_str='='),
+ WhitespaceToken(region=StrRegion(start=2056, end=2057)),
+ LSqBracket(region=StrRegion(start=2057, end=2058)),
+ RSqBracket(region=StrRegion(start=2058, end=2059)),
+ SemicolonToken(region=StrRegion(start=2059, end=2060)),
+ WhitespaceToken(region=StrRegion(start=2060, end=2061)),
+ IdentNameToken(region=StrRegion(start=2061, end=2067)),
+ WhitespaceToken(region=StrRegion(start=2067, end=2068)),
+ IdentNameToken(region=StrRegion(start=2068, end=2078)),
+ WhitespaceToken(region=StrRegion(start=2078, end=2079)),
+ OpToken(region=StrRegion(start=2079, end=2080), op_str='='),
+ WhitespaceToken(region=StrRegion(start=2080, end=2081)),
+ IdentNameToken(region=StrRegion(start=2081, end=2086)),
+ SemicolonToken(region=StrRegion(start=2086, end=2087)),
+ WhitespaceToken(region=StrRegion(start=2087, end=2089)),
+ LineCommentToken(region=StrRegion(start=2089, end=2124)),
+ WhitespaceToken(region=StrRegion(start=2124, end=2126)),
+ LineCommentToken(region=StrRegion(start=2126, end=2185)),
+ WhitespaceToken(region=StrRegion(start=2185, end=2186)),
+ LineCommentToken(region=StrRegion(start=2186, end=2270)),
+ WhitespaceToken(region=StrRegion(start=2270, end=2271)),
+ LineCommentToken(region=StrRegion(start=2271, end=2354)),
+ WhitespaceToken(region=StrRegion(start=2354, end=2355)),
+ LineCommentToken(region=StrRegion(start=2355, end=2434)),
+ WhitespaceToken(region=StrRegion(start=2434, end=2436)),
+ IdentNameToken(region=StrRegion(start=2436, end=2439)),
+ WhitespaceToken(region=StrRegion(start=2439, end=2440)),
+ IdentNameToken(region=StrRegion(start=2440, end=2443)),
+ LParToken(region=StrRegion(start=2443, end=2444)),
+ RParToken(region=StrRegion(start=2444, end=2445)),
+ WhitespaceToken(region=StrRegion(start=2445, end=2446)),
+ LBrace(region=StrRegion(start=2446, end=2447)),
+ RBrace(region=StrRegion(start=2447, end=2448)),
+ WhitespaceToken(region=StrRegion(start=2448, end=2450)),
+ IdentNameToken(region=StrRegion(start=2450, end=2453)),
+ WhitespaceToken(region=StrRegion(start=2453, end=2454)),
+ IdentNameToken(region=StrRegion(start=2454, end=2461)),
+ LParToken(region=StrRegion(start=2461, end=2462)),
+ RParToken(region=StrRegion(start=2462, end=2463)),
+ WhitespaceToken(region=StrRegion(start=2463, end=2464)),
+ LBrace(region=StrRegion(start=2464, end=2465)),
+ WhitespaceToken(region=StrRegion(start=2465, end=2470)),
+ IdentNameToken(region=StrRegion(start=2470, end=2478)),
+ LParToken(region=StrRegion(start=2478, end=2479)),
+ RParToken(region=StrRegion(start=2479, end=2480)),
+ SemicolonToken(region=StrRegion(start=2480, end=2481)),
+ WhitespaceToken(region=StrRegion(start=2481, end=2483)),
+ LineCommentToken(region=StrRegion(start=2483, end=2499)),
+ WhitespaceToken(region=StrRegion(start=2499, end=2504)),
+ IdentNameToken(region=StrRegion(start=2504, end=2506)),
+ WhitespaceToken(region=StrRegion(start=2506, end=2507)),
+ IdentNameToken(region=StrRegion(start=2507, end=2517)),
+ WhitespaceToken(region=StrRegion(start=2517, end=2518)),
+ OpToken(region=StrRegion(start=2518, end=2520), op_str='=='),
+ WhitespaceToken(region=StrRegion(start=2520, end=2521)),
+ IdentNameToken(region=StrRegion(start=2521, end=2525)),
+ WhitespaceToken(region=StrRegion(start=2525, end=2526)),
+ LBrace(region=StrRegion(start=2526, end=2527)),
+ WhitespaceToken(region=StrRegion(start=2527, end=2536)),
+ IdentNameToken(region=StrRegion(start=2536, end=2542)),
+ LParToken(region=StrRegion(start=2542, end=2543)),
+ IdentNameToken(region=StrRegion(start=2543, end=2548)),
+ LSqBracket(region=StrRegion(start=2548, end=2549)),
+ IdentNameToken(region=StrRegion(start=2549, end=2559)),
+ RSqBracket(region=StrRegion(start=2559, end=2560)),
+ RParToken(region=StrRegion(start=2560, end=2561)),
+ SemicolonToken(region=StrRegion(start=2561, end=2562)),
+ WhitespaceToken(region=StrRegion(start=2562, end=2567)),
+ RBrace(region=StrRegion(start=2567, end=2568)),
+ WhitespaceToken(region=StrRegion(start=2568, end=2573)),
+ IdentNameToken(region=StrRegion(start=2573, end=2585)),
+ LParToken(region=StrRegion(start=2585, end=2586)),
+ IdentNameToken(region=StrRegion(start=2586, end=2596)),
+ RParToken(region=StrRegion(start=2596, end=2597)),
+ SemicolonToken(region=StrRegion(start=2597, end=2598)),
+ WhitespaceToken(region=StrRegion(start=2598, end=2599)),
+ RBrace(region=StrRegion(start=2599, end=2600)),
+ WhitespaceToken(region=StrRegion(start=2600, end=2602)),
+ IdentNameToken(region=StrRegion(start=2602, end=2605)),
+ WhitespaceToken(region=StrRegion(start=2605, end=2606)),
+ IdentNameToken(region=StrRegion(start=2606, end=2613)),
+ LParToken(region=StrRegion(start=2613, end=2614)),
+ RParToken(region=StrRegion(start=2614, end=2615)),
+ WhitespaceToken(region=StrRegion(start=2615, end=2616)),
+ LBrace(region=StrRegion(start=2616, end=2617)),
+ WhitespaceToken(region=StrRegion(start=2617, end=2622)),
+ IdentNameToken(region=StrRegion(start=2622, end=2630)),
+ LParToken(region=StrRegion(start=2630, end=2631)),
+ RParToken(region=StrRegion(start=2631, end=2632)),
+ SemicolonToken(region=StrRegion(start=2632, end=2633)),
+ WhitespaceToken(region=StrRegion(start=2633, end=2638)),
+ IdentNameToken(region=StrRegion(start=2638, end=2641)),
+ WhitespaceToken(region=StrRegion(start=2641, end=2642)),
+ IdentNameToken(region=StrRegion(start=2642, end=2649)),
+ WhitespaceToken(region=StrRegion(start=2649, end=2650)),
+ OpToken(region=StrRegion(start=2650, end=2651), op_str='='),
+ WhitespaceToken(region=StrRegion(start=2651, end=2652)),
+ IdentNameToken(region=StrRegion(start=2652, end=2662)),
+ SemicolonToken(region=StrRegion(start=2662, end=2663)),
+ WhitespaceToken(region=StrRegion(start=2663, end=2668)),
+ IdentNameToken(region=StrRegion(start=2668, end=2671)),
+ WhitespaceToken(region=StrRegion(start=2671, end=2672)),
+ IdentNameToken(region=StrRegion(start=2672, end=2676)),
+ WhitespaceToken(region=StrRegion(start=2676, end=2677)),
+ OpToken(region=StrRegion(start=2677, end=2678), op_str='='),
+ WhitespaceToken(region=StrRegion(start=2678, end=2679)),
+ IdentNameToken(region=StrRegion(start=2679, end=2684)),
+ LSqBracket(region=StrRegion(start=2684, end=2685)),
+ IdentNameToken(region=StrRegion(start=2685, end=2692)),
+ RSqBracket(region=StrRegion(start=2692, end=2693)),
+ SemicolonToken(region=StrRegion(start=2693, end=2694)),
+ WhitespaceToken(region=StrRegion(start=2694, end=2699)),
+ IdentNameToken(region=StrRegion(start=2699, end=2704)),
+ LSqBracket(region=StrRegion(start=2704, end=2705)),
+ IdentNameToken(region=StrRegion(start=2705, end=2712)),
+ RSqBracket(region=StrRegion(start=2712, end=2713)),
+ WhitespaceToken(region=StrRegion(start=2713, end=2714)),
+ OpToken(region=StrRegion(start=2714, end=2715), op_str='='),
+ WhitespaceToken(region=StrRegion(start=2715, end=2716)),
+ IdentNameToken(region=StrRegion(start=2716, end=2721)),
+ LSqBracket(region=StrRegion(start=2721, end=2722)),
+ IdentNameToken(region=StrRegion(start=2722, end=2729)),
+ WhitespaceToken(region=StrRegion(start=2729, end=2730)),
+ OpToken(region=StrRegion(start=2730, end=2731), op_str='-'),
+ WhitespaceToken(region=StrRegion(start=2731, end=2732)),
+ NumberToken(region=StrRegion(start=2732, end=2733)),
+ RSqBracket(region=StrRegion(start=2733, end=2734)),
+ SemicolonToken(region=StrRegion(start=2734, end=2735)),
+ WhitespaceToken(region=StrRegion(start=2735, end=2740)),
+ IdentNameToken(region=StrRegion(start=2740, end=2745)),
+ LSqBracket(region=StrRegion(start=2745, end=2746)),
+ IdentNameToken(region=StrRegion(start=2746, end=2753)),
+ WhitespaceToken(region=StrRegion(start=2753, end=2754)),
+ OpToken(region=StrRegion(start=2754, end=2755), op_str='-'),
+ WhitespaceToken(region=StrRegion(start=2755, end=2756)),
+ NumberToken(region=StrRegion(start=2756, end=2757)),
+ RSqBracket(region=StrRegion(start=2757, end=2758)),
+ WhitespaceToken(region=StrRegion(start=2758, end=2759)),
+ OpToken(region=StrRegion(start=2759, end=2760), op_str='='),
+ WhitespaceToken(region=StrRegion(start=2760, end=2761)),
+ IdentNameToken(region=StrRegion(start=2761, end=2765)),
+ SemicolonToken(region=StrRegion(start=2765, end=2766)),
+ WhitespaceToken(region=StrRegion(start=2766, end=2767)),
+ RBrace(region=StrRegion(start=2767, end=2768)),
+ WhitespaceToken(region=StrRegion(start=2768, end=2770)),
+ IdentNameToken(region=StrRegion(start=2770, end=2773)),
+ WhitespaceToken(region=StrRegion(start=2773, end=2774)),
+ IdentNameToken(region=StrRegion(start=2774, end=2783)),
+ LParToken(region=StrRegion(start=2783, end=2784)),
+ RParToken(region=StrRegion(start=2784, end=2785)),
+ WhitespaceToken(region=StrRegion(start=2785, end=2786)),
+ LBrace(region=StrRegion(start=2786, end=2787)),
+ WhitespaceToken(region=StrRegion(start=2787, end=2792)),
+ LineCommentToken(region=StrRegion(start=2792, end=2808)),
+ WhitespaceToken(region=StrRegion(start=2808, end=2813)),
+ LineCommentToken(region=StrRegion(start=2813, end=2829)),
+ WhitespaceToken(region=StrRegion(start=2829, end=2834)),
+ LineCommentToken(region=StrRegion(start=2834, end=2848)),
+ WhitespaceToken(region=StrRegion(start=2848, end=2853)),
+ LineCommentToken(region=StrRegion(start=2853, end=2900)),
+ WhitespaceToken(region=StrRegion(start=2900, end=2905)),
+ IdentNameToken(region=StrRegion(start=2905, end=2913)),
+ LParToken(region=StrRegion(start=2913, end=2914)),
+ RParToken(region=StrRegion(start=2914, end=2915)),
+ SemicolonToken(region=StrRegion(start=2915, end=2916)),
+ WhitespaceToken(region=StrRegion(start=2916, end=2921)),
+ IdentNameToken(region=StrRegion(start=2921, end=2924)),
+ WhitespaceToken(region=StrRegion(start=2924, end=2925)),
+ IdentNameToken(region=StrRegion(start=2925, end=2932)),
+ WhitespaceToken(region=StrRegion(start=2932, end=2933)),
+ OpToken(region=StrRegion(start=2933, end=2934), op_str='='),
+ WhitespaceToken(region=StrRegion(start=2934, end=2935)),
+ IdentNameToken(region=StrRegion(start=2935, end=2945)),
+ SemicolonToken(region=StrRegion(start=2945, end=2946)),
+ WhitespaceToken(region=StrRegion(start=2946, end=2951)),
+ IdentNameToken(region=StrRegion(start=2951, end=2954)),
+ WhitespaceToken(region=StrRegion(start=2954, end=2955)),
+ IdentNameToken(region=StrRegion(start=2955, end=2959)),
+ WhitespaceToken(region=StrRegion(start=2959, end=2960)),
+ OpToken(region=StrRegion(start=2960, end=2961), op_str='='),
+ WhitespaceToken(region=StrRegion(start=2961, end=2962)),
+ IdentNameToken(region=StrRegion(start=2962, end=2967)),
+ LSqBracket(region=StrRegion(start=2967, end=2968)),
+ IdentNameToken(region=StrRegion(start=2968, end=2975)),
+ RSqBracket(region=StrRegion(start=2975, end=2976)),
+ SemicolonToken(region=StrRegion(start=2976, end=2977)),
+ WhitespaceToken(region=StrRegion(start=2977, end=2982)),
+ IdentNameToken(region=StrRegion(start=2982, end=2987)),
+ LSqBracket(region=StrRegion(start=2987, end=2988)),
+ IdentNameToken(region=StrRegion(start=2988, end=2995)),
+ RSqBracket(region=StrRegion(start=2995, end=2996)),
+ WhitespaceToken(region=StrRegion(start=2996, end=2997)),
+ OpToken(region=StrRegion(start=2997, end=2998), op_str='='),
+ WhitespaceToken(region=StrRegion(start=2998, end=2999)),
+ IdentNameToken(region=StrRegion(start=2999, end=3004)),
+ LSqBracket(region=StrRegion(start=3004, end=3005)),
+ IdentNameToken(region=StrRegion(start=3005, end=3012)),
+ WhitespaceToken(region=StrRegion(start=3012, end=3013)),
+ OpToken(region=StrRegion(start=3013, end=3014), op_str='-'),
+ WhitespaceToken(region=StrRegion(start=3014, end=3015)),
+ NumberToken(region=StrRegion(start=3015, end=3016)),
+ RSqBracket(region=StrRegion(start=3016, end=3017)),
+ SemicolonToken(region=StrRegion(start=3017, end=3018)),
+ WhitespaceToken(region=StrRegion(start=3018, end=3023)),
+ IdentNameToken(region=StrRegion(start=3023, end=3028)),
+ LSqBracket(region=StrRegion(start=3028, end=3029)),
+ IdentNameToken(region=StrRegion(start=3029, end=3036)),
+ WhitespaceToken(region=StrRegion(start=3036, end=3037)),
+ OpToken(region=StrRegion(start=3037, end=3038), op_str='-'),
+ WhitespaceToken(region=StrRegion(start=3038, end=3039)),
+ NumberToken(region=StrRegion(start=3039, end=3040)),
+ RSqBracket(region=StrRegion(start=3040, end=3041)),
+ WhitespaceToken(region=StrRegion(start=3041, end=3042)),
+ OpToken(region=StrRegion(start=3042, end=3043), op_str='='),
+ WhitespaceToken(region=StrRegion(start=3043, end=3044)),
+ IdentNameToken(region=StrRegion(start=3044, end=3049)),
+ LSqBracket(region=StrRegion(start=3049, end=3050)),
+ IdentNameToken(region=StrRegion(start=3050, end=3057)),
+ WhitespaceToken(region=StrRegion(start=3057, end=3058)),
+ OpToken(region=StrRegion(start=3058, end=3059), op_str='-'),
+ WhitespaceToken(region=StrRegion(start=3059, end=3060)),
+ NumberToken(region=StrRegion(start=3060, end=3061)),
+ RSqBracket(region=StrRegion(start=3061, end=3062)),
+ SemicolonToken(region=StrRegion(start=3062, end=3063)),
+ WhitespaceToken(region=StrRegion(start=3063, end=3068)),
+ IdentNameToken(region=StrRegion(start=3068, end=3073)),
+ LSqBracket(region=StrRegion(start=3073, end=3074)),
+ IdentNameToken(region=StrRegion(start=3074, end=3081)),
+ WhitespaceToken(region=StrRegion(start=3081, end=3082)),
+ OpToken(region=StrRegion(start=3082, end=3083), op_str='-'),
+ WhitespaceToken(region=StrRegion(start=3083, end=3084)),
+ NumberToken(region=StrRegion(start=3084, end=3085)),
+ RSqBracket(region=StrRegion(start=3085, end=3086)),
+ WhitespaceToken(region=StrRegion(start=3086, end=3087)),
+ OpToken(region=StrRegion(start=3087, end=3088), op_str='='),
+ WhitespaceToken(region=StrRegion(start=3088, end=3089)),
+ IdentNameToken(region=StrRegion(start=3089, end=3093)),
+ SemicolonToken(region=StrRegion(start=3093, end=3094)),
+ WhitespaceToken(region=StrRegion(start=3094, end=3095)),
+ RBrace(region=StrRegion(start=3095, end=3096)),
+ WhitespaceToken(region=StrRegion(start=3096, end=3098)),
+ IdentNameToken(region=StrRegion(start=3098, end=3101)),
+ WhitespaceToken(region=StrRegion(start=3101, end=3102)),
+ IdentNameToken(region=StrRegion(start=3102, end=3109)),
+ LParToken(region=StrRegion(start=3109, end=3110)),
+ RParToken(region=StrRegion(start=3110, end=3111)),
+ WhitespaceToken(region=StrRegion(start=3111, end=3112)),
+ LBrace(region=StrRegion(start=3112, end=3113)),
+ WhitespaceToken(region=StrRegion(start=3113, end=3118)),
+ IdentNameToken(region=StrRegion(start=3118, end=3126)),
+ LParToken(region=StrRegion(start=3126, end=3127)),
+ RParToken(region=StrRegion(start=3127, end=3128)),
+ SemicolonToken(region=StrRegion(start=3128, end=3129)),
+ WhitespaceToken(region=StrRegion(start=3129, end=3134)),
+ IdentNameToken(region=StrRegion(start=3134, end=3137)),
+ WhitespaceToken(region=StrRegion(start=3137, end=3138)),
+ IdentNameToken(region=StrRegion(start=3138, end=3143)),
+ WhitespaceToken(region=StrRegion(start=3143, end=3144)),
+ OpToken(region=StrRegion(start=3144, end=3145), op_str='='),
+ WhitespaceToken(region=StrRegion(start=3145, end=3146)),
+ IdentNameToken(region=StrRegion(start=3146, end=3151)),
+ LSqBracket(region=StrRegion(start=3151, end=3152)),
+ IdentNameToken(region=StrRegion(start=3152, end=3162)),
+ RSqBracket(region=StrRegion(start=3162, end=3163)),
+ SemicolonToken(region=StrRegion(start=3163, end=3164)),
+ WhitespaceToken(region=StrRegion(start=3164, end=3169)),
+ IdentNameToken(region=StrRegion(start=3169, end=3182)),
+ LParToken(region=StrRegion(start=3182, end=3183)),
+ IdentNameToken(region=StrRegion(start=3183, end=3188)),
+ RParToken(region=StrRegion(start=3188, end=3189)),
+ SemicolonToken(region=StrRegion(start=3189, end=3190)),
+ WhitespaceToken(region=StrRegion(start=3190, end=3195)),
+ IdentNameToken(region=StrRegion(start=3195, end=3197)),
+ WhitespaceToken(region=StrRegion(start=3197, end=3198)),
+ IdentNameToken(region=StrRegion(start=3198, end=3208)),
+ WhitespaceToken(region=StrRegion(start=3208, end=3209)),
+ OpToken(region=StrRegion(start=3209, end=3211), op_str='!='),
+ WhitespaceToken(region=StrRegion(start=3211, end=3212)),
+ IdentNameToken(region=StrRegion(start=3212, end=3217)),
+ WhitespaceToken(region=StrRegion(start=3217, end=3218)),
+ LBrace(region=StrRegion(start=3218, end=3219)),
+ WhitespaceToken(region=StrRegion(start=3219, end=3228)),
+ IdentNameToken(region=StrRegion(start=3228, end=3234)),
+ LParToken(region=StrRegion(start=3234, end=3235)),
+ IdentNameToken(region=StrRegion(start=3235, end=3240)),
+ RParToken(region=StrRegion(start=3240, end=3241)),
+ SemicolonToken(region=StrRegion(start=3241, end=3242)),
+ WhitespaceToken(region=StrRegion(start=3242, end=3247)),
+ RBrace(region=StrRegion(start=3247, end=3248)),
+ WhitespaceToken(region=StrRegion(start=3248, end=3249)),
+ RBrace(region=StrRegion(start=3249, end=3250)),
+ WhitespaceToken(region=StrRegion(start=3250, end=3252)),
+ IdentNameToken(region=StrRegion(start=3252, end=3255)),
+ WhitespaceToken(region=StrRegion(start=3255, end=3256)),
+ IdentNameToken(region=StrRegion(start=3256, end=3267)),
+ LParToken(region=StrRegion(start=3267, end=3268)),
+ RParToken(region=StrRegion(start=3268, end=3269)),
+ WhitespaceToken(region=StrRegion(start=3269, end=3270)),
+ LBrace(region=StrRegion(start=3270, end=3271)),
+ WhitespaceToken(region=StrRegion(start=3271, end=3276)),
+ IdentNameToken(region=StrRegion(start=3276, end=3284)),
+ LParToken(region=StrRegion(start=3284, end=3285)),
+ RParToken(region=StrRegion(start=3285, end=3286)),
+ SemicolonToken(region=StrRegion(start=3286, end=3287)),
+ WhitespaceToken(region=StrRegion(start=3287, end=3292)),
+ IdentNameToken(region=StrRegion(start=3292, end=3295)),
+ WhitespaceToken(region=StrRegion(start=3295, end=3296)),
+ IdentNameToken(region=StrRegion(start=3296, end=3303)),
+ WhitespaceToken(region=StrRegion(start=3303, end=3304)),
+ OpToken(region=StrRegion(start=3304, end=3305), op_str='='),
+ WhitespaceToken(region=StrRegion(start=3305, end=3306)),
+ IdentNameToken(region=StrRegion(start=3306, end=3316)),
+ SemicolonToken(region=StrRegion(start=3316, end=3317)),
+ WhitespaceToken(region=StrRegion(start=3317, end=3322)),
+ IdentNameToken(region=StrRegion(start=3322, end=3325)),
+ WhitespaceToken(region=StrRegion(start=3325, end=3326)),
+ IdentNameToken(region=StrRegion(start=3326, end=3330)),
+ WhitespaceToken(region=StrRegion(start=3330, end=3331)),
+ OpToken(region=StrRegion(start=3331, end=3332), op_str='='),
+ WhitespaceToken(region=StrRegion(start=3332, end=3333)),
+ IdentNameToken(region=StrRegion(start=3333, end=3338)),
+ LSqBracket(region=StrRegion(start=3338, end=3339)),
+ IdentNameToken(region=StrRegion(start=3339, end=3346)),
+ RSqBracket(region=StrRegion(start=3346, end=3347)),
+ SemicolonToken(region=StrRegion(start=3347, end=3348)),
+ WhitespaceToken(region=StrRegion(start=3348, end=3353)),
+ IdentNameToken(region=StrRegion(start=3353, end=3356)),
+ WhitespaceToken(region=StrRegion(start=3356, end=3357)),
+ IdentNameToken(region=StrRegion(start=3357, end=3361)),
+ WhitespaceToken(region=StrRegion(start=3361, end=3362)),
+ OpToken(region=StrRegion(start=3362, end=3363), op_str='='),
+ WhitespaceToken(region=StrRegion(start=3363, end=3364)),
+ IdentNameToken(region=StrRegion(start=3364, end=3369)),
+ LSqBracket(region=StrRegion(start=3369, end=3370)),
+ IdentNameToken(region=StrRegion(start=3370, end=3377)),
+ WhitespaceToken(region=StrRegion(start=3377, end=3378)),
+ OpToken(region=StrRegion(start=3378, end=3379), op_str='-'),
+ WhitespaceToken(region=StrRegion(start=3379, end=3380)),
+ NumberToken(region=StrRegion(start=3380, end=3381)),
+ RSqBracket(region=StrRegion(start=3381, end=3382)),
+ SemicolonToken(region=StrRegion(start=3382, end=3383)),
+ WhitespaceToken(region=StrRegion(start=3383, end=3388)),
+ IdentNameToken(region=StrRegion(start=3388, end=3401)),
+ LParToken(region=StrRegion(start=3401, end=3402)),
+ IdentNameToken(region=StrRegion(start=3402, end=3406)),
+ RParToken(region=StrRegion(start=3406, end=3407)),
+ SemicolonToken(region=StrRegion(start=3407, end=3408)),
+ WhitespaceToken(region=StrRegion(start=3408, end=3413)),
+ IdentNameToken(region=StrRegion(start=3413, end=3426)),
+ LParToken(region=StrRegion(start=3426, end=3427)),
+ IdentNameToken(region=StrRegion(start=3427, end=3431)),
+ RParToken(region=StrRegion(start=3431, end=3432)),
+ SemicolonToken(region=StrRegion(start=3432, end=3433)),
+ WhitespaceToken(region=StrRegion(start=3433, end=3435)),
+ LineCommentToken(region=StrRegion(start=3435, end=3454)),
+ WhitespaceToken(region=StrRegion(start=3454, end=3459)),
+ IdentNameToken(region=StrRegion(start=3459, end=3461)),
+ WhitespaceToken(region=StrRegion(start=3461, end=3462)),
+ IdentNameToken(region=StrRegion(start=3462, end=3472)),
+ WhitespaceToken(region=StrRegion(start=3472, end=3473)),
+ OpToken(region=StrRegion(start=3473, end=3475), op_str='!='),
+ WhitespaceToken(region=StrRegion(start=3475, end=3476)),
+ NumberToken(region=StrRegion(start=3476, end=3477)),
+ WhitespaceToken(region=StrRegion(start=3477, end=3478)),
+ LBrace(region=StrRegion(start=3478, end=3479)),
+ WhitespaceToken(region=StrRegion(start=3479, end=3488)),
+ IdentNameToken(region=StrRegion(start=3488, end=3494)),
+ LParToken(region=StrRegion(start=3494, end=3495)),
+ IdentNameToken(region=StrRegion(start=3495, end=3499)),
+ RParToken(region=StrRegion(start=3499, end=3500)),
+ SemicolonToken(region=StrRegion(start=3500, end=3501)),
+ WhitespaceToken(region=StrRegion(start=3501, end=3510)),
+ IdentNameToken(region=StrRegion(start=3510, end=3516)),
+ LParToken(region=StrRegion(start=3516, end=3517)),
+ IdentNameToken(region=StrRegion(start=3517, end=3521)),
+ RParToken(region=StrRegion(start=3521, end=3522)),
+ SemicolonToken(region=StrRegion(start=3522, end=3523)),
+ WhitespaceToken(region=StrRegion(start=3523, end=3528)),
+ RBrace(region=StrRegion(start=3528, end=3529)),
+ WhitespaceToken(region=StrRegion(start=3529, end=3530)),
+ RBrace(region=StrRegion(start=3530, end=3531)),
+ WhitespaceToken(region=StrRegion(start=3531, end=3533)),
+ IdentNameToken(region=StrRegion(start=3533, end=3536)),
+ WhitespaceToken(region=StrRegion(start=3536, end=3537)),
+ IdentNameToken(region=StrRegion(start=3537, end=3545)),
+ LParToken(region=StrRegion(start=3545, end=3546)),
+ RParToken(region=StrRegion(start=3546, end=3547)),
+ WhitespaceToken(region=StrRegion(start=3547, end=3548)),
+ LBrace(region=StrRegion(start=3548, end=3549)),
+ WhitespaceToken(region=StrRegion(start=3549, end=3554)),
+ LineCommentToken(region=StrRegion(start=3554, end=3567)),
+ WhitespaceToken(region=StrRegion(start=3567, end=3572)),
+ LineCommentToken(region=StrRegion(start=3572, end=3585)),
+ WhitespaceToken(region=StrRegion(start=3585, end=3590)),
+ LineCommentToken(region=StrRegion(start=3590, end=3604)),
+ WhitespaceToken(region=StrRegion(start=3604, end=3609)),
+ LineCommentToken(region=StrRegion(start=3609, end=3623)),
+ WhitespaceToken(region=StrRegion(start=3623, end=3628)),
+ IdentNameToken(region=StrRegion(start=3628, end=3636)),
+ LParToken(region=StrRegion(start=3636, end=3637)),
+ RParToken(region=StrRegion(start=3637, end=3638)),
+ SemicolonToken(region=StrRegion(start=3638, end=3639)),
+ WhitespaceToken(region=StrRegion(start=3639, end=3644)),
+ IdentNameToken(region=StrRegion(start=3644, end=3647)),
+ WhitespaceToken(region=StrRegion(start=3647, end=3648)),
+ IdentNameToken(region=StrRegion(start=3648, end=3655)),
+ WhitespaceToken(region=StrRegion(start=3655, end=3656)),
+ OpToken(region=StrRegion(start=3656, end=3657), op_str='='),
+ WhitespaceToken(region=StrRegion(start=3657, end=3658)),
+ IdentNameToken(region=StrRegion(start=3658, end=3668)),
+ SemicolonToken(region=StrRegion(start=3668, end=3669)),
+ WhitespaceToken(region=StrRegion(start=3669, end=3674)),
+ IdentNameToken(region=StrRegion(start=3674, end=3677)),
+ WhitespaceToken(region=StrRegion(start=3677, end=3678)),
+ IdentNameToken(region=StrRegion(start=3678, end=3682)),
+ WhitespaceToken(region=StrRegion(start=3682, end=3683)),
+ OpToken(region=StrRegion(start=3683, end=3684), op_str='='),
+ WhitespaceToken(region=StrRegion(start=3684, end=3685)),
+ IdentNameToken(region=StrRegion(start=3685, end=3690)),
+ LSqBracket(region=StrRegion(start=3690, end=3691)),
+ IdentNameToken(region=StrRegion(start=3691, end=3698)),
+ RSqBracket(region=StrRegion(start=3698, end=3699)),
+ SemicolonToken(region=StrRegion(start=3699, end=3700)),
+ WhitespaceToken(region=StrRegion(start=3700, end=3705)),
+ IdentNameToken(region=StrRegion(start=3705, end=3710)),
+ LSqBracket(region=StrRegion(start=3710, end=3711)),
+ IdentNameToken(region=StrRegion(start=3711, end=3718)),
+ RSqBracket(region=StrRegion(start=3718, end=3719)),
+ WhitespaceToken(region=StrRegion(start=3719, end=3720)),
+ OpToken(region=StrRegion(start=3720, end=3721), op_str='='),
+ WhitespaceToken(region=StrRegion(start=3721, end=3722)),
+ IdentNameToken(region=StrRegion(start=3722, end=3727)),
+ LSqBracket(region=StrRegion(start=3727, end=3728)),
+ IdentNameToken(region=StrRegion(start=3728, end=3735)),
+ WhitespaceToken(region=StrRegion(start=3735, end=3736)),
+ OpToken(region=StrRegion(start=3736, end=3737), op_str='-'),
+ WhitespaceToken(region=StrRegion(start=3737, end=3738)),
+ NumberToken(region=StrRegion(start=3738, end=3739)),
+ RSqBracket(region=StrRegion(start=3739, end=3740)),
+ SemicolonToken(region=StrRegion(start=3740, end=3741)),
+ WhitespaceToken(region=StrRegion(start=3741, end=3746)),
+ IdentNameToken(region=StrRegion(start=3746, end=3751)),
+ LSqBracket(region=StrRegion(start=3751, end=3752)),
+ IdentNameToken(region=StrRegion(start=3752, end=3759)),
+ WhitespaceToken(region=StrRegion(start=3759, end=3760)),
+ OpToken(region=StrRegion(start=3760, end=3761), op_str='-'),
+ WhitespaceToken(region=StrRegion(start=3761, end=3762)),
+ NumberToken(region=StrRegion(start=3762, end=3763)),
+ RSqBracket(region=StrRegion(start=3763, end=3764)),
+ WhitespaceToken(region=StrRegion(start=3764, end=3765)),
+ OpToken(region=StrRegion(start=3765, end=3766), op_str='='),
+ WhitespaceToken(region=StrRegion(start=3766, end=3767)),
+ IdentNameToken(region=StrRegion(start=3767, end=3772)),
+ LSqBracket(region=StrRegion(start=3772, end=3773)),
+ IdentNameToken(region=StrRegion(start=3773, end=3780)),
+ WhitespaceToken(region=StrRegion(start=3780, end=3781)),
+ OpToken(region=StrRegion(start=3781, end=3782), op_str='-'),
+ WhitespaceToken(region=StrRegion(start=3782, end=3783)),
+ NumberToken(region=StrRegion(start=3783, end=3784)),
+ RSqBracket(region=StrRegion(start=3784, end=3785)),
+ SemicolonToken(region=StrRegion(start=3785, end=3786)),
+ WhitespaceToken(region=StrRegion(start=3786, end=3791)),
+ IdentNameToken(region=StrRegion(start=3791, end=3796)),
+ LSqBracket(region=StrRegion(start=3796, end=3797)),
+ IdentNameToken(region=StrRegion(start=3797, end=3804)),
+ WhitespaceToken(region=StrRegion(start=3804, end=3805)),
+ OpToken(region=StrRegion(start=3805, end=3806), op_str='-'),
+ WhitespaceToken(region=StrRegion(start=3806, end=3807)),
+ NumberToken(region=StrRegion(start=3807, end=3808)),
+ RSqBracket(region=StrRegion(start=3808, end=3809)),
+ WhitespaceToken(region=StrRegion(start=3809, end=3810)),
+ OpToken(region=StrRegion(start=3810, end=3811), op_str='='),
+ WhitespaceToken(region=StrRegion(start=3811, end=3812)),
+ IdentNameToken(region=StrRegion(start=3812, end=3817)),
+ LSqBracket(region=StrRegion(start=3817, end=3818)),
+ IdentNameToken(region=StrRegion(start=3818, end=3825)),
+ WhitespaceToken(region=StrRegion(start=3825, end=3826)),
+ OpToken(region=StrRegion(start=3826, end=3827), op_str='-'),
+ WhitespaceToken(region=StrRegion(start=3827, end=3828)),
+ NumberToken(region=StrRegion(start=3828, end=3829)),
+ RSqBracket(region=StrRegion(start=3829, end=3830)),
+ SemicolonToken(region=StrRegion(start=3830, end=3831)),
+ WhitespaceToken(region=StrRegion(start=3831, end=3836)),
+ IdentNameToken(region=StrRegion(start=3836, end=3841)),
+ LSqBracket(region=StrRegion(start=3841, end=3842)),
+ IdentNameToken(region=StrRegion(start=3842, end=3849)),
+ WhitespaceToken(region=StrRegion(start=3849, end=3850)),
+ OpToken(region=StrRegion(start=3850, end=3851), op_str='-'),
+ WhitespaceToken(region=StrRegion(start=3851, end=3852)),
+ NumberToken(region=StrRegion(start=3852, end=3853)),
+ RSqBracket(region=StrRegion(start=3853, end=3854)),
+ WhitespaceToken(region=StrRegion(start=3854, end=3855)),
+ OpToken(region=StrRegion(start=3855, end=3856), op_str='='),
+ WhitespaceToken(region=StrRegion(start=3856, end=3857)),
+ IdentNameToken(region=StrRegion(start=3857, end=3861)),
+ SemicolonToken(region=StrRegion(start=3861, end=3862)),
+ WhitespaceToken(region=StrRegion(start=3862, end=3863)),
+ RBrace(region=StrRegion(start=3863, end=3864)),
+ WhitespaceToken(region=StrRegion(start=3864, end=3865)),
+ EofToken(region=StrRegion(start=3865, end=3865))]
+ProgramNode(StrRegion(0, 3864), [
+  DeclNode(StrRegion(0, 16), [
+    DeclScope_Global(StrRegion(0, 6)),
+    DeclType_Variable(StrRegion(6, 6)),
+    DeclItemsList(StrRegion(7, 16), [
+      DeclItemNode(StrRegion(7, 16), [
+        IdentNode(StrRegion(7, 12)),
+        NumberNode(StrRegion(15, 16))
+      ])
+    ])
+  ]),
+  DeclNode(StrRegion(18, 33), [
+    DeclScope_Global(StrRegion(18, 24)),
+    DeclType_Variable(StrRegion(24, 24)),
+    DeclItemsList(StrRegion(25, 33), [
+      DeclItemNode(StrRegion(25, 33), [
+        IdentNode(StrRegion(25, 29)),
+        NumberNode(StrRegion(32, 33))
+      ])
+    ])
+  ]),
+  DefineNode(StrRegion(62, 87), [
+    IdentNode(StrRegion(66, 69)),
+    ArgsDeclNode(StrRegion(69, 84), [
+      ArgDeclNode(StrRegion(78, 83), [
+        IdentNode(StrRegion(78, 81)),
+        IdentNode(StrRegion(82, 83))
+      ])
+    ]),
+    BlockNode(StrRegion(85, 87), [])
+  ]),
+  DefineNode(StrRegion(101, 142), [
+    IdentNode(StrRegion(105, 112)),
+    ArgsDeclNode(StrRegion(112, 139), [
+      ArgDeclNode(StrRegion(121, 126), [
+        IdentNode(StrRegion(121, 124)),
+        IdentNode(StrRegion(125, 126))
+      ]),
+      ArgDeclNode(StrRegion(128, 138), [
+        IdentNode(StrRegion(128, 134)),
+        IdentNode(StrRegion(135, 138))
+      ])
+    ]),
+    BlockNode(StrRegion(140, 142), [])
+  ]),
+  DeclNode(StrRegion(144, 164), [
+    DeclScope_Global(StrRegion(144, 150)),
+    DeclType_List(StrRegion(150, 152)),
+    DeclItemsList(StrRegion(153, 164), [
+      DeclItemNode(StrRegion(153, 164), [
+        IdentNode(StrRegion(153, 159)),
+        ListNode(StrRegion(162, 164), [])
+      ])
+    ])
+  ]),
+  DeclNode(StrRegion(166, 196), [
+    DeclScope_Global(StrRegion(166, 172)),
+    DeclType_List(StrRegion(172, 174)),
+    DeclItemsList(StrRegion(175, 196), [
+      DeclItemNode(StrRegion(175, 196), [
+        IdentNode(StrRegion(175, 191)),
+        ListNode(StrRegion(194, 196), [])
+      ])
+    ])
+  ]),
+  DefineNode(StrRegion(199, 294), [
+    IdentNode(StrRegion(203, 222)),
+    ArgsDeclNode(StrRegion(222, 234), [
+      ArgDeclNode(StrRegion(223, 233), [
+        IdentNode(StrRegion(223, 229)),
+        IdentNode(StrRegion(230, 233))
+      ])
+    ]),
+    BlockNode(StrRegion(235, 294), [])
+  ]),
+  DeclNode(StrRegion(296, 313), [
+    DeclScope_Global(StrRegion(296, 302)),
+    DeclType_Variable(StrRegion(302, 302)),
+    DeclItemsList(StrRegion(303, 313), [
+      DeclItemNode(StrRegion(303, 313), [
+        IdentNode(StrRegion(303, 313))
+      ])
+    ])
+  ]),
+  DefineNode(StrRegion(355, 793), [
+    IdentNode(StrRegion(359, 375)),
+    ArgsDeclNode(StrRegion(375, 377), []),
+    BlockNode(StrRegion(378, 793), [
+      CallNode(StrRegion(384, 407), [
+        IdentNode(StrRegion(384, 405)),
+        CallArgs(StrRegion(405, 407), [])
+      ]),
+      ConditionalBlock(StrRegion(413, 791), [
+        IfBlock(StrRegion(413, 595), [
+          GtNode(StrRegion(416, 430), [
+            IdentNode(StrRegion(416, 426)),
+            NumberNode(StrRegion(429, 430))
+          ]),
+          BlockNode(StrRegion(431, 595), [
+            AssignNode(StrRegion(441, 473), [
+              IdentNode(StrRegion(441, 451)),
+              GetitemNode(StrRegion(454, 473), [
+                IdentNode(StrRegion(454, 470)),
+                NumberNode(StrRegion(471, 472))
+              ])
+            ]),
+            CallNode(StrRegion(483, 511), [
+              IdentNode(StrRegion(483, 508)),
+              CallArgs(StrRegion(508, 511), [
+                NumberNode(StrRegion(509, 510))
+              ])
+            ]),
+            ConditionalBlock(StrRegion(521, 589), [
+              IfBlock(StrRegion(521, 589), [
+                NeqNode(StrRegion(524, 539), [
+                  IdentNode(StrRegion(524, 534)),
+                  NumberNode(StrRegion(538, 539))
+                ]),
+                BlockNode(StrRegion(540, 589), [
+                  AssignNode(StrRegion(554, 578), [
+                    GetitemNode(StrRegion(554, 574), [
+                      IdentNode(StrRegion(554, 562)),
+                      IdentNode(StrRegion(563, 573))
+                    ]),
+                    NumberNode(StrRegion(577, 578))
+                  ])
+                ])
+              ]),
+              NullElseBlock(StrRegion(588, 589))
+            ])
+          ])
+        ]),
+        ElseBlock(StrRegion(596, 791), [
+          BlockNode(StrRegion(601, 791), [
+            CallNode(StrRegion(651, 669), [
+              IdentNode(StrRegion(651, 665)),
+              CallArgs(StrRegion(665, 669), [
+                StringNode(StrRegion(666, 668))
+              ])
+            ]),
+            CallNode(StrRegion(679, 692), [
+              IdentNode(StrRegion(679, 690)),
+              CallArgs(StrRegion(690, 692), [])
+            ]),
+            ConditionalBlock(StrRegion(722, 785), [
+              IfBlock(StrRegion(722, 785), [
+                NeqNode(StrRegion(725, 740), [
+                  IdentNode(StrRegion(725, 735)),
+                  NumberNode(StrRegion(739, 740))
+                ]),
+                BlockNode(StrRegion(741, 785), [
+                  CallNode(StrRegion(755, 774), [
+                    IdentNode(StrRegion(755, 771)),
+                    CallArgs(StrRegion(771, 774), [
+                      NumberNode(StrRegion(772, 773))
+                    ])
+                  ])
+                ])
+              ]),
+              NullElseBlock(StrRegion(784, 785))
+            ])
+          ])
+        ])
+      ])
+    ])
+  ]),
+  DefineNode(StrRegion(825, 1016), [
+    IdentNode(StrRegion(829, 844)),
+    ArgsDeclNode(StrRegion(844, 856), [
+      ArgDeclNode(StrRegion(845, 855), [
+        IdentNode(StrRegion(845, 851)),
+        IdentNode(StrRegion(852, 855))
+      ])
+    ]),
+    BlockNode(StrRegion(857, 1016), [
+      AssignNode(StrRegion(863, 879), [
+        GetitemNode(StrRegion(863, 874), [
+          IdentNode(StrRegion(863, 869)),
+          IdentNode(StrRegion(870, 873))
+        ]),
+        StringNode(StrRegion(877, 879))
+      ]),
+      ConditionalBlock(StrRegion(926, 979), [
+        IfBlock(StrRegion(926, 979), [
+          NeqNode(StrRegion(929, 944), [
+            IdentNode(StrRegion(929, 939)),
+            NumberNode(StrRegion(943, 944))
+          ]),
+          BlockNode(StrRegion(945, 979), [
+            AssignNode(StrRegion(955, 972), [
+              GetitemNode(StrRegion(955, 968), [
+                IdentNode(StrRegion(955, 963)),
+                IdentNode(StrRegion(964, 967))
+              ]),
+              NumberNode(StrRegion(971, 972))
+            ])
+          ])
+        ]),
+        NullElseBlock(StrRegion(978, 979))
+      ]),
+      CallNode(StrRegion(984, 1013), [
+        IdentNode(StrRegion(984, 1008)),
+        CallArgs(StrRegion(1008, 1013), [
+          IdentNode(StrRegion(1009, 1012))
+        ])
+      ])
+    ])
+  ]),
+  DefineNode(StrRegion(1017, 1110), [
+    IdentNode(StrRegion(1021, 1038)),
+    ArgsDeclNode(StrRegion(1038, 1050), [
+      ArgDeclNode(StrRegion(1039, 1049), [
+        IdentNode(StrRegion(1039, 1045)),
+        IdentNode(StrRegion(1046, 1049))
+      ])
+    ]),
+    BlockNode(StrRegion(1051, 1110), [
+      CallNode(StrRegion(1057, 1081), [
+        IdentNode(StrRegion(1057, 1076)),
+        CallArgs(StrRegion(1076, 1081), [
+          IdentNode(StrRegion(1077, 1080))
+        ])
+      ]),
+      CallNode(StrRegion(1087, 1107), [
+        IdentNode(StrRegion(1087, 1102)),
+        CallArgs(StrRegion(1102, 1107), [
+          IdentNode(StrRegion(1103, 1106))
+        ])
+      ])
+    ])
+  ]),
+  DeclNode(StrRegion(1112, 1134), [
+    DeclScope_Global(StrRegion(1112, 1118)),
+    DeclType_List(StrRegion(1118, 1120)),
+    DeclItemsList(StrRegion(1121, 1134), [
+      DeclItemNode(StrRegion(1121, 1134), [
+        IdentNode(StrRegion(1121, 1129)),
+        ListNode(StrRegion(1132, 1134), [])
+      ])
+    ])
+  ]),
+  DefineNode(StrRegion(1156, 1186), [
+    IdentNode(StrRegion(1160, 1176)),
+    ArgsDeclNode(StrRegion(1176, 1183), [
+      ArgDeclNode(StrRegion(1177, 1182), [
+        IdentNode(StrRegion(1177, 1180)),
+        IdentNode(StrRegion(1181, 1182))
+      ])
+    ]),
+    BlockNode(StrRegion(1184, 1186), [])
+  ]),
+  DefineNode(StrRegion(1207, 1234), [
+    IdentNode(StrRegion(1211, 1224)),
+    ArgsDeclNode(StrRegion(1224, 1231), [
+      ArgDeclNode(StrRegion(1225, 1230), [
+        IdentNode(StrRegion(1225, 1228)),
+        IdentNode(StrRegion(1229, 1230))
+      ])
+    ]),
+    BlockNode(StrRegion(1232, 1234), [])
+  ]),
+  DefineNode(StrRegion(1255, 1272), [
+    IdentNode(StrRegion(1259, 1267)),
+    ArgsDeclNode(StrRegion(1267, 1269), []),
+    BlockNode(StrRegion(1270, 1272), [])
+  ]),
+  DefineNode(StrRegion(1293, 1319), [
+    IdentNode(StrRegion(1297, 1309)),
+    ArgsDeclNode(StrRegion(1309, 1316), [
+      ArgDeclNode(StrRegion(1310, 1315), [
+        IdentNode(StrRegion(1310, 1313)),
+        IdentNode(StrRegion(1314, 1315))
+      ])
+    ]),
+    BlockNode(StrRegion(1317, 1319), [])
+  ]),
+  DefineNode(StrRegion(1340, 1368), [
+    IdentNode(StrRegion(1344, 1358)),
+    ArgsDeclNode(StrRegion(1358, 1365), [
+      ArgDeclNode(StrRegion(1359, 1364), [
+        IdentNode(StrRegion(1359, 1362)),
+        IdentNode(StrRegion(1363, 1364))
+      ])
+    ]),
+    BlockNode(StrRegion(1366, 1368), [])
+  ]),
+  DefineNode(StrRegion(1389, 1427), [
+    IdentNode(StrRegion(1393, 1417)),
+    ArgsDeclNode(StrRegion(1417, 1424), [
+      ArgDeclNode(StrRegion(1418, 1423), [
+        IdentNode(StrRegion(1418, 1421)),
+        IdentNode(StrRegion(1422, 1423))
+      ])
+    ]),
+    BlockNode(StrRegion(1425, 1427), [])
+  ]),
+  DefineNode(StrRegion(1448, 1487), [
+    IdentNode(StrRegion(1452, 1477)),
+    ArgsDeclNode(StrRegion(1477, 1484), [
+      ArgDeclNode(StrRegion(1478, 1483), [
+        IdentNode(StrRegion(1478, 1481)),
+        IdentNode(StrRegion(1482, 1483))
+      ])
+    ]),
+    BlockNode(StrRegion(1485, 1487), [])
+  ]),
+  DefineNode(StrRegion(1508, 1538), [
+    IdentNode(StrRegion(1512, 1533)),
+    ArgsDeclNode(StrRegion(1533, 1535), []),
+    BlockNode(StrRegion(1536, 1538), [])
+  ]),
+  DefineNode(StrRegion(1559, 1579), [
+    IdentNode(StrRegion(1563, 1574)),
+    ArgsDeclNode(StrRegion(1574, 1576), []),
+    BlockNode(StrRegion(1577, 1579), [])
+  ]),
+  DefineNode(StrRegion(1581, 1811), [
+    IdentNode(StrRegion(1585, 1591)),
+    ArgsDeclNode(StrRegion(1591, 1603), [
+      ArgDeclNode(StrRegion(1592, 1602), [
+        IdentNode(StrRegion(1592, 1598)),
+        IdentNode(StrRegion(1599, 1602))
+      ])
+    ]),
+    BlockNode(StrRegion(1604, 1811), [
+      ConditionalBlock(StrRegion(1610, 1809), [
+        IfBlock(StrRegion(1610, 1809), [
+          GeNode(StrRegion(1613, 1631), [
+            GetitemNode(StrRegion(1613, 1626), [
+              IdentNode(StrRegion(1613, 1621)),
+              IdentNode(StrRegion(1622, 1625))
+            ]),
+            NumberNode(StrRegion(1630, 1631))
+          ]),
+          BlockNode(StrRegion(1632, 1809), [
+            AssignNode(StrRegion(1691, 1724), [
+              GetitemNode(StrRegion(1691, 1704), [
+                IdentNode(StrRegion(1691, 1699)),
+                IdentNode(StrRegion(1700, 1703))
+              ]),
+              SubNode(StrRegion(1707, 1724), [
+                GetitemNode(StrRegion(1707, 1720), [
+                  IdentNode(StrRegion(1707, 1715)),
+                  IdentNode(StrRegion(1716, 1719))
+                ]),
+                NumberNode(StrRegion(1723, 1724))
+              ])
+            ]),
+            ConditionalBlock(StrRegion(1734, 1803), [
+              IfBlock(StrRegion(1734, 1803), [
+                EqNode(StrRegion(1737, 1755), [
+                  GetitemNode(StrRegion(1737, 1750), [
+                    IdentNode(StrRegion(1737, 1745)),
+                    IdentNode(StrRegion(1746, 1749))
+                  ]),
+                  NumberNode(StrRegion(1754, 1755))
+                ]),
+                BlockNode(StrRegion(1756, 1803), [
+                  CallNode(StrRegion(1770, 1792), [
+                    IdentNode(StrRegion(1770, 1787)),
+                    CallArgs(StrRegion(1787, 1792), [
+                      IdentNode(StrRegion(1788, 1791))
+                    ])
+                  ])
+                ])
+              ]),
+              NullElseBlock(StrRegion(1802, 1803))
+            ])
+          ])
+        ]),
+        NullElseBlock(StrRegion(1808, 1809))
+      ])
+    ])
+  ]),
+  DefineNode(StrRegion(1812, 2002), [
+    IdentNode(StrRegion(1816, 1822)),
+    ArgsDeclNode(StrRegion(1822, 1834), [
+      ArgDeclNode(StrRegion(1823, 1833), [
+        IdentNode(StrRegion(1823, 1829)),
+        IdentNode(StrRegion(1830, 1833))
+      ])
+    ]),
+    BlockNode(StrRegion(1835, 2002), [
+      ConditionalBlock(StrRegion(1841, 2000), [
+        IfBlock(StrRegion(1841, 2000), [
+          GeNode(StrRegion(1844, 1862), [
+            GetitemNode(StrRegion(1844, 1857), [
+              IdentNode(StrRegion(1844, 1852)),
+              IdentNode(StrRegion(1853, 1856))
+            ]),
+            NumberNode(StrRegion(1861, 1862))
+          ]),
+          BlockNode(StrRegion(1863, 2000), [
+            AssignNode(StrRegion(1922, 1955), [
+              GetitemNode(StrRegion(1922, 1935), [
+                IdentNode(StrRegion(1922, 1930)),
+                IdentNode(StrRegion(1931, 1934))
+              ]),
+              AddNode(StrRegion(1938, 1955), [
+                GetitemNode(StrRegion(1938, 1951), [
+                  IdentNode(StrRegion(1938, 1946)),
+                  IdentNode(StrRegion(1947, 1950))
+                ]),
+                NumberNode(StrRegion(1954, 1955))
+              ])
+            ])
+          ])
+        ]),
+        NullElseBlock(StrRegion(1999, 2000))
+      ])
+    ])
+  ]),
+  DeclNode(StrRegion(2040, 2059), [
+    DeclScope_Global(StrRegion(2040, 2046)),
+    DeclType_List(StrRegion(2046, 2048)),
+    DeclItemsList(StrRegion(2049, 2059), [
+      DeclItemNode(StrRegion(2049, 2059), [
+        IdentNode(StrRegion(2049, 2054)),
+        ListNode(StrRegion(2057, 2059), [])
+      ])
+    ])
+  ]),
+  DeclNode(StrRegion(2061, 2086), [
+    DeclScope_Global(StrRegion(2061, 2067)),
+    DeclType_Variable(StrRegion(2067, 2067)),
+    DeclItemsList(StrRegion(2068, 2086), [
+      DeclItemNode(StrRegion(2068, 2086), [
+        IdentNode(StrRegion(2068, 2078)),
+        IdentNode(StrRegion(2081, 2086))
+      ])
+    ])
+  ]),
+  DefineNode(StrRegion(2436, 2448), [
+    IdentNode(StrRegion(2440, 2443)),
+    ArgsDeclNode(StrRegion(2443, 2445), []),
+    BlockNode(StrRegion(2446, 2448), [])
+  ]),
+  DefineNode(StrRegion(2450, 2600), [
+    IdentNode(StrRegion(2454, 2461)),
+    ArgsDeclNode(StrRegion(2461, 2463), []),
+    BlockNode(StrRegion(2464, 2600), [
+      CallNode(StrRegion(2470, 2480), [
+        IdentNode(StrRegion(2470, 2478)),
+        CallArgs(StrRegion(2478, 2480), [])
+      ]),
+      ConditionalBlock(StrRegion(2504, 2568), [
+        IfBlock(StrRegion(2504, 2568), [
+          EqNode(StrRegion(2507, 2525), [
+            IdentNode(StrRegion(2507, 2517)),
+            IdentNode(StrRegion(2521, 2525))
+          ]),
+          BlockNode(StrRegion(2526, 2568), [
+            CallNode(StrRegion(2536, 2561), [
+              IdentNode(StrRegion(2536, 2542)),
+              CallArgs(StrRegion(2542, 2561), [
+                GetitemNode(StrRegion(2543, 2560), [
+                  IdentNode(StrRegion(2543, 2548)),
+                  IdentNode(StrRegion(2549, 2559))
+                ])
+              ])
+            ])
+          ])
+        ]),
+        NullElseBlock(StrRegion(2567, 2568))
+      ]),
+      CallNode(StrRegion(2573, 2597), [
+        IdentNode(StrRegion(2573, 2585)),
+        CallArgs(StrRegion(2585, 2597), [
+          IdentNode(StrRegion(2586, 2596))
+        ])
+      ])
+    ])
+  ]),
+  DefineNode(StrRegion(2602, 2768), [
+    IdentNode(StrRegion(2606, 2613)),
+    ArgsDeclNode(StrRegion(2613, 2615), []),
+    BlockNode(StrRegion(2616, 2768), [
+      CallNode(StrRegion(2622, 2632), [
+        IdentNode(StrRegion(2622, 2630)),
+        CallArgs(StrRegion(2630, 2632), [])
+      ]),
+      DeclNode(StrRegion(2638, 2662), [
+        DeclScope_Let(StrRegion(2638, 2641)),
+        DeclType_Variable(StrRegion(2641, 2641)),
+        DeclItemsList(StrRegion(2642, 2662), [
+          DeclItemNode(StrRegion(2642, 2662), [
+            IdentNode(StrRegion(2642, 2649)),
+            IdentNode(StrRegion(2652, 2662))
+          ])
+        ])
+      ]),
+      DeclNode(StrRegion(2668, 2693), [
+        DeclScope_Let(StrRegion(2668, 2671)),
+        DeclType_Variable(StrRegion(2671, 2671)),
+        DeclItemsList(StrRegion(2672, 2693), [
+          DeclItemNode(StrRegion(2672, 2693), [
+            IdentNode(StrRegion(2672, 2676)),
+            GetitemNode(StrRegion(2679, 2693), [
+              IdentNode(StrRegion(2679, 2684)),
+              IdentNode(StrRegion(2685, 2692))
+            ])
+          ])
+        ])
+      ]),
+      AssignNode(StrRegion(2699, 2734), [
+        GetitemNode(StrRegion(2699, 2713), [
+          IdentNode(StrRegion(2699, 2704)),
+          IdentNode(StrRegion(2705, 2712))
+        ]),
+        GetitemNode(StrRegion(2716, 2734), [
+          IdentNode(StrRegion(2716, 2721)),
+          SubNode(StrRegion(2722, 2733), [
+            IdentNode(StrRegion(2722, 2729)),
+            NumberNode(StrRegion(2732, 2733))
+          ])
+        ])
+      ]),
+      AssignNode(StrRegion(2740, 2765), [
+        GetitemNode(StrRegion(2740, 2758), [
+          IdentNode(StrRegion(2740, 2745)),
+          SubNode(StrRegion(2746, 2757), [
+            IdentNode(StrRegion(2746, 2753)),
+            NumberNode(StrRegion(2756, 2757))
+          ])
+        ]),
+        IdentNode(StrRegion(2761, 2765))
+      ])
+    ])
+  ]),
+  DefineNode(StrRegion(2770, 3096), [
+    IdentNode(StrRegion(2774, 2783)),
+    ArgsDeclNode(StrRegion(2783, 2785), []),
+    BlockNode(StrRegion(2786, 3096), [
+      CallNode(StrRegion(2905, 2915), [
+        IdentNode(StrRegion(2905, 2913)),
+        CallArgs(StrRegion(2913, 2915), [])
+      ]),
+      DeclNode(StrRegion(2921, 2945), [
+        DeclScope_Let(StrRegion(2921, 2924)),
+        DeclType_Variable(StrRegion(2924, 2924)),
+        DeclItemsList(StrRegion(2925, 2945), [
+          DeclItemNode(StrRegion(2925, 2945), [
+            IdentNode(StrRegion(2925, 2932)),
+            IdentNode(StrRegion(2935, 2945))
+          ])
+        ])
+      ]),
+      DeclNode(StrRegion(2951, 2976), [
+        DeclScope_Let(StrRegion(2951, 2954)),
+        DeclType_Variable(StrRegion(2954, 2954)),
+        DeclItemsList(StrRegion(2955, 2976), [
+          DeclItemNode(StrRegion(2955, 2976), [
+            IdentNode(StrRegion(2955, 2959)),
+            GetitemNode(StrRegion(2962, 2976), [
+              IdentNode(StrRegion(2962, 2967)),
+              IdentNode(StrRegion(2968, 2975))
+            ])
+          ])
+        ])
+      ]),
+      AssignNode(StrRegion(2982, 3017), [
+        GetitemNode(StrRegion(2982, 2996), [
+          IdentNode(StrRegion(2982, 2987)),
+          IdentNode(StrRegion(2988, 2995))
+        ]),
+        GetitemNode(StrRegion(2999, 3017), [
+          IdentNode(StrRegion(2999, 3004)),
+          SubNode(StrRegion(3005, 3016), [
+            IdentNode(StrRegion(3005, 3012)),
+            NumberNode(StrRegion(3015, 3016))
+          ])
+        ])
+      ]),
+      AssignNode(StrRegion(3023, 3062), [
+        GetitemNode(StrRegion(3023, 3041), [
+          IdentNode(StrRegion(3023, 3028)),
+          SubNode(StrRegion(3029, 3040), [
+            IdentNode(StrRegion(3029, 3036)),
+            NumberNode(StrRegion(3039, 3040))
+          ])
+        ]),
+        GetitemNode(StrRegion(3044, 3062), [
+          IdentNode(StrRegion(3044, 3049)),
+          SubNode(StrRegion(3050, 3061), [
+            IdentNode(StrRegion(3050, 3057)),
+            NumberNode(StrRegion(3060, 3061))
+          ])
+        ])
+      ]),
+      AssignNode(StrRegion(3068, 3093), [
+        GetitemNode(StrRegion(3068, 3086), [
+          IdentNode(StrRegion(3068, 3073)),
+          SubNode(StrRegion(3074, 3085), [
+            IdentNode(StrRegion(3074, 3081)),
+            NumberNode(StrRegion(3084, 3085))
+          ])
+        ]),
+        IdentNode(StrRegion(3089, 3093))
+      ])
+    ])
+  ]),
+  DefineNode(StrRegion(3098, 3250), [
+    IdentNode(StrRegion(3102, 3109)),
+    ArgsDeclNode(StrRegion(3109, 3111), []),
+    BlockNode(StrRegion(3112, 3250), [
+      CallNode(StrRegion(3118, 3128), [
+        IdentNode(StrRegion(3118, 3126)),
+        CallArgs(StrRegion(3126, 3128), [])
+      ]),
+      DeclNode(StrRegion(3134, 3163), [
+        DeclScope_Let(StrRegion(3134, 3137)),
+        DeclType_Variable(StrRegion(3137, 3137)),
+        DeclItemsList(StrRegion(3138, 3163), [
+          DeclItemNode(StrRegion(3138, 3163), [
+            IdentNode(StrRegion(3138, 3143)),
+            GetitemNode(StrRegion(3146, 3163), [
+              IdentNode(StrRegion(3146, 3151)),
+              IdentNode(StrRegion(3152, 3162))
+            ])
+          ])
+        ])
+      ]),
+      CallNode(StrRegion(3169, 3189), [
+        IdentNode(StrRegion(3169, 3182)),
+        CallArgs(StrRegion(3182, 3189), [
+          IdentNode(StrRegion(3183, 3188))
+        ])
+      ]),
+      ConditionalBlock(StrRegion(3195, 3248), [
+        IfBlock(StrRegion(3195, 3248), [
+          NeqNode(StrRegion(3198, 3217), [
+            IdentNode(StrRegion(3198, 3208)),
+            IdentNode(StrRegion(3212, 3217))
+          ]),
+          BlockNode(StrRegion(3218, 3248), [
+            CallNode(StrRegion(3228, 3241), [
+              IdentNode(StrRegion(3228, 3234)),
+              CallArgs(StrRegion(3234, 3241), [
+                IdentNode(StrRegion(3235, 3240))
+              ])
+            ])
+          ])
+        ]),
+        NullElseBlock(StrRegion(3247, 3248))
+      ])
+    ])
+  ]),
+  DefineNode(StrRegion(3252, 3531), [
+    IdentNode(StrRegion(3256, 3267)),
+    ArgsDeclNode(StrRegion(3267, 3269), []),
+    BlockNode(StrRegion(3270, 3531), [
+      CallNode(StrRegion(3276, 3286), [
+        IdentNode(StrRegion(3276, 3284)),
+        CallArgs(StrRegion(3284, 3286), [])
+      ]),
+      DeclNode(StrRegion(3292, 3316), [
+        DeclScope_Let(StrRegion(3292, 3295)),
+        DeclType_Variable(StrRegion(3295, 3295)),
+        DeclItemsList(StrRegion(3296, 3316), [
+          DeclItemNode(StrRegion(3296, 3316), [
+            IdentNode(StrRegion(3296, 3303)),
+            IdentNode(StrRegion(3306, 3316))
+          ])
+        ])
+      ]),
+      DeclNode(StrRegion(3322, 3347), [
+        DeclScope_Let(StrRegion(3322, 3325)),
+        DeclType_Variable(StrRegion(3325, 3325)),
+        DeclItemsList(StrRegion(3326, 3347), [
+          DeclItemNode(StrRegion(3326, 3347), [
+            IdentNode(StrRegion(3326, 3330)),
+            GetitemNode(StrRegion(3333, 3347), [
+              IdentNode(StrRegion(3333, 3338)),
+              IdentNode(StrRegion(3339, 3346))
+            ])
+          ])
+        ])
+      ]),
+      DeclNode(StrRegion(3353, 3382), [
+        DeclScope_Let(StrRegion(3353, 3356)),
+        DeclType_Variable(StrRegion(3356, 3356)),
+        DeclItemsList(StrRegion(3357, 3382), [
+          DeclItemNode(StrRegion(3357, 3382), [
+            IdentNode(StrRegion(3357, 3361)),
+            GetitemNode(StrRegion(3364, 3382), [
+              IdentNode(StrRegion(3364, 3369)),
+              SubNode(StrRegion(3370, 3381), [
+                IdentNode(StrRegion(3370, 3377)),
+                NumberNode(StrRegion(3380, 3381))
+              ])
+            ])
+          ])
+        ])
+      ]),
+      CallNode(StrRegion(3388, 3407), [
+        IdentNode(StrRegion(3388, 3401)),
+        CallArgs(StrRegion(3401, 3407), [
+          IdentNode(StrRegion(3402, 3406))
+        ])
+      ]),
+      CallNode(StrRegion(3413, 3432), [
+        IdentNode(StrRegion(3413, 3426)),
+        CallArgs(StrRegion(3426, 3432), [
+          IdentNode(StrRegion(3427, 3431))
+        ])
+      ]),
+      ConditionalBlock(StrRegion(3459, 3529), [
+        IfBlock(StrRegion(3459, 3529), [
+          NeqNode(StrRegion(3462, 3477), [
+            IdentNode(StrRegion(3462, 3472)),
+            NumberNode(StrRegion(3476, 3477))
+          ]),
+          BlockNode(StrRegion(3478, 3529), [
+            CallNode(StrRegion(3488, 3500), [
+              IdentNode(StrRegion(3488, 3494)),
+              CallArgs(StrRegion(3494, 3500), [
+                IdentNode(StrRegion(3495, 3499))
+              ])
+            ]),
+            CallNode(StrRegion(3510, 3522), [
+              IdentNode(StrRegion(3510, 3516)),
+              CallArgs(StrRegion(3516, 3522), [
+                IdentNode(StrRegion(3517, 3521))
+              ])
+            ])
+          ])
+        ]),
+        NullElseBlock(StrRegion(3528, 3529))
+      ])
+    ])
+  ]),
+  DefineNode(StrRegion(3533, 3864), [
+    IdentNode(StrRegion(3537, 3545)),
+    ArgsDeclNode(StrRegion(3545, 3547), []),
+    BlockNode(StrRegion(3548, 3864), [
+      CallNode(StrRegion(3628, 3638), [
+        IdentNode(StrRegion(3628, 3636)),
+        CallArgs(StrRegion(3636, 3638), [])
+      ]),
+      DeclNode(StrRegion(3644, 3668), [
+        DeclScope_Let(StrRegion(3644, 3647)),
+        DeclType_Variable(StrRegion(3647, 3647)),
+        DeclItemsList(StrRegion(3648, 3668), [
+          DeclItemNode(StrRegion(3648, 3668), [
+            IdentNode(StrRegion(3648, 3655)),
+            IdentNode(StrRegion(3658, 3668))
+          ])
+        ])
+      ]),
+      DeclNode(StrRegion(3674, 3699), [
+        DeclScope_Let(StrRegion(3674, 3677)),
+        DeclType_Variable(StrRegion(3677, 3677)),
+        DeclItemsList(StrRegion(3678, 3699), [
+          DeclItemNode(StrRegion(3678, 3699), [
+            IdentNode(StrRegion(3678, 3682)),
+            GetitemNode(StrRegion(3685, 3699), [
+              IdentNode(StrRegion(3685, 3690)),
+              IdentNode(StrRegion(3691, 3698))
+            ])
+          ])
+        ])
+      ]),
+      AssignNode(StrRegion(3705, 3740), [
+        GetitemNode(StrRegion(3705, 3719), [
+          IdentNode(StrRegion(3705, 3710)),
+          IdentNode(StrRegion(3711, 3718))
+        ]),
+        GetitemNode(StrRegion(3722, 3740), [
+          IdentNode(StrRegion(3722, 3727)),
+          SubNode(StrRegion(3728, 3739), [
+            IdentNode(StrRegion(3728, 3735)),
+            NumberNode(StrRegion(3738, 3739))
+          ])
+        ])
+      ]),
+      AssignNode(StrRegion(3746, 3785), [
+        GetitemNode(StrRegion(3746, 3764), [
+          IdentNode(StrRegion(3746, 3751)),
+          SubNode(StrRegion(3752, 3763), [
+            IdentNode(StrRegion(3752, 3759)),
+            NumberNode(StrRegion(3762, 3763))
+          ])
+        ]),
+        GetitemNode(StrRegion(3767, 3785), [
+          IdentNode(StrRegion(3767, 3772)),
+          SubNode(StrRegion(3773, 3784), [
+            IdentNode(StrRegion(3773, 3780)),
+            NumberNode(StrRegion(3783, 3784))
+          ])
+        ])
+      ]),
+      AssignNode(StrRegion(3791, 3830), [
+        GetitemNode(StrRegion(3791, 3809), [
+          IdentNode(StrRegion(3791, 3796)),
+          SubNode(StrRegion(3797, 3808), [
+            IdentNode(StrRegion(3797, 3804)),
+            NumberNode(StrRegion(3807, 3808))
+          ])
+        ]),
+        GetitemNode(StrRegion(3812, 3830), [
+          IdentNode(StrRegion(3812, 3817)),
+          SubNode(StrRegion(3818, 3829), [
+            IdentNode(StrRegion(3818, 3825)),
+            NumberNode(StrRegion(3828, 3829))
+          ])
+        ])
+      ]),
+      AssignNode(StrRegion(3836, 3861), [
+        GetitemNode(StrRegion(3836, 3854), [
+          IdentNode(StrRegion(3836, 3841)),
+          SubNode(StrRegion(3842, 3853), [
+            IdentNode(StrRegion(3842, 3849)),
+            NumberNode(StrRegion(3852, 3853))
+          ])
+        ]),
+        IdentNode(StrRegion(3857, 3861))
+      ])
+    ])
+  ])
+])
+AstProgramNode(StrRegion(0, 3864),
+  [
+    AstDeclNode(StrRegion(0, 16),
+      VarDeclScope.GLOBAL,
+      VarDeclType.VARIABLE,
+      AstIdent(StrRegion(7, 12), 'false'),
+      AstNumber(StrRegion(15, 16), 0)
+    ),
+    AstDeclNode(StrRegion(18, 33),
+      VarDeclScope.GLOBAL,
+      VarDeclType.VARIABLE,
+      AstIdent(StrRegion(25, 29), 'true'),
+      AstNumber(StrRegion(32, 33), 1)
+    ),
+    AstDefine(StrRegion(62, 87),
+      AstIdent(StrRegion(66, 69), 'len'),
+      [
+        (
+          AstIdent(StrRegion(78, 81), 'val'),
+          AstIdent(StrRegion(82, 83), 'a')
+        )
+      ],
+      []
+    ),
+    AstDefine(StrRegion(101, 142),
+      AstIdent(StrRegion(105, 112), 'delitem'),
+      [
+        (
+          AstIdent(StrRegion(121, 124), 'val'),
+          AstIdent(StrRegion(125, 126), 'a')
+        ),
+        (
+          AstIdent(StrRegion(128, 134), 'number'),
+          AstIdent(StrRegion(135, 138), 'idx')
+        )
+      ],
+      []
+    ),
+    AstDeclNode(StrRegion(144, 164),
+      VarDeclScope.GLOBAL,
+      VarDeclType.LIST,
+      AstIdent(StrRegion(153, 159), 'psHeap'),
+      AstListLiteral(StrRegion(162, 164),
+        []
+      )
+    ),
+    AstDeclNode(StrRegion(166, 196),
+      VarDeclScope.GLOBAL,
+      VarDeclType.LIST,
+      AstIdent(StrRegion(175, 191), '_psHeap_freelist'),
+      AstListLiteral(StrRegion(194, 196),
+        []
+      )
+    ),
+    AstDefine(StrRegion(199, 294),
+      AstIdent(StrRegion(203, 222), '_PsHeap_FinalizeObj'),
+      [
+        (
+          AstIdent(StrRegion(223, 229), 'number'),
+          AstIdent(StrRegion(230, 233), 'ptr')
+        )
+      ],
+      []
+    ),
+    AstDeclNode(StrRegion(296, 313),
+      VarDeclScope.GLOBAL,
+      VarDeclType.VARIABLE,
+      AstIdent(StrRegion(303, 313), '__result__'),
+      None
+    ),
+    AstDefine(StrRegion(355, 793),
+      AstIdent(StrRegion(359, 375), 'PsHeap_AllocWord'),
+      [],
+      [
+        AstCall(StrRegion(384, 407),
+          AstIdent(StrRegion(384, 405), '_psHeap_freelist__len'),
+          []
+        ),
+        AstIf(StrRegion(413, 791),
+          AstBinOp(StrRegion(416, 430),
+            '>',
+            AstIdent(StrRegion(416, 426), '__result__'),
+            AstNumber(StrRegion(429, 430), 0)
+          ),
+          [
+            AstAssign(StrRegion(441, 473),
+              AstIdent(StrRegion(441, 451), '__result__'),
+              AstItem(StrRegion(454, 473),
+                AstIdent(StrRegion(454, 470), '_psHeap_freelist'),
+                AstNumber(StrRegion(471, 472), 0)
+              )
+            ),
+            AstCall(StrRegion(483, 511),
+              AstIdent(StrRegion(483, 508), '_psHeap_freelist__delitem'),
+              [
+                AstNumber(StrRegion(509, 510), 0)
+              ]
+            ),
+            AstIf(StrRegion(521, 589),
+              AstBinOp(StrRegion(524, 539),
+                '!=',
+                AstIdent(StrRegion(524, 534), 'COUNT_REFS'),
+                AstNumber(StrRegion(538, 539), 0)
+              ),
+              [
+                AstAssign(StrRegion(554, 578),
+                  AstItem(StrRegion(554, 574),
+                    AstIdent(StrRegion(554, 562), 'refStack'),
+                    AstIdent(StrRegion(563, 573), '__result__')
+                  ),
+                  AstNumber(StrRegion(577, 578), 1)
+                )
+              ]
+            )
+          ],
+          [
+            AstCall(StrRegion(651, 669),
+              AstIdent(StrRegion(651, 665), 'psHeap__append'),
+              [
+                AstString(StrRegion(666, 668), '')
+              ]
+            ),
+            AstCall(StrRegion(679, 692),
+              AstIdent(StrRegion(679, 690), 'psHeap__len'),
+              []
+            ),
+            AstIf(StrRegion(722, 785),
+              AstBinOp(StrRegion(725, 740),
+                '!=',
+                AstIdent(StrRegion(725, 735), 'COUNT_REFS'),
+                AstNumber(StrRegion(739, 740), 0)
+              ),
+              [
+                AstCall(StrRegion(755, 774),
+                  AstIdent(StrRegion(755, 771), 'refStack__append'),
+                  [
+                    AstNumber(StrRegion(772, 773), 1)
+                  ]
+                )
+              ]
+            )
+          ]
+        )
+      ]
+    ),
+    AstDefine(StrRegion(825, 1016),
+      AstIdent(StrRegion(829, 844), 'PsHeap_FreeWord'),
+      [
+        (
+          AstIdent(StrRegion(845, 851), 'number'),
+          AstIdent(StrRegion(852, 855), 'ptr')
+        )
+      ],
+      [
+        AstAssign(StrRegion(863, 879),
+          AstItem(StrRegion(863, 874),
+            AstIdent(StrRegion(863, 869), 'psHeap'),
+            AstIdent(StrRegion(870, 873), 'ptr')
+          ),
+          AstString(StrRegion(877, 879), '')
+        ),
+        AstIf(StrRegion(926, 979),
+          AstBinOp(StrRegion(929, 944),
+            '!=',
+            AstIdent(StrRegion(929, 939), 'COUNT_REFS'),
+            AstNumber(StrRegion(943, 944), 0)
+          ),
+          [
+            AstAssign(StrRegion(955, 972),
+              AstItem(StrRegion(955, 968),
+                AstIdent(StrRegion(955, 963), 'refStack'),
+                AstIdent(StrRegion(964, 967), 'ptr')
+              ),
+              AstNumber(StrRegion(971, 972), 0)
+            )
+          ]
+        ),
+        AstCall(StrRegion(984, 1013),
+          AstIdent(StrRegion(984, 1008), '_psHeap_freelist__append'),
+          [
+            AstIdent(StrRegion(1009, 1012), 'ptr')
+          ]
+        )
+      ]
+    ),
+    AstDefine(StrRegion(1017, 1110),
+      AstIdent(StrRegion(1021, 1038), 'PsHeap_DeleteWord'),
+      [
+        (
+          AstIdent(StrRegion(1039, 1045), 'number'),
+          AstIdent(StrRegion(1046, 1049), 'ptr')
+        )
+      ],
+      [
+        AstCall(StrRegion(1057, 1081),
+          AstIdent(StrRegion(1057, 1076), '_PsHeap_FinalizeObj'),
+          [
+            AstIdent(StrRegion(1077, 1080), 'ptr')
+          ]
+        ),
+        AstCall(StrRegion(1087, 1107),
+          AstIdent(StrRegion(1087, 1102), 'PsHeap_FreeWord'),
+          [
+            AstIdent(StrRegion(1103, 1106), 'ptr')
+          ]
+        )
+      ]
+    ),
+    AstDeclNode(StrRegion(1112, 1134),
+      VarDeclScope.GLOBAL,
+      VarDeclType.LIST,
+      AstIdent(StrRegion(1121, 1129), 'refStack'),
+      AstListLiteral(StrRegion(1132, 1134),
+        []
+      )
+    ),
+    AstDefine(StrRegion(1156, 1186),
+      AstIdent(StrRegion(1160, 1176), 'refStack__append'),
+      [
+        (
+          AstIdent(StrRegion(1177, 1180), 'val'),
+          AstIdent(StrRegion(1181, 1182), 'x')
+        )
+      ],
+      []
+    ),
+    AstDefine(StrRegion(1207, 1234),
+      AstIdent(StrRegion(1211, 1224), 'stack__append'),
+      [
+        (
+          AstIdent(StrRegion(1225, 1228), 'val'),
+          AstIdent(StrRegion(1229, 1230), 'x')
+        )
+      ],
+      []
+    ),
+    AstDefine(StrRegion(1255, 1272),
+      AstIdent(StrRegion(1259, 1267), 'lenStack'),
+      [],
+      []
+    ),
+    AstDefine(StrRegion(1293, 1319),
+      AstIdent(StrRegion(1297, 1309), 'stackDelitem'),
+      [
+        (
+          AstIdent(StrRegion(1310, 1313), 'val'),
+          AstIdent(StrRegion(1314, 1315), 'x')
+        )
+      ],
+      []
+    ),
+    AstDefine(StrRegion(1340, 1368),
+      AstIdent(StrRegion(1344, 1358), 'psHeap__append'),
+      [
+        (
+          AstIdent(StrRegion(1359, 1362), 'val'),
+          AstIdent(StrRegion(1363, 1364), 'x')
+        )
+      ],
+      []
+    ),
+    AstDefine(StrRegion(1389, 1427),
+      AstIdent(StrRegion(1393, 1417), '_psHeap_freelist__append'),
+      [
+        (
+          AstIdent(StrRegion(1418, 1421), 'val'),
+          AstIdent(StrRegion(1422, 1423), 'x')
+        )
+      ],
+      []
+    ),
+    AstDefine(StrRegion(1448, 1487),
+      AstIdent(StrRegion(1452, 1477), '_psHeap_freelist__delitem'),
+      [
+        (
+          AstIdent(StrRegion(1478, 1481), 'val'),
+          AstIdent(StrRegion(1482, 1483), 'x')
+        )
+      ],
+      []
+    ),
+    AstDefine(StrRegion(1508, 1538),
+      AstIdent(StrRegion(1512, 1533), '_psHeap_freelist__len'),
+      [],
+      []
+    ),
+    AstDefine(StrRegion(1559, 1579),
+      AstIdent(StrRegion(1563, 1574), 'psHeap__len'),
+      [],
+      []
+    ),
+    AstDefine(StrRegion(1581, 1811),
+      AstIdent(StrRegion(1585, 1591), 'decref'),
+      [
+        (
+          AstIdent(StrRegion(1592, 1598), 'number'),
+          AstIdent(StrRegion(1599, 1602), 'ptr')
+        )
+      ],
+      [
+        AstIf(StrRegion(1610, 1809),
+          AstBinOp(StrRegion(1613, 1631),
+            '>=',
+            AstItem(StrRegion(1613, 1626),
+              AstIdent(StrRegion(1613, 1621), 'refStack'),
+              AstIdent(StrRegion(1622, 1625), 'ptr')
+            ),
+            AstNumber(StrRegion(1630, 1631), 0)
+          ),
+          [
+            AstAssign(StrRegion(1691, 1724),
+              AstItem(StrRegion(1691, 1704),
+                AstIdent(StrRegion(1691, 1699), 'refStack'),
+                AstIdent(StrRegion(1700, 1703), 'ptr')
+              ),
+              AstBinOp(StrRegion(1707, 1724),
+                '-',
+                AstItem(StrRegion(1707, 1720),
+                  AstIdent(StrRegion(1707, 1715), 'refStack'),
+                  AstIdent(StrRegion(1716, 1719), 'ptr')
+                ),
+                AstNumber(StrRegion(1723, 1724), 1)
+              )
+            ),
+            AstIf(StrRegion(1734, 1803),
+              AstBinOp(StrRegion(1737, 1755),
+                '==',
+                AstItem(StrRegion(1737, 1750),
+                  AstIdent(StrRegion(1737, 1745), 'refStack'),
+                  AstIdent(StrRegion(1746, 1749), 'ptr')
+                ),
+                AstNumber(StrRegion(1754, 1755), 0)
+              ),
+              [
+                AstCall(StrRegion(1770, 1792),
+                  AstIdent(StrRegion(1770, 1787), 'PsHeap_DeleteWord'),
+                  [
+                    AstIdent(StrRegion(1788, 1791), 'ptr')
+                  ]
+                )
+              ]
+            )
+          ]
+        )
+      ]
+    ),
+    AstDefine(StrRegion(1812, 2002),
+      AstIdent(StrRegion(1816, 1822), 'incref'),
+      [
+        (
+          AstIdent(StrRegion(1823, 1829), 'number'),
+          AstIdent(StrRegion(1830, 1833), 'ptr')
+        )
+      ],
+      [
+        AstIf(StrRegion(1841, 2000),
+          AstBinOp(StrRegion(1844, 1862),
+            '>=',
+            AstItem(StrRegion(1844, 1857),
+              AstIdent(StrRegion(1844, 1852), 'refStack'),
+              AstIdent(StrRegion(1853, 1856), 'ptr')
+            ),
+            AstNumber(StrRegion(1861, 1862), 0)
+          ),
+          [
+            AstAssign(StrRegion(1922, 1955),
+              AstItem(StrRegion(1922, 1935),
+                AstIdent(StrRegion(1922, 1930), 'refStack'),
+                AstIdent(StrRegion(1931, 1934), 'ptr')
+              ),
+              AstBinOp(StrRegion(1938, 1955),
+                '+',
+                AstItem(StrRegion(1938, 1951),
+                  AstIdent(StrRegion(1938, 1946), 'refStack'),
+                  AstIdent(StrRegion(1947, 1950), 'ptr')
+                ),
+                AstNumber(StrRegion(1954, 1955), 1)
+              )
+            )
+          ]
+        )
+      ]
+    ),
+    AstDeclNode(StrRegion(2040, 2059),
+      VarDeclScope.GLOBAL,
+      VarDeclType.LIST,
+      AstIdent(StrRegion(2049, 2054), 'stack'),
+      AstListLiteral(StrRegion(2057, 2059),
+        []
+      )
+    ),
+    AstDeclNode(StrRegion(2061, 2086),
+      VarDeclScope.GLOBAL,
+      VarDeclType.VARIABLE,
+      AstIdent(StrRegion(2068, 2078), 'COUNT_REFS'),
+      AstIdent(StrRegion(2081, 2086), 'false')
+    ),
+    AstDefine(StrRegion(2436, 2448),
+      AstIdent(StrRegion(2440, 2443), 'NOP'),
+      [],
+      []
+    ),
+    AstDefine(StrRegion(2450, 2600),
+      AstIdent(StrRegion(2454, 2461), 'POP_TOP'),
+      [],
+      [
+        AstCall(StrRegion(2470, 2480),
+          AstIdent(StrRegion(2470, 2478), 'lenStack'),
+          []
+        ),
+        AstIf(StrRegion(2504, 2568),
+          AstBinOp(StrRegion(2507, 2525),
+            '==',
+            AstIdent(StrRegion(2507, 2517), 'COUNT_REFS'),
+            AstIdent(StrRegion(2521, 2525), 'true')
+          ),
+          [
+            AstCall(StrRegion(2536, 2561),
+              AstIdent(StrRegion(2536, 2542), 'decref'),
+              [
+                AstItem(StrRegion(2543, 2560),
+                  AstIdent(StrRegion(2543, 2548), 'stack'),
+                  AstIdent(StrRegion(2549, 2559), '__result__')
+                )
+              ]
+            )
+          ]
+        ),
+        AstCall(StrRegion(2573, 2597),
+          AstIdent(StrRegion(2573, 2585), 'stackDelitem'),
+          [
+            AstIdent(StrRegion(2586, 2596), '__result__')
+          ]
+        )
+      ]
+    ),
+    AstDefine(StrRegion(2602, 2768),
+      AstIdent(StrRegion(2606, 2613), 'ROT_TWO'),
+      [],
+      [
+        AstCall(StrRegion(2622, 2632),
+          AstIdent(StrRegion(2622, 2630), 'lenStack'),
+          []
+        ),
+        AstDeclNode(StrRegion(2638, 2662),
+          VarDeclScope.LET,
+          VarDeclType.VARIABLE,
+          AstIdent(StrRegion(2642, 2649), 'tos_idx'),
+          AstIdent(StrRegion(2652, 2662), '__result__')
+        ),
+        AstDeclNode(StrRegion(2668, 2693),
+          VarDeclScope.LET,
+          VarDeclType.VARIABLE,
+          AstIdent(StrRegion(2672, 2676), 'tos0'),
+          AstItem(StrRegion(2679, 2693),
+            AstIdent(StrRegion(2679, 2684), 'stack'),
+            AstIdent(StrRegion(2685, 2692), 'tos_idx')
+          )
+        ),
+        AstAssign(StrRegion(2699, 2734),
+          AstItem(StrRegion(2699, 2713),
+            AstIdent(StrRegion(2699, 2704), 'stack'),
+            AstIdent(StrRegion(2705, 2712), 'tos_idx')
+          ),
+          AstItem(StrRegion(2716, 2734),
+            AstIdent(StrRegion(2716, 2721), 'stack'),
+            AstBinOp(StrRegion(2722, 2733),
+              '-',
+              AstIdent(StrRegion(2722, 2729), 'tos_idx'),
+              AstNumber(StrRegion(2732, 2733), 1)
+            )
+          )
+        ),
+        AstAssign(StrRegion(2740, 2765),
+          AstItem(StrRegion(2740, 2758),
+            AstIdent(StrRegion(2740, 2745), 'stack'),
+            AstBinOp(StrRegion(2746, 2757),
+              '-',
+              AstIdent(StrRegion(2746, 2753), 'tos_idx'),
+              AstNumber(StrRegion(2756, 2757), 1)
+            )
+          ),
+          AstIdent(StrRegion(2761, 2765), 'tos0')
+        )
+      ]
+    ),
+    AstDefine(StrRegion(2770, 3096),
+      AstIdent(StrRegion(2774, 2783), 'ROT_THREE'),
+      [],
+      [
+        AstCall(StrRegion(2905, 2915),
+          AstIdent(StrRegion(2905, 2913), 'lenStack'),
+          []
+        ),
+        AstDeclNode(StrRegion(2921, 2945),
+          VarDeclScope.LET,
+          VarDeclType.VARIABLE,
+          AstIdent(StrRegion(2925, 2932), 'tos_idx'),
+          AstIdent(StrRegion(2935, 2945), '__result__')
+        ),
+        AstDeclNode(StrRegion(2951, 2976),
+          VarDeclScope.LET,
+          VarDeclType.VARIABLE,
+          AstIdent(StrRegion(2955, 2959), 'tos0'),
+          AstItem(StrRegion(2962, 2976),
+            AstIdent(StrRegion(2962, 2967), 'stack'),
+            AstIdent(StrRegion(2968, 2975), 'tos_idx')
+          )
+        ),
+        AstAssign(StrRegion(2982, 3017),
+          AstItem(StrRegion(2982, 2996),
+            AstIdent(StrRegion(2982, 2987), 'stack'),
+            AstIdent(StrRegion(2988, 2995), 'tos_idx')
+          ),
+          AstItem(StrRegion(2999, 3017),
+            AstIdent(StrRegion(2999, 3004), 'stack'),
+            AstBinOp(StrRegion(3005, 3016),
+              '-',
+              AstIdent(StrRegion(3005, 3012), 'tos_idx'),
+              AstNumber(StrRegion(3015, 3016), 1)
+            )
+          )
+        ),
+        AstAssign(StrRegion(3023, 3062),
+          AstItem(StrRegion(3023, 3041),
+            AstIdent(StrRegion(3023, 3028), 'stack'),
+            AstBinOp(StrRegion(3029, 3040),
+              '-',
+              AstIdent(StrRegion(3029, 3036), 'tos_idx'),
+              AstNumber(StrRegion(3039, 3040), 1)
+            )
+          ),
+          AstItem(StrRegion(3044, 3062),
+            AstIdent(StrRegion(3044, 3049), 'stack'),
+            AstBinOp(StrRegion(3050, 3061),
+              '-',
+              AstIdent(StrRegion(3050, 3057), 'tos_idx'),
+              AstNumber(StrRegion(3060, 3061), 2)
+            )
+          )
+        ),
+        AstAssign(StrRegion(3068, 3093),
+          AstItem(StrRegion(3068, 3086),
+            AstIdent(StrRegion(3068, 3073), 'stack'),
+            AstBinOp(StrRegion(3074, 3085),
+              '-',
+              AstIdent(StrRegion(3074, 3081), 'tos_idx'),
+              AstNumber(StrRegion(3084, 3085), 2)
+            )
+          ),
+          AstIdent(StrRegion(3089, 3093), 'tos0')
+        )
+      ]
+    ),
+    AstDefine(StrRegion(3098, 3250),
+      AstIdent(StrRegion(3102, 3109), 'DUP_TOP'),
+      [],
+      [
+        AstCall(StrRegion(3118, 3128),
+          AstIdent(StrRegion(3118, 3126), 'lenStack'),
+          []
+        ),
+        AstDeclNode(StrRegion(3134, 3163),
+          VarDeclScope.LET,
+          VarDeclType.VARIABLE,
+          AstIdent(StrRegion(3138, 3143), 'value'),
+          AstItem(StrRegion(3146, 3163),
+            AstIdent(StrRegion(3146, 3151), 'stack'),
+            AstIdent(StrRegion(3152, 3162), '__result__')
+          )
+        ),
+        AstCall(StrRegion(3169, 3189),
+          AstIdent(StrRegion(3169, 3182), 'stack__append'),
+          [
+            AstIdent(StrRegion(3183, 3188), 'value')
+          ]
+        ),
+        AstIf(StrRegion(3195, 3248),
+          AstBinOp(StrRegion(3198, 3217),
+            '!=',
+            AstIdent(StrRegion(3198, 3208), 'COUNT_REFS'),
+            AstIdent(StrRegion(3212, 3217), 'false')
+          ),
+          [
+            AstCall(StrRegion(3228, 3241),
+              AstIdent(StrRegion(3228, 3234), 'incref'),
+              [
+                AstIdent(StrRegion(3235, 3240), 'value')
+              ]
+            )
+          ]
+        )
+      ]
+    ),
+    AstDefine(StrRegion(3252, 3531),
+      AstIdent(StrRegion(3256, 3267), 'DUP_TOP_TWO'),
+      [],
+      [
+        AstCall(StrRegion(3276, 3286),
+          AstIdent(StrRegion(3276, 3284), 'lenStack'),
+          []
+        ),
+        AstDeclNode(StrRegion(3292, 3316),
+          VarDeclScope.LET,
+          VarDeclType.VARIABLE,
+          AstIdent(StrRegion(3296, 3303), 'tos_idx'),
+          AstIdent(StrRegion(3306, 3316), '__result__')
+        ),
+        AstDeclNode(StrRegion(3322, 3347),
+          VarDeclScope.LET,
+          VarDeclType.VARIABLE,
+          AstIdent(StrRegion(3326, 3330), 'tos0'),
+          AstItem(StrRegion(3333, 3347),
+            AstIdent(StrRegion(3333, 3338), 'stack'),
+            AstIdent(StrRegion(3339, 3346), 'tos_idx')
+          )
+        ),
+        AstDeclNode(StrRegion(3353, 3382),
+          VarDeclScope.LET,
+          VarDeclType.VARIABLE,
+          AstIdent(StrRegion(3357, 3361), 'tos1'),
+          AstItem(StrRegion(3364, 3382),
+            AstIdent(StrRegion(3364, 3369), 'stack'),
+            AstBinOp(StrRegion(3370, 3381),
+              '-',
+              AstIdent(StrRegion(3370, 3377), 'tos_idx'),
+              AstNumber(StrRegion(3380, 3381), 1)
+            )
+          )
+        ),
+        AstCall(StrRegion(3388, 3407),
+          AstIdent(StrRegion(3388, 3401), 'stack__append'),
+          [
+            AstIdent(StrRegion(3402, 3406), 'tos1')
+          ]
+        ),
+        AstCall(StrRegion(3413, 3432),
+          AstIdent(StrRegion(3413, 3426), 'stack__append'),
+          [
+            AstIdent(StrRegion(3427, 3431), 'tos0')
+          ]
+        ),
+        AstIf(StrRegion(3459, 3529),
+          AstBinOp(StrRegion(3462, 3477),
+            '!=',
+            AstIdent(StrRegion(3462, 3472), 'COUNT_REFS'),
+            AstNumber(StrRegion(3476, 3477), 0)
+          ),
+          [
+            AstCall(StrRegion(3488, 3500),
+              AstIdent(StrRegion(3488, 3494), 'incref'),
+              [
+                AstIdent(StrRegion(3495, 3499), 'tos0')
+              ]
+            ),
+            AstCall(StrRegion(3510, 3522),
+              AstIdent(StrRegion(3510, 3516), 'incref'),
+              [
+                AstIdent(StrRegion(3517, 3521), 'tos1')
+              ]
+            )
+          ]
+        )
+      ]
+    ),
+    AstDefine(StrRegion(3533, 3864),
+      AstIdent(StrRegion(3537, 3545), 'ROT_FOUR'),
+      [],
+      [
+        AstCall(StrRegion(3628, 3638),
+          AstIdent(StrRegion(3628, 3636), 'lenStack'),
+          []
+        ),
+        AstDeclNode(StrRegion(3644, 3668),
+          VarDeclScope.LET,
+          VarDeclType.VARIABLE,
+          AstIdent(StrRegion(3648, 3655), 'tos_idx'),
+          AstIdent(StrRegion(3658, 3668), '__result__')
+        ),
+        AstDeclNode(StrRegion(3674, 3699),
+          VarDeclScope.LET,
+          VarDeclType.VARIABLE,
+          AstIdent(StrRegion(3678, 3682), 'tos0'),
+          AstItem(StrRegion(3685, 3699),
+            AstIdent(StrRegion(3685, 3690), 'stack'),
+            AstIdent(StrRegion(3691, 3698), 'tos_idx')
+          )
+        ),
+        AstAssign(StrRegion(3705, 3740),
+          AstItem(StrRegion(3705, 3719),
+            AstIdent(StrRegion(3705, 3710), 'stack'),
+            AstIdent(StrRegion(3711, 3718), 'tos_idx')
+          ),
+          AstItem(StrRegion(3722, 3740),
+            AstIdent(StrRegion(3722, 3727), 'stack'),
+            AstBinOp(StrRegion(3728, 3739),
+              '-',
+              AstIdent(StrRegion(3728, 3735), 'tos_idx'),
+              AstNumber(StrRegion(3738, 3739), 1)
+            )
+          )
+        ),
+        AstAssign(StrRegion(3746, 3785),
+          AstItem(StrRegion(3746, 3764),
+            AstIdent(StrRegion(3746, 3751), 'stack'),
+            AstBinOp(StrRegion(3752, 3763),
+              '-',
+              AstIdent(StrRegion(3752, 3759), 'tos_idx'),
+              AstNumber(StrRegion(3762, 3763), 1)
+            )
+          ),
+          AstItem(StrRegion(3767, 3785),
+            AstIdent(StrRegion(3767, 3772), 'stack'),
+            AstBinOp(StrRegion(3773, 3784),
+              '-',
+              AstIdent(StrRegion(3773, 3780), 'tos_idx'),
+              AstNumber(StrRegion(3783, 3784), 2)
+            )
+          )
+        ),
+        AstAssign(StrRegion(3791, 3830),
+          AstItem(StrRegion(3791, 3809),
+            AstIdent(StrRegion(3791, 3796), 'stack'),
+            AstBinOp(StrRegion(3797, 3808),
+              '-',
+              AstIdent(StrRegion(3797, 3804), 'tos_idx'),
+              AstNumber(StrRegion(3807, 3808), 2)
+            )
+          ),
+          AstItem(StrRegion(3812, 3830),
+            AstIdent(StrRegion(3812, 3817), 'stack'),
+            AstBinOp(StrRegion(3818, 3829),
+              '-',
+              AstIdent(StrRegion(3818, 3825), 'tos_idx'),
+              AstNumber(StrRegion(3828, 3829), 3)
+            )
+          )
+        ),
+        AstAssign(StrRegion(3836, 3861),
+          AstItem(StrRegion(3836, 3854),
+            AstIdent(StrRegion(3836, 3841), 'stack'),
+            AstBinOp(StrRegion(3842, 3853),
+              '-',
+              AstIdent(StrRegion(3842, 3849), 'tos_idx'),
+              AstNumber(StrRegion(3852, 3853), 3)
+            )
+          ),
+          AstIdent(StrRegion(3857, 3861), 'tos0')
+        )
+      ]
+    )
+  ]
+)
+Scope(
+  declared={
+    'COUNT_REFS': NameInfo(
+      decl_scope=<Circular: 3 up>,
+      ident='COUNT_REFS',
+      tp_info=ValType(),
+      is_param=False
+    ),
+    'DUP_TOP': FuncInfo(
+      decl_scope=<Circular: 3 up>,
+      ident='DUP_TOP',
+      tp_info=FunctionType(
+        arg_types=[],
+        ret_type=VoidType()
+      ),
+      is_param=False,
+      params_info=[],
+      subscope=Scope(
+        declared={
+          'value': NameInfo(
+            decl_scope=<Circular: 3 up>,
+            ident='value',
+            tp_info=ValType(),
+            is_param=False
+          )
+        },
+        used={
+          'COUNT_REFS': NameInfo(
+            decl_scope=<Circular: 6 up>,
+            ident='COUNT_REFS',
+            tp_info=ValType(),
+            is_param=False
+          ),
+          '__result__': NameInfo(
+            decl_scope=<Circular: 6 up>,
+            ident='__result__',
+            tp_info=ValType(),
+            is_param=False
+          ),
+          'false': NameInfo(
+            decl_scope=<Circular: 6 up>,
+            ident='false',
+            tp_info=ValType(),
+            is_param=False
+          ),
+          'incref': FuncInfo(
+            decl_scope=<Circular: 6 up>,
+            ident='incref',
+            tp_info=FunctionType(
+              arg_types=[
+                ValType()
+              ],
+              ret_type=VoidType()
+            ),
+            is_param=False,
+            params_info=[
+              ParamInfo(
+                name='ptr',
+                tp=ValType()
+              )
+            ],
+            subscope=Scope(
+              declared={
+                'ptr': NameInfo(
+                  decl_scope=<Circular: 3 up>,
+                  ident='ptr',
+                  tp_info=ValType(),
+                  is_param=True
+                )
+              },
+              used={
+                'ptr': NameInfo(
+                  decl_scope=<Circular: 3 up>,
+                  ident='ptr',
+                  tp_info=ValType(),
+                  is_param=True
+                ),
+                'refStack': NameInfo(
+                  decl_scope=<Circular: 9 up>,
+                  ident='refStack',
+                  tp_info=ListType(),
+                  is_param=False
+                )
+              }
+            )
+          ),
+          'lenStack': FuncInfo(
+            decl_scope=<Circular: 6 up>,
+            ident='lenStack',
+            tp_info=FunctionType(
+              arg_types=[],
+              ret_type=VoidType()
+            ),
+            is_param=False,
+            params_info=[],
+            subscope=Scope(
+              declared={},
+              used={}
+            )
+          ),
+          'stack': NameInfo(
+            decl_scope=<Circular: 6 up>,
+            ident='stack',
+            tp_info=ListType(),
+            is_param=False
+          ),
+          'stack__append': FuncInfo(
+            decl_scope=<Circular: 6 up>,
+            ident='stack__append',
+            tp_info=FunctionType(
+              arg_types=[
+                ValType()
+              ],
+              ret_type=VoidType()
+            ),
+            is_param=False,
+            params_info=[
+              ParamInfo(
+                name='x',
+                tp=ValType()
+              )
+            ],
+            subscope=Scope(
+              declared={
+                'x': NameInfo(
+                  decl_scope=<Circular: 3 up>,
+                  ident='x',
+                  tp_info=ValType(),
+                  is_param=True
+                )
+              },
+              used={}
+            )
+          ),
+          'value': NameInfo(
+            decl_scope=<Circular: 3 up>,
+            ident='value',
+            tp_info=ValType(),
+            is_param=False
+          )
+        }
+      )
+    ),
+    'DUP_TOP_TWO': FuncInfo(
+      decl_scope=<Circular: 3 up>,
+      ident='DUP_TOP_TWO',
+      tp_info=FunctionType(
+        arg_types=[],
+        ret_type=VoidType()
+      ),
+      is_param=False,
+      params_info=[],
+      subscope=Scope(
+        declared={
+          'tos0': NameInfo(
+            decl_scope=<Circular: 3 up>,
+            ident='tos0',
+            tp_info=ValType(),
+            is_param=False
+          ),
+          'tos1': NameInfo(
+            decl_scope=<Circular: 3 up>,
+            ident='tos1',
+            tp_info=ValType(),
+            is_param=False
+          ),
+          'tos_idx': NameInfo(
+            decl_scope=<Circular: 3 up>,
+            ident='tos_idx',
+            tp_info=ValType(),
+            is_param=False
+          )
+        },
+        used={
+          'COUNT_REFS': NameInfo(
+            decl_scope=<Circular: 6 up>,
+            ident='COUNT_REFS',
+            tp_info=ValType(),
+            is_param=False
+          ),
+          '__result__': NameInfo(
+            decl_scope=<Circular: 6 up>,
+            ident='__result__',
+            tp_info=ValType(),
+            is_param=False
+          ),
+          'incref': FuncInfo(
+            decl_scope=<Circular: 6 up>,
+            ident='incref',
+            tp_info=FunctionType(
+              arg_types=[
+                ValType()
+              ],
+              ret_type=VoidType()
+            ),
+            is_param=False,
+            params_info=[
+              ParamInfo(
+                name='ptr',
+                tp=ValType()
+              )
+            ],
+            subscope=Scope(
+              declared={
+                'ptr': NameInfo(
+                  decl_scope=<Circular: 3 up>,
+                  ident='ptr',
+                  tp_info=ValType(),
+                  is_param=True
+                )
+              },
+              used={
+                'ptr': NameInfo(
+                  decl_scope=<Circular: 3 up>,
+                  ident='ptr',
+                  tp_info=ValType(),
+                  is_param=True
+                ),
+                'refStack': NameInfo(
+                  decl_scope=<Circular: 9 up>,
+                  ident='refStack',
+                  tp_info=ListType(),
+                  is_param=False
+                )
+              }
+            )
+          ),
+          'lenStack': FuncInfo(
+            decl_scope=<Circular: 6 up>,
+            ident='lenStack',
+            tp_info=FunctionType(
+              arg_types=[],
+              ret_type=VoidType()
+            ),
+            is_param=False,
+            params_info=[],
+            subscope=Scope(
+              declared={},
+              used={}
+            )
+          ),
+          'stack': NameInfo(
+            decl_scope=<Circular: 6 up>,
+            ident='stack',
+            tp_info=ListType(),
+            is_param=False
+          ),
+          'stack__append': FuncInfo(
+            decl_scope=<Circular: 6 up>,
+            ident='stack__append',
+            tp_info=FunctionType(
+              arg_types=[
+                ValType()
+              ],
+              ret_type=VoidType()
+            ),
+            is_param=False,
+            params_info=[
+              ParamInfo(
+                name='x',
+                tp=ValType()
+              )
+            ],
+            subscope=Scope(
+              declared={
+                'x': NameInfo(
+                  decl_scope=<Circular: 3 up>,
+                  ident='x',
+                  tp_info=ValType(),
+                  is_param=True
+                )
+              },
+              used={}
+            )
+          ),
+          'tos0': NameInfo(
+            decl_scope=<Circular: 3 up>,
+            ident='tos0',
+            tp_info=ValType(),
+            is_param=False
+          ),
+          'tos1': NameInfo(
+            decl_scope=<Circular: 3 up>,
+            ident='tos1',
+            tp_info=ValType(),
+            is_param=False
+          ),
+          'tos_idx': NameInfo(
+            decl_scope=<Circular: 3 up>,
+            ident='tos_idx',
+            tp_info=ValType(),
+            is_param=False
+          )
+        }
+      )
+    ),
+    'NOP': FuncInfo(
+      decl_scope=<Circular: 3 up>,
+      ident='NOP',
+      tp_info=FunctionType(
+        arg_types=[],
+        ret_type=VoidType()
+      ),
+      is_param=False,
+      params_info=[],
+      subscope=Scope(
+        declared={},
+        used={}
+      )
+    ),
+    'POP_TOP': FuncInfo(
+      decl_scope=<Circular: 3 up>,
+      ident='POP_TOP',
+      tp_info=FunctionType(
+        arg_types=[],
+        ret_type=VoidType()
+      ),
+      is_param=False,
+      params_info=[],
+      subscope=Scope(
+        declared={},
+        used={
+          'COUNT_REFS': NameInfo(
+            decl_scope=<Circular: 6 up>,
+            ident='COUNT_REFS',
+            tp_info=ValType(),
+            is_param=False
+          ),
+          '__result__': NameInfo(
+            decl_scope=<Circular: 6 up>,
+            ident='__result__',
+            tp_info=ValType(),
+            is_param=False
+          ),
+          'decref': FuncInfo(
+            decl_scope=<Circular: 6 up>,
+            ident='decref',
+            tp_info=FunctionType(
+              arg_types=[
+                ValType()
+              ],
+              ret_type=VoidType()
+            ),
+            is_param=False,
+            params_info=[
+              ParamInfo(
+                name='ptr',
+                tp=ValType()
+              )
+            ],
+            subscope=Scope(
+              declared={
+                'ptr': NameInfo(
+                  decl_scope=<Circular: 3 up>,
+                  ident='ptr',
+                  tp_info=ValType(),
+                  is_param=True
+                )
+              },
+              used={
+                'PsHeap_DeleteWord': FuncInfo(
+                  decl_scope=<Circular: 9 up>,
+                  ident='PsHeap_DeleteWord',
+                  tp_info=FunctionType(
+                    arg_types=[
+                      ValType()
+                    ],
+                    ret_type=VoidType()
+                  ),
+                  is_param=False,
+                  params_info=[
+                    ParamInfo(
+                      name='ptr',
+                      tp=ValType()
+                    )
+                  ],
+                  subscope=Scope(
+                    declared={
+                      'ptr': NameInfo(
+                        decl_scope=<Circular: 3 up>,
+                        ident='ptr',
+                        tp_info=ValType(),
+                        is_param=True
+                      )
+                    },
+                    used={
+                      'PsHeap_FreeWord': FuncInfo(
+                        decl_scope=<Circular: 12 up>,
+                        ident='PsHeap_FreeWord',
+                        tp_info=FunctionType(
+                          arg_types=[
+                            ValType()
+                          ],
+                          ret_type=VoidType()
+                        ),
+                        is_param=False,
+                        params_info=[
+                          ParamInfo(
+                            name='ptr',
+                            tp=ValType()
+                          )
+                        ],
+                        subscope=Scope(
+                          declared={
+                            'ptr': NameInfo(
+                              decl_scope=<Circular: 3 up>,
+                              ident='ptr',
+                              tp_info=ValType(),
+                              is_param=True
+                            )
+                          },
+                          used={
+                            'COUNT_REFS': NameInfo(
+                              decl_scope=<Circular: 15 up>,
+                              ident='COUNT_REFS',
+                              tp_info=ValType(),
+                              is_param=False
+                            ),
+                            '_psHeap_freelist__append': FuncInfo(
+                              decl_scope=<Circular: 15 up>,
+                              ident='_psHeap_freelist__append',
+                              tp_info=FunctionType(
+                                arg_types=[
+                                  ValType()
+                                ],
+                                ret_type=VoidType()
+                              ),
+                              is_param=False,
+                              params_info=[
+                                ParamInfo(
+                                  name='x',
+                                  tp=ValType()
+                                )
+                              ],
+                              subscope=Scope(
+                                declared={
+                                  'x': NameInfo(
+                                    decl_scope=<Circular: 3 up>,
+                                    ident='x',
+                                    tp_info=ValType(),
+                                    is_param=True
+                                  )
+                                },
+                                used={}
+                              )
+                            ),
+                            'psHeap': NameInfo(
+                              decl_scope=<Circular: 15 up>,
+                              ident='psHeap',
+                              tp_info=ListType(),
+                              is_param=False
+                            ),
+                            'ptr': NameInfo(
+                              decl_scope=<Circular: 3 up>,
+                              ident='ptr',
+                              tp_info=ValType(),
+                              is_param=True
+                            ),
+                            'refStack': NameInfo(
+                              decl_scope=<Circular: 15 up>,
+                              ident='refStack',
+                              tp_info=ListType(),
+                              is_param=False
+                            )
+                          }
+                        )
+                      ),
+                      '_PsHeap_FinalizeObj': FuncInfo(
+                        decl_scope=<Circular: 12 up>,
+                        ident='_PsHeap_FinalizeObj',
+                        tp_info=FunctionType(
+                          arg_types=[
+                            ValType()
+                          ],
+                          ret_type=VoidType()
+                        ),
+                        is_param=False,
+                        params_info=[
+                          ParamInfo(
+                            name='ptr',
+                            tp=ValType()
+                          )
+                        ],
+                        subscope=Scope(
+                          declared={
+                            'ptr': NameInfo(
+                              decl_scope=<Circular: 3 up>,
+                              ident='ptr',
+                              tp_info=ValType(),
+                              is_param=True
+                            )
+                          },
+                          used={}
+                        )
+                      ),
+                      'ptr': NameInfo(
+                        decl_scope=<Circular: 3 up>,
+                        ident='ptr',
+                        tp_info=ValType(),
+                        is_param=True
+                      )
+                    }
+                  )
+                ),
+                'ptr': NameInfo(
+                  decl_scope=<Circular: 3 up>,
+                  ident='ptr',
+                  tp_info=ValType(),
+                  is_param=True
+                ),
+                'refStack': NameInfo(
+                  decl_scope=<Circular: 9 up>,
+                  ident='refStack',
+                  tp_info=ListType(),
+                  is_param=False
+                )
+              }
+            )
+          ),
+          'lenStack': FuncInfo(
+            decl_scope=<Circular: 6 up>,
+            ident='lenStack',
+            tp_info=FunctionType(
+              arg_types=[],
+              ret_type=VoidType()
+            ),
+            is_param=False,
+            params_info=[],
+            subscope=Scope(
+              declared={},
+              used={}
+            )
+          ),
+          'stack': NameInfo(
+            decl_scope=<Circular: 6 up>,
+            ident='stack',
+            tp_info=ListType(),
+            is_param=False
+          ),
+          'stackDelitem': FuncInfo(
+            decl_scope=<Circular: 6 up>,
+            ident='stackDelitem',
+            tp_info=FunctionType(
+              arg_types=[
+                ValType()
+              ],
+              ret_type=VoidType()
+            ),
+            is_param=False,
+            params_info=[
+              ParamInfo(
+                name='x',
+                tp=ValType()
+              )
+            ],
+            subscope=Scope(
+              declared={
+                'x': NameInfo(
+                  decl_scope=<Circular: 3 up>,
+                  ident='x',
+                  tp_info=ValType(),
+                  is_param=True
+                )
+              },
+              used={}
+            )
+          ),
+          'true': NameInfo(
+            decl_scope=<Circular: 6 up>,
+            ident='true',
+            tp_info=ValType(),
+            is_param=False
+          )
+        }
+      )
+    ),
+    'PsHeap_AllocWord': FuncInfo(
+      decl_scope=<Circular: 3 up>,
+      ident='PsHeap_AllocWord',
+      tp_info=FunctionType(
+        arg_types=[],
+        ret_type=VoidType()
+      ),
+      is_param=False,
+      params_info=[],
+      subscope=Scope(
+        declared={},
+        used={
+          'COUNT_REFS': NameInfo(
+            decl_scope=<Circular: 6 up>,
+            ident='COUNT_REFS',
+            tp_info=ValType(),
+            is_param=False
+          ),
+          '__result__': NameInfo(
+            decl_scope=<Circular: 6 up>,
+            ident='__result__',
+            tp_info=ValType(),
+            is_param=False
+          ),
+          '_psHeap_freelist': NameInfo(
+            decl_scope=<Circular: 6 up>,
+            ident='_psHeap_freelist',
+            tp_info=ListType(),
+            is_param=False
+          ),
+          '_psHeap_freelist__delitem': FuncInfo(
+            decl_scope=<Circular: 6 up>,
+            ident='_psHeap_freelist__delitem',
+            tp_info=FunctionType(
+              arg_types=[
+                ValType()
+              ],
+              ret_type=VoidType()
+            ),
+            is_param=False,
+            params_info=[
+              ParamInfo(
+                name='x',
+                tp=ValType()
+              )
+            ],
+            subscope=Scope(
+              declared={
+                'x': NameInfo(
+                  decl_scope=<Circular: 3 up>,
+                  ident='x',
+                  tp_info=ValType(),
+                  is_param=True
+                )
+              },
+              used={}
+            )
+          ),
+          '_psHeap_freelist__len': FuncInfo(
+            decl_scope=<Circular: 6 up>,
+            ident='_psHeap_freelist__len',
+            tp_info=FunctionType(
+              arg_types=[],
+              ret_type=VoidType()
+            ),
+            is_param=False,
+            params_info=[],
+            subscope=Scope(
+              declared={},
+              used={}
+            )
+          ),
+          'psHeap__append': FuncInfo(
+            decl_scope=<Circular: 6 up>,
+            ident='psHeap__append',
+            tp_info=FunctionType(
+              arg_types=[
+                ValType()
+              ],
+              ret_type=VoidType()
+            ),
+            is_param=False,
+            params_info=[
+              ParamInfo(
+                name='x',
+                tp=ValType()
+              )
+            ],
+            subscope=Scope(
+              declared={
+                'x': NameInfo(
+                  decl_scope=<Circular: 3 up>,
+                  ident='x',
+                  tp_info=ValType(),
+                  is_param=True
+                )
+              },
+              used={}
+            )
+          ),
+          'psHeap__len': FuncInfo(
+            decl_scope=<Circular: 6 up>,
+            ident='psHeap__len',
+            tp_info=FunctionType(
+              arg_types=[],
+              ret_type=VoidType()
+            ),
+            is_param=False,
+            params_info=[],
+            subscope=Scope(
+              declared={},
+              used={}
+            )
+          ),
+          'refStack': NameInfo(
+            decl_scope=<Circular: 6 up>,
+            ident='refStack',
+            tp_info=ListType(),
+            is_param=False
+          ),
+          'refStack__append': FuncInfo(
+            decl_scope=<Circular: 6 up>,
+            ident='refStack__append',
+            tp_info=FunctionType(
+              arg_types=[
+                ValType()
+              ],
+              ret_type=VoidType()
+            ),
+            is_param=False,
+            params_info=[
+              ParamInfo(
+                name='x',
+                tp=ValType()
+              )
+            ],
+            subscope=Scope(
+              declared={
+                'x': NameInfo(
+                  decl_scope=<Circular: 3 up>,
+                  ident='x',
+                  tp_info=ValType(),
+                  is_param=True
+                )
+              },
+              used={}
+            )
+          )
+        }
+      )
+    ),
+    'PsHeap_DeleteWord': FuncInfo(
+      decl_scope=<Circular: 3 up>,
+      ident='PsHeap_DeleteWord',
+      tp_info=FunctionType(
+        arg_types=[
+          ValType()
+        ],
+        ret_type=VoidType()
+      ),
+      is_param=False,
+      params_info=[
+        ParamInfo(
+          name='ptr',
+          tp=ValType()
+        )
+      ],
+      subscope=Scope(
+        declared={
+          'ptr': NameInfo(
+            decl_scope=<Circular: 3 up>,
+            ident='ptr',
+            tp_info=ValType(),
+            is_param=True
+          )
+        },
+        used={
+          'PsHeap_FreeWord': FuncInfo(
+            decl_scope=<Circular: 6 up>,
+            ident='PsHeap_FreeWord',
+            tp_info=FunctionType(
+              arg_types=[
+                ValType()
+              ],
+              ret_type=VoidType()
+            ),
+            is_param=False,
+            params_info=[
+              ParamInfo(
+                name='ptr',
+                tp=ValType()
+              )
+            ],
+            subscope=Scope(
+              declared={
+                'ptr': NameInfo(
+                  decl_scope=<Circular: 3 up>,
+                  ident='ptr',
+                  tp_info=ValType(),
+                  is_param=True
+                )
+              },
+              used={
+                'COUNT_REFS': NameInfo(
+                  decl_scope=<Circular: 9 up>,
+                  ident='COUNT_REFS',
+                  tp_info=ValType(),
+                  is_param=False
+                ),
+                '_psHeap_freelist__append': FuncInfo(
+                  decl_scope=<Circular: 9 up>,
+                  ident='_psHeap_freelist__append',
+                  tp_info=FunctionType(
+                    arg_types=[
+                      ValType()
+                    ],
+                    ret_type=VoidType()
+                  ),
+                  is_param=False,
+                  params_info=[
+                    ParamInfo(
+                      name='x',
+                      tp=ValType()
+                    )
+                  ],
+                  subscope=Scope(
+                    declared={
+                      'x': NameInfo(
+                        decl_scope=<Circular: 3 up>,
+                        ident='x',
+                        tp_info=ValType(),
+                        is_param=True
+                      )
+                    },
+                    used={}
+                  )
+                ),
+                'psHeap': NameInfo(
+                  decl_scope=<Circular: 9 up>,
+                  ident='psHeap',
+                  tp_info=ListType(),
+                  is_param=False
+                ),
+                'ptr': NameInfo(
+                  decl_scope=<Circular: 3 up>,
+                  ident='ptr',
+                  tp_info=ValType(),
+                  is_param=True
+                ),
+                'refStack': NameInfo(
+                  decl_scope=<Circular: 9 up>,
+                  ident='refStack',
+                  tp_info=ListType(),
+                  is_param=False
+                )
+              }
+            )
+          ),
+          '_PsHeap_FinalizeObj': FuncInfo(
+            decl_scope=<Circular: 6 up>,
+            ident='_PsHeap_FinalizeObj',
+            tp_info=FunctionType(
+              arg_types=[
+                ValType()
+              ],
+              ret_type=VoidType()
+            ),
+            is_param=False,
+            params_info=[
+              ParamInfo(
+                name='ptr',
+                tp=ValType()
+              )
+            ],
+            subscope=Scope(
+              declared={
+                'ptr': NameInfo(
+                  decl_scope=<Circular: 3 up>,
+                  ident='ptr',
+                  tp_info=ValType(),
+                  is_param=True
+                )
+              },
+              used={}
+            )
+          ),
+          'ptr': NameInfo(
+            decl_scope=<Circular: 3 up>,
+            ident='ptr',
+            tp_info=ValType(),
+            is_param=True
+          )
+        }
+      )
+    ),
+    'PsHeap_FreeWord': FuncInfo(
+      decl_scope=<Circular: 3 up>,
+      ident='PsHeap_FreeWord',
+      tp_info=FunctionType(
+        arg_types=[
+          ValType()
+        ],
+        ret_type=VoidType()
+      ),
+      is_param=False,
+      params_info=[
+        ParamInfo(
+          name='ptr',
+          tp=ValType()
+        )
+      ],
+      subscope=Scope(
+        declared={
+          'ptr': NameInfo(
+            decl_scope=<Circular: 3 up>,
+            ident='ptr',
+            tp_info=ValType(),
+            is_param=True
+          )
+        },
+        used={
+          'COUNT_REFS': NameInfo(
+            decl_scope=<Circular: 6 up>,
+            ident='COUNT_REFS',
+            tp_info=ValType(),
+            is_param=False
+          ),
+          '_psHeap_freelist__append': FuncInfo(
+            decl_scope=<Circular: 6 up>,
+            ident='_psHeap_freelist__append',
+            tp_info=FunctionType(
+              arg_types=[
+                ValType()
+              ],
+              ret_type=VoidType()
+            ),
+            is_param=False,
+            params_info=[
+              ParamInfo(
+                name='x',
+                tp=ValType()
+              )
+            ],
+            subscope=Scope(
+              declared={
+                'x': NameInfo(
+                  decl_scope=<Circular: 3 up>,
+                  ident='x',
+                  tp_info=ValType(),
+                  is_param=True
+                )
+              },
+              used={}
+            )
+          ),
+          'psHeap': NameInfo(
+            decl_scope=<Circular: 6 up>,
+            ident='psHeap',
+            tp_info=ListType(),
+            is_param=False
+          ),
+          'ptr': NameInfo(
+            decl_scope=<Circular: 3 up>,
+            ident='ptr',
+            tp_info=ValType(),
+            is_param=True
+          ),
+          'refStack': NameInfo(
+            decl_scope=<Circular: 6 up>,
+            ident='refStack',
+            tp_info=ListType(),
+            is_param=False
+          )
+        }
+      )
+    ),
+    'ROT_FOUR': FuncInfo(
+      decl_scope=<Circular: 3 up>,
+      ident='ROT_FOUR',
+      tp_info=FunctionType(
+        arg_types=[],
+        ret_type=VoidType()
+      ),
+      is_param=False,
+      params_info=[],
+      subscope=Scope(
+        declared={
+          'tos0': NameInfo(
+            decl_scope=<Circular: 3 up>,
+            ident='tos0',
+            tp_info=ValType(),
+            is_param=False
+          ),
+          'tos_idx': NameInfo(
+            decl_scope=<Circular: 3 up>,
+            ident='tos_idx',
+            tp_info=ValType(),
+            is_param=False
+          )
+        },
+        used={
+          '__result__': NameInfo(
+            decl_scope=<Circular: 6 up>,
+            ident='__result__',
+            tp_info=ValType(),
+            is_param=False
+          ),
+          'lenStack': FuncInfo(
+            decl_scope=<Circular: 6 up>,
+            ident='lenStack',
+            tp_info=FunctionType(
+              arg_types=[],
+              ret_type=VoidType()
+            ),
+            is_param=False,
+            params_info=[],
+            subscope=Scope(
+              declared={},
+              used={}
+            )
+          ),
+          'stack': NameInfo(
+            decl_scope=<Circular: 6 up>,
+            ident='stack',
+            tp_info=ListType(),
+            is_param=False
+          ),
+          'tos0': NameInfo(
+            decl_scope=<Circular: 3 up>,
+            ident='tos0',
+            tp_info=ValType(),
+            is_param=False
+          ),
+          'tos_idx': NameInfo(
+            decl_scope=<Circular: 3 up>,
+            ident='tos_idx',
+            tp_info=ValType(),
+            is_param=False
+          )
+        }
+      )
+    ),
+    'ROT_THREE': FuncInfo(
+      decl_scope=<Circular: 3 up>,
+      ident='ROT_THREE',
+      tp_info=FunctionType(
+        arg_types=[],
+        ret_type=VoidType()
+      ),
+      is_param=False,
+      params_info=[],
+      subscope=Scope(
+        declared={
+          'tos0': NameInfo(
+            decl_scope=<Circular: 3 up>,
+            ident='tos0',
+            tp_info=ValType(),
+            is_param=False
+          ),
+          'tos_idx': NameInfo(
+            decl_scope=<Circular: 3 up>,
+            ident='tos_idx',
+            tp_info=ValType(),
+            is_param=False
+          )
+        },
+        used={
+          '__result__': NameInfo(
+            decl_scope=<Circular: 6 up>,
+            ident='__result__',
+            tp_info=ValType(),
+            is_param=False
+          ),
+          'lenStack': FuncInfo(
+            decl_scope=<Circular: 6 up>,
+            ident='lenStack',
+            tp_info=FunctionType(
+              arg_types=[],
+              ret_type=VoidType()
+            ),
+            is_param=False,
+            params_info=[],
+            subscope=Scope(
+              declared={},
+              used={}
+            )
+          ),
+          'stack': NameInfo(
+            decl_scope=<Circular: 6 up>,
+            ident='stack',
+            tp_info=ListType(),
+            is_param=False
+          ),
+          'tos0': NameInfo(
+            decl_scope=<Circular: 3 up>,
+            ident='tos0',
+            tp_info=ValType(),
+            is_param=False
+          ),
+          'tos_idx': NameInfo(
+            decl_scope=<Circular: 3 up>,
+            ident='tos_idx',
+            tp_info=ValType(),
+            is_param=False
+          )
+        }
+      )
+    ),
+    'ROT_TWO': FuncInfo(
+      decl_scope=<Circular: 3 up>,
+      ident='ROT_TWO',
+      tp_info=FunctionType(
+        arg_types=[],
+        ret_type=VoidType()
+      ),
+      is_param=False,
+      params_info=[],
+      subscope=Scope(
+        declared={
+          'tos0': NameInfo(
+            decl_scope=<Circular: 3 up>,
+            ident='tos0',
+            tp_info=ValType(),
+            is_param=False
+          ),
+          'tos_idx': NameInfo(
+            decl_scope=<Circular: 3 up>,
+            ident='tos_idx',
+            tp_info=ValType(),
+            is_param=False
+          )
+        },
+        used={
+          '__result__': NameInfo(
+            decl_scope=<Circular: 6 up>,
+            ident='__result__',
+            tp_info=ValType(),
+            is_param=False
+          ),
+          'lenStack': FuncInfo(
+            decl_scope=<Circular: 6 up>,
+            ident='lenStack',
+            tp_info=FunctionType(
+              arg_types=[],
+              ret_type=VoidType()
+            ),
+            is_param=False,
+            params_info=[],
+            subscope=Scope(
+              declared={},
+              used={}
+            )
+          ),
+          'stack': NameInfo(
+            decl_scope=<Circular: 6 up>,
+            ident='stack',
+            tp_info=ListType(),
+            is_param=False
+          ),
+          'tos0': NameInfo(
+            decl_scope=<Circular: 3 up>,
+            ident='tos0',
+            tp_info=ValType(),
+            is_param=False
+          ),
+          'tos_idx': NameInfo(
+            decl_scope=<Circular: 3 up>,
+            ident='tos_idx',
+            tp_info=ValType(),
+            is_param=False
+          )
+        }
+      )
+    ),
+    '_PsHeap_FinalizeObj': FuncInfo(
+      decl_scope=<Circular: 3 up>,
+      ident='_PsHeap_FinalizeObj',
+      tp_info=FunctionType(
+        arg_types=[
+          ValType()
+        ],
+        ret_type=VoidType()
+      ),
+      is_param=False,
+      params_info=[
+        ParamInfo(
+          name='ptr',
+          tp=ValType()
+        )
+      ],
+      subscope=Scope(
+        declared={
+          'ptr': NameInfo(
+            decl_scope=<Circular: 3 up>,
+            ident='ptr',
+            tp_info=ValType(),
+            is_param=True
+          )
+        },
+        used={}
+      )
+    ),
+    '__result__': NameInfo(
+      decl_scope=<Circular: 3 up>,
+      ident='__result__',
+      tp_info=ValType(),
+      is_param=False
+    ),
+    '_psHeap_freelist': NameInfo(
+      decl_scope=<Circular: 3 up>,
+      ident='_psHeap_freelist',
+      tp_info=ListType(),
+      is_param=False
+    ),
+    '_psHeap_freelist__append': FuncInfo(
+      decl_scope=<Circular: 3 up>,
+      ident='_psHeap_freelist__append',
+      tp_info=FunctionType(
+        arg_types=[
+          ValType()
+        ],
+        ret_type=VoidType()
+      ),
+      is_param=False,
+      params_info=[
+        ParamInfo(
+          name='x',
+          tp=ValType()
+        )
+      ],
+      subscope=Scope(
+        declared={
+          'x': NameInfo(
+            decl_scope=<Circular: 3 up>,
+            ident='x',
+            tp_info=ValType(),
+            is_param=True
+          )
+        },
+        used={}
+      )
+    ),
+    '_psHeap_freelist__delitem': FuncInfo(
+      decl_scope=<Circular: 3 up>,
+      ident='_psHeap_freelist__delitem',
+      tp_info=FunctionType(
+        arg_types=[
+          ValType()
+        ],
+        ret_type=VoidType()
+      ),
+      is_param=False,
+      params_info=[
+        ParamInfo(
+          name='x',
+          tp=ValType()
+        )
+      ],
+      subscope=Scope(
+        declared={
+          'x': NameInfo(
+            decl_scope=<Circular: 3 up>,
+            ident='x',
+            tp_info=ValType(),
+            is_param=True
+          )
+        },
+        used={}
+      )
+    ),
+    '_psHeap_freelist__len': FuncInfo(
+      decl_scope=<Circular: 3 up>,
+      ident='_psHeap_freelist__len',
+      tp_info=FunctionType(
+        arg_types=[],
+        ret_type=VoidType()
+      ),
+      is_param=False,
+      params_info=[],
+      subscope=Scope(
+        declared={},
+        used={}
+      )
+    ),
+    'decref': FuncInfo(
+      decl_scope=<Circular: 3 up>,
+      ident='decref',
+      tp_info=FunctionType(
+        arg_types=[
+          ValType()
+        ],
+        ret_type=VoidType()
+      ),
+      is_param=False,
+      params_info=[
+        ParamInfo(
+          name='ptr',
+          tp=ValType()
+        )
+      ],
+      subscope=Scope(
+        declared={
+          'ptr': NameInfo(
+            decl_scope=<Circular: 3 up>,
+            ident='ptr',
+            tp_info=ValType(),
+            is_param=True
+          )
+        },
+        used={
+          'PsHeap_DeleteWord': FuncInfo(
+            decl_scope=<Circular: 6 up>,
+            ident='PsHeap_DeleteWord',
+            tp_info=FunctionType(
+              arg_types=[
+                ValType()
+              ],
+              ret_type=VoidType()
+            ),
+            is_param=False,
+            params_info=[
+              ParamInfo(
+                name='ptr',
+                tp=ValType()
+              )
+            ],
+            subscope=Scope(
+              declared={
+                'ptr': NameInfo(
+                  decl_scope=<Circular: 3 up>,
+                  ident='ptr',
+                  tp_info=ValType(),
+                  is_param=True
+                )
+              },
+              used={
+                'PsHeap_FreeWord': FuncInfo(
+                  decl_scope=<Circular: 9 up>,
+                  ident='PsHeap_FreeWord',
+                  tp_info=FunctionType(
+                    arg_types=[
+                      ValType()
+                    ],
+                    ret_type=VoidType()
+                  ),
+                  is_param=False,
+                  params_info=[
+                    ParamInfo(
+                      name='ptr',
+                      tp=ValType()
+                    )
+                  ],
+                  subscope=Scope(
+                    declared={
+                      'ptr': NameInfo(
+                        decl_scope=<Circular: 3 up>,
+                        ident='ptr',
+                        tp_info=ValType(),
+                        is_param=True
+                      )
+                    },
+                    used={
+                      'COUNT_REFS': NameInfo(
+                        decl_scope=<Circular: 12 up>,
+                        ident='COUNT_REFS',
+                        tp_info=ValType(),
+                        is_param=False
+                      ),
+                      '_psHeap_freelist__append': FuncInfo(
+                        decl_scope=<Circular: 12 up>,
+                        ident='_psHeap_freelist__append',
+                        tp_info=FunctionType(
+                          arg_types=[
+                            ValType()
+                          ],
+                          ret_type=VoidType()
+                        ),
+                        is_param=False,
+                        params_info=[
+                          ParamInfo(
+                            name='x',
+                            tp=ValType()
+                          )
+                        ],
+                        subscope=Scope(
+                          declared={
+                            'x': NameInfo(
+                              decl_scope=<Circular: 3 up>,
+                              ident='x',
+                              tp_info=ValType(),
+                              is_param=True
+                            )
+                          },
+                          used={}
+                        )
+                      ),
+                      'psHeap': NameInfo(
+                        decl_scope=<Circular: 12 up>,
+                        ident='psHeap',
+                        tp_info=ListType(),
+                        is_param=False
+                      ),
+                      'ptr': NameInfo(
+                        decl_scope=<Circular: 3 up>,
+                        ident='ptr',
+                        tp_info=ValType(),
+                        is_param=True
+                      ),
+                      'refStack': NameInfo(
+                        decl_scope=<Circular: 12 up>,
+                        ident='refStack',
+                        tp_info=ListType(),
+                        is_param=False
+                      )
+                    }
+                  )
+                ),
+                '_PsHeap_FinalizeObj': FuncInfo(
+                  decl_scope=<Circular: 9 up>,
+                  ident='_PsHeap_FinalizeObj',
+                  tp_info=FunctionType(
+                    arg_types=[
+                      ValType()
+                    ],
+                    ret_type=VoidType()
+                  ),
+                  is_param=False,
+                  params_info=[
+                    ParamInfo(
+                      name='ptr',
+                      tp=ValType()
+                    )
+                  ],
+                  subscope=Scope(
+                    declared={
+                      'ptr': NameInfo(
+                        decl_scope=<Circular: 3 up>,
+                        ident='ptr',
+                        tp_info=ValType(),
+                        is_param=True
+                      )
+                    },
+                    used={}
+                  )
+                ),
+                'ptr': NameInfo(
+                  decl_scope=<Circular: 3 up>,
+                  ident='ptr',
+                  tp_info=ValType(),
+                  is_param=True
+                )
+              }
+            )
+          ),
+          'ptr': NameInfo(
+            decl_scope=<Circular: 3 up>,
+            ident='ptr',
+            tp_info=ValType(),
+            is_param=True
+          ),
+          'refStack': NameInfo(
+            decl_scope=<Circular: 6 up>,
+            ident='refStack',
+            tp_info=ListType(),
+            is_param=False
+          )
+        }
+      )
+    ),
+    'delitem': FuncInfo(
+      decl_scope=<Circular: 3 up>,
+      ident='delitem',
+      tp_info=FunctionType(
+        arg_types=[
+          ValType(),
+          ValType()
+        ],
+        ret_type=VoidType()
+      ),
+      is_param=False,
+      params_info=[
+        ParamInfo(
+          name='a',
+          tp=ValType()
+        ),
+        ParamInfo(
+          name='idx',
+          tp=ValType()
+        )
+      ],
+      subscope=Scope(
+        declared={
+          'a': NameInfo(
+            decl_scope=<Circular: 3 up>,
+            ident='a',
+            tp_info=ValType(),
+            is_param=True
+          ),
+          'idx': NameInfo(
+            decl_scope=<Circular: 3 up>,
+            ident='idx',
+            tp_info=ValType(),
+            is_param=True
+          )
+        },
+        used={}
+      )
+    ),
+    'false': NameInfo(
+      decl_scope=<Circular: 3 up>,
+      ident='false',
+      tp_info=ValType(),
+      is_param=False
+    ),
+    'incref': FuncInfo(
+      decl_scope=<Circular: 3 up>,
+      ident='incref',
+      tp_info=FunctionType(
+        arg_types=[
+          ValType()
+        ],
+        ret_type=VoidType()
+      ),
+      is_param=False,
+      params_info=[
+        ParamInfo(
+          name='ptr',
+          tp=ValType()
+        )
+      ],
+      subscope=Scope(
+        declared={
+          'ptr': NameInfo(
+            decl_scope=<Circular: 3 up>,
+            ident='ptr',
+            tp_info=ValType(),
+            is_param=True
+          )
+        },
+        used={
+          'ptr': NameInfo(
+            decl_scope=<Circular: 3 up>,
+            ident='ptr',
+            tp_info=ValType(),
+            is_param=True
+          ),
+          'refStack': NameInfo(
+            decl_scope=<Circular: 6 up>,
+            ident='refStack',
+            tp_info=ListType(),
+            is_param=False
+          )
+        }
+      )
+    ),
+    'len': FuncInfo(
+      decl_scope=<Circular: 3 up>,
+      ident='len',
+      tp_info=FunctionType(
+        arg_types=[
+          ValType()
+        ],
+        ret_type=VoidType()
+      ),
+      is_param=False,
+      params_info=[
+        ParamInfo(
+          name='a',
+          tp=ValType()
+        )
+      ],
+      subscope=Scope(
+        declared={
+          'a': NameInfo(
+            decl_scope=<Circular: 3 up>,
+            ident='a',
+            tp_info=ValType(),
+            is_param=True
+          )
+        },
+        used={}
+      )
+    ),
+    'lenStack': FuncInfo(
+      decl_scope=<Circular: 3 up>,
+      ident='lenStack',
+      tp_info=FunctionType(
+        arg_types=[],
+        ret_type=VoidType()
+      ),
+      is_param=False,
+      params_info=[],
+      subscope=Scope(
+        declared={},
+        used={}
+      )
+    ),
+    'psHeap': NameInfo(
+      decl_scope=<Circular: 3 up>,
+      ident='psHeap',
+      tp_info=ListType(),
+      is_param=False
+    ),
+    'psHeap__append': FuncInfo(
+      decl_scope=<Circular: 3 up>,
+      ident='psHeap__append',
+      tp_info=FunctionType(
+        arg_types=[
+          ValType()
+        ],
+        ret_type=VoidType()
+      ),
+      is_param=False,
+      params_info=[
+        ParamInfo(
+          name='x',
+          tp=ValType()
+        )
+      ],
+      subscope=Scope(
+        declared={
+          'x': NameInfo(
+            decl_scope=<Circular: 3 up>,
+            ident='x',
+            tp_info=ValType(),
+            is_param=True
+          )
+        },
+        used={}
+      )
+    ),
+    'psHeap__len': FuncInfo(
+      decl_scope=<Circular: 3 up>,
+      ident='psHeap__len',
+      tp_info=FunctionType(
+        arg_types=[],
+        ret_type=VoidType()
+      ),
+      is_param=False,
+      params_info=[],
+      subscope=Scope(
+        declared={},
+        used={}
+      )
+    ),
+    'refStack': NameInfo(
+      decl_scope=<Circular: 3 up>,
+      ident='refStack',
+      tp_info=ListType(),
+      is_param=False
+    ),
+    'refStack__append': FuncInfo(
+      decl_scope=<Circular: 3 up>,
+      ident='refStack__append',
+      tp_info=FunctionType(
+        arg_types=[
+          ValType()
+        ],
+        ret_type=VoidType()
+      ),
+      is_param=False,
+      params_info=[
+        ParamInfo(
+          name='x',
+          tp=ValType()
+        )
+      ],
+      subscope=Scope(
+        declared={
+          'x': NameInfo(
+            decl_scope=<Circular: 3 up>,
+            ident='x',
+            tp_info=ValType(),
+            is_param=True
+          )
+        },
+        used={}
+      )
+    ),
+    'stack': NameInfo(
+      decl_scope=<Circular: 3 up>,
+      ident='stack',
+      tp_info=ListType(),
+      is_param=False
+    ),
+    'stackDelitem': FuncInfo(
+      decl_scope=<Circular: 3 up>,
+      ident='stackDelitem',
+      tp_info=FunctionType(
+        arg_types=[
+          ValType()
+        ],
+        ret_type=VoidType()
+      ),
+      is_param=False,
+      params_info=[
+        ParamInfo(
+          name='x',
+          tp=ValType()
+        )
+      ],
+      subscope=Scope(
+        declared={
+          'x': NameInfo(
+            decl_scope=<Circular: 3 up>,
+            ident='x',
+            tp_info=ValType(),
+            is_param=True
+          )
+        },
+        used={}
+      )
+    ),
+    'stack__append': FuncInfo(
+      decl_scope=<Circular: 3 up>,
+      ident='stack__append',
+      tp_info=FunctionType(
+        arg_types=[
+          ValType()
+        ],
+        ret_type=VoidType()
+      ),
+      is_param=False,
+      params_info=[
+        ParamInfo(
+          name='x',
+          tp=ValType()
+        )
+      ],
+      subscope=Scope(
+        declared={
+          'x': NameInfo(
+            decl_scope=<Circular: 3 up>,
+            ident='x',
+            tp_info=ValType(),
+            is_param=True
+          )
+        },
+        used={}
+      )
     ),
     'true': NameInfo(
       decl_scope=<Circular: 3 up>,
