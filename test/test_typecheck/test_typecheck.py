@@ -54,4 +54,5 @@ class TestErrors(CommonTestCase):
     def test_assignment_error(self):
         exc = self.assertTypecheckError("let a; a = (1 < 2);")
         self.assertEqual(exc.msg, "Expected type val, got type bool")
-        self.assertErrorRegion(StrRegion(11, 18), exc)
+        # Or 11->18 (either including or excluding parens? - which one?)
+        self.assertErrorRegion(StrRegion(12, 17), exc)

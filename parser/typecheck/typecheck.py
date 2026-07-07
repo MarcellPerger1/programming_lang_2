@@ -152,8 +152,8 @@ class Typechecker:
         else:
             assert 0, "Unknown simple-assignment type"
         if target_tp == ListType():
-            raise self.err("Cannot assign directly to list", n)
-        self.expect_type(self._typecheck(n.source), target_tp, n)
+            raise self.err("Cannot assign directly to list", n.target)
+        self.expect_type(self._typecheck(n.source), target_tp, n.source)
 
     @_node_typechecker(AstAugAssign)
     def _typecheck_aug_assign(self, n: AstAugAssign):
