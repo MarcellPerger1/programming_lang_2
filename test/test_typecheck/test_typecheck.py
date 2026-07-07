@@ -1,4 +1,5 @@
 from parser.astgen.ast_nodes import AstDeclNode, AstDefine
+from parser.common import StrRegion
 from parser.typecheck.typecheck import TypeMetadata
 from parser.typecheck.types import ValType, VoidType, BoolType, TypeType
 from test.common import CommonTestCase
@@ -35,3 +36,9 @@ class TestGivenTypes(CommonTestCase):
     def test_bools(self):
         prog = self.getTypechecker("if(!(6==7) && (8==9 || 7<2) || 4>=2){}").run()
         self.assertAllMetadata(prog, TypeMetadata)
+
+
+class TestErrors(CommonTestCase):
+    def test_cant_pass_list_to_val_param(self):
+        exc = self.assertTypecheckError("def f(val v){}\nf(9);")
+        self.assertErrorRegion(StrRegion(18, 19), exc)
