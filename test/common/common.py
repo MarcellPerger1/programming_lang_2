@@ -2,7 +2,6 @@
 used in all projects should go in utils.py"""
 from __future__ import annotations
 
-import sys
 from enum import IntFlag, Enum
 from typing import Sequence, TypeVar, Any
 
@@ -18,7 +17,8 @@ from parser.cst.base_node import Leaf, AnyNode, Node
 from parser.cst.cstgen import CstGen, LocatedCstError
 from parser.lexer import Tokenizer
 from parser.lexer.tokens import Token, OpToken
-from parser.typecheck.name_resolver import Scope, NameResolutionError, NameResolver
+from parser.typecheck.name_resolver import NameResolutionError, NameResolver
+from parser.typecheck.scope import Scope
 from parser.typecheck.typecheck import Typechecker, TypeMetadata, TypecheckError
 from parser.typecheck.types import TypeInfo
 from util.pformat import pformat

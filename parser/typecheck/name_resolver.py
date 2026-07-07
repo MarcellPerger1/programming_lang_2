@@ -1,59 +1,13 @@
 from __future__ import annotations
 
-from dataclasses import dataclass, field
-
 from util import assert_not_none
-from util.recursive_eq import recursive_eq
+from .scope import NameInfo, FuncInfo, ParamInfo, Scope
+from .types import ValType, ListType, BoolType, VoidType, PARAM_TYPES
 from ..astgen.ast_node import AstNode
 from ..astgen.ast_nodes import AstIdent, AstDeclNode, VarDeclScope, VarDeclType, AstDefine
 from ..astgen.astgen import AstGen
 from ..astgen.filtered_walker import FilteredWalker
-
-from ..common import BaseLocatedError, StrRegion, RegionUnionArgT, region_union
-from .types import TypeInfo, FunctionType, ValType, ListType, BoolType, VoidType, PARAM_TYPES
-
-
-@dataclass
-class NameInfo:
-    decl_scope: Scope
-    ident: str
-    tp_info: TypeInfo
-    # node: AstNode  # <-- Why do we need this?
-    is_param: bool = field(default=False, kw_only=True)
-
-
-@dataclass
-class FuncInfo(NameInfo):
-    tp_info: FunctionType  # Overrides types (doesn't change order)
-    params_info: list[ParamInfo]
-    # Can't just pass default_factory=Scope as it is only defined below
-    subscope: Scope = field(default_factory=lambda: Scope())
-
-    @classmethod
-    def from_param_info(
-            cls, decl_scope: Scope, ident: str, params_info: list[ParamInfo],
-            ret_type: TypeInfo, subscope: Scope = None):
-        subscope = subscope or Scope()
-        tp_info = FunctionType([p.tp for p in params_info], ret_type)
-        return cls(decl_scope, ident, tp_info, params_info, subscope)
-
-
-@dataclass
-class ParamInfo:
-    name: str
-    tp: TypeInfo
-
-
-@dataclass
-class Scope:
-    declared: dict[str, NameInfo] = field(default_factory=dict)
-    used: dict[str, NameInfo] = field(default_factory=dict)
-    """Add references to outer scopes' variables that we use.
-    (so type codegen/type-checker knows what each AstIdent refers to)"""
-
-
-# Prevent declared -> scope cmp recursion error
-Scope.__eq__ = recursive_eq(Scope.__eq__)
+from ..common import BaseLocatedError, RegionUnionArgT, region_union
 
 
 class NameResolutionError(BaseLocatedError):

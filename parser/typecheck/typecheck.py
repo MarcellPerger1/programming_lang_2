@@ -7,11 +7,11 @@ from dataclasses import dataclass
 from typing import TypeAlias, TypeVar, ParamSpec
 
 from util import assert_not_none
-from .name_resolver import FuncInfo, Scope, NameResolver
+from .name_resolver import NameResolver
+from .scope import FuncInfo, Scope
 from .types import TypeInfo, ValType, BoolType, ListType, VoidType, FunctionType, TypeType
 from ..astgen.ast_nodes import *
 from ..common import BaseLocatedError, region_union, RegionUnionArgT
-
 
 T = TypeVar('T')
 P = ParamSpec('P')

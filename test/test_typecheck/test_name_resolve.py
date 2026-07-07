@@ -1,7 +1,8 @@
 from unittest.mock import Mock, patch
 
 from parser.common import StrRegion
-from parser.typecheck.name_resolver import NameInfo, FuncInfo, ParamInfo, Scope, NameResolver
+from parser.typecheck.name_resolver import NameResolver
+from parser.typecheck.scope import NameInfo, FuncInfo, ParamInfo, Scope
 from parser.typecheck.types import ValType, BoolType, VoidType
 from test.common import CommonTestCase
 
