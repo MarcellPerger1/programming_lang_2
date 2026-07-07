@@ -56,3 +56,8 @@ class TestErrors(CommonTestCase):
         self.assertEqual(exc.msg, "Expected type val, got type bool")
         # Or 11->18 (either including or excluding parens? - which one?)
         self.assertErrorRegion(StrRegion(12, 17), exc)
+
+    def test_bool_only_in_condition(self):
+        exc = self.assertTypecheckError("let a=8;\nif a {}")
+        self.assertEqual(exc.msg, "Expected type bool, got type val")
+        self.assertErrorRegion(StrRegion(12, 13), exc)
