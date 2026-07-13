@@ -99,6 +99,7 @@ class ScopeNameResolver(FilteredWalker):
             ValType() if n.type == VarDeclType.VARIABLE else ListType()))
         return True
 
+    @class_registry.on_enter(AstDefine)
     def enter_fn_decl(self, fn: AstDefine):
         ident = fn.ident.id
         if ident in self.curr_scope.declared:
