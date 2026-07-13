@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import sys
+from collections.abc import Sequence
 from dataclasses import dataclass, field
 from enum import Enum
 from typing import Callable, TypeAlias, Iterable, TypeVar, TYPE_CHECKING, Generic
@@ -79,7 +80,7 @@ class AstNode(HasRegion, Generic[MetadataT]):
 walk_ast = AstNode.walk_obj
 
 
-WalkableL0: TypeAlias = AstNode | list[AstNode] | tuple[AstNode, ...] | None
-WalkableT: TypeAlias = WalkableL0 | list[WalkableL0] | tuple[WalkableL0, ...]
+WalkableL0: TypeAlias = AstNode | Sequence[AstNode] | None
+WalkableT: TypeAlias = WalkableL0 | Sequence[WalkableL0]
 WalkerFnT: TypeAlias = Callable[[WalkableT, WalkerCallType], bool | None]
 """Returns True if skip"""
