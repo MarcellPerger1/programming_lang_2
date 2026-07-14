@@ -76,13 +76,13 @@ class Typechecker:
             return n_type
         return new_fn
 
-    def _node_typechecker(self, tp=None):
+    def _node_typechecker(self: type[AstNode], tp: type[AstNode] | None = None):
         if tp is None:
             assert callable(self)
-            tp = self  # Called as decor in this class
+        tp_ = self if tp is None else tp  # Need new var coz Pycharm stupid
 
         def decor(fn: NodeTypecheckFn):
-            new_fn = _TypecheckerInitVars.typecheck_dispatch[tp] = (
+            new_fn = _TypecheckerInitVars.typecheck_dispatch[tp_] = (
                 _TypecheckerInitVars.and_set_type_metadata(fn))
             return new_fn
         return decor
