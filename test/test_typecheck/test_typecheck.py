@@ -1,4 +1,4 @@
-from parser.astgen.ast_nodes import AstDeclNode, AstDefine
+from parser.astgen.ast_nodes import AstDeclNode, AstDefine, AstAugAssign
 from parser.common import StrRegion
 from parser.typecheck.types import ValType, VoidType, BoolType, TypeType, TypeMetadata
 from test.common import CommonTestCase
@@ -39,6 +39,19 @@ class TestGivenTypes(CommonTestCase):
     def test_assign_list_getitem(self):
         prog = self.getTypechecker("global AA = 9; let[] bb = [7]; AA = bb[1];").run()
         self.assertAllMetadata(prog, TypeMetadata)
+
+    def test_aug_assign(self):
+        prog = self.getTypechecker("let v=8; v+=5;").run()
+        self.assertAllMetadata(prog, TypeMetadata)
+        decl, aug = self.assertHasLength(prog.statements, 2)
+        self.assertTypecheckedTo(decl, VoidType())
+        self.assertTypecheckedTo(aug, VoidType())
+        decl = self.assertAsInstance(decl, AstDeclNode)
+        self.assertTypecheckedTo(decl.ident, ValType())
+        self.assertTypecheckedTo(decl.value, ValType())
+        aug = self.assertAsInstance(aug, AstAugAssign)
+        self.assertTypecheckedTo(aug.target, ValType())
+        self.assertTypecheckedTo(aug.source, ValType())
 
 
 class TestErrors(CommonTestCase):

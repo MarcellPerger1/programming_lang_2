@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import os
 import unittest
+from collections.abc import Sized
 from pathlib import Path
 from typing import overload, TYPE_CHECKING, TypeVar, Protocol, Iterable, Container, Any
 
@@ -13,6 +14,7 @@ T = TypeVar('T')
 T_contra = TypeVar('T_contra', contravariant=True)
 U = TypeVar('U')
 U_contra = TypeVar('U_contra', contravariant=True)
+SizedT = TypeVar('SizedT', bound=Sized)
 
 if TYPE_CHECKING:
     from _typeshed import SupportsDunderLE, SupportsDunderGE
@@ -95,6 +97,10 @@ class TestCaseUtils(unittest.TestCase):
                       f"one extra (iterable: {container}, extra: {v2})")
         self.fail(f"Expected iterable to contain one item, got {length} items"
                   f"(iterable: {container})")
+
+    def assertHasLength(self, sized: SizedT, n: int) -> SizedT:
+        self.assertEqual(n, len(sized), f"Expected {sized} to have size {n}")
+        return sized
 
     def assertAsInstance(self, o: object, cls: type[T], msg: str | None = None) -> T:
         self.assertIsInstance(o, cls, msg)
