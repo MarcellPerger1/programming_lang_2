@@ -58,7 +58,7 @@ def fuzz_advanced(buf: bytes):
     rng = random.Random()
     for i, byte in enumerate(buf):
         rng.seed(buf + b'\0' + bytes(byte) + b'\0'
-                 + i.to_bytes(length=i.bit_count() // 8 + 1))
+                 + i.to_bytes(length=i.bit_count() // 8 + 1, byteorder='big'))
         parts.append(rng.choice(sample_from))
     s = ''.join(parts)
     target(s)
