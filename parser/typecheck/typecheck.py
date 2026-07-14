@@ -146,8 +146,8 @@ class Typechecker:
             raise self.err("Setting attributes is currently unsupported", n.target)
         else:
             assert 0, "Unknown simple-assignment type"
-        if target_tp == ListType():
-            raise self.err("Cannot assign directly to list", n.target)
+        if target_tp != ValType():  # Not even bool
+            raise self.err(f"Cannot assign directly to {target_tp}", n.target)
         self.expect_type(self._typecheck(n.source), target_tp, n.source)
 
     @_node_typechecker(AstAugAssign)
