@@ -118,3 +118,15 @@ class TestErrors(CommonTestCase):
         exc = self.assertTypecheckError("def f(){}; f(67, 69);")
         self.assertErrorRegion(StrRegion(13, 15), exc)
         self.assertEqual("Incorrect number of arguments, expected 0, got 2", exc.msg)
+
+    def test_call_not_enough_arg(self):
+        # BEHAV: Should we really highlight entire call? Fine I guess for now
+        exc = self.assertTypecheckError("def f(val s, val r){}; f(67);")
+        self.assertErrorRegion(StrRegion(23, 28), exc)
+        self.assertEqual("Incorrect number of arguments, expected 2, got 1", exc.msg)
+
+    def test_call_not_enough_arg_given_zero(self):
+        exc = self.assertTypecheckError("def f(val s, val r){}; f();")
+        self.assertErrorRegion(StrRegion(23, 26), exc)
+        self.assertEqual("Incorrect number of arguments, expected 2, got 0", exc.msg)
+
