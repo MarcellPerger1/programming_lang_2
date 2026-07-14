@@ -158,7 +158,7 @@ class Typechecker:
             raise self.err(f"The '{n.op}' operator is not implemented", n)
         if not isinstance(n.target, AstIdent):
             raise self.err(f"The '+=' operator is only implemented for variables", n)
-        target_tp = self._curr_scope.used[n.target.id].tp_info
+        target_tp = self._typecheck_ident_used(n.target)
         if target_tp != ValType():
             raise self.err(f"Cannot apply += to {target_tp}", n)
         self.expect_type(self._typecheck(n.source), ValType(), n.source)
