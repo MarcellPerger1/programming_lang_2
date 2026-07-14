@@ -171,7 +171,7 @@ class CommonTestCase(SnapshotTestCase, TestCaseUtils):
         return ctx.exception
 
     @contextlib.contextmanager
-    def assertFailsGracefully(self):
+    def assertDoesntCrash(self):
         try:
             yield
         except BaseParseError:

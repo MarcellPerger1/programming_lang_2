@@ -1,5 +1,6 @@
+from parser.astgen.ast_node import AstNode
 from parser.astgen.ast_nodes import AstDeclNode, AstDefine, AstAugAssign, AstWhile, \
-    VarDeclType, VarDeclScope, AstRepeat
+    VarDeclType, VarDeclScope, AstRepeat, AstItem
 from parser.common import StrRegion
 from parser.typecheck.types import ValType, VoidType, BoolType, TypeType, TypeMetadata, \
     ListType
@@ -48,9 +49,7 @@ class TestGivenTypes(CommonTestCase):
         decl, aug = self.assertHasLength(prog.statements, 2)
         self.assertTypecheckedTo(decl, VoidType())
         self.assertTypecheckedTo(aug, VoidType())
-        decl = self.assertAsInstance(decl, AstDeclNode)
-        self.assertTypecheckedTo(decl.ident, ValType())
-        self.assertTypecheckedTo(decl.value, ValType())
+        self._check_decl_val(decl)
         aug = self.assertAsInstance(aug, AstAugAssign)
         self.assertTypecheckedTo(aug.target, ValType())
         self.assertTypecheckedTo(aug.source, ValType())
@@ -75,6 +74,25 @@ class TestGivenTypes(CommonTestCase):
         self.assertTypecheckedTo(repeat, VoidType())
         self.assertTypecheckedTo(repeat.count, ValType())
         self.assertHasLength(repeat.body, 0)
+
+    def test_string_getitem(self):
+        prog = self.getTypechecker("let a='hello'; let b=a[4];").run()
+        self.assertAllMetadata(prog, TypeMetadata)
+        a, b = self.assertHasLength(prog.statements, 2)
+        self.assertTypecheckedTo(a, VoidType())
+        self.assertTypecheckedTo(b, VoidType())
+        self._check_decl_val(a)
+        b = self._check_decl_val(b)
+        getitem = self.assertAsInstance(b.value, AstItem)
+        self.assertTypecheckedTo(getitem, ValType())
+        self.assertTypecheckedTo(getitem.obj, ValType())
+        self.assertTypecheckedTo(getitem.index, ValType())
+
+    def _check_decl_val(self, a: AstNode):
+        a = self.assertAsInstance(a, AstDeclNode)
+        self.assertTypecheckedTo(a.ident, ValType())
+        self.assertTypecheckedTo(a.value, ValType())
+        return a
 
 
 class TestErrors(CommonTestCase):
@@ -130,8 +148,31 @@ class TestErrors(CommonTestCase):
         self.assertErrorRegion(StrRegion(23, 26), exc)
         self.assertEqual("Incorrect number of arguments, expected 2, got 0", exc.msg)
 
+    def test_call_list(self):
+        exc = self.assertTypecheckError("let[] a=[6]; a();")
+        self.assertEqual("Cannot call list", exc.msg)
+        self.assertErrorRegion(StrRegion(13, 14), exc)
+
+    def test_call_val(self):
+        exc = self.assertTypecheckError("let a=8; a();")
+        self.assertEqual("Cannot call val", exc.msg)
+        self.assertErrorRegion(StrRegion(9, 10), exc)
+
+    def test_item_of_func(self):
+        exc = self.assertTypecheckError("def f(val x){}; let a=f[9];")
+        self.assertEqual("Cannot get item of (val) -> void", exc.msg)
+        self.assertErrorRegion(StrRegion(22, 26), exc)
+
     def test_attr_doesnt_crash(self):
-        with self.assertFailsGracefully():
+        with self.assertDoesntCrash():
             self.getTypechecker("let a; a.b=9;").run()
-        with self.assertFailsGracefully():
+        with self.assertDoesntCrash():
             self.getTypechecker("let a; let c = a.b;").run()
+
+    def test_unsupported_aug_assign_doesnt_crash(self):
+        with self.assertDoesntCrash():
+            self.getTypechecker("let a; a-=7;").run()
+        with self.assertDoesntCrash():
+            self.getTypechecker("let a; a**=7;").run()
+        with self.assertDoesntCrash():
+            self.getTypechecker("let[] a; a[6] += 7;").run()
