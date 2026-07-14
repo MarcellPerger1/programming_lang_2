@@ -4,6 +4,7 @@ from pathlib import Path
 
 from parser.cst.cstgen import CstGen
 from parser.lexer.tokenizer import Tokenizer
+from scripts.fuzz import fuzz
 from test.common import CommonTestCase, TestCaseUtils
 from util import timeout_decor, timeout_decor_async
 
@@ -17,15 +18,16 @@ class FuzzerCorpusTestCases(unittest.IsolatedAsyncioTestCase, TestCaseUtils):
     # TestCase object isn't passed to the other process as the self value
     @staticmethod
     @timeout_decor_async(5, debug=0, pool=True)
-    def _inner_once(src: str):
-        return CommonTestCase.raiseInternalErrorsOnlyCST(src)
+    def _inner_once(src_bytes: bytes):
+        with CommonTestCase.raiseInternalErrorsOnly():
+            fuzz(src_bytes)
 
     async def _test_once(self, p: Path):
         with self.subTest(corp=p.name):
-            with open(p, encoding='cp1252') as f:
-                src = f.read()
+            with open(p, 'rb') as f:
+                src_bytes = f.read()
             # noinspection PyUnresolvedReferences
-            await self._inner_once(src)  # Pycharm doesn't understand decorators
+            await self._inner_once(src_bytes)  # Pycharm doesn't understand decorators
 
     async def test(self):
         await asyncio.gather(*[

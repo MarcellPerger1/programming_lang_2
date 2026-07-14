@@ -2,6 +2,7 @@
 used in all projects should go in utils.py"""
 from __future__ import annotations
 
+import contextlib
 from enum import IntFlag, Enum
 from typing import Sequence, TypeVar, Any
 
@@ -107,6 +108,16 @@ class CommonTestCase(SnapshotTestCase, TestCaseUtils):
         except BaseParseError:
             self.assertTrue(True)
         self.assertTrue(True)
+
+    @classmethod
+    @contextlib.contextmanager
+    def raiseInternalErrorsOnly(cls):
+        try:
+            yield
+        except BaseParseError:
+            pass
+        except Exception:
+            raise
 
     @classmethod
     def raiseInternalErrorsOnlyCST(cls, src: str):
