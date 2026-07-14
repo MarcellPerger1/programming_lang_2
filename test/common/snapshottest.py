@@ -233,7 +233,10 @@ class SnapshotTestCase(unittest.TestCase):
 
     @classmethod
     def _check_unused_snaps(cls):
-        all_snap_keys = set(cls._read_snapshot_file().keys())
+        try:
+            all_snap_keys = set(cls._read_snapshot_file().keys())
+        except SnapshotsNotFound:
+            return   # No snapshots anyway
         # Important: only look at the snapshot keys for our class
         # TODO: not perfect, doesn't detect if entire class is gone (needs custom runtime)
         our_snap_keys = {k for k in all_snap_keys if k.startswith(f'{cls.cls_name}::')}
@@ -244,14 +247,13 @@ class SnapshotTestCase(unittest.TestCase):
         if cls.unused_handling == 'ignore':
             return
         if cls.unused_handling == 'prune':
-            ...  # TODO: how delete stuff?
+            cls._queued_changes[cls.snap_file] |= dict.fromkeys(
+                unreferenced_keys, _DELETE_SENTINEL)
         msg = f'Unused snapshot keys: {", ".join(unreferenced_keys)}'
         if cls.unused_handling == 'print':
             return print(msg, file=sys.stderr)
         assert cls.unused_handling == 'error'
         raise UnusedSnapshot(msg)
-
-
 
     @classmethod
     def _make_snaps_dir(cls):
