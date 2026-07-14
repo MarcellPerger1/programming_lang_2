@@ -1,4 +1,6 @@
-from typing import TypeAlias, Sequence, cast, TYPE_CHECKING
+from __future__ import annotations
+
+from typing import TypeAlias, Sequence, TYPE_CHECKING
 
 from .str_region import StrRegion
 
