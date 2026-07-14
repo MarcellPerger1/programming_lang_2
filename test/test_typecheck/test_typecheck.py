@@ -1,6 +1,8 @@
-from parser.astgen.ast_nodes import AstDeclNode, AstDefine, AstAugAssign
+from parser.astgen.ast_nodes import AstDeclNode, AstDefine, AstAugAssign, AstWhile, \
+    VarDeclType, VarDeclScope, AstRepeat
 from parser.common import StrRegion
-from parser.typecheck.types import ValType, VoidType, BoolType, TypeType, TypeMetadata
+from parser.typecheck.types import ValType, VoidType, BoolType, TypeType, TypeMetadata, \
+    ListType
 from test.common import CommonTestCase
 
 
@@ -53,6 +55,27 @@ class TestGivenTypes(CommonTestCase):
         self.assertTypecheckedTo(aug.target, ValType())
         self.assertTypecheckedTo(aug.source, ValType())
 
+    def test_while(self):
+        prog = self.getTypechecker("while(1==1){let[] b;}").run()
+        self.assertAllMetadata(prog, TypeMetadata)
+        while_ = self.assertAsInstance(self.assertHasSingleItem(prog.statements), AstWhile)
+        self.assertTypecheckedTo(while_, VoidType())
+        self.assertTypecheckedTo(while_.cond, BoolType())
+        let = self.assertAsInstance(self.assertHasSingleItem(while_.body), AstDeclNode)
+        self.assertTypecheckedTo(let, VoidType())
+        self.assertTypecheckedTo(let.ident, ListType())
+        self.assertIsNone(let.value)
+        self.assertEqual(VarDeclType.LIST, let.type)
+        self.assertEqual(VarDeclScope.LET, let.scope)
+
+    def test_repeat(self):
+        prog = self.getTypechecker("repeat 42 {}").run()
+        self.assertAllMetadata(prog, TypeMetadata)
+        repeat = self.assertAsInstance(self.assertHasSingleItem(prog.statements), AstRepeat)
+        self.assertTypecheckedTo(repeat, VoidType())
+        self.assertTypecheckedTo(repeat.count, ValType())
+        self.assertHasLength(repeat.body, 0)
+
 
 class TestErrors(CommonTestCase):
     def test_cant_pass_list_to_val_param(self):
@@ -66,10 +89,32 @@ class TestErrors(CommonTestCase):
     def test_assignment_error(self):
         exc = self.assertTypecheckError("let a; a = (1 < 2);")
         self.assertEqual(exc.msg, "Expected type val, got type bool")
-        # Or 11->18 (either including or excluding parens? - which one?)
+        # BEHAV: Or 11->18 (either including or excluding parens? - which one?)
         self.assertErrorRegion(StrRegion(12, 17), exc)
 
     def test_bool_only_in_condition(self):
         exc = self.assertTypecheckError("let a=8;\nif a {}")
         self.assertEqual(exc.msg, "Expected type bool, got type val")
         self.assertErrorRegion(StrRegion(12, 13), exc)
+
+    def test_assign_func(self):
+        exc = self.assertTypecheckError("def f(){}\nf = 8;")
+        self.assertErrorRegion(StrRegion(10, 11), exc)
+        self.assertEqual(exc.msg, "Cannot assign directly to () -> void")
+
+    def test_call_extra_arg_single(self):
+        exc = self.assertTypecheckError("def f(){}; f(6769);")
+        self.assertErrorRegion(StrRegion(13, 17), exc)
+        self.assertEqual("Incorrect number of arguments, expected 0, got 1", exc.msg)
+
+    def test_call_error_one_extra_arg(self):
+        exc = self.assertTypecheckError("def f(val a){}; f(67, 69);")
+        self.assertErrorRegion(StrRegion(22, 24), exc)
+        self.assertEqual("Incorrect number of arguments, expected 1, got 2", exc.msg)
+
+    def test_call_error_many_extra_arg(self):
+        # BEHAV: should we do last or first extraneous one? Do first for
+        #  now as last might imply that it's the only extraneous arg. Or all??
+        exc = self.assertTypecheckError("def f(){}; f(67, 69);")
+        self.assertErrorRegion(StrRegion(13, 15), exc)
+        self.assertEqual("Incorrect number of arguments, expected 0, got 2", exc.msg)
