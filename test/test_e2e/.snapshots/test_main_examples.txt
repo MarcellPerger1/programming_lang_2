@@ -1,5 +1,5 @@
-"2","90","188","680","1101","1482","2370","3122","3801","5188","6216","7036","7789"
-"TestMain::test_example_0:tokens","TestMain::test_example_0:cst","TestMain::test_example_1:tokens","TestMain::test_example_1:cst","TestMain::test_example_1:ast","TestMain::test_example_2:tokens","TestMain::test_example_2:cst","TestMain::test_example_2:ast","TestMain::test_example_2:name_resolve","TestMain::test_example_3:tokens","TestMain::test_example_3:cst","TestMain::test_example_3:ast","TestMain::test_example_3:name_resolve"
+"2","90","188","680","1101","1482","2370","3122","3801","5188","6216","7036","7789","9522"
+"TestMain::test_example_0:tokens","TestMain::test_example_0:cst","TestMain::test_example_1:tokens","TestMain::test_example_1:cst","TestMain::test_example_1:ast","TestMain::test_example_2:tokens","TestMain::test_example_2:cst","TestMain::test_example_2:ast","TestMain::test_example_2:name_resolve","TestMain::test_example_3:tokens","TestMain::test_example_3:cst","TestMain::test_example_3:ast","TestMain::test_example_3:name_resolve","TestMain::test_example_3:typecheck"
 [IdentNameToken(region=StrRegion(start=0, end=3)),
  WhitespaceToken(region=StrRegion(start=3, end=4)),
  IdentNameToken(region=StrRegion(start=4, end=5)),
@@ -9519,4 +9519,910 @@ Scope(
       is_param=False
     )
   }
+)
+AstProgramNode(StrRegion(0, 3864),
+  [
+    AstDeclNode(StrRegion(0, 16),
+      VarDeclScope.GLOBAL,
+      VarDeclType.VARIABLE,
+      AstIdent(StrRegion(7, 12), 'false', meta=TypeMetadata(type=ValType())),
+      AstNumber(StrRegion(15, 16), 0, meta=TypeMetadata(type=ValType())),
+      meta=TypeMetadata(type=VoidType())
+    ),
+    AstDeclNode(StrRegion(18, 33),
+      VarDeclScope.GLOBAL,
+      VarDeclType.VARIABLE,
+      AstIdent(StrRegion(25, 29), 'true', meta=TypeMetadata(type=ValType())),
+      AstNumber(StrRegion(32, 33), 1, meta=TypeMetadata(type=ValType())),
+      meta=TypeMetadata(type=VoidType())
+    ),
+    AstDefine(StrRegion(62, 87),
+      AstIdent(StrRegion(66, 69), 'len', meta=TypeMetadata(type=FunctionType(arg_types=[ValType()], ret_type=VoidType()))),
+      [
+        (
+          AstIdent(StrRegion(78, 81), 'val', meta=TypeMetadata(type=TypeType(tp=ValType()))),
+          AstIdent(StrRegion(82, 83), 'a', meta=TypeMetadata(type=ValType()))
+        )
+      ],
+      [],
+      meta=TypeMetadata(type=VoidType())
+    ),
+    AstDefine(StrRegion(101, 142),
+      AstIdent(StrRegion(105, 112), 'delitem', meta=TypeMetadata(type=FunctionType(arg_types=[ValType(), ValType()], ret_type=VoidType()))),
+      [
+        (
+          AstIdent(StrRegion(121, 124), 'val', meta=TypeMetadata(type=TypeType(tp=ValType()))),
+          AstIdent(StrRegion(125, 126), 'a', meta=TypeMetadata(type=ValType()))
+        ),
+        (
+          AstIdent(StrRegion(128, 134), 'number', meta=TypeMetadata(type=TypeType(tp=ValType()))),
+          AstIdent(StrRegion(135, 138), 'idx', meta=TypeMetadata(type=ValType()))
+        )
+      ],
+      [],
+      meta=TypeMetadata(type=VoidType())
+    ),
+    AstDeclNode(StrRegion(144, 164),
+      VarDeclScope.GLOBAL,
+      VarDeclType.LIST,
+      AstIdent(StrRegion(153, 159), 'psHeap', meta=TypeMetadata(type=ListType())),
+      AstListLiteral(StrRegion(162, 164),
+        [],
+        meta=TypeMetadata(type=ListType())
+      ),
+      meta=TypeMetadata(type=VoidType())
+    ),
+    AstDeclNode(StrRegion(166, 196),
+      VarDeclScope.GLOBAL,
+      VarDeclType.LIST,
+      AstIdent(StrRegion(175, 191), '_psHeap_freelist', meta=TypeMetadata(type=ListType())),
+      AstListLiteral(StrRegion(194, 196),
+        [],
+        meta=TypeMetadata(type=ListType())
+      ),
+      meta=TypeMetadata(type=VoidType())
+    ),
+    AstDefine(StrRegion(199, 294),
+      AstIdent(StrRegion(203, 222), '_PsHeap_FinalizeObj', meta=TypeMetadata(type=FunctionType(arg_types=[ValType()], ret_type=VoidType()))),
+      [
+        (
+          AstIdent(StrRegion(223, 229), 'number', meta=TypeMetadata(type=TypeType(tp=ValType()))),
+          AstIdent(StrRegion(230, 233), 'ptr', meta=TypeMetadata(type=ValType()))
+        )
+      ],
+      [],
+      meta=TypeMetadata(type=VoidType())
+    ),
+    AstDeclNode(StrRegion(296, 313),
+      VarDeclScope.GLOBAL,
+      VarDeclType.VARIABLE,
+      AstIdent(StrRegion(303, 313), '__result__', meta=TypeMetadata(type=ValType())),
+      None,
+      meta=TypeMetadata(type=VoidType())
+    ),
+    AstDefine(StrRegion(355, 793),
+      AstIdent(StrRegion(359, 375), 'PsHeap_AllocWord', meta=TypeMetadata(type=FunctionType(arg_types=[], ret_type=VoidType()))),
+      [],
+      [
+        AstCall(StrRegion(384, 407),
+          AstIdent(StrRegion(384, 405), '_psHeap_freelist__len', meta=TypeMetadata(type=FunctionType(arg_types=[], ret_type=VoidType()))),
+          [],
+          meta=TypeMetadata(type=VoidType())
+        ),
+        AstIf(StrRegion(413, 791),
+          AstBinOp(StrRegion(416, 430),
+            '>',
+            AstIdent(StrRegion(416, 426), '__result__', meta=TypeMetadata(type=ValType())),
+            AstNumber(StrRegion(429, 430), 0, meta=TypeMetadata(type=ValType())),
+            meta=TypeMetadata(type=BoolType())
+          ),
+          [
+            AstAssign(StrRegion(441, 473),
+              AstIdent(StrRegion(441, 451), '__result__', meta=TypeMetadata(type=ValType())),
+              AstItem(StrRegion(454, 473),
+                AstIdent(StrRegion(454, 470), '_psHeap_freelist', meta=TypeMetadata(type=ListType())),
+                AstNumber(StrRegion(471, 472), 0, meta=TypeMetadata(type=ValType())),
+                meta=TypeMetadata(type=ValType())
+              ),
+              meta=TypeMetadata(type=VoidType())
+            ),
+            AstCall(StrRegion(483, 511),
+              AstIdent(StrRegion(483, 508), '_psHeap_freelist__delitem', meta=TypeMetadata(type=FunctionType(arg_types=[ValType()], ret_type=VoidType()))),
+              [
+                AstNumber(StrRegion(509, 510), 0, meta=TypeMetadata(type=ValType()))
+              ],
+              meta=TypeMetadata(type=VoidType())
+            ),
+            AstIf(StrRegion(521, 589),
+              AstBinOp(StrRegion(524, 539),
+                '!=',
+                AstIdent(StrRegion(524, 534), 'COUNT_REFS', meta=TypeMetadata(type=ValType())),
+                AstNumber(StrRegion(538, 539), 0, meta=TypeMetadata(type=ValType())),
+                meta=TypeMetadata(type=BoolType())
+              ),
+              [
+                AstAssign(StrRegion(554, 578),
+                  AstItem(StrRegion(554, 574),
+                    AstIdent(StrRegion(554, 562), 'refStack', meta=TypeMetadata(type=ListType())),
+                    AstIdent(StrRegion(563, 573), '__result__', meta=TypeMetadata(type=ValType())),
+                    meta=TypeMetadata(type=ValType())
+                  ),
+                  AstNumber(StrRegion(577, 578), 1, meta=TypeMetadata(type=ValType())),
+                  meta=TypeMetadata(type=VoidType())
+                )
+              ],
+              meta=TypeMetadata(type=VoidType())
+            )
+          ],
+          [
+            AstCall(StrRegion(651, 669),
+              AstIdent(StrRegion(651, 665), 'psHeap__append', meta=TypeMetadata(type=FunctionType(arg_types=[ValType()], ret_type=VoidType()))),
+              [
+                AstString(StrRegion(666, 668), '', meta=TypeMetadata(type=ValType()))
+              ],
+              meta=TypeMetadata(type=VoidType())
+            ),
+            AstCall(StrRegion(679, 692),
+              AstIdent(StrRegion(679, 690), 'psHeap__len', meta=TypeMetadata(type=FunctionType(arg_types=[], ret_type=VoidType()))),
+              [],
+              meta=TypeMetadata(type=VoidType())
+            ),
+            AstIf(StrRegion(722, 785),
+              AstBinOp(StrRegion(725, 740),
+                '!=',
+                AstIdent(StrRegion(725, 735), 'COUNT_REFS', meta=TypeMetadata(type=ValType())),
+                AstNumber(StrRegion(739, 740), 0, meta=TypeMetadata(type=ValType())),
+                meta=TypeMetadata(type=BoolType())
+              ),
+              [
+                AstCall(StrRegion(755, 774),
+                  AstIdent(StrRegion(755, 771), 'refStack__append', meta=TypeMetadata(type=FunctionType(arg_types=[ValType()], ret_type=VoidType()))),
+                  [
+                    AstNumber(StrRegion(772, 773), 1, meta=TypeMetadata(type=ValType()))
+                  ],
+                  meta=TypeMetadata(type=VoidType())
+                )
+              ],
+              meta=TypeMetadata(type=VoidType())
+            )
+          ],
+          meta=TypeMetadata(type=VoidType())
+        )
+      ],
+      meta=TypeMetadata(type=VoidType())
+    ),
+    AstDefine(StrRegion(825, 1016),
+      AstIdent(StrRegion(829, 844), 'PsHeap_FreeWord', meta=TypeMetadata(type=FunctionType(arg_types=[ValType()], ret_type=VoidType()))),
+      [
+        (
+          AstIdent(StrRegion(845, 851), 'number', meta=TypeMetadata(type=TypeType(tp=ValType()))),
+          AstIdent(StrRegion(852, 855), 'ptr', meta=TypeMetadata(type=ValType()))
+        )
+      ],
+      [
+        AstAssign(StrRegion(863, 879),
+          AstItem(StrRegion(863, 874),
+            AstIdent(StrRegion(863, 869), 'psHeap', meta=TypeMetadata(type=ListType())),
+            AstIdent(StrRegion(870, 873), 'ptr', meta=TypeMetadata(type=ValType())),
+            meta=TypeMetadata(type=ValType())
+          ),
+          AstString(StrRegion(877, 879), '', meta=TypeMetadata(type=ValType())),
+          meta=TypeMetadata(type=VoidType())
+        ),
+        AstIf(StrRegion(926, 979),
+          AstBinOp(StrRegion(929, 944),
+            '!=',
+            AstIdent(StrRegion(929, 939), 'COUNT_REFS', meta=TypeMetadata(type=ValType())),
+            AstNumber(StrRegion(943, 944), 0, meta=TypeMetadata(type=ValType())),
+            meta=TypeMetadata(type=BoolType())
+          ),
+          [
+            AstAssign(StrRegion(955, 972),
+              AstItem(StrRegion(955, 968),
+                AstIdent(StrRegion(955, 963), 'refStack', meta=TypeMetadata(type=ListType())),
+                AstIdent(StrRegion(964, 967), 'ptr', meta=TypeMetadata(type=ValType())),
+                meta=TypeMetadata(type=ValType())
+              ),
+              AstNumber(StrRegion(971, 972), 0, meta=TypeMetadata(type=ValType())),
+              meta=TypeMetadata(type=VoidType())
+            )
+          ],
+          meta=TypeMetadata(type=VoidType())
+        ),
+        AstCall(StrRegion(984, 1013),
+          AstIdent(StrRegion(984, 1008), '_psHeap_freelist__append', meta=TypeMetadata(type=FunctionType(arg_types=[ValType()], ret_type=VoidType()))),
+          [
+            AstIdent(StrRegion(1009, 1012), 'ptr', meta=TypeMetadata(type=ValType()))
+          ],
+          meta=TypeMetadata(type=VoidType())
+        )
+      ],
+      meta=TypeMetadata(type=VoidType())
+    ),
+    AstDefine(StrRegion(1017, 1110),
+      AstIdent(StrRegion(1021, 1038), 'PsHeap_DeleteWord', meta=TypeMetadata(type=FunctionType(arg_types=[ValType()], ret_type=VoidType()))),
+      [
+        (
+          AstIdent(StrRegion(1039, 1045), 'number', meta=TypeMetadata(type=TypeType(tp=ValType()))),
+          AstIdent(StrRegion(1046, 1049), 'ptr', meta=TypeMetadata(type=ValType()))
+        )
+      ],
+      [
+        AstCall(StrRegion(1057, 1081),
+          AstIdent(StrRegion(1057, 1076), '_PsHeap_FinalizeObj', meta=TypeMetadata(type=FunctionType(arg_types=[ValType()], ret_type=VoidType()))),
+          [
+            AstIdent(StrRegion(1077, 1080), 'ptr', meta=TypeMetadata(type=ValType()))
+          ],
+          meta=TypeMetadata(type=VoidType())
+        ),
+        AstCall(StrRegion(1087, 1107),
+          AstIdent(StrRegion(1087, 1102), 'PsHeap_FreeWord', meta=TypeMetadata(type=FunctionType(arg_types=[ValType()], ret_type=VoidType()))),
+          [
+            AstIdent(StrRegion(1103, 1106), 'ptr', meta=TypeMetadata(type=ValType()))
+          ],
+          meta=TypeMetadata(type=VoidType())
+        )
+      ],
+      meta=TypeMetadata(type=VoidType())
+    ),
+    AstDeclNode(StrRegion(1112, 1134),
+      VarDeclScope.GLOBAL,
+      VarDeclType.LIST,
+      AstIdent(StrRegion(1121, 1129), 'refStack', meta=TypeMetadata(type=ListType())),
+      AstListLiteral(StrRegion(1132, 1134),
+        [],
+        meta=TypeMetadata(type=ListType())
+      ),
+      meta=TypeMetadata(type=VoidType())
+    ),
+    AstDefine(StrRegion(1156, 1186),
+      AstIdent(StrRegion(1160, 1176), 'refStack__append', meta=TypeMetadata(type=FunctionType(arg_types=[ValType()], ret_type=VoidType()))),
+      [
+        (
+          AstIdent(StrRegion(1177, 1180), 'val', meta=TypeMetadata(type=TypeType(tp=ValType()))),
+          AstIdent(StrRegion(1181, 1182), 'x', meta=TypeMetadata(type=ValType()))
+        )
+      ],
+      [],
+      meta=TypeMetadata(type=VoidType())
+    ),
+    AstDefine(StrRegion(1207, 1234),
+      AstIdent(StrRegion(1211, 1224), 'stack__append', meta=TypeMetadata(type=FunctionType(arg_types=[ValType()], ret_type=VoidType()))),
+      [
+        (
+          AstIdent(StrRegion(1225, 1228), 'val', meta=TypeMetadata(type=TypeType(tp=ValType()))),
+          AstIdent(StrRegion(1229, 1230), 'x', meta=TypeMetadata(type=ValType()))
+        )
+      ],
+      [],
+      meta=TypeMetadata(type=VoidType())
+    ),
+    AstDefine(StrRegion(1255, 1272),
+      AstIdent(StrRegion(1259, 1267), 'lenStack', meta=TypeMetadata(type=FunctionType(arg_types=[], ret_type=VoidType()))),
+      [],
+      [],
+      meta=TypeMetadata(type=VoidType())
+    ),
+    AstDefine(StrRegion(1293, 1319),
+      AstIdent(StrRegion(1297, 1309), 'stackDelitem', meta=TypeMetadata(type=FunctionType(arg_types=[ValType()], ret_type=VoidType()))),
+      [
+        (
+          AstIdent(StrRegion(1310, 1313), 'val', meta=TypeMetadata(type=TypeType(tp=ValType()))),
+          AstIdent(StrRegion(1314, 1315), 'x', meta=TypeMetadata(type=ValType()))
+        )
+      ],
+      [],
+      meta=TypeMetadata(type=VoidType())
+    ),
+    AstDefine(StrRegion(1340, 1368),
+      AstIdent(StrRegion(1344, 1358), 'psHeap__append', meta=TypeMetadata(type=FunctionType(arg_types=[ValType()], ret_type=VoidType()))),
+      [
+        (
+          AstIdent(StrRegion(1359, 1362), 'val', meta=TypeMetadata(type=TypeType(tp=ValType()))),
+          AstIdent(StrRegion(1363, 1364), 'x', meta=TypeMetadata(type=ValType()))
+        )
+      ],
+      [],
+      meta=TypeMetadata(type=VoidType())
+    ),
+    AstDefine(StrRegion(1389, 1427),
+      AstIdent(StrRegion(1393, 1417), '_psHeap_freelist__append', meta=TypeMetadata(type=FunctionType(arg_types=[ValType()], ret_type=VoidType()))),
+      [
+        (
+          AstIdent(StrRegion(1418, 1421), 'val', meta=TypeMetadata(type=TypeType(tp=ValType()))),
+          AstIdent(StrRegion(1422, 1423), 'x', meta=TypeMetadata(type=ValType()))
+        )
+      ],
+      [],
+      meta=TypeMetadata(type=VoidType())
+    ),
+    AstDefine(StrRegion(1448, 1487),
+      AstIdent(StrRegion(1452, 1477), '_psHeap_freelist__delitem', meta=TypeMetadata(type=FunctionType(arg_types=[ValType()], ret_type=VoidType()))),
+      [
+        (
+          AstIdent(StrRegion(1478, 1481), 'val', meta=TypeMetadata(type=TypeType(tp=ValType()))),
+          AstIdent(StrRegion(1482, 1483), 'x', meta=TypeMetadata(type=ValType()))
+        )
+      ],
+      [],
+      meta=TypeMetadata(type=VoidType())
+    ),
+    AstDefine(StrRegion(1508, 1538),
+      AstIdent(StrRegion(1512, 1533), '_psHeap_freelist__len', meta=TypeMetadata(type=FunctionType(arg_types=[], ret_type=VoidType()))),
+      [],
+      [],
+      meta=TypeMetadata(type=VoidType())
+    ),
+    AstDefine(StrRegion(1559, 1579),
+      AstIdent(StrRegion(1563, 1574), 'psHeap__len', meta=TypeMetadata(type=FunctionType(arg_types=[], ret_type=VoidType()))),
+      [],
+      [],
+      meta=TypeMetadata(type=VoidType())
+    ),
+    AstDefine(StrRegion(1581, 1811),
+      AstIdent(StrRegion(1585, 1591), 'decref', meta=TypeMetadata(type=FunctionType(arg_types=[ValType()], ret_type=VoidType()))),
+      [
+        (
+          AstIdent(StrRegion(1592, 1598), 'number', meta=TypeMetadata(type=TypeType(tp=ValType()))),
+          AstIdent(StrRegion(1599, 1602), 'ptr', meta=TypeMetadata(type=ValType()))
+        )
+      ],
+      [
+        AstIf(StrRegion(1610, 1809),
+          AstBinOp(StrRegion(1613, 1631),
+            '>=',
+            AstItem(StrRegion(1613, 1626),
+              AstIdent(StrRegion(1613, 1621), 'refStack', meta=TypeMetadata(type=ListType())),
+              AstIdent(StrRegion(1622, 1625), 'ptr', meta=TypeMetadata(type=ValType())),
+              meta=TypeMetadata(type=ValType())
+            ),
+            AstNumber(StrRegion(1630, 1631), 0, meta=TypeMetadata(type=ValType())),
+            meta=TypeMetadata(type=BoolType())
+          ),
+          [
+            AstAssign(StrRegion(1691, 1724),
+              AstItem(StrRegion(1691, 1704),
+                AstIdent(StrRegion(1691, 1699), 'refStack', meta=TypeMetadata(type=ListType())),
+                AstIdent(StrRegion(1700, 1703), 'ptr', meta=TypeMetadata(type=ValType())),
+                meta=TypeMetadata(type=ValType())
+              ),
+              AstBinOp(StrRegion(1707, 1724),
+                '-',
+                AstItem(StrRegion(1707, 1720),
+                  AstIdent(StrRegion(1707, 1715), 'refStack', meta=TypeMetadata(type=ListType())),
+                  AstIdent(StrRegion(1716, 1719), 'ptr', meta=TypeMetadata(type=ValType())),
+                  meta=TypeMetadata(type=ValType())
+                ),
+                AstNumber(StrRegion(1723, 1724), 1, meta=TypeMetadata(type=ValType())),
+                meta=TypeMetadata(type=ValType())
+              ),
+              meta=TypeMetadata(type=VoidType())
+            ),
+            AstIf(StrRegion(1734, 1803),
+              AstBinOp(StrRegion(1737, 1755),
+                '==',
+                AstItem(StrRegion(1737, 1750),
+                  AstIdent(StrRegion(1737, 1745), 'refStack', meta=TypeMetadata(type=ListType())),
+                  AstIdent(StrRegion(1746, 1749), 'ptr', meta=TypeMetadata(type=ValType())),
+                  meta=TypeMetadata(type=ValType())
+                ),
+                AstNumber(StrRegion(1754, 1755), 0, meta=TypeMetadata(type=ValType())),
+                meta=TypeMetadata(type=BoolType())
+              ),
+              [
+                AstCall(StrRegion(1770, 1792),
+                  AstIdent(StrRegion(1770, 1787), 'PsHeap_DeleteWord', meta=TypeMetadata(type=FunctionType(arg_types=[ValType()], ret_type=VoidType()))),
+                  [
+                    AstIdent(StrRegion(1788, 1791), 'ptr', meta=TypeMetadata(type=ValType()))
+                  ],
+                  meta=TypeMetadata(type=VoidType())
+                )
+              ],
+              meta=TypeMetadata(type=VoidType())
+            )
+          ],
+          meta=TypeMetadata(type=VoidType())
+        )
+      ],
+      meta=TypeMetadata(type=VoidType())
+    ),
+    AstDefine(StrRegion(1812, 2002),
+      AstIdent(StrRegion(1816, 1822), 'incref', meta=TypeMetadata(type=FunctionType(arg_types=[ValType()], ret_type=VoidType()))),
+      [
+        (
+          AstIdent(StrRegion(1823, 1829), 'number', meta=TypeMetadata(type=TypeType(tp=ValType()))),
+          AstIdent(StrRegion(1830, 1833), 'ptr', meta=TypeMetadata(type=ValType()))
+        )
+      ],
+      [
+        AstIf(StrRegion(1841, 2000),
+          AstBinOp(StrRegion(1844, 1862),
+            '>=',
+            AstItem(StrRegion(1844, 1857),
+              AstIdent(StrRegion(1844, 1852), 'refStack', meta=TypeMetadata(type=ListType())),
+              AstIdent(StrRegion(1853, 1856), 'ptr', meta=TypeMetadata(type=ValType())),
+              meta=TypeMetadata(type=ValType())
+            ),
+            AstNumber(StrRegion(1861, 1862), 0, meta=TypeMetadata(type=ValType())),
+            meta=TypeMetadata(type=BoolType())
+          ),
+          [
+            AstAssign(StrRegion(1922, 1955),
+              AstItem(StrRegion(1922, 1935),
+                AstIdent(StrRegion(1922, 1930), 'refStack', meta=TypeMetadata(type=ListType())),
+                AstIdent(StrRegion(1931, 1934), 'ptr', meta=TypeMetadata(type=ValType())),
+                meta=TypeMetadata(type=ValType())
+              ),
+              AstBinOp(StrRegion(1938, 1955),
+                '+',
+                AstItem(StrRegion(1938, 1951),
+                  AstIdent(StrRegion(1938, 1946), 'refStack', meta=TypeMetadata(type=ListType())),
+                  AstIdent(StrRegion(1947, 1950), 'ptr', meta=TypeMetadata(type=ValType())),
+                  meta=TypeMetadata(type=ValType())
+                ),
+                AstNumber(StrRegion(1954, 1955), 1, meta=TypeMetadata(type=ValType())),
+                meta=TypeMetadata(type=ValType())
+              ),
+              meta=TypeMetadata(type=VoidType())
+            )
+          ],
+          meta=TypeMetadata(type=VoidType())
+        )
+      ],
+      meta=TypeMetadata(type=VoidType())
+    ),
+    AstDeclNode(StrRegion(2040, 2059),
+      VarDeclScope.GLOBAL,
+      VarDeclType.LIST,
+      AstIdent(StrRegion(2049, 2054), 'stack', meta=TypeMetadata(type=ListType())),
+      AstListLiteral(StrRegion(2057, 2059),
+        [],
+        meta=TypeMetadata(type=ListType())
+      ),
+      meta=TypeMetadata(type=VoidType())
+    ),
+    AstDeclNode(StrRegion(2061, 2086),
+      VarDeclScope.GLOBAL,
+      VarDeclType.VARIABLE,
+      AstIdent(StrRegion(2068, 2078), 'COUNT_REFS', meta=TypeMetadata(type=ValType())),
+      AstIdent(StrRegion(2081, 2086), 'false', meta=TypeMetadata(type=ValType())),
+      meta=TypeMetadata(type=VoidType())
+    ),
+    AstDefine(StrRegion(2436, 2448),
+      AstIdent(StrRegion(2440, 2443), 'NOP', meta=TypeMetadata(type=FunctionType(arg_types=[], ret_type=VoidType()))),
+      [],
+      [],
+      meta=TypeMetadata(type=VoidType())
+    ),
+    AstDefine(StrRegion(2450, 2600),
+      AstIdent(StrRegion(2454, 2461), 'POP_TOP', meta=TypeMetadata(type=FunctionType(arg_types=[], ret_type=VoidType()))),
+      [],
+      [
+        AstCall(StrRegion(2470, 2480),
+          AstIdent(StrRegion(2470, 2478), 'lenStack', meta=TypeMetadata(type=FunctionType(arg_types=[], ret_type=VoidType()))),
+          [],
+          meta=TypeMetadata(type=VoidType())
+        ),
+        AstIf(StrRegion(2504, 2568),
+          AstBinOp(StrRegion(2507, 2525),
+            '==',
+            AstIdent(StrRegion(2507, 2517), 'COUNT_REFS', meta=TypeMetadata(type=ValType())),
+            AstIdent(StrRegion(2521, 2525), 'true', meta=TypeMetadata(type=ValType())),
+            meta=TypeMetadata(type=BoolType())
+          ),
+          [
+            AstCall(StrRegion(2536, 2561),
+              AstIdent(StrRegion(2536, 2542), 'decref', meta=TypeMetadata(type=FunctionType(arg_types=[ValType()], ret_type=VoidType()))),
+              [
+                AstItem(StrRegion(2543, 2560),
+                  AstIdent(StrRegion(2543, 2548), 'stack', meta=TypeMetadata(type=ListType())),
+                  AstIdent(StrRegion(2549, 2559), '__result__', meta=TypeMetadata(type=ValType())),
+                  meta=TypeMetadata(type=ValType())
+                )
+              ],
+              meta=TypeMetadata(type=VoidType())
+            )
+          ],
+          meta=TypeMetadata(type=VoidType())
+        ),
+        AstCall(StrRegion(2573, 2597),
+          AstIdent(StrRegion(2573, 2585), 'stackDelitem', meta=TypeMetadata(type=FunctionType(arg_types=[ValType()], ret_type=VoidType()))),
+          [
+            AstIdent(StrRegion(2586, 2596), '__result__', meta=TypeMetadata(type=ValType()))
+          ],
+          meta=TypeMetadata(type=VoidType())
+        )
+      ],
+      meta=TypeMetadata(type=VoidType())
+    ),
+    AstDefine(StrRegion(2602, 2768),
+      AstIdent(StrRegion(2606, 2613), 'ROT_TWO', meta=TypeMetadata(type=FunctionType(arg_types=[], ret_type=VoidType()))),
+      [],
+      [
+        AstCall(StrRegion(2622, 2632),
+          AstIdent(StrRegion(2622, 2630), 'lenStack', meta=TypeMetadata(type=FunctionType(arg_types=[], ret_type=VoidType()))),
+          [],
+          meta=TypeMetadata(type=VoidType())
+        ),
+        AstDeclNode(StrRegion(2638, 2662),
+          VarDeclScope.LET,
+          VarDeclType.VARIABLE,
+          AstIdent(StrRegion(2642, 2649), 'tos_idx', meta=TypeMetadata(type=ValType())),
+          AstIdent(StrRegion(2652, 2662), '__result__', meta=TypeMetadata(type=ValType())),
+          meta=TypeMetadata(type=VoidType())
+        ),
+        AstDeclNode(StrRegion(2668, 2693),
+          VarDeclScope.LET,
+          VarDeclType.VARIABLE,
+          AstIdent(StrRegion(2672, 2676), 'tos0', meta=TypeMetadata(type=ValType())),
+          AstItem(StrRegion(2679, 2693),
+            AstIdent(StrRegion(2679, 2684), 'stack', meta=TypeMetadata(type=ListType())),
+            AstIdent(StrRegion(2685, 2692), 'tos_idx', meta=TypeMetadata(type=ValType())),
+            meta=TypeMetadata(type=ValType())
+          ),
+          meta=TypeMetadata(type=VoidType())
+        ),
+        AstAssign(StrRegion(2699, 2734),
+          AstItem(StrRegion(2699, 2713),
+            AstIdent(StrRegion(2699, 2704), 'stack', meta=TypeMetadata(type=ListType())),
+            AstIdent(StrRegion(2705, 2712), 'tos_idx', meta=TypeMetadata(type=ValType())),
+            meta=TypeMetadata(type=ValType())
+          ),
+          AstItem(StrRegion(2716, 2734),
+            AstIdent(StrRegion(2716, 2721), 'stack', meta=TypeMetadata(type=ListType())),
+            AstBinOp(StrRegion(2722, 2733),
+              '-',
+              AstIdent(StrRegion(2722, 2729), 'tos_idx', meta=TypeMetadata(type=ValType())),
+              AstNumber(StrRegion(2732, 2733), 1, meta=TypeMetadata(type=ValType())),
+              meta=TypeMetadata(type=ValType())
+            ),
+            meta=TypeMetadata(type=ValType())
+          ),
+          meta=TypeMetadata(type=VoidType())
+        ),
+        AstAssign(StrRegion(2740, 2765),
+          AstItem(StrRegion(2740, 2758),
+            AstIdent(StrRegion(2740, 2745), 'stack', meta=TypeMetadata(type=ListType())),
+            AstBinOp(StrRegion(2746, 2757),
+              '-',
+              AstIdent(StrRegion(2746, 2753), 'tos_idx', meta=TypeMetadata(type=ValType())),
+              AstNumber(StrRegion(2756, 2757), 1, meta=TypeMetadata(type=ValType())),
+              meta=TypeMetadata(type=ValType())
+            ),
+            meta=TypeMetadata(type=ValType())
+          ),
+          AstIdent(StrRegion(2761, 2765), 'tos0', meta=TypeMetadata(type=ValType())),
+          meta=TypeMetadata(type=VoidType())
+        )
+      ],
+      meta=TypeMetadata(type=VoidType())
+    ),
+    AstDefine(StrRegion(2770, 3096),
+      AstIdent(StrRegion(2774, 2783), 'ROT_THREE', meta=TypeMetadata(type=FunctionType(arg_types=[], ret_type=VoidType()))),
+      [],
+      [
+        AstCall(StrRegion(2905, 2915),
+          AstIdent(StrRegion(2905, 2913), 'lenStack', meta=TypeMetadata(type=FunctionType(arg_types=[], ret_type=VoidType()))),
+          [],
+          meta=TypeMetadata(type=VoidType())
+        ),
+        AstDeclNode(StrRegion(2921, 2945),
+          VarDeclScope.LET,
+          VarDeclType.VARIABLE,
+          AstIdent(StrRegion(2925, 2932), 'tos_idx', meta=TypeMetadata(type=ValType())),
+          AstIdent(StrRegion(2935, 2945), '__result__', meta=TypeMetadata(type=ValType())),
+          meta=TypeMetadata(type=VoidType())
+        ),
+        AstDeclNode(StrRegion(2951, 2976),
+          VarDeclScope.LET,
+          VarDeclType.VARIABLE,
+          AstIdent(StrRegion(2955, 2959), 'tos0', meta=TypeMetadata(type=ValType())),
+          AstItem(StrRegion(2962, 2976),
+            AstIdent(StrRegion(2962, 2967), 'stack', meta=TypeMetadata(type=ListType())),
+            AstIdent(StrRegion(2968, 2975), 'tos_idx', meta=TypeMetadata(type=ValType())),
+            meta=TypeMetadata(type=ValType())
+          ),
+          meta=TypeMetadata(type=VoidType())
+        ),
+        AstAssign(StrRegion(2982, 3017),
+          AstItem(StrRegion(2982, 2996),
+            AstIdent(StrRegion(2982, 2987), 'stack', meta=TypeMetadata(type=ListType())),
+            AstIdent(StrRegion(2988, 2995), 'tos_idx', meta=TypeMetadata(type=ValType())),
+            meta=TypeMetadata(type=ValType())
+          ),
+          AstItem(StrRegion(2999, 3017),
+            AstIdent(StrRegion(2999, 3004), 'stack', meta=TypeMetadata(type=ListType())),
+            AstBinOp(StrRegion(3005, 3016),
+              '-',
+              AstIdent(StrRegion(3005, 3012), 'tos_idx', meta=TypeMetadata(type=ValType())),
+              AstNumber(StrRegion(3015, 3016), 1, meta=TypeMetadata(type=ValType())),
+              meta=TypeMetadata(type=ValType())
+            ),
+            meta=TypeMetadata(type=ValType())
+          ),
+          meta=TypeMetadata(type=VoidType())
+        ),
+        AstAssign(StrRegion(3023, 3062),
+          AstItem(StrRegion(3023, 3041),
+            AstIdent(StrRegion(3023, 3028), 'stack', meta=TypeMetadata(type=ListType())),
+            AstBinOp(StrRegion(3029, 3040),
+              '-',
+              AstIdent(StrRegion(3029, 3036), 'tos_idx', meta=TypeMetadata(type=ValType())),
+              AstNumber(StrRegion(3039, 3040), 1, meta=TypeMetadata(type=ValType())),
+              meta=TypeMetadata(type=ValType())
+            ),
+            meta=TypeMetadata(type=ValType())
+          ),
+          AstItem(StrRegion(3044, 3062),
+            AstIdent(StrRegion(3044, 3049), 'stack', meta=TypeMetadata(type=ListType())),
+            AstBinOp(StrRegion(3050, 3061),
+              '-',
+              AstIdent(StrRegion(3050, 3057), 'tos_idx', meta=TypeMetadata(type=ValType())),
+              AstNumber(StrRegion(3060, 3061), 2, meta=TypeMetadata(type=ValType())),
+              meta=TypeMetadata(type=ValType())
+            ),
+            meta=TypeMetadata(type=ValType())
+          ),
+          meta=TypeMetadata(type=VoidType())
+        ),
+        AstAssign(StrRegion(3068, 3093),
+          AstItem(StrRegion(3068, 3086),
+            AstIdent(StrRegion(3068, 3073), 'stack', meta=TypeMetadata(type=ListType())),
+            AstBinOp(StrRegion(3074, 3085),
+              '-',
+              AstIdent(StrRegion(3074, 3081), 'tos_idx', meta=TypeMetadata(type=ValType())),
+              AstNumber(StrRegion(3084, 3085), 2, meta=TypeMetadata(type=ValType())),
+              meta=TypeMetadata(type=ValType())
+            ),
+            meta=TypeMetadata(type=ValType())
+          ),
+          AstIdent(StrRegion(3089, 3093), 'tos0', meta=TypeMetadata(type=ValType())),
+          meta=TypeMetadata(type=VoidType())
+        )
+      ],
+      meta=TypeMetadata(type=VoidType())
+    ),
+    AstDefine(StrRegion(3098, 3250),
+      AstIdent(StrRegion(3102, 3109), 'DUP_TOP', meta=TypeMetadata(type=FunctionType(arg_types=[], ret_type=VoidType()))),
+      [],
+      [
+        AstCall(StrRegion(3118, 3128),
+          AstIdent(StrRegion(3118, 3126), 'lenStack', meta=TypeMetadata(type=FunctionType(arg_types=[], ret_type=VoidType()))),
+          [],
+          meta=TypeMetadata(type=VoidType())
+        ),
+        AstDeclNode(StrRegion(3134, 3163),
+          VarDeclScope.LET,
+          VarDeclType.VARIABLE,
+          AstIdent(StrRegion(3138, 3143), 'value', meta=TypeMetadata(type=ValType())),
+          AstItem(StrRegion(3146, 3163),
+            AstIdent(StrRegion(3146, 3151), 'stack', meta=TypeMetadata(type=ListType())),
+            AstIdent(StrRegion(3152, 3162), '__result__', meta=TypeMetadata(type=ValType())),
+            meta=TypeMetadata(type=ValType())
+          ),
+          meta=TypeMetadata(type=VoidType())
+        ),
+        AstCall(StrRegion(3169, 3189),
+          AstIdent(StrRegion(3169, 3182), 'stack__append', meta=TypeMetadata(type=FunctionType(arg_types=[ValType()], ret_type=VoidType()))),
+          [
+            AstIdent(StrRegion(3183, 3188), 'value', meta=TypeMetadata(type=ValType()))
+          ],
+          meta=TypeMetadata(type=VoidType())
+        ),
+        AstIf(StrRegion(3195, 3248),
+          AstBinOp(StrRegion(3198, 3217),
+            '!=',
+            AstIdent(StrRegion(3198, 3208), 'COUNT_REFS', meta=TypeMetadata(type=ValType())),
+            AstIdent(StrRegion(3212, 3217), 'false', meta=TypeMetadata(type=ValType())),
+            meta=TypeMetadata(type=BoolType())
+          ),
+          [
+            AstCall(StrRegion(3228, 3241),
+              AstIdent(StrRegion(3228, 3234), 'incref', meta=TypeMetadata(type=FunctionType(arg_types=[ValType()], ret_type=VoidType()))),
+              [
+                AstIdent(StrRegion(3235, 3240), 'value', meta=TypeMetadata(type=ValType()))
+              ],
+              meta=TypeMetadata(type=VoidType())
+            )
+          ],
+          meta=TypeMetadata(type=VoidType())
+        )
+      ],
+      meta=TypeMetadata(type=VoidType())
+    ),
+    AstDefine(StrRegion(3252, 3531),
+      AstIdent(StrRegion(3256, 3267), 'DUP_TOP_TWO', meta=TypeMetadata(type=FunctionType(arg_types=[], ret_type=VoidType()))),
+      [],
+      [
+        AstCall(StrRegion(3276, 3286),
+          AstIdent(StrRegion(3276, 3284), 'lenStack', meta=TypeMetadata(type=FunctionType(arg_types=[], ret_type=VoidType()))),
+          [],
+          meta=TypeMetadata(type=VoidType())
+        ),
+        AstDeclNode(StrRegion(3292, 3316),
+          VarDeclScope.LET,
+          VarDeclType.VARIABLE,
+          AstIdent(StrRegion(3296, 3303), 'tos_idx', meta=TypeMetadata(type=ValType())),
+          AstIdent(StrRegion(3306, 3316), '__result__', meta=TypeMetadata(type=ValType())),
+          meta=TypeMetadata(type=VoidType())
+        ),
+        AstDeclNode(StrRegion(3322, 3347),
+          VarDeclScope.LET,
+          VarDeclType.VARIABLE,
+          AstIdent(StrRegion(3326, 3330), 'tos0', meta=TypeMetadata(type=ValType())),
+          AstItem(StrRegion(3333, 3347),
+            AstIdent(StrRegion(3333, 3338), 'stack', meta=TypeMetadata(type=ListType())),
+            AstIdent(StrRegion(3339, 3346), 'tos_idx', meta=TypeMetadata(type=ValType())),
+            meta=TypeMetadata(type=ValType())
+          ),
+          meta=TypeMetadata(type=VoidType())
+        ),
+        AstDeclNode(StrRegion(3353, 3382),
+          VarDeclScope.LET,
+          VarDeclType.VARIABLE,
+          AstIdent(StrRegion(3357, 3361), 'tos1', meta=TypeMetadata(type=ValType())),
+          AstItem(StrRegion(3364, 3382),
+            AstIdent(StrRegion(3364, 3369), 'stack', meta=TypeMetadata(type=ListType())),
+            AstBinOp(StrRegion(3370, 3381),
+              '-',
+              AstIdent(StrRegion(3370, 3377), 'tos_idx', meta=TypeMetadata(type=ValType())),
+              AstNumber(StrRegion(3380, 3381), 1, meta=TypeMetadata(type=ValType())),
+              meta=TypeMetadata(type=ValType())
+            ),
+            meta=TypeMetadata(type=ValType())
+          ),
+          meta=TypeMetadata(type=VoidType())
+        ),
+        AstCall(StrRegion(3388, 3407),
+          AstIdent(StrRegion(3388, 3401), 'stack__append', meta=TypeMetadata(type=FunctionType(arg_types=[ValType()], ret_type=VoidType()))),
+          [
+            AstIdent(StrRegion(3402, 3406), 'tos1', meta=TypeMetadata(type=ValType()))
+          ],
+          meta=TypeMetadata(type=VoidType())
+        ),
+        AstCall(StrRegion(3413, 3432),
+          AstIdent(StrRegion(3413, 3426), 'stack__append', meta=TypeMetadata(type=FunctionType(arg_types=[ValType()], ret_type=VoidType()))),
+          [
+            AstIdent(StrRegion(3427, 3431), 'tos0', meta=TypeMetadata(type=ValType()))
+          ],
+          meta=TypeMetadata(type=VoidType())
+        ),
+        AstIf(StrRegion(3459, 3529),
+          AstBinOp(StrRegion(3462, 3477),
+            '!=',
+            AstIdent(StrRegion(3462, 3472), 'COUNT_REFS', meta=TypeMetadata(type=ValType())),
+            AstNumber(StrRegion(3476, 3477), 0, meta=TypeMetadata(type=ValType())),
+            meta=TypeMetadata(type=BoolType())
+          ),
+          [
+            AstCall(StrRegion(3488, 3500),
+              AstIdent(StrRegion(3488, 3494), 'incref', meta=TypeMetadata(type=FunctionType(arg_types=[ValType()], ret_type=VoidType()))),
+              [
+                AstIdent(StrRegion(3495, 3499), 'tos0', meta=TypeMetadata(type=ValType()))
+              ],
+              meta=TypeMetadata(type=VoidType())
+            ),
+            AstCall(StrRegion(3510, 3522),
+              AstIdent(StrRegion(3510, 3516), 'incref', meta=TypeMetadata(type=FunctionType(arg_types=[ValType()], ret_type=VoidType()))),
+              [
+                AstIdent(StrRegion(3517, 3521), 'tos1', meta=TypeMetadata(type=ValType()))
+              ],
+              meta=TypeMetadata(type=VoidType())
+            )
+          ],
+          meta=TypeMetadata(type=VoidType())
+        )
+      ],
+      meta=TypeMetadata(type=VoidType())
+    ),
+    AstDefine(StrRegion(3533, 3864),
+      AstIdent(StrRegion(3537, 3545), 'ROT_FOUR', meta=TypeMetadata(type=FunctionType(arg_types=[], ret_type=VoidType()))),
+      [],
+      [
+        AstCall(StrRegion(3628, 3638),
+          AstIdent(StrRegion(3628, 3636), 'lenStack', meta=TypeMetadata(type=FunctionType(arg_types=[], ret_type=VoidType()))),
+          [],
+          meta=TypeMetadata(type=VoidType())
+        ),
+        AstDeclNode(StrRegion(3644, 3668),
+          VarDeclScope.LET,
+          VarDeclType.VARIABLE,
+          AstIdent(StrRegion(3648, 3655), 'tos_idx', meta=TypeMetadata(type=ValType())),
+          AstIdent(StrRegion(3658, 3668), '__result__', meta=TypeMetadata(type=ValType())),
+          meta=TypeMetadata(type=VoidType())
+        ),
+        AstDeclNode(StrRegion(3674, 3699),
+          VarDeclScope.LET,
+          VarDeclType.VARIABLE,
+          AstIdent(StrRegion(3678, 3682), 'tos0', meta=TypeMetadata(type=ValType())),
+          AstItem(StrRegion(3685, 3699),
+            AstIdent(StrRegion(3685, 3690), 'stack', meta=TypeMetadata(type=ListType())),
+            AstIdent(StrRegion(3691, 3698), 'tos_idx', meta=TypeMetadata(type=ValType())),
+            meta=TypeMetadata(type=ValType())
+          ),
+          meta=TypeMetadata(type=VoidType())
+        ),
+        AstAssign(StrRegion(3705, 3740),
+          AstItem(StrRegion(3705, 3719),
+            AstIdent(StrRegion(3705, 3710), 'stack', meta=TypeMetadata(type=ListType())),
+            AstIdent(StrRegion(3711, 3718), 'tos_idx', meta=TypeMetadata(type=ValType())),
+            meta=TypeMetadata(type=ValType())
+          ),
+          AstItem(StrRegion(3722, 3740),
+            AstIdent(StrRegion(3722, 3727), 'stack', meta=TypeMetadata(type=ListType())),
+            AstBinOp(StrRegion(3728, 3739),
+              '-',
+              AstIdent(StrRegion(3728, 3735), 'tos_idx', meta=TypeMetadata(type=ValType())),
+              AstNumber(StrRegion(3738, 3739), 1, meta=TypeMetadata(type=ValType())),
+              meta=TypeMetadata(type=ValType())
+            ),
+            meta=TypeMetadata(type=ValType())
+          ),
+          meta=TypeMetadata(type=VoidType())
+        ),
+        AstAssign(StrRegion(3746, 3785),
+          AstItem(StrRegion(3746, 3764),
+            AstIdent(StrRegion(3746, 3751), 'stack', meta=TypeMetadata(type=ListType())),
+            AstBinOp(StrRegion(3752, 3763),
+              '-',
+              AstIdent(StrRegion(3752, 3759), 'tos_idx', meta=TypeMetadata(type=ValType())),
+              AstNumber(StrRegion(3762, 3763), 1, meta=TypeMetadata(type=ValType())),
+              meta=TypeMetadata(type=ValType())
+            ),
+            meta=TypeMetadata(type=ValType())
+          ),
+          AstItem(StrRegion(3767, 3785),
+            AstIdent(StrRegion(3767, 3772), 'stack', meta=TypeMetadata(type=ListType())),
+            AstBinOp(StrRegion(3773, 3784),
+              '-',
+              AstIdent(StrRegion(3773, 3780), 'tos_idx', meta=TypeMetadata(type=ValType())),
+              AstNumber(StrRegion(3783, 3784), 2, meta=TypeMetadata(type=ValType())),
+              meta=TypeMetadata(type=ValType())
+            ),
+            meta=TypeMetadata(type=ValType())
+          ),
+          meta=TypeMetadata(type=VoidType())
+        ),
+        AstAssign(StrRegion(3791, 3830),
+          AstItem(StrRegion(3791, 3809),
+            AstIdent(StrRegion(3791, 3796), 'stack', meta=TypeMetadata(type=ListType())),
+            AstBinOp(StrRegion(3797, 3808),
+              '-',
+              AstIdent(StrRegion(3797, 3804), 'tos_idx', meta=TypeMetadata(type=ValType())),
+              AstNumber(StrRegion(3807, 3808), 2, meta=TypeMetadata(type=ValType())),
+              meta=TypeMetadata(type=ValType())
+            ),
+            meta=TypeMetadata(type=ValType())
+          ),
+          AstItem(StrRegion(3812, 3830),
+            AstIdent(StrRegion(3812, 3817), 'stack', meta=TypeMetadata(type=ListType())),
+            AstBinOp(StrRegion(3818, 3829),
+              '-',
+              AstIdent(StrRegion(3818, 3825), 'tos_idx', meta=TypeMetadata(type=ValType())),
+              AstNumber(StrRegion(3828, 3829), 3, meta=TypeMetadata(type=ValType())),
+              meta=TypeMetadata(type=ValType())
+            ),
+            meta=TypeMetadata(type=ValType())
+          ),
+          meta=TypeMetadata(type=VoidType())
+        ),
+        AstAssign(StrRegion(3836, 3861),
+          AstItem(StrRegion(3836, 3854),
+            AstIdent(StrRegion(3836, 3841), 'stack', meta=TypeMetadata(type=ListType())),
+            AstBinOp(StrRegion(3842, 3853),
+              '-',
+              AstIdent(StrRegion(3842, 3849), 'tos_idx', meta=TypeMetadata(type=ValType())),
+              AstNumber(StrRegion(3852, 3853), 3, meta=TypeMetadata(type=ValType())),
+              meta=TypeMetadata(type=ValType())
+            ),
+            meta=TypeMetadata(type=ValType())
+          ),
+          AstIdent(StrRegion(3857, 3861), 'tos0', meta=TypeMetadata(type=ValType())),
+          meta=TypeMetadata(type=VoidType())
+        )
+      ],
+      meta=TypeMetadata(type=VoidType())
+    )
+  ],
+  meta=TypeMetadata(type=VoidType())
 )
