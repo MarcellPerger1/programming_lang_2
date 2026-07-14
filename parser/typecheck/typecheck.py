@@ -227,9 +227,9 @@ class Typechecker:
         called_tp = self._typecheck(n.obj)
         if not isinstance(called_tp, FunctionType):
             raise self.err(f"Cannot call {called_tp}", n.obj)
-        if len(called_tp.arg_types) != len(n.args):
-            if n.args and len(n.args) > len(called_tp.arg_types):
-                region = n.args[-1].region  # Highlight extraneous arg
+        if (n_expect := len(called_tp.arg_types)) != (n_given := len(n.args)):
+            if n.args and n_given > n_expect:
+                region = n.args[n_expect].region  # First unexpected one
             else:
                 region = n.region
             raise self.err(f"Incorrect number of arguments, expected "
