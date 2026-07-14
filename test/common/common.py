@@ -170,6 +170,16 @@ class CommonTestCase(SnapshotTestCase, TestCaseUtils):
             tc.run()
         return ctx.exception
 
+    @contextlib.contextmanager
+    def assertFailsGracefully(self):
+        try:
+            yield
+        except BaseParseError:
+            self.assertTrue(True)
+        except Exception:
+            raise   # Let's be explicit
+        self.assertTrue(True)
+
     def assertAllMetadata(self, n: AstNode[Any], expected_type: type[T]) -> AstNode[T]:
         def on_exit_node(nd: AstNode[Any]):
             if isinstance(nd, expected_type):

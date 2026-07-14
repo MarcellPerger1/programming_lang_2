@@ -130,3 +130,8 @@ class TestErrors(CommonTestCase):
         self.assertErrorRegion(StrRegion(23, 26), exc)
         self.assertEqual("Incorrect number of arguments, expected 2, got 0", exc.msg)
 
+    def test_attr_doesnt_crash(self):
+        with self.assertFailsGracefully():
+            self.getTypechecker("let a; a.b=9;").run()
+        with self.assertFailsGracefully():
+            self.getTypechecker("let a; let c = a.b;").run()
