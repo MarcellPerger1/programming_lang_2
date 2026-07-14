@@ -228,7 +228,7 @@ class SnapshotTestCase(unittest.TestCase):
     def tearDownClass(cls):
         cls._check_unused_snaps()
         cls._files_cache.clear()  # Free that huge data structure ASAP (not used in write)
-        if cls.update_snapshots:
+        if cls.update_snapshots or cls.unused_handling == 'prune':
             cls.write_queued_snapshots()
 
     @classmethod
@@ -240,15 +240,16 @@ class SnapshotTestCase(unittest.TestCase):
         # Important: only look at the snapshot keys for our class
         # TODO: not perfect, doesn't detect if entire class is gone (needs custom runtime)
         our_snap_keys = {k for k in all_snap_keys if k.startswith(f'{cls.cls_name}::')}
-        referenced_keys = cls._referenced_snaps[cls.snap_file]
+        referenced_keys = cls._referenced_snaps.get(cls.snap_file, set())
         unreferenced_keys = our_snap_keys - referenced_keys
         if len(unreferenced_keys) == 0:
             return  # Ok, all referenced
         if cls.unused_handling == 'ignore':
             return
         if cls.unused_handling == 'prune':
-            cls._queued_changes[cls.snap_file] |= dict.fromkeys(
-                unreferenced_keys, _DELETE_SENTINEL)
+            cls._queued_changes.setdefault(cls.snap_file, {}).update(
+                dict.fromkeys(unreferenced_keys, _DELETE_SENTINEL))
+            return
         msg = f'Unused snapshot keys: {", ".join(unreferenced_keys)}'
         if cls.unused_handling == 'print':
             return print(msg, file=sys.stderr)
@@ -268,6 +269,8 @@ class SnapshotTestCase(unittest.TestCase):
     def write_queued_snapshots(cls):
         if not cls._queued_changes:
             return
+        if not cls.update_snapshots:
+            cls._check_only_prune_changes()
         cls._make_snaps_dir()
         for path, changes in cls._queued_changes.items():
             if not changes:
@@ -280,6 +283,16 @@ class SnapshotTestCase(unittest.TestCase):
                 format_snap(f, cls._apply_file_changes(orig, changes))
                 # Remove extra garbage that may be left over and not fully overwritten
                 f.truncate()
+
+    @classmethod
+    def _check_only_prune_changes(cls):
+        for changes in cls._queued_changes.values():
+            for k, v in changes.items():
+                if v and not _is_sentinel(v):
+                    # Check unconditionally as no update should guarantee only
+                    # 'prune' changes even if our internal methods used.
+                    raise AssertionError("Cannot write non-prune changes for"
+                                         f"snapshot {k} in non-update mode")
 
     @classmethod
     def _apply_file_changes(cls, orig: dict[str, str], changes: dict[str, str | _SentinelT]):
