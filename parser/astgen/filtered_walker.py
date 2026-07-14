@@ -9,7 +9,7 @@ from .ast_node import WalkerCallType, WalkableT, walk_ast
 
 try:
     from typing import TypeVarTuple, Unpack, ParamSpec, Concatenate, Self
-except TypeError:
+except ImportError:
     from typing_extensions import TypeVarTuple, Unpack, ParamSpec, Concatenate, Self
 
 
