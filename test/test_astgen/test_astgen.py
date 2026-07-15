@@ -79,7 +79,7 @@ class TestAstGen(CommonTestCase):
         elif_2 = self.assertAsInstance(
             self.assertHasSingleItem(self.assertAsNotNone(elif_1.else_body)),
             AstIf)
-        self.assertEqual(AstNumber(StrRegion(28, 28), 7), elif_2.cond)
+        self.assertEqual(AstNumber(StrRegion(27, 28), 7), elif_2.cond)
         self.assertEqual(elif_2.if_body, [])
         self.assertEqual(elif_2.else_body, [])
         self.assertMatchesSnapshot(a)  # In case I missed any checks
