@@ -169,6 +169,7 @@ class AstGen:
         # Build up else/elseif parts inner-first
         node = (None if isinstance(smt.else_block, NullElseBlock)
                 else self._walk_block(smt.else_block.block))
+        # TODO: here is broken
         for elseif in smt.elseif_blocks:
             # region is current elseif to end
             node = AstIf(elseif.region | smt.else_block.region,
@@ -178,8 +179,7 @@ class AstGen:
                       self._walk_block(smt.if_block.block), node)]
 
     def _walk_block(self, nodes: list[AnyNode] | BlockNode) -> list[AstNode]:
-        if isinstance(nodes, BlockNode):
-            nodes = nodes.statements
+        nodes = nodes.statements if isinstance(nodes, BlockNode) else nodes
         return flatten_force(map(self._walk_smt, nodes))
 
     def _walk_expr(self, expr: AnyNode) -> AstNode:
