@@ -1,28 +1,26 @@
 from __future__ import annotations
 
 import sys
-from collections.abc import Sequence
+from collections.abc import Callable, Sequence
 from dataclasses import dataclass, field
 from enum import Enum
-from typing import Callable, TypeAlias, Iterable, TypeVar, TYPE_CHECKING, Generic
+from typing import TypeAlias, Iterable, TypeVar, TYPE_CHECKING, Generic
 
 from ..common import HasRegion, StrRegion
 
 __all__ = ['AstNode', 'walk_ast', 'WalkableT', 'WalkerFnT', 'WalkerCallType', 'MetadataT']
 
 
-# Pycharm: unknown value (so ignores this branch as it doesn't understand).
-#  mypy-oids: True. Runtime: False
-_TYPE_CHECKING_NOT_PYCHARM = TYPE_CHECKING
-# If we are a compatible type checker or we are a sufficiently new runtime...
-if _TYPE_CHECKING_NOT_PYCHARM or (not TYPE_CHECKING and sys.version_info >= (3, 13)):
-    # If we are an old version, import it (for type checkers, unreachable at runtime)
+# noinspection PyUnreachableCode
+# If we are a type checker or a new enough runtime, we want default
+if TYPE_CHECKING or sys.version_info >= (3, 13):
+    # If we are an old version, import it (for type checkers; unreachable at runtime)
     if sys.version_info < (3, 13):
         from typing_extensions import TypeVar
     # Now we have a default-able TypeVar from somewhere so can use it
     MetadataT = TypeVar('MetadataT', default=None)
 else:
-    # We are an old runtime version without default or Pycharm
+    # We are an old runtime version without default
     MetadataT = TypeVar('MetadataT')
 
 
