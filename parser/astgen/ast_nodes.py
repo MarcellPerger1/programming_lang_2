@@ -108,7 +108,7 @@ class AstAugAssign(AstNode[MetadataT]):
 class AstDefine(AstNode[MetadataT]):
     name = 'def'
 
-    ident: AstIdent
+    ident: AstIdent[MetadataT]
     # TODO: this should be list[AstDefineParam] where AstParam is an AstNode
     params: list[tuple[AstIdent[MetadataT], AstIdent[MetadataT]]]  # type, ident
     body: list[AstNode[MetadataT]]
@@ -139,7 +139,6 @@ class AstAnyName(AstNode[MetadataT]):
             raise TypeError("AstAnyName must not be instantiated directly.")
 
 
-# TODO: AstIdent[MetadataT] here!!!
 @dataclass
 class AstIdent(AstAnyName[MetadataT]):
     name = 'ident'

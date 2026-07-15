@@ -78,6 +78,8 @@ class AstNode(HasRegion, Generic[MetadataT]):
 walk_ast = AstNode.walk_obj
 
 
+# TODO: We are unable to parameterise these by MetadataT as Pycharm cannot
+#  handle TypeVar with `default` set properly which is very sad.
 WalkableL0: TypeAlias = AstNode | Sequence[AstNode] | None
 WalkableT: TypeAlias = WalkableL0 | Sequence[WalkableL0]
 WalkerFnT: TypeAlias = Callable[[WalkableT, WalkerCallType], bool | None]

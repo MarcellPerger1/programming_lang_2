@@ -56,7 +56,6 @@ class Typechecker:
             return self.typed_ast
         self._init()
         self._typecheck(self.orig_ast)
-        # TODO: tests for the output types
         self.typed_ast = self.orig_ast  # should now have the types
         return assert_not_none(self.typed_ast)
 
