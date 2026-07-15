@@ -167,16 +167,16 @@ class AstGen:
 
     def _walk_conditional(self, smt: ConditionalBlock):
         # Build up else/elseif parts inner-first
-        node = (None if isinstance(smt.else_block, NullElseBlock)
-                else self._walk_block(smt.else_block.block))
-        # TODO: here is broken
-        for elseif in smt.elseif_blocks:
+        else_cst = smt.else_block  # New var to workaround Pycharm narrowing bug
+        else_block = (None if isinstance(else_cst, NullElseBlock)
+                      else self._walk_block(else_cst.block))
+        for elseif in reversed(smt.elseif_blocks):  # Last = innermost
             # region is current elseif to end
-            node = AstIf(elseif.region | smt.else_block.region,
-                         self._walk_expr(elseif.cond),
-                         self._walk_block(elseif.block), node)
+            else_block = [AstIf(elseif.region | smt.else_block.region,
+                                self._walk_expr(elseif.cond),
+                                self._walk_block(elseif.block), else_block)]
         return [AstIf(smt.region, self._walk_expr(smt.if_block.cond),
-                      self._walk_block(smt.if_block.block), node)]
+                      self._walk_block(smt.if_block.block), else_block)]
 
     def _walk_block(self, nodes: list[AnyNode] | BlockNode) -> list[AstNode]:
         nodes = nodes.statements if isinstance(nodes, BlockNode) else nodes
