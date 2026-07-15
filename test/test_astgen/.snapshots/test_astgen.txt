@@ -1,5 +1,5 @@
-"2","14","45","93","122","184","192","204","254","313","358"
-"TestAstGen::test_op_node:0","TestAstGen::test_nop_node:0","TestAstGen::test_aug_assign:0","TestAstGen::test_getattr:0","TestAstGen::test_while_block:0","TestAstGen::test_autocat:0","TestAstGen::test_string_basic:0","TestAstGen::test_unaries:0","TestAstGen::test_decl:0","TestAstGen::test_list_literal_decl:0","TestAstGen::test_list_literal_decl_paren:0"
+"2","14","47","95","124","186","194","206","256","315","360","374"
+"TestAstGen::test_op_node:0","TestAstGen::test_nop_node:0","TestAstGen::test_aug_assign:0","TestAstGen::test_getattr:0","TestAstGen::test_while_block:0","TestAstGen::test_autocat:0","TestAstGen::test_string_basic:0","TestAstGen::test_unaries:0","TestAstGen::test_decl:0","TestAstGen::test_list_literal_decl:0","TestAstGen::test_list_literal_decl_paren:0","TestAstGen::test_elif_chain:0"
 AstProgramNode(StrRegion(0, 6),
   [
     AstAssign(StrRegion(0, 5),
@@ -17,20 +17,22 @@ AstProgramNode(StrRegion(0, 66),
     AstIf(StrRegion(0, 38),
       AstNumber(StrRegion(3, 4), 2),
       [],
-      AstIf(StrRegion(8, 38),
-        AstBinOp(StrRegion(17, 21),
-          '==',
-          AstNumber(StrRegion(17, 18), 1),
-          AstNumber(StrRegion(20, 21), 2)
-        ),
-        [
-          AstCall(StrRegion(24, 27),
-            AstIdent(StrRegion(24, 25), 'a'),
-            []
-          )
-        ],
-        []
-      )
+      [
+        AstIf(StrRegion(8, 38),
+          AstBinOp(StrRegion(17, 21),
+            '==',
+            AstNumber(StrRegion(17, 18), 1),
+            AstNumber(StrRegion(20, 21), 2)
+          ),
+          [
+            AstCall(StrRegion(24, 27),
+              AstIdent(StrRegion(24, 25), 'a'),
+              []
+            )
+          ],
+          []
+        )
+      ]
     ),
     AstRepeat(StrRegion(41, 53),
       AstIdent(StrRegion(48, 49), 'a'),
@@ -367,6 +369,27 @@ AstProgramNode(StrRegion(0, 16),
           AstNumber(StrRegion(12, 13), 1)
         ]
       )
+    )
+  ]
+)
+AstProgramNode(StrRegion(0, 37),
+  [
+    AstIf(StrRegion(0, 37),
+      AstNumber(StrRegion(3, 4), 1),
+      [],
+      [
+        AstIf(StrRegion(7, 37),
+          AstNumber(StrRegion(15, 16), 6),
+          [],
+          [
+            AstIf(StrRegion(19, 37),
+              AstNumber(StrRegion(27, 28), 7),
+              [],
+              []
+            )
+          ]
+        )
+      ]
     )
   ]
 )
