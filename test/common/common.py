@@ -147,8 +147,11 @@ class CommonTestCase(SnapshotTestCase, TestCaseUtils):
         return ctx.exception
 
     # noinspection PyMethodMayBeStatic
+    def getAstGen(self, src: str):
+        return AstGen(CstGen(Tokenizer(src)))
+
     def getNameResolver(self, src: str):
-        return NameResolver(AstGen(CstGen(Tokenizer(src))))
+        return NameResolver(self.getAstGen(src))
 
     def assertNameResolveError(self, src: str):
         nr = self.getNameResolver(src)

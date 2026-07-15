@@ -98,7 +98,12 @@ class TestCaseUtils(unittest.TestCase):
         self.fail(f"Expected iterable to contain one item, got {length} items"
                   f"(iterable: {container})")
 
-    def assertHasLength(self, sized: SizedT, n: int) -> SizedT:
+    def assertAsNotNone(self, x: T | None) -> T:
+        self.assertIsNotNone(x)
+        return x
+
+    def assertHasLength(self, sized: SizedT | None, n: int) -> SizedT:
+        sized = self.assertAsNotNone(sized)
         self.assertEqual(n, len(sized), f"Expected {sized} to have size {n}")
         return sized
 
