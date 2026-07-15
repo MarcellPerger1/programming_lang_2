@@ -163,7 +163,7 @@ class CommonTestCase(SnapshotTestCase, TestCaseUtils):
         return Typechecker(self.getNameResolver(src))
 
     def assertTypecheckedTo(self, node: AstNode[TypeMetadata] | None, expected: TypeInfo):
-        self.assertIsNotNone(node, "Expected a node with metadata, got None")
+        node = self.assertAsNotNone(node, "Expected a node with metadata, got None")
         self.assertIsNotNone(node.meta, "Expected type metadata")
         self.assertEqual(expected, node.meta.type)
 

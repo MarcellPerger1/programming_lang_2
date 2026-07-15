@@ -71,4 +71,3 @@ class FunctionType(TypeInfo):
 # Don't need to `sys.intern` these manually as Python automatically does
 #   this for literals.
 PARAM_TYPES = {'number', 'string', 'val', 'bool'}
-
