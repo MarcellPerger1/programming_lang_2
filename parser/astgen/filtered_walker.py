@@ -129,7 +129,7 @@ class BasicFilteredWalker(WalkerFilterRegistry[WT], Generic[WT]):
 
 class FilteredWalker(BasicFilteredWalker[WT], Generic[WT]):
     def __init__(self):
-        # Can then add studd to specific instances
+        # Can then add stuff to specific instances
         from_cls = (
             self.class_registry
             if isinstance(self.class_registry, WalkerFilterRegistry)
@@ -165,7 +165,7 @@ class FilteredWalker(BasicFilteredWalker[WT], Generic[WT]):
 
         The restrictions on name are because we have no other way of detecting
          it (without metaclass dark magic) as we can't refer to the class while
-         its namespace is being evaluated
+         its namespace is being evaluated. Could do __init_subclass__ though?
         """
         if fn is None:
             return WalkerFilterRegistry()
