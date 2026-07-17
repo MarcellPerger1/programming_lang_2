@@ -33,7 +33,7 @@ class ConcatLiteral(UserString):
 @dataclasses.dataclass
 class IndentInfo:
     """Represents a first/current-line indentation and a possibly-different
-    indentation for the next line."""
+    indentation for the later lines."""
 
     level: int
     start_level: int = dataclasses.field(default=-1)
@@ -50,7 +50,8 @@ class IndentInfo:
 
 
 class TreePrinter:
-    def __init__(self, stream: IO[str] = None, indent=2, verbose=False, append_lf=False):
+    def __init__(self, stream: IO[str] | None = None, indent: int = 2,
+                 verbose: bool = False, append_lf: bool = False):
         self.indent = indent
         self.verbose = verbose
         self.append_lf = append_lf
@@ -207,7 +208,7 @@ class TreePrinter:
         return f'StrRegion({r.start}, {r.end})'
 
 
-def tree_print(obj: object, stream: IO[str] = None, indent: int = 2,
+def tree_print(obj: object, stream: IO[str] | None = None, indent: int = 2,
                verbose: bool = False, append_lf: bool = True):
     TreePrinter(stream, indent, verbose, append_lf).print(obj)
 
