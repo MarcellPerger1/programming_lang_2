@@ -19,15 +19,14 @@ def readfile(path: int | str | bytes | PathLike[str] | PathLike[bytes],
         return f.read()
 
 
-@overload
-def checked_cast(typ: type[T], val: Any) -> T: ...
-@overload
-def checked_cast(typ: type[T | U], val: Any) -> T | U: ...
-
-
 def checked_cast(typ: type[T], val: Any) -> T:
     assert isinstance(val, typ)
     return val
+
+
+def checked_cast_class(as_subclass_of: type[T], cls: type) -> type[T]:
+    assert issubclass(cls, as_subclass_of)
+    return cls
 
 
 def flatten_force(seq: Iterable[Iterable[T]]) -> list[T]:

@@ -1,8 +1,9 @@
 from __future__ import annotations
 
 from dataclasses import dataclass, field
-from typing import TYPE_CHECKING, overload, Sequence, cast, Literal
+from typing import TYPE_CHECKING, overload, Sequence, Literal, Sized
 
+from util import checked_cast_class
 from .base_node import Leaf, AnyNode, Node
 from ..common import StrRegion, HasRegion
 
@@ -53,7 +54,7 @@ class _AnyNamedNodeT(AnyNode):
         return cls(token.region, parent)
 
 
-AnyNamedNode: type[_AnyNamedNodeT] | type[NamedLeafCls] = NamedLeafCls
+AnyNamedNode = NamedLeafCls
 
 
 @dataclass
@@ -75,7 +76,7 @@ class NamedNodeCls(Node, AnyNamedNode):
 
     # noinspection PyMethodOverriding
     @classmethod  # Better args order
-    def new(cls, region: StrRegion, children: list[AnyNode], parent: Node = None):
+    def new(cls, region: StrRegion, children: list[AnyNode], parent: Node | None = None):
         return cls(region, parent, children)
 
 
@@ -118,7 +119,7 @@ def register_corresponding_token(*names: str, include_attr=False,
 # Only really useful for thing with a 1-to-1 token-to-CST relation
 # (atoms and operators mainly)
 def register_corresponding_token(*args, include_attr=False,
-                                 arity: int | Literal['auto'] = None):
+                                 arity: int | Literal['auto'] | None = None):
     def register_once(name: str, cls: type[AnyNamedNode]):
         if arity is None:
             NAME_REGISTRY[name] = cls
@@ -126,7 +127,6 @@ def register_corresponding_token(*args, include_attr=False,
             assert issubclass(cls, NamedSizedNodeCls)
             NAME_REGISTRY[name, cls.size] = cls
         else:
-            # Cast required because Pycharm stupid
             NAME_REGISTRY[name, arity] = cls
 
     def decor(cls: type[AnyNamedNode]):
@@ -151,7 +151,8 @@ def _cls_with_arity_or_general(name: str, arity: int):
         return NAME_REGISTRY[name]
 
 
-def node_cls_from_name(name: str, children: list | int | None = None, arity: int = None):
+def node_cls_from_name(name: str, children: Sized | int | None = None,
+                       arity: int | None = None) -> type[NamedLeafCls]:
     """Priority: arity > n_children > auto"""
     if arity is not None:
         return _cls_with_arity_or_general(name, arity)
@@ -161,9 +162,9 @@ def node_cls_from_name(name: str, children: list | int | None = None, arity: int
     return NAME_REGISTRY[name]
 
 
-def node_from_token(token: Token, children: Sequence[Node] = None,
-                    parent: Node | None = None, arity: int = None):
+def node_from_token(token: Token, children: Sequence[Node] | None = None,
+                    parent: Node | None = None, arity: int | None = None):
     cls = node_cls_from_name(token.name, children, arity)
     if children:
-        return cast(type[NamedNodeCls], cls)(token.region, parent, list(children))
+        return checked_cast_class(NamedNodeCls, cls)(token.region, parent, list(children))
     return cls(token.region, parent)
