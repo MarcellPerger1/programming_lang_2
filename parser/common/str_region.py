@@ -13,13 +13,9 @@ __all__ = ['StrRegion']
 @dataclass
 class StrRegion:
     start: int
-    end: int | None = None
+    end: int
 
     def resolve(self, s: str):
-        if self.end is None:
-            import warnings
-            warnings.warn(RuntimeWarning(
-                "Trying to call StrRegion.resolve with end=None."))
         return s[self.start:self.end]
 
     @classmethod
