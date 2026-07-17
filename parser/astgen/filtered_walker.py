@@ -120,6 +120,7 @@ class BasicFilteredWalker(WalkerFilterRegistry[WT], Generic[WT]):
                 return result
         return result
 
+    # `type[WT] | type` needed so we can access supertypes like `object` in the MRO
     @classmethod
     def _get_funcs(cls, mapping: dict[type[WT] | type, list[VT]], tp: type[WT]) -> list[VT]:
         """Also looks at superclasses/MRO"""
