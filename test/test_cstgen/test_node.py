@@ -1,6 +1,7 @@
 from unittest import TestCase
 
 from parser.common import StrRegion
+from parser.cst.base_node import Node, Leaf
 from parser.tokens import NumberToken, IdentNameToken
 from parser.cst.named_node import node_from_token
 from parser.cst.nodes import NumberNode, IdentNode
@@ -14,3 +15,20 @@ class Test(TestCase):
         self.assertEqual(IdentNode(None, None), node_from_token(IdentNameToken()))
         self.assertEqual(IdentNode(StrRegion(5, 7), None),
                          node_from_token(IdentNameToken(StrRegion(5, 7))))
+
+    def test_node_add(self):
+        nd = Node('parent', StrRegion(0, 6))
+        lf1 = Leaf('leaf1', StrRegion(0, 2))
+        lf2 = Leaf('leaf2', StrRegion(3, 5))
+        nd.add(lf1, lf2)
+        self.assertEqual(nd.children, [lf1, lf2])
+        self.assertIs(lf1.parent, nd)
+        self.assertIs(lf2.parent, nd)
+
+    def test_node_init_with_children(self):
+        lf1 = Leaf('leaf1', StrRegion(0, 2))
+        lf2 = Leaf('leaf2', StrRegion(3, 5))
+        nd = Node.new('parent', StrRegion(0, 6), [lf1, lf2])
+        self.assertEqual(nd.children, [lf1, lf2])
+        self.assertIs(lf1.parent, nd)
+        self.assertIs(lf2.parent, nd)
