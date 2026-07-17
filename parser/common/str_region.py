@@ -56,7 +56,7 @@ class _RegionPrinter:
             # length=0 but still try to do something
             region = d_replace(region, end=region.start + 1)
         lines = src.splitlines(keepends=True)
-        cum_lengths = tuple(itertools.accumulate(tuple(map(len, lines))))
+        cum_lengths = tuple(itertools.accumulate(map(len, lines)))
         start_idx = region.start
         end_idx = region.end - 1  # its inclusive below so convert excl -> incl
         start_line, start_col = cls._idx_to_coord(cum_lengths, start_idx)
@@ -97,7 +97,7 @@ class _RegionPrinter:
 
     @classmethod
     def _display_single_line(cls, lines: Sequence[str], line: int, start_col: int,
-                             end_col: int, lineno_w: int = None):
+                             end_col: int, lineno_w: int | None = None):
         start_spaces = ' ' * start_col
         carets = '^' * (end_col - start_col + 1)
         end_spaces = ' ' * (len(lines[line]) - end_col)
