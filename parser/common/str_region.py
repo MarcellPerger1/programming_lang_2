@@ -65,7 +65,8 @@ class _RegionPrinter:
     @classmethod
     def _display_multi_line(cls, lines: Sequence[str], start_line: int, start_col: int,
                             end_line: int, end_col: int):
-        if end_line - start_line + 1 > 5:
+        n_middle_lines = end_line - start_line - 1
+        if n_middle_lines > 3:
             # just print start and end lines
             lineno_w = len(str(end_line + 1))  # last will always be biggest
             start_repr = cls._display_single_line(
@@ -73,7 +74,7 @@ class _RegionPrinter:
             end_repr = cls._display_single_line(
                 lines, end_line, 0, end_col, lineno_w)
             return (f'{start_repr}\n'
-                    f'...\n'
+                    f'... <{n_middle_lines} lines omitted>\n'
                     f'{end_repr}')
         lines_repr = []
         lineno_w = len(str(end_line + 1))
