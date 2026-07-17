@@ -13,13 +13,9 @@ __all__ = ['StrRegion']
 @dataclass
 class StrRegion:
     start: int
-    end: int | None = None
+    end: int
 
     def resolve(self, s: str):
-        if self.end is None:
-            import warnings
-            warnings.warn(RuntimeWarning(
-                "Trying to call StrRegion.resolve with end=None."))
         return s[self.start:self.end]
 
     @classmethod
@@ -97,7 +93,7 @@ class _RegionPrinter:
 
     @classmethod
     def _display_single_line(cls, lines: Sequence[str], line: int, start_col: int,
-                             end_col: int, lineno_w: int = None):
+                             end_col: int, lineno_w: int | None = None):
         start_spaces = ' ' * start_col
         carets = '^' * (end_col - start_col + 1)
         end_spaces = ' ' * (len(lines[line]) - end_col)
