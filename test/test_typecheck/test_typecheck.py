@@ -7,6 +7,8 @@ from parser.typecheck.types import ValType, VoidType, BoolType, TypeType, TypeMe
 from test.common import CommonTestCase
 
 
+# We don't do snapshot tests as those would only test the astgen (as we manually
+#  check for all the type info). Less maintenacne burden as well.
 class TestGivenTypes(CommonTestCase):
     def test_var_decl_assign(self):
         prog = self.getTypechecker("let a = 9;").run()
@@ -18,7 +20,6 @@ class TestGivenTypes(CommonTestCase):
         decl: AstDeclNode[TypeMetadata]
         self.assertTypecheckedTo(decl.value, ValType())
         self.assertTypecheckedTo(decl.ident, ValType())
-        # self.assertMatchesSnapshot(prog)
 
     def test_function(self):
         prog = self.getTypechecker("def f(val a, bool b, number c, string d){}").run()
@@ -29,7 +30,6 @@ class TestGivenTypes(CommonTestCase):
         for expect_t, (type_ident, name_ident) in zip(expected_types, f.params):
             self.assertTypecheckedTo(name_ident, expect_t)
             self.assertTypecheckedTo(type_ident, TypeType(expect_t))
-        # self.assertMatchesSnapshot(prog)
 
     def test_operators(self):
         prog = self.getTypechecker("let a = (1 + 1) * 2.2;").run()
