@@ -77,7 +77,7 @@ class Typechecker:
 
     def _node_typechecker(self: type[AstNode], tp: type[AstNode] | None = None):
         if tp is None:
-            assert callable(self)
+            assert issubclass(self, AstNode)  # Sanity check for in-class case
         tp_ = self if tp is None else tp  # Need new var coz Pycharm stupid
 
         def decor(fn: NodeTypecheckFn):
@@ -112,10 +112,6 @@ class Typechecker:
         if n.value:
             self.expect_type(self._typecheck(n.value), expect, n)
 
-    @_and_set_type_metadata
-    def _typecheck_ident_declared(self, n: AstIdent, decl: AstDeclNode):
-        return self._resolve_scope(decl.scope).declared[n.id].tp_info
-
     @_node_typechecker(AstRepeat)
     def _typecheck_repeat(self, n: AstRepeat):
         # For now, we don't differentiate between number/string (as sc doesn't)
@@ -135,7 +131,7 @@ class Typechecker:
         self._typecheck_block(n.body)
 
     @_node_typechecker(AstAssign)
-    def _typecheck_assign(self, n: AstAssign):  # super tempted to call this _typecheck_ass
+    def _typecheck_assign(self, n: AstAssign):
         if isinstance(n.target, AstIdent):
             # Assignment-to also counts as a type of usage (also sets .meta)
             target_tp = self._typecheck_ident_used(n.target)
@@ -169,9 +165,9 @@ class Typechecker:
         f_type = func_info.tp_info
         n.ident.meta = TypeMetadata(f_type)
         # Could also use .param_info here - should be same either way
-        for (type_node, name_node), param_type in zip(n.params, f_type.arg_types):
-            name_node.meta = TypeMetadata(param_type)
-            type_node.meta = TypeMetadata(TypeType(param_type))
+        for (type_nd, name_nd), param_type in zip(n.params, f_type.arg_types, strict=True):
+            name_nd.meta = TypeMetadata(param_type)
+            type_nd.meta = TypeMetadata(TypeType(param_type))
         with self._enter_scope(func_info.subscope):
             self._typecheck_block(n.body)
 
@@ -203,6 +199,10 @@ class Typechecker:
     def _typecheck_ident_used(self, n: AstIdent):
         return self._curr_scope.used[n.id].tp_info
 
+    @_and_set_type_metadata
+    def _typecheck_ident_declared(self, n: AstIdent, decl: AstDeclNode):
+        return self._resolve_scope(decl.scope).declared[n.id].tp_info
+
     @_node_typechecker(AstAttrName)
     def _typecheck_attr_name(self, _n: AstAttrName):
         assert 0, "AstAttrName has no type, cannot be checked on its own"
@@ -226,11 +226,11 @@ class Typechecker:
         called_tp = self._typecheck(n.obj)
         if not isinstance(called_tp, FunctionType):
             raise self.err(f"Cannot call {called_tp}", n.obj)
-        if (n_expect := len(called_tp.arg_types)) != (n_given := len(n.args)):
-            if n.args and n_given > n_expect:
+        if (n_expect := len(called_tp.arg_types)) != len(n.args):
+            if len(n.args) > n_expect:
                 region = n.args[n_expect].region  # First unexpected one
             else:
-                region = n.region
+                region = n.region  # Entire call (is that ok to do?)
             raise self.err(f"Incorrect number of arguments, expected "
                            f"{len(called_tp.arg_types)}, got {len(n.args)}",
                            region)
@@ -258,8 +258,7 @@ class Typechecker:
     def _check_abstract_op_types_only(
             self, arg_types: list[AstNode], op_type: FunctionType):
         """Arity should be checked before invoking as that allow better error highlighting"""
-        assert len(op_type.arg_types) == len(arg_types)
-        for decl_t, arg_node in zip(op_type.arg_types, arg_types):
+        for decl_t, arg_node in zip(op_type.arg_types, arg_types, strict=True):
             self.expect_type(self._typecheck(arg_node), decl_t, arg_node)
         return op_type.ret_type
 
