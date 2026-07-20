@@ -15,12 +15,13 @@ if TYPE_CHECKING:
     from typing import TypeIs
 
 
+
+# NOTE: This is copied from and should be kept up-to-date with
+# https://github.com/MarcellPerger1/mini-snapshot/blob/main/mini_snapshot.py
 class SnapshottestError(RuntimeError):
     pass
 
 
-# NOTE: This is copied from and should be kept up-to-date with
-# https://github.com/MarcellPerger1/mini-snapshot/blob/main/mini_snapshot.py
 class SnapshotsNotFound(SnapshottestError):
     pass
 
@@ -77,7 +78,6 @@ def _is_sentinel(o: object) -> TypeIs[_SentinelT]:
     return o is _DELETE_SENTINEL
 
 
-# TODO: new unused detection needs testing!
 class SnapshotTestCase(unittest.TestCase):
     snap_filename: str = None
     snaps_dir: Path = None
