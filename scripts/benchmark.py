@@ -1,6 +1,7 @@
 import cProfile
 import contextlib
 import time
+from pathlib import Path
 
 from parser.astgen.ast_nodes import AstProgramNode
 from parser.astgen.astgen import AstGen
@@ -10,10 +11,18 @@ from parser.cst.cstgen import CstGen
 from parser.lexer import Tokenizer, format_tokens
 from parser.typecheck.name_resolver import NameResolver
 from parser.typecheck.scope import Scope
+from parser.typecheck.typecheck import Typechecker
+from parser.typecheck.types import TypeMetadata
 from util import readfile
 from util.pformat import pformat
 
 PROFILER = False
+BENCHMARKS_DIR = Path('./benchmarks')
+
+
+def _dump_stats(p: cProfile.Profile, name: str):
+    BENCHMARKS_DIR.mkdir(exist_ok=True)
+    p.dump_stats(BENCHMARKS_DIR / (name.removesuffix('.prof') + '.prof'))
 
 
 class _Timer:
@@ -38,13 +47,16 @@ class BenchOnce:
     _ast: AstProgramNode
     _nr: NameResolver
     _top_scope: Scope
+    _typechecker: Typechecker
+    _ast_typed: AstProgramNode[TypeMetadata]
 
     def __init__(self, src: str, idx: int = -1, do_ast=True,
-                 do_name_resolve=True):
+                 do_name_resolve=True, do_typecheck=True):
         self.src = src
         self.idx = idx
         self.should_do_ast = do_ast
         self.should_name_resolve = do_name_resolve
+        self.should_typecheck = do_typecheck
         self.lines: list[tuple[float, str]] = []  # First item used as key
 
     @classmethod
@@ -59,21 +71,30 @@ class BenchOnce:
 
     def run(self):
         with self._maybe_profiler() as p:
-            self.do_tokenize()
-            self.do_token_fmt()
-            self.do_cst()
-            self.do_cst_fmt()
-            if self.should_do_ast:
-                self.do_ast()
-                self.do_ast_fmt()
-                if self.should_name_resolve:
-                    self.do_name_resolve()
-                    self.do_name_resolve_fmt()
+            self._run_inner()
         if p:
-            p.dump_stats(f'./_exclude/prof/perf_dump_{self.idx}.prof')
+            _dump_stats(p, f'perf_dump_{self.idx}')
         print(f'Perf for idx={self.idx} ({PROFILER=}):')
         for _k, s in sorted(self.lines):
             print(f'  {s}')
+
+    def _run_inner(self):
+        self.do_tokenize()
+        self.do_token_fmt()
+        self.do_cst()
+        self.do_cst_fmt()
+        if not self.should_do_ast:
+            return
+        self.do_ast()
+        self.do_ast_fmt()
+        if not self.should_name_resolve:
+            return
+        self.do_name_resolve()
+        self.do_name_resolve_fmt()
+        if not self.should_typecheck:
+            return
+        self.do_typecheck()
+        self.do_typecheck_fmt()
 
     def _add_line(self, sort_key: float, name: str, delta_sec: float):
         self.lines.append((sort_key, self._fmt_time_taken(name, delta_sec)))
@@ -121,9 +142,21 @@ class BenchOnce:
             _s = pformat(self._top_scope)
         self._add_line(3.5, 'NameRes_fmt', t.get())
 
+    def do_typecheck(self):
+        with _Timer() as t:
+            self._typechecker = Typechecker(self._nr)
+            self._ast_typed = self._typechecker.run()
+        self._add_line(4.0, 'TypeChk', t.get())
 
-def benchmark(src: str, idx: int = -1, do_ast=True, do_name_resolve=True):
-    return BenchOnce(src, idx, do_ast, do_name_resolve).run()
+    def do_typecheck_fmt(self):
+        with _Timer() as t:
+            _s = tformat(self._ast_typed)
+        self._add_line(4.5, 'TypeChk_fmt', t.get())
+
+
+def benchmark(src: str, idx: int = -1, do_ast=True, do_name_resolve=True,
+              do_typecheck=True):
+    return BenchOnce(src, idx, do_ast, do_name_resolve, do_typecheck).run()
 
 
 def bench_full(n=200):
@@ -132,13 +165,13 @@ def bench_full(n=200):
     with BenchOnce._maybe_profiler() as p:
         for _ in range(n):
             t0 = time.perf_counter()
-            _sc = NameResolver(AstGen(CstGen(Tokenizer(
-                readfile('./examples/main_example_2.st'))))).run()
+            _sc = Typechecker(NameResolver(AstGen(CstGen(Tokenizer(
+                readfile('./examples/main_example_3.st')))))).run()
             t1 = time.perf_counter()
             times.append(t1 - t0)
     if p:
-        p.dump_stats('./_exclude/prof/bench_full.prof')
-    print(f'Bench main_example_2.st, {n} iterations, ({PROFILER=}):')
+        _dump_stats(p, 'bench_full')
+    print(f'Bench main_example_3.st, {n} iterations, ({PROFILER=}):')
     print(f'  Min: {min(times)*1000:.2f}ms')
     print(f'  Avg: {sum(times)/n*1000:.2f}ms')
 
@@ -146,7 +179,8 @@ def bench_full(n=200):
 def main():
     benchmark(readfile('./examples/main_example_0.st'), 0, do_ast=False)
     benchmark(readfile('./examples/main_example_1.st'), 1, do_name_resolve=False)
-    benchmark(readfile('./examples/main_example_2.st'), 2)
+    benchmark(readfile('./examples/main_example_2.st'), 2, do_typecheck=False)
+    benchmark(readfile('./examples/main_example_3.st'), 3)
     bench_full(200)
 
 
