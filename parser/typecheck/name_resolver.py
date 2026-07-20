@@ -61,8 +61,11 @@ class ScopeNameResolver(FilteredWalker):
         self.block = block
         self.scope_stack = parent_scopes
         self.curr_scope = curr_scope
-        self.top_scope = assert_not_none(self.resolver.top_scope)
-        self.inner_funcs: list[tuple[FuncInfo, AstDefine]] = []
+        self._inner_funcs: list[tuple[FuncInfo, AstDefine]] = []
+
+    @property
+    def top_scope(self):
+        return assert_not_none(self.resolver.top_scope)
 
     def run(self):
         self.scope_stack.append(self.curr_scope)  # And our new scope onto the stack
@@ -71,7 +74,7 @@ class ScopeNameResolver(FilteredWalker):
         return self.scope_stack.pop()  # Remove current scope from stack & return it
 
     def walk_collected_inner_funcs(self):
-        for fn_info, fn_decl in self.inner_funcs:
+        for fn_info, fn_decl in self._inner_funcs:
             fn_info.subscope = ScopeNameResolver.resolve(
                 self.resolver, fn_decl.body, fn_info.subscope, self.scope_stack)
 
@@ -117,7 +120,7 @@ class ScopeNameResolver(FilteredWalker):
         self.curr_scope.declared[ident] = info = FuncInfo.from_param_info(
             self.curr_scope, ident, params,
             ret_type=VoidType(), subscope=subscope)
-        self.inner_funcs.append((info, fn))  # Store funcs for later walking
+        self._inner_funcs.append((info, fn))  # Store funcs for later walking
         # Skip walking body, only walk inner after collecting all declared
         #  variables in outer scope so function can use all variables
         #  declared in outer scope - even the ones declared below it)
