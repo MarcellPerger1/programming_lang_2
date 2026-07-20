@@ -88,6 +88,14 @@ class TestGivenTypes(CommonTestCase):
         self.assertTypecheckedTo(getitem.obj, ValType())
         self.assertTypecheckedTo(getitem.index, ValType())
 
+    def test_no_value_let(self):
+        prog = self.getTypechecker("let a;").run()
+        self.assertAllMetadata(prog, TypeMetadata)
+        let = self.assertAsInstance(self.assertHasSingleItem(prog.statements), AstDeclNode)
+        self.assertTypecheckedTo(let, VoidType())
+        self.assertTypecheckedTo(let.ident, ValType())
+        self.assertIsNone(let.value)
+
     def _check_decl_val(self, a: AstNode):
         a = self.assertAsInstance(a, AstDeclNode)
         self.assertTypecheckedTo(a.ident, ValType())
