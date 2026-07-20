@@ -127,9 +127,5 @@ def _indent_size(line: str):
 def dedent(s: str):
     s = s.removeprefix('\n')  # if '''<newline> and forgotten \ after the '''
     content_lines = filter(None, map(str.rstrip, s.splitlines()))
-    amount = min(map(_indent_size, content_lines))
-    result_lines = []
-    for line in s.split('\n'):  # not splitlines to preserve possible newline at EOF
-        num_ws = len(line) - len(line.lstrip())
-        result_lines.append(line[min(amount, num_ws):])  # don't strip more WS than there is
-    return '\n'.join(result_lines)
+    min_indent = min(map(_indent_size, content_lines))
+    return '\n'.join(line[min_indent:] for line in s.splitlines())
