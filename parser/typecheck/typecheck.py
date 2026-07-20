@@ -44,7 +44,6 @@ class Typechecker:
     def __init__(self, name_resolver: NameResolver):
         self.resolver = name_resolver
         self.src = self.resolver.src
-        self.is_ok: bool | None = None
         self.typed_ast: AstProgramNode[TypeMetadata] | None = None
 
     def _init(self):
