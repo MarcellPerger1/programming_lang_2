@@ -34,10 +34,7 @@ def flatten_force(seq: Iterable[Iterable[T]]) -> list[T]:
 
 
 def is_strict_subclass(o: object, type_or_types: tuple[type, ...]):
-    try:
-        types = tuple(type_or_types)
-    except TypeError:
-        types = (type_or_types,)
+    types = tuple(pack_if_single_item(type_or_types))
     return isinstance(o, type) and issubclass(o, types) and o not in types
 
 
@@ -57,3 +54,22 @@ def dcls_field_default(f: dataclasses.Field[T]) -> T | DataclassesMissingT:
 def assert_not_none(x: T | None) -> T:
     assert x is not None, "Expected non-None value, got None"
     return x
+
+
+@overload
+def pack_if_single_item(iter_or_item: Iterable[T] | T,
+                        ctor: Callable[[Iterable[T]], U]) -> U: ...
+
+
+@overload
+def pack_if_single_item(iter_or_item: Iterable[T] | T,
+                        ctor: None = None) -> Iterable[T]: ...
+
+
+def pack_if_single_item(iter_or_item: Iterable[T] | T,
+                        ctor: Callable[[Iterable[T]], U] | None = None) -> U:
+    try:
+        it = iter(iter_or_item)
+    except (TypeError, NotImplementedError):
+        it = (iter_or_item, )
+    return ctor(it) if ctor is not None else it
