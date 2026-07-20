@@ -1,44 +1,17 @@
-from unittest.mock import Mock, patch
+from unittest.mock import patch
 
 from parser.common import StrRegion
 from parser.typecheck.name_resolver import NameResolver
 from parser.typecheck.scope import NameInfo, FuncInfo, ParamInfo, Scope
 from parser.typecheck.types import ValType, BoolType, VoidType
-from test.common import CommonTestCase
-
-
-class BoundMock(Mock):
-    # Not-so-black magic to allow setting the method on the class while ensuring
-    # that the wrapper receives the correct `self` value (builtin unittest is
-    # a bit broken in this regard, as it passes no self value at all)
-    def __init__(self, *args, wraps=None, **kwargs):
-        if wraps:
-            def wraps_2(*a, **k):  # I hope we don't have to pickle this anywhere...
-                if (inst := self.__dict__['_inst']) is not None:
-                    return wraps(inst, *a, **k)
-                else:
-                    return wraps(*a, **k)
-        else:
-            wraps_2 = None
-        super().__init__(*args, wraps=wraps_2, **kwargs)
-        self.__dict__['_inst'] = None
-
-    def __get__(self, instance, owner=None):
-        # This very naive method of finding out the proper instance works
-        # because __get__ will be called again every time this is accessed
-        if owner is not None:  # if accessed on instance
-            self.__dict__['_inst'] = instance
-        else:
-            self.__dict__['_inst'] = None
-        return self
+from test.common import CommonTestCase, BoundMock
 
 
 class TestNameResolve(CommonTestCase):
     def test_top_scope_attr(self):
         src = 'let a = 8, b = 5; a += b; def c(val param) {c(param, a, b);}'
         orig = NameResolver._init  # Reliably called exactly once in slow path of .run()
-        m = BoundMock(spec_set=orig, wraps=orig)
-        with patch.object(NameResolver, '_init', new_callable=lambda: m):
+        with patch.object(NameResolver, '_init', BoundMock(spec_set=orig, wraps=orig)) as m:
             nr = self.getNameResolver(src)
             self.assertIsNone(nr.top_scope)
             m.assert_not_called()

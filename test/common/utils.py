@@ -7,6 +7,7 @@ import unittest
 from collections.abc import Sized
 from pathlib import Path
 from typing import overload, TYPE_CHECKING, TypeVar, Protocol, Iterable, Container, Any
+from unittest.mock import Mock
 
 from unittest.util import safe_repr
 
@@ -110,3 +111,29 @@ class TestCaseUtils(unittest.TestCase):
     def assertAsInstance(self, o: object, cls: type[T], msg: str | None = None) -> T:
         self.assertIsInstance(o, cls, msg)
         return o
+
+
+class BoundMock(Mock):
+    # Not-so-black magic to allow setting the method on the class while ensuring
+    # that the wrapper receives the correct `self` value (builtin unittest is
+    # a bit broken in this regard, as it passes no self value at all)
+    def __init__(self, *args, wraps=None, **kwargs):
+        if wraps:
+            def wraps_2(*a, **k):  # I hope we don't have to pickle this anywhere...
+                if (inst := self.__dict__['_inst']) is not None:
+                    return wraps(inst, *a, **k)
+                else:
+                    return wraps(*a, **k)
+        else:
+            wraps_2 = None
+        super().__init__(*args, wraps=wraps_2, **kwargs)
+        self.__dict__['_inst'] = None
+
+    def __get__(self, instance, owner=None):
+        # This very naive method of finding out the proper instance works
+        # because __get__ will be called again every time this is accessed
+        if owner is not None:  # if accessed on instance
+            self.__dict__['_inst'] = instance
+        else:
+            self.__dict__['_inst'] = None
+        return self
