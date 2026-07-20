@@ -172,8 +172,6 @@ class CommonTestCase(SnapshotTestCase, TestCaseUtils):
 
     def assertAllMetadata(self, n: AstNode[Any], expected_type: type[T]) -> AstNode[T]:
         def on_exit_node(nd: AstNode[Any]):
-            if isinstance(nd, expected_type):
-                return
             msg_extra = f"root={tformat(n)}\nnode={tformat(nd)}"
             self.assertIsNotNone(
                 nd.meta, f"Expected node to have metadata:\n{msg_extra}")
