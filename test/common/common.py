@@ -121,13 +121,8 @@ class CommonTestCase(SnapshotTestCase, TestCaseUtils):
 
     @classmethod
     def raiseInternalErrorsOnlyCST(cls, src: str):
-        try:
+        with cls.raiseInternalErrorsOnly():
             CstGen(Tokenizer(src)).parse()
-        except BaseParseError:
-            return None
-        except Exception:
-            raise
-        return None
 
     def assertCstMatchesSnapshot(self, src: str):
         t = CstGen(Tokenizer(src))
@@ -173,15 +168,7 @@ class CommonTestCase(SnapshotTestCase, TestCaseUtils):
             tc.run()
         return ctx.exception
 
-    @contextlib.contextmanager
-    def assertDoesntCrash(self):
-        try:
-            yield
-        except BaseParseError:
-            self.assertTrue(True)
-        except Exception:
-            raise   # Let's be explicit
-        self.assertTrue(True)
+    assertDoesntCrash = raiseInternalErrorsOnly
 
     def assertAllMetadata(self, n: AstNode[Any], expected_type: type[T]) -> AstNode[T]:
         def on_exit_node(nd: AstNode[Any]):
@@ -201,10 +188,11 @@ class CommonTestCase(SnapshotTestCase, TestCaseUtils):
     def assertRegionEquals(self, expected: StrRegion, actual: StrRegion, src: str | None):
         if expected == actual:
             return
-        # Newlines added so that <lhs> != <rhs> output by unittest looks reasonable
-        self.assertEqual(f'\n{expected.display(src)}\n',
-                         f'\n{actual.display(src)}\n ',
-                         "Expected regions to be equal (showing displayed)")
+        if src:
+            # Newlines added so that <lhs> != <rhs> output by unittest looks reasonable
+            self.assertEqual(f'\n{expected.display(src)}\n',
+                             f'\n{actual.display(src)}\n ',
+                             "Expected regions to be equal (showing displayed)")
         self.assertEqual(expected, actual,  # Fallback in case display equal
                          "Expected regions to be equal (displayed as same)")
 
