@@ -69,7 +69,7 @@ def fuzz(buf: bytes):
         if not buf:
             return
         flag, *buf = buf
-        if flag.bit_count():  # Parity rather than MSB check for less bias?
+        if flag.bit_count() % 1 == 0:  # Parity rather than MSB check for less bias?
             return fuzz_advanced(bytes(buf))
         buf = bytes(map(0x7F.__and__, buf))  # wdym you don't understand
     try:
