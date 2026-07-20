@@ -11,7 +11,6 @@ class NameInfo:
     decl_scope: Scope
     ident: str
     tp_info: TypeInfo
-    # node: AstNode  # <-- Why do we need this?
     is_param: bool = field(default=False, kw_only=True)
 
 
