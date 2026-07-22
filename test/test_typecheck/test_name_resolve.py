@@ -4,14 +4,14 @@ from parser.common import StrRegion
 from parser.typecheck.name_resolver import NameResolver
 from parser.typecheck.scope import NameInfo, FuncInfo, ParamInfo, Scope
 from parser.typecheck.types import ValType, BoolType, VoidType
-from test.common import CommonTestCase, BoundMock
+from test.common import CommonTestCase, MethodMock
 
 
 class TestNameResolve(CommonTestCase):
     def test_top_scope_attr(self):
         src = 'let a = 8, b = 5; a += b; def c(val param) {c(param, a, b);}'
-        orig = NameResolver._init  # Reliably called exactly once in slow path of .run()
-        with patch.object(NameResolver, '_init', BoundMock(spec_set=orig, wraps=orig)) as m:
+        # Use NameResolver._init as it's reliably called exactly once in slow path of .run()
+        with patch.object(NameResolver, '_init', MethodMock(wraps=NameResolver._init)) as m:
             nr = self.getNameResolver(src)
             self.assertIsNone(nr.top_scope)
             m.assert_not_called()

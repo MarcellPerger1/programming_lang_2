@@ -5,6 +5,7 @@ from __future__ import annotations
 import os
 import unittest
 from collections.abc import Sized
+from functools import partial
 from pathlib import Path
 from typing import overload, TYPE_CHECKING, TypeVar, Protocol, Iterable, Container, Any
 from unittest.mock import Mock
@@ -113,27 +114,98 @@ class TestCaseUtils(unittest.TestCase):
         return o
 
 
-class BoundMock(Mock):
+class MethodMock(Mock):
+    """Mocks a method on a class, for use with patch.object.
+    For example::
+        with patch.object(MyClass, 'my_method', MethodMock()) as m:
+    """
     # Not-so-black magic to allow setting the method on the class while ensuring
-    # that the wrapper receives the correct `self` value (builtin unittest is
-    # a bit broken in this regard, as it passes no self value at all)
-    def __init__(self, *args, wraps=None, **kwargs):
-        if wraps:
-            def wraps_2(*a, **k):  # I hope we don't have to pickle this anywhere...
-                if (inst := self.__dict__['_inst']) is not None:
-                    return wraps(inst, *a, **k)
-                else:
-                    return wraps(*a, **k)
-        else:
-            wraps_2 = None
-        super().__init__(*args, wraps=wraps_2, **kwargs)
-        self.__dict__['_inst'] = None
+    # that the method receives the correct `self` value (builtin unittest is
+    # a bit broken in this regard, passing no self value at all)
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.__dict__['__mock_args'] = args
+        self.__dict__['__mock_kwargs'] = kwargs
+        # We use __dict__ so that Mock doesn't intercept this property access
+        self.__dict__['__inst'] = None
 
     def __get__(self, instance, owner=None):
         # This very naive method of finding out the proper instance works
         # because __get__ will be called again every time this is accessed
-        if owner is not None:  # if accessed on instance
-            self.__dict__['_inst'] = instance
-        else:
-            self.__dict__['_inst'] = None
-        return self
+        if instance is not None:
+            return _BoundDelegateMock(
+                self, instance, *self.__dict__['__mock_args'],
+                **self.__dict__['__mock_kwargs'])
+        return _DelegateMock(self, *self.__dict__['__mock_args'],
+                             **self.__dict__['__mock_kwargs'])
+
+
+class _DelegateMock(Mock):
+    def __new__(cls, inner, /, *args, **kwargs):
+        # noinspection PyTypeChecker
+        return super().__new__(cls, *args, **kwargs)  # Pycharm doesn't understand __new__
+
+    def __init__(self, inner: Mock, /, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # We cannot use property setter the first time as it will not be in
+        #  __dict__ so the property will not be recognised with spec_set
+        self.__dict__['__inner'] = inner
+
+    # We use __dict__ so that Mock doesn't intercept this property access
+    @property
+    def __inner(self) -> Mock:
+        return self.__dict__['__inner']
+
+    @__inner.setter
+    def __inner(self, value: Mock):
+        self.__dict__['__inner'] = value
+
+    def __call__(self, *args, **kwargs):
+        return self.__inner(*args, **kwargs)
+
+    def assert_called_with(self, *args, **kwargs):
+        self.__inner.assert_called_with(*args, **kwargs)
+
+    def assert_not_called(self):
+        self.__inner.assert_not_called()
+
+    def assert_called_once_with(self, *args, **kwargs):
+        self.__inner.assert_called_once_with(*args, **kwargs)
+
+    def assert_called(self):
+        self.__inner.assert_called()
+
+    def assert_called_once(self):
+        self.__inner.assert_called_once()
+
+    def reset_mock(self, visited=None, *, return_value=False, side_effect=False):
+        self.__inner.reset_mock(visited, return_value=return_value, side_effect=side_effect)
+
+    def assert_any_call(self, *args, **kwargs):
+        self.__inner.assert_any_call(*args, **kwargs)
+
+    def assert_has_calls(self, calls, any_order=False):
+        self.__inner.assert_has_calls(calls, any_order)
+
+    def mock_add_spec(self, spec, spec_set=False):
+        self.__inner.mock_add_spec(spec, spec_set)
+
+    def attach_mock(self, mock, attribute):
+        self.__inner.attach_mock(mock, attribute)
+
+    def configure_mock(self, **kwargs):
+        self.__inner.configure_mock(**kwargs)
+
+
+class _BoundDelegateMock(_DelegateMock):
+    def __new__(cls, inner, inst, /, *args, **kwargs):
+        # (Pycharm doesn't understand __new__, see PY-89087)
+        # noinspection PyTypeChecker
+        return super().__new__(cls, inner, *args, **kwargs)
+
+    def __init__(self, inner: Mock, inst, /, *args, **kwargs):
+        super().__init__(inner, *args, **kwargs)
+        self.__dict__['__inst'] = inst
+
+    def __call__(self, *args, **kwargs):
+        return super().__call__(self.__dict__['__inst'], *args, **kwargs)
