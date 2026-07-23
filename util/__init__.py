@@ -2,11 +2,16 @@ from __future__ import annotations
 
 import dataclasses
 from os import PathLike
-from typing import TypeVar, Any, overload, Iterable, Literal, TypeAlias
+from typing import TypeVar, Any, overload, Iterable, Literal, TYPE_CHECKING
 
 from .recursive_eq import recursive_eq
 from .simple_process_pool import *
 from .timeouts import *
+
+if TYPE_CHECKING:
+    # (Note: dataclasses._MISSING_TYPE isn't actually a runtime thing, it's just
+    # for type checkers to recognise dataclasses.MISSING)
+    DataclassesMissingT = Literal[dataclasses._MISSING_TYPE.MISSING]
 
 T = TypeVar('T')
 U = TypeVar('U')
@@ -38,11 +43,6 @@ def is_strict_subclass(o: object, type_or_types: tuple[type, ...]):
     return isinstance(o, type) and issubclass(o, types) and o not in types
 
 
-DataclassesMissingT: TypeAlias = 'Literal[dataclasses._MISSING_TYPE.MISSING]'
-
-
-# (Note: dataclasses._MISSING_TYPE isn't actually a runtime thing, it's just
-# for type checkers to recognise dataclasses.MISSING)
 def dcls_field_default(f: dataclasses.Field[T]) -> T | DataclassesMissingT:
     if f.default is not dataclasses.MISSING:
         return f.default
