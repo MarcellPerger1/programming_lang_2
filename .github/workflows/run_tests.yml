@@ -16,17 +16,24 @@ jobs:
           - "3.10"
           - "3.11"
           - "3.12"
+          - "3.13"
+          - "3.14"
+      fail-fast: false
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
       - name: Setup python ${{ matrix.py_version }}
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v6
         with:
           python-version: ${{ matrix.py_version }}
+      - name: Setup pythonfuzz
+        run: pip install -r requirements-dev.txt
       - name: Run tests
         run: |
-          chmod +x ./run_tests.sh
-          ./run_tests.sh --verbose
+          ./scripts/run_tests.sh --verbose
       - name: Run mini-benchmark
         run: |
-          python ./benchmark.py
+          python -m scripts.benchmark
+      # Just to detect ultra-obvious bugs that our tests missed
+      - name: Run quick fuzzing (20000 iterations)
+        run: python -m scripts.fuzz -n 20000

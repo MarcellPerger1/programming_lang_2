@@ -44,4 +44,4 @@ jobs:
         run: pip install -r requirements-dev.txt
       - name: Run fuzzer (${{ inputs.iterations }} iterations)
         run: |
-          python fuzz.py -n ${{ inputs.iterations }}
+          python -m scripts.fuzz -n ${{ inputs.iterations }}

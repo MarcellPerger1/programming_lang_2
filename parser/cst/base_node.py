@@ -47,7 +47,7 @@ class Node(Leaf):
                 raise TypeError("Cannot have `None` as child of AnyNode (for now??)")
             end = max(end, n.region.end)
             self.children.append(n)
-            n.parent = n
+            n.parent = self
         if update_end:
             self.region.end = end
 

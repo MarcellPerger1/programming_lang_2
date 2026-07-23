@@ -2,6 +2,7 @@
   <profile version="1.0">
     <option name="myName" value="project_inspections" />
     <inspection_tool class="GrazieInspection" enabled="false" level="GRAMMAR_ERROR" enabled_by_default="false" />
+    <inspection_tool class="PyAugmentAssignmentInspection" enabled="true" level="INFORMATION" enabled_by_default="true" editorAttributes="INFORMATION_ATTRIBUTES" />
     <inspection_tool class="PyCompatibilityInspection" enabled="true" level="WARNING" enabled_by_default="true">
       <option name="ourVersions">
         <value>
@@ -15,6 +16,15 @@
       </option>
     </inspection_tool>
     <inspection_tool class="PyInconsistentReturnsInspection" enabled="true" level="INFORMATION" enabled_by_default="true" editorAttributes="INFORMATION_ATTRIBUTES" />
+    <inspection_tool class="PyNoneFunctionAssignmentInspection" enabled="true" level="INFORMATION" enabled_by_default="true" editorAttributes="INFORMATION_ATTRIBUTES" />
+    <inspection_tool class="PyPackageRequirementsInspection" enabled="true" level="WARNING" enabled_by_default="true">
+      <option name="ignoredPackages">
+        <list>
+          <option value="typing-extensions" />
+          <option value="typing_extensions" />
+        </list>
+      </option>
+    </inspection_tool>
     <inspection_tool class="PyPep8Inspection" enabled="true" level="WEAK WARNING" enabled_by_default="true">
       <option name="ignoredErrors">
         <list>
@@ -22,7 +32,35 @@
         </list>
       </option>
     </inspection_tool>
-    <inspection_tool class="PyUnresolvedReferencesInspection" enabled="true" level="WARNING" enabled_by_default="true">
+    <inspection_tool class="PyStringConversionWithoutDunderMethodInspection" enabled="true" level="WEAK WARNING" enabled_by_default="true">
+      <option name="ignoredTypes">
+        <list>
+          <option value="types.NoneType" />
+          <option value="_io.TextIOWrapper" />
+          <option value="str" />
+          <option value="int" />
+          <option value="float" />
+          <option value="complex" />
+          <option value="set" />
+          <option value="frozenset" />
+          <option value="bytes" />
+          <option value="bytearray" />
+          <option value="memoryview" />
+          <option value="slice" />
+          <option value="list" />
+          <option value="dict" />
+          <option value="bool" />
+          <option value="range" />
+          <option value="tuple" />
+          <option value="pathlib.PurePath" />
+          <option value="uuid.UUID" />
+          <option value="decimal.Decimal" />
+          <option value="fractions.Fraction" />
+          <option value="typing.Iterable" />
+        </list>
+      </option>
+    </inspection_tool>
+    <inspection_tool class="PyUnresolvedReferencesInspection" enabled="true" level="WARNING" enabled_by_default="true" editorAttributes="WARNING_ATTRIBUTES">
       <option name="ignoredIdentifiers">
         <list>
           <option value="unittest.case._subtest_msg_sentinel" />

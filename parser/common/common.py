@@ -1,15 +1,18 @@
-from typing import TypeAlias, Sequence
+from __future__ import annotations
+
+from typing import TypeAlias, Sequence, Protocol, runtime_checkable
 
 from .str_region import StrRegion
 
 __all__ = ['HasRegion', 'RegionUnionArgT', 'region_union']
 
 
-class HasRegion:
+@runtime_checkable  # Eh, can't check subclass-ness but whatever
+class HasRegion(Protocol):
     region: StrRegion
 
 
-RegionUnionFlatT: TypeAlias = HasRegion | StrRegion
+RegionUnionFlatT: TypeAlias = HasRegion | StrRegion | None
 RegionUnionArgT: TypeAlias = RegionUnionFlatT | Sequence[RegionUnionFlatT]
 
 
@@ -18,7 +21,7 @@ def region_union(*args: RegionUnionArgT):
     for loc in args:
         if loc is None:
             continue
-        if getattr(loc, 'region', None) is not None:  # Duck-type HasRegion
+        if isinstance(loc, HasRegion):
             loc = loc.region
         if isinstance(loc, StrRegion):
             regs.append(loc)

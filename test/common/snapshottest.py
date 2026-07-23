@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import contextlib
 import csv
 import inspect
@@ -7,17 +9,28 @@ import sys
 import unittest
 from dataclasses import dataclass
 from pathlib import Path
-from typing import IO
+from typing import IO, Literal, NewType, TYPE_CHECKING, cast
+
+if TYPE_CHECKING:
+    from typing import TypeIs
 
 
 # NOTE: This is copied from and should be kept up-to-date with
 # https://github.com/MarcellPerger1/mini-snapshot/blob/main/mini_snapshot.py
-class SnapshotsNotFound(RuntimeError):
-    ...
+class SnapshottestError(RuntimeError):
+    pass
 
 
-class CantUpdateSnapshots(RuntimeError):
-    ...
+class SnapshotsNotFound(SnapshottestError):
+    pass
+
+
+class CantUpdateSnapshots(SnapshottestError):
+    pass
+
+
+class UnusedSnapshot(SnapshottestError):
+    pass
 
 
 def _string_is_number(s: str):
@@ -42,6 +55,10 @@ def _open_or_create_rw(path: str):
         return open(path, 'w+', encoding='utf8')  # Try to create if not exists
 
 
+def _environ_get_bool(name: str, default: bool):
+    return os.getenv(name, str(default)).lower() in ('1', 'true', 'yes')
+
+
 _SNAPS_NOT_FOUND_MSG = (
     'Snapshots not found, execute this with PY_SNAPSHOTTEST_UPDATE=1 to write \n'
     'the following as the snapshot for {full_name}:\n'
@@ -52,17 +69,26 @@ _SNAPS_DONT_MATCH_MSG = (
     '{value}'
 )
 
+_SentinelT = NewType('_SentinelT', object)
+_DELETE_SENTINEL = _SentinelT(object())
+
+
+def _is_sentinel(o: object) -> TypeIs[_SentinelT]:
+    return o is _DELETE_SENTINEL
+
 
 class SnapshotTestCase(unittest.TestCase):
-    snap_filename: str | None = None
-    snaps_dir: Path | None = None
-    snap_file: str | None = None
-    cls_name: str | None = None
+    snap_filename: str = None
+    snaps_dir: Path = None
+    snap_file: str = None
+    cls_name: str = None
 
-    update_snapshots: bool | None = None
+    update_snapshots: bool = None
+    unused_handling: Literal['ignore', 'error', 'print', 'prune'] | None = None
 
     _files_cache: dict[str, dict[str, str]]
-    _queued_changes: dict[str, dict[str, str]]
+    _queued_changes: dict[str, dict[str, str | _SentinelT]]
+    _referenced_snaps: dict[str, set[str]]
     _subtest = None
 
     format_dispatch = {}
@@ -100,12 +126,19 @@ class SnapshotTestCase(unittest.TestCase):
         cls.cls_name = cls.cls_name or _safe_cls_name(cls)
         cls._files_cache = {}
         if cls.update_snapshots is None:
-            cls.update_snapshots = os.environ.get(
-                'PY_SNAPSHOTTEST_UPDATE', '0').lower() in ('1', 'true', 'yes')
+            cls.update_snapshots = _environ_get_bool('PY_SNAPSHOTTEST_UPDATE', False)
+        if cls.unused_handling is None:
+            unused = os.getenv('PY_SNAPSHOTTEST_UNUSED', 'ignore').lower().strip()
+            if unused not in ('ignore', 'error', 'print', 'prune'):
+                print('WARN: unknown PY_SNAPSHOTTEST_UNUSED, assuming ignore',
+                      file=sys.stderr)
+                unused: Literal['ignore'] = 'ignore'
+            cls.unused_handling = unused
         # Store changes, not entire file. This reduces (but doesn't eliminate)
         # chance of race conditions when using threading.
         # Additionally, reduces memory load during the main bit of the tests.
         cls._queued_changes = {}
+        cls._referenced_snaps = {}
         super().setUpClass()
 
     @classmethod
@@ -137,7 +170,7 @@ class SnapshotTestCase(unittest.TestCase):
         except SnapshotsNotFound:
             if not cls.update_snapshots:
                 raise
-            snap_data = {}  # need to have something
+            snap_data: dict[str, str] = {}  # need to have something
         cls._files_cache[file] = snap_data
         return snap_data
 
@@ -159,7 +192,7 @@ class SnapshotTestCase(unittest.TestCase):
             subt = getattr(subt, '_parent_', None)  # We override self.subTest
         return '+'.join(parts)
 
-    def _allocate_sub_name(self, name: str):
+    def _allocate_sub_name(self, name: str | None):
         if name is None:
             v = self.next_idx
             self.next_idx += 1
@@ -172,6 +205,7 @@ class SnapshotTestCase(unittest.TestCase):
         self._queued_changes.setdefault(self.snap_file, {})[full_name] = new_value
 
     def lookup_snapshot(self, full_name: str):
+        self._referenced_snaps.setdefault(self.snap_file, set()).add(full_name)
         try:
             return self._read_snapshot_file()[full_name]
         except KeyError:
@@ -190,10 +224,36 @@ class SnapshotTestCase(unittest.TestCase):
             self.next_idx = old_idx
 
     @classmethod
-    def tearDownClass(cls) -> None:
+    def tearDownClass(cls):
+        cls._check_unused_snaps()
         cls._files_cache.clear()  # Free that huge data structure ASAP (not used in write)
-        if cls.update_snapshots:
+        if cls.update_snapshots or cls.unused_handling == 'prune':
             cls.write_queued_snapshots()
+
+    @classmethod
+    def _check_unused_snaps(cls):
+        try:
+            all_snap_keys = set(cls._read_snapshot_file().keys())
+        except SnapshotsNotFound:
+            return   # No snapshots anyway
+        # Important: only look at the snapshot keys for our class
+        # TODO: not perfect, doesn't detect if entire class is gone (needs custom runtime)
+        our_snap_keys = {k for k in all_snap_keys if k.startswith(f'{cls.cls_name}::')}
+        referenced_keys = cls._referenced_snaps.get(cls.snap_file, set())
+        unreferenced_keys = our_snap_keys - referenced_keys
+        if len(unreferenced_keys) == 0:
+            return  # Ok, all referenced
+        if cls.unused_handling == 'ignore':
+            return
+        if cls.unused_handling == 'prune':
+            cls._queued_changes.setdefault(cls.snap_file, {}).update(
+                dict.fromkeys(unreferenced_keys, _DELETE_SENTINEL))
+            return
+        msg = f'Unused snapshot keys: {", ".join(unreferenced_keys)}'
+        if cls.unused_handling == 'print':
+            return print(msg, file=sys.stderr)
+        assert cls.unused_handling == 'error'
+        raise UnusedSnapshot(msg)
 
     @classmethod
     def _make_snaps_dir(cls):
@@ -208,6 +268,8 @@ class SnapshotTestCase(unittest.TestCase):
     def write_queued_snapshots(cls):
         if not cls._queued_changes:
             return
+        if not cls.update_snapshots:
+            cls._check_only_prune_changes()
         cls._make_snaps_dir()
         for path, changes in cls._queued_changes.items():
             if not changes:
@@ -222,8 +284,20 @@ class SnapshotTestCase(unittest.TestCase):
                 f.truncate()
 
     @classmethod
-    def _apply_file_changes(cls, orig: dict[str, str], new: dict[str, str]):
-        return orig | new
+    def _check_only_prune_changes(cls):
+        for changes in cls._queued_changes.values():
+            for k, v in changes.items():
+                if v and not _is_sentinel(v):
+                    # Check unconditionally as no update should guarantee only
+                    # 'prune' changes even if our internal methods used.
+                    raise AssertionError("Cannot write non-prune changes for"
+                                         f"snapshot {k} in non-update mode")
+
+    @classmethod
+    def _apply_file_changes(cls, orig: dict[str, str], changes: dict[str, str | _SentinelT]):
+        new = {k: v for k, v in orig.items() if not _is_sentinel(changes.get(k))}
+        changes = {k: v for k, v in changes.items() if not _is_sentinel(v)}
+        return new | cast(dict[str, str], changes)
 
 
 @dataclass
@@ -280,7 +354,7 @@ def parse_snap(text: str):  # This is a bit overcomplicated - need a better form
             zip(lines_idx, names, strict=True))
     except ValueError:
         raise SnapshotsNotFound("Can't read snapshot file (invalid format)")
-    name_to_src = {}
+    name_to_src: dict[str, str] = {}
     for i, (line_idx, name) in enumerate(line_name_tup):
         start = line_idx
         if i == len(line_name_tup) - 1:

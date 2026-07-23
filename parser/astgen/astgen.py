@@ -5,7 +5,7 @@ import sys
 from typing import Callable, overload, TypeVar, TypeAlias
 
 from util import flatten_force, is_strict_subclass
-from .ast_node import *
+from .ast_nodes import *
 from .eval_literal import eval_number, eval_string
 from .errors import LocatedAstError
 from ..common import region_union, RegionUnionArgT, HasRegion, StrRegion
@@ -68,7 +68,7 @@ def _detect_autowalk_type_from_annot(fn):
         bound = sig.bind(0, 1)  # simulate call w/ 2 args
     except TypeError as e:  # pragma: no cover
         raise TypeError("Unable to detect node_type (signature may be incompatible)") from e
-    arg2_name: str = (*bound.arguments,)[1]  # get name it's bound to
+    arg2_name: str = tuple(bound.arguments)[1]  # get name it's bound to
     param = sig.parameters[arg2_name]  # lookup the param by name
     if param.kind not in (param.POSITIONAL_ONLY,
                           param.POSITIONAL_OR_KEYWORD):  # pragma: no cover
@@ -89,10 +89,11 @@ class AstGen:
         self.src = self.cst.src
         self.result: AstProgramNode | None = None
 
-    def parse(self):
-        if not self.result:
-            self.result = self._walk_program(self.cst.parse())
-        return self.result
+    def parse(self) -> AstProgramNode:
+        if self.result:
+            return self.result
+        result = self.result = self._walk_program(self.cst.parse())
+        return result
 
     def _walk_program(self, root: ProgramNode):
         return AstProgramNode(root.region, self._walk_block(root.statements))
@@ -111,6 +112,7 @@ class AstGen:
         elif isinstance(smt, ConditionalBlock):
             return self._walk_conditional(smt)
         elif isinstance(smt, AssignNode):  # Simple assignment
+            # TODO: maybe separate SetAttr, SetItem, SetVar nodes?
             return [AstAssign(smt.region, self._walk_assign_left(smt.target),
                               self._walk_expr(smt.source))]
         elif isinstance(smt, AssignOpNode):  # Other (aug.) assignment
@@ -165,19 +167,19 @@ class AstGen:
 
     def _walk_conditional(self, smt: ConditionalBlock):
         # Build up else/elseif parts inner-first
-        node = (None if isinstance(smt.else_block, NullElseBlock)
-                else self._walk_block(smt.else_block.block))
-        for elseif in smt.elseif_blocks:
+        else_cst = smt.else_block  # New var to workaround Pycharm narrowing bug
+        else_block = (None if isinstance(else_cst, NullElseBlock)
+                      else self._walk_block(else_cst.block))
+        for elseif in reversed(smt.elseif_blocks):  # Last = innermost
             # region is current elseif to end
-            node = AstIf(elseif.region | smt.else_block.region,
-                         self._walk_expr(elseif.cond),
-                         self._walk_block(elseif.block), node)
+            else_block = [AstIf(elseif.region | smt.else_block.region,
+                                self._walk_expr(elseif.cond),
+                                self._walk_block(elseif.block), else_block)]
         return [AstIf(smt.region, self._walk_expr(smt.if_block.cond),
-                      self._walk_block(smt.if_block.block), node)]
+                      self._walk_block(smt.if_block.block), else_block)]
 
     def _walk_block(self, nodes: list[AnyNode] | BlockNode) -> list[AstNode]:
-        if isinstance(nodes, BlockNode):
-            nodes = nodes.statements
+        nodes = nodes.statements if isinstance(nodes, BlockNode) else nodes
         return flatten_force(map(self._walk_smt, nodes))
 
     def _walk_expr(self, expr: AnyNode) -> AstNode:

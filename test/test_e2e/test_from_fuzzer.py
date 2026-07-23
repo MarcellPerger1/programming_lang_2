@@ -5,6 +5,7 @@ from pathlib import Path
 from parser.cst.cstgen import CstGen
 from parser.lexer.tokenizer import Tokenizer
 from test.common import CommonTestCase, TestCaseUtils
+from test.fuzz import fuzz_target
 from util import timeout_decor, timeout_decor_async
 
 
@@ -17,22 +18,23 @@ class FuzzerCorpusTestCases(unittest.IsolatedAsyncioTestCase, TestCaseUtils):
     # TestCase object isn't passed to the other process as the self value
     @staticmethod
     @timeout_decor_async(5, debug=0, pool=True)
-    def _inner_once(src: str):
-        return CommonTestCase.raiseInternalErrorsOnlyCST(src)
+    def _inner_once(src_bytes: bytes):
+        with CommonTestCase.raiseInternalErrorsOnly():
+            fuzz_target(src_bytes)
 
     async def _test_once(self, p: Path):
         with self.subTest(corp=p.name):
-            with open(p, encoding='cp1252') as f:
-                src = f.read()
+            with open(p, 'rb') as f:
+                src_bytes = f.read()
             # noinspection PyUnresolvedReferences
-            await self._inner_once(src)  # Pycharm doesn't understand decorators
+            await self._inner_once(src_bytes)  # Pycharm doesn't understand decorators
 
     async def test(self):
         await asyncio.gather(*[
             self._test_once(p) for p in Path('./pythonfuzz_corpus').iterdir()])
 
 
-class FuzzerCrashTestCase(CommonTestCase):
+class FuzzerCrashTestCaseV1(CommonTestCase):
     """Tests for crashes caught by pythonfuzz"""
 
     def test_3610f59833246958fff7d5cbc5b23f8c99496c3c8fda3f5606f5b198713cbb95(self):
@@ -44,7 +46,7 @@ class FuzzerCrashTestCase(CommonTestCase):
         self.assertNotInternalErrorCST('!W>W>W9Jd\x1e')
 
 
-class FuzzerTimeoutTestCase(CommonTestCase):
+class FuzzerTimeoutTestCaseV1(CommonTestCase):
     """Tests for timeouts caught by pythonfuzz"""
 
     # We need extra inner methods that MUST be static so that the unpicklable

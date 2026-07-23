@@ -1,220 +1,283 @@
 from __future__ import annotations
 
-from dataclasses import dataclass, field
+import contextlib
+import functools
+from collections.abc import Callable
+from typing import TypeAlias, TypeVar, ParamSpec
 
-from util.recursive_eq import recursive_eq
-from ..astgen.ast_node import (
-    AstNode, walk_ast, AstIdent, AstDeclNode, AstDefine, VarDeclType,
-    VarDeclScope, FilteredWalker)
-from ..astgen.astgen import AstGen
-from ..common import BaseLocatedError, StrRegion
+from util import assert_not_none
+from .name_resolver import NameResolver
+from .scope import FuncInfo, Scope
+from .types import (TypeInfo, ValType, BoolType, ListType, VoidType,
+                    FunctionType, TypeType, TypeMetadata)
+from ..astgen.ast_nodes import *
+from ..common import BaseLocatedError, region_union, RegionUnionArgT
 
-
-@dataclass
-class TypeInfo:
-    def __post_init__(self):
-        assert type(self) != TypeInfo, "Cannot instantiate TypeInfo directly,use a subclass"
-
-
-@dataclass
-class ValType(TypeInfo):
-    pass
+T = TypeVar('T')
+P = ParamSpec('P')
+NodeTypecheckFn: TypeAlias = 'Callable[[Typechecker, AstNode], TypeInfo | None]'
+NodeTypecheckFnStrict: TypeAlias = 'Callable[[Typechecker, AstNode], TypeInfo]'
 
 
-@dataclass
-class BoolType(TypeInfo):
-    pass
+class TypecheckError(BaseLocatedError):
+    """Errors raised by the typechecker"""
 
 
-@dataclass
-class ListType(TypeInfo):
-    pass
-
-
-@dataclass
-class VoidType(TypeInfo):
-    """The ``void`` type - represents 'there must not be a value here'.
-
-    For example, this is the return type of function that don't return anything
-    (e.g. all regular user-defined scratch functions).
-    """
-
-
-@dataclass
-class FunctionType(TypeInfo):
-    arg_types: list[TypeInfo]
-    ret_type: TypeInfo
-
-
-@dataclass
-class NameInfo:
-    decl_scope: Scope
-    ident: str
-    tp_info: TypeInfo
-    # node: AstNode  # <-- Why do we need this?
-    is_param: bool = field(default=False, kw_only=True)
-
-
-@dataclass
-class FuncInfo(NameInfo):
-    tp_info: FunctionType  # Overrides types (doesn't change order)
-    params_info: list[ParamInfo]
-    # Can't just pass default_factory=Scope as it is only defined below
-    subscope: Scope = field(default_factory=lambda: Scope())
+class _TypecheckerInitVars:
+    """Stores variables needed at time of initialising the Typechecker class
+    (yes the class itself you read that right ;-)"""
+    typecheck_dispatch: dict[type[AstNode], NodeTypecheckFnStrict] = {}
+    and_set_type_metadata: Callable[[NodeTypecheckFn], NodeTypecheckFnStrict]
 
     @classmethod
-    def from_param_info(
-            cls, decl_scope: Scope, ident: str, params_info: list[ParamInfo],
-            ret_type: TypeInfo, subscope: Scope = None):
-        subscope = subscope or Scope()
-        tp_info = FunctionType([p.tp for p in params_info], ret_type)
-        return cls(decl_scope, ident, tp_info, params_info, subscope)
-
-
-@dataclass
-class ParamInfo:
-    name: str
-    tp: TypeInfo
-
-
-@dataclass
-class Scope:
-    declared: dict[str, NameInfo] = field(default_factory=dict)
-    used: dict[str, NameInfo] = field(default_factory=dict)
-    """Add references to outer scopes' variables that we use.
-    (so type codegen/type-checker knows what each AstIdent refers to)"""
-
-
-Scope.__eq__ = recursive_eq(Scope.__eq__)
-
-
-class NameResolutionError(BaseLocatedError):
-    pass
-
-
-# The reason `let` isn't used is because we don't want to imply similarity
-#   between parameters as local variables (where none exists in Scratch).
-#   Also, we might want to use `let` later as a modifier to bind it to
-#     an actual local var.
-# Don't need to `sys.intern` these manually as Python automatically does
-#   this for literals.
-PARAM_TYPES = {'number', 'string', 'val', 'bool'}
-
-
-# Variables:
-#  - We can prevent usages before the variable is declared in 2 ways:
-#    - Based on time: very sensible, like JS, but requires too many runtime features
-#    - Based on location: somewhat makes sense except for inner functions -
-#       they may be called later so should be able to access any variables.
-#  - Or we can just ignore it (e.g. `var` in JS) and pretend everything was
-#     declared at the top (but not assigned to - i.e. hoist `var foo;` to top).
-# To minimise accidental errors, option 1.2 is best
-#  (errors shouldn't pass silently, and that method requires no special runtime)
-class NameResolver:
-    def __init__(self, astgen: AstGen):
-        self.astgen = astgen
-        self.src = self.astgen.src
-        self.top_scope: Scope | None = None
-
-    def _init(self):
-        self.ast = self.astgen.parse()
-        self.top_scope = Scope()
-
-    def run(self):
-        if self.top_scope:
-            return self.top_scope
-        self._init()
-        self.run_on_new_scope(self.ast.statements, curr_scope=self.top_scope)
-        return self.top_scope
-
-    def run_on_new_scope(self, block: list[AstNode], parent_scopes: list[Scope] = None,
-                         curr_scope: Scope = None):
-        def enter_ident(n: AstIdent):
-            for s in scope_stack[::-1]:  # Inefficient, creates a copy!
-                if info := s.declared.get(n.id):
-                    curr_scope.used[n.id] = info
-                    return
-            raise self.err(f"Name '{n.id}' is not defined", n.region)
-
-        def enter_decl(n: AstDeclNode):
-            # Need semi-special logic here to prevent walking it walking
-            # the AstIdent that is currently being declared.
-            AstNode.walk_obj(n.value, walker)  # Don't walk `n.ident`
-            # Do this after walking (that is when the name is bound)
-            ident = n.ident.id
-            target_scope = curr_scope if n.scope == VarDeclScope.LET else self.top_scope
-            if ident in target_scope.declared:
-                raise self.err("Variable already declared", n.region)
-            target_scope.declared[ident] = NameInfo(target_scope, ident, (
-                ValType() if n.type == VarDeclType.VARIABLE else ListType()))
-            return True
-
-        def enter_fn_decl(fn: AstDefine):
-            ident = fn.ident.id
-            if ident in curr_scope.declared:
-                raise self.err("Function already declared", fn.ident.region)
-            subscope = Scope()
-            params: list[ParamInfo] = []
-            for tp_node, name_node in fn.params:
-                if tp_node.id not in PARAM_TYPES:
-                    raise self.err("Unknown parameter type", tp_node.region)
-                if (name := name_node.id) in subscope.declared:
-                    raise self.err("There is already a parameter of this name",
-                                   name_node.region)
-                tp = BoolType() if tp_node.id == 'bool' else ValType()
-                subscope.declared[name] = NameInfo(subscope, name, tp, is_param=True)
-                params.append(ParamInfo(name, tp))
-            curr_scope.declared[ident] = info = FuncInfo.from_param_info(
-                curr_scope, ident, params,
-                ret_type=VoidType(), subscope=subscope)
-            inner_funcs.append((info, fn))  # Store funcs for later walking
-            # Skip walking body, only walk inner after collecting all declared
-            #  variables in outer scope so function can use all variables
-            #  declared in outer scope - even the ones declared below it)
-            return True
-
-        curr_scope = curr_scope or Scope()
-        scope_stack = parent_scopes or []
-        scope_stack.append(curr_scope)
-        inner_funcs: list[tuple[FuncInfo, AstDefine]] = []
-        # Walk self
-        walker = (FilteredWalker()
-                  .register_enter(AstIdent, enter_ident)
-                  .register_enter(AstDeclNode, enter_decl)
-                  .register_enter(AstDefine, enter_fn_decl))
-        walk_ast(block, walker)
-        # Walk sub-functions
-        for fn_info, fn_decl in inner_funcs:
-            fn_info.subscope = self.run_on_new_scope(
-                fn_decl.body, scope_stack, fn_info.subscope)
-        return scope_stack.pop()  # Remove current scope from stack & return it
-
-    def err(self, msg: str, region: StrRegion):
-        return NameResolutionError(msg, region, self.src)
+    def method(cls, attr: str):
+        """To be used as decorator, like @_TypecheckerInitVars.method('attr')"""
+        def decor(f: T) -> T:
+            setattr(cls, attr, f)
+            return f
+        return decor
 
 
 class Typechecker:
+    _curr_scope: Scope
+
     def __init__(self, name_resolver: NameResolver):
         self.resolver = name_resolver
         self.src = self.resolver.src
-        self.is_ok: bool | None = None
+        self.typed_ast: AstProgramNode[TypeMetadata] | None = None
 
     def _init(self):
-        self.resolver.run()
-        self.ast = self.resolver.ast
-        self.top_scope = self.resolver.top_scope
+        self.top_scope = self._curr_scope = self.resolver.run()
+        self.orig_ast = self.resolver.ast
 
-    def run(self):
-        if self.is_ok is None:
-            return self.is_ok
-        self._typecheck()
-        self.is_ok = True
-        return self.is_ok
+    def run(self) -> AstProgramNode[TypeMetadata]:
+        if self.typed_ast is not None:
+            return self.typed_ast
+        self._init()
+        self._typecheck(self.orig_ast)
+        self.typed_ast = self.orig_ast  # should now have the types
+        return assert_not_none(self.typed_ast)
 
-    def _typecheck(self):
-        walker = FilteredWalker()
+    @_TypecheckerInitVars.method('and_set_type_metadata')  # Such Java vibes
+    def _and_set_type_metadata(
+            self: Callable[[Typechecker, AstNode, P], TypeInfo | None],
+            fn: Callable[[Typechecker, AstNode, P], TypeInfo | None] | None = None
+    ) -> Callable[[Typechecker, AstNode, P], TypeInfo]:
+        if fn is None:
+            assert callable(self)
+            fn = self  # Called as decor in this class
 
-        self.ast.walk(walker)
-        ...
+        @functools.wraps(fn)
+        def new_fn(self_inner: Typechecker, n: AstNode, *args, **kwargs) -> TypeInfo:
+            n_type: TypeInfo = fn(self_inner, n, *args, **kwargs) or VoidType()
+            n.meta = TypeMetadata(n_type)  # ^^ checker return None = void type
+            return n_type
+        return new_fn
 
+    def _node_typechecker(self: type[AstNode], tp: type[AstNode] | None = None):
+        if tp is None:
+            assert issubclass(self, AstNode)  # Sanity check for in-class case
+        tp_ = self if tp is None else tp  # Need new var coz Pycharm stupid
 
+        def decor(fn: NodeTypecheckFn):
+            new_fn = _TypecheckerInitVars.typecheck_dispatch[tp_] = (
+                _TypecheckerInitVars.and_set_type_metadata(fn))
+            return new_fn
+        return decor
+
+    def _typecheck(self, n: AstNode):
+        try:
+            fn = _TypecheckerInitVars.typecheck_dispatch[type(n)]
+        except KeyError:
+            fn = type(self)._typecheck_node_fallback
+        return fn(self, n)
+
+    def _typecheck_node_fallback(self, n: AstNode):
+        raise NotImplementedError(f"No typechecker function for node "
+                                  f"type {type(n).__name__}")
+
+    @_node_typechecker(AstProgramNode)
+    def _typecheck_program(self, n: AstProgramNode):
+        self._typecheck_block(n.statements)
+
+    def _typecheck_block(self, block: list[AstNode]):
+        for smt in block:
+            self.expect_type(self._typecheck(smt), VoidType(), smt)
+
+    @_node_typechecker(AstDeclNode)
+    def _typecheck_decl(self, n: AstDeclNode):
+        # Note: must come before 'if' so always set n.ident.meta.type
+        expect = self._typecheck_ident_declared(n.ident, decl=n)
+        if n.value:
+            self.expect_type(self._typecheck(n.value), expect, n)
+
+    @_node_typechecker(AstRepeat)
+    def _typecheck_repeat(self, n: AstRepeat):
+        # For now, we don't differentiate between number/string (as sc doesn't)
+        self.expect_type(self._typecheck(n.count), ValType(), n.count)
+        self._typecheck_block(n.body)
+
+    @_node_typechecker(AstIf)
+    def _typecheck_if(self, n: AstIf):
+        self.expect_type(self._typecheck(n.cond), BoolType(), n.cond)
+        self._typecheck_block(n.if_body)
+        if n.else_body is not None:
+            self._typecheck_block(n.else_body)
+
+    @_node_typechecker(AstWhile)
+    def _typecheck_while(self, n: AstWhile):
+        self.expect_type(self._typecheck(n.cond), BoolType(), n.cond)
+        self._typecheck_block(n.body)
+
+    @_node_typechecker(AstAssign)
+    def _typecheck_assign(self, n: AstAssign):
+        if isinstance(n.target, AstIdent):
+            # Assignment-to also counts as a type of usage (also sets .meta)
+            target_tp = self._typecheck_ident_used(n.target)
+        elif isinstance(n.target, AstItem):  # ls[i] = v
+            target_tp = self._typecheck(n.target)  # Also checks that `ls` is a list
+        elif isinstance(n.target, AstAttribute):
+            raise self.err("Setting attributes is currently unsupported", n.target)
+        else:
+            assert 0, "Unknown simple-assignment type"
+        if target_tp != ValType():  # Not even bool
+            raise self.err(f"Cannot assign directly to {target_tp}", n.target)
+        self.expect_type(self._typecheck(n.source), target_tp, n.source)
+
+    @_node_typechecker(AstAugAssign)
+    def _typecheck_aug_assign(self, n: AstAugAssign):
+        # TODO: change this when desugaring is implemented
+        #  (for now only +=, only on variables)
+        if n.op != '+=':
+            raise self.err(f"The '{n.op}' operator is not implemented", n)
+        if not isinstance(n.target, AstIdent):
+            raise self.err(f"The '+=' operator is only implemented for variables", n)
+        target_tp = self._typecheck_ident_used(n.target)
+        if target_tp != ValType():
+            raise self.err(f"Cannot apply += to {target_tp}", n)
+        self.expect_type(self._typecheck(n.source), ValType(), n.source)
+
+    @_node_typechecker(AstDefine)
+    def _typecheck_define(self, n: AstDefine):
+        func_info = self._curr_scope.declared[n.ident.id]
+        assert isinstance(func_info, FuncInfo)
+        f_type = func_info.tp_info
+        n.ident.meta = TypeMetadata(f_type)
+        # Could also use .param_info here - should be same either way
+        for (type_nd, name_nd), param_type in zip(n.params, f_type.arg_types, strict=True):
+            name_nd.meta = TypeMetadata(param_type)
+            type_nd.meta = TypeMetadata(TypeType(param_type))
+        with self._enter_scope(func_info.subscope):
+            self._typecheck_block(n.body)
+
+    @contextlib.contextmanager
+    def _enter_scope(self, scope: Scope):
+        old_scope = self._curr_scope
+        self._curr_scope = scope
+        try:
+            yield scope
+        finally:
+            self._curr_scope = old_scope
+
+    @_node_typechecker(AstNumber)
+    def _typecheck_number(self, _n: AstNumber):
+        return ValType()
+
+    @_node_typechecker(AstString)
+    def _typecheck_string(self, _n: AstString):
+        return ValType()
+
+    @_node_typechecker(AstListLiteral)
+    def _typecheck_list(self, n: AstListLiteral):
+        for item in n.items:
+            if self._typecheck(item) != ValType():
+                raise self.err("Can only have ValType()s in list", item)
+        return ListType()
+
+    @_node_typechecker(AstIdent)
+    def _typecheck_ident_used(self, n: AstIdent):
+        return self._curr_scope.used[n.id].tp_info
+
+    @_and_set_type_metadata
+    def _typecheck_ident_declared(self, n: AstIdent, decl: AstDeclNode):
+        return self._resolve_scope(decl.scope).declared[n.id].tp_info
+
+    @_node_typechecker(AstAttrName)
+    def _typecheck_attr_name(self, _n: AstAttrName):
+        assert 0, "AstAttrName has no type, cannot be checked on its own"
+
+    @_node_typechecker(AstAttribute)
+    def _typecheck_attribute(self, n: AstAttribute):
+        # TODO: implement this properly, with better types and stuff
+        raise self.err("Attributes are not implemented yet", n)
+
+    @_node_typechecker(AstItem)
+    def _typecheck_item(self, n: AstItem):
+        # TODO: this will require different intrinsics for string vs list getitem
+        container_tp = self._typecheck(n.obj)
+        if container_tp not in (ListType(), ValType()):
+            raise self.err(f"Cannot get item of {container_tp}", n)
+        self.expect_type(self._typecheck(n.index), ValType(), n.index)
+        return ValType()  # no list-in-list
+
+    @_node_typechecker(AstCall)
+    def _typecheck_call(self, n: AstCall):
+        called_tp = self._typecheck(n.obj)
+        if not isinstance(called_tp, FunctionType):
+            raise self.err(f"Cannot call {called_tp}", n.obj)
+        if (n_expect := len(called_tp.arg_types)) != len(n.args):
+            if len(n.args) > n_expect:
+                region = n.args[n_expect].region  # First unexpected one
+            else:
+                region = n.region  # Entire call (is that ok to do?)
+            raise self.err(f"Incorrect number of arguments, expected "
+                           f"{len(called_tp.arg_types)}, got {len(n.args)}",
+                           region)
+        return self._check_abstract_op_types_only(n.args, called_tp)
+
+    _BINARY_OP_TYPES = dict.fromkeys(
+        [*'+-*/%', '**', '..'],
+        FunctionType([ValType(), ValType()], ValType())
+    ) | dict.fromkeys(
+        ['==', '!=', '<', '>', '<=', '>='],
+        FunctionType([ValType(), ValType()], BoolType())
+    ) | dict.fromkeys(
+        ['&&', '||'],
+        FunctionType([BoolType(), BoolType()], BoolType())
+    )
+
+    _UNARY_OP_TYPES = dict.fromkeys(
+        [*'+-'],
+        FunctionType([ValType()], ValType())
+    ) | dict.fromkeys(
+        ['!'],
+        FunctionType([BoolType()], BoolType())
+    )
+
+    def _check_abstract_op_types_only(
+            self, arg_types: list[AstNode], op_type: FunctionType):
+        """Arity should be checked before invoking as that allow better error highlighting"""
+        for decl_t, arg_node in zip(op_type.arg_types, arg_types, strict=True):
+            self.expect_type(self._typecheck(arg_node), decl_t, arg_node)
+        return op_type.ret_type
+
+    # TODO: allow casting bool to val? - auto-cast or explicit?
+    @_node_typechecker(AstBinOp)
+    def _typecheck_bin_op(self, n: AstBinOp):
+        return self._check_abstract_op_types_only(
+            [n.left, n.right], self._BINARY_OP_TYPES[n.op])
+
+    @_node_typechecker(AstUnaryOp)
+    def _typecheck_unary_op(self, n: AstUnaryOp):
+        return self._check_abstract_op_types_only(
+            [n.operand], self._UNARY_OP_TYPES[n.op])
+
+    def _resolve_scope(self, scope_tp: VarDeclScope):
+        return self.top_scope if scope_tp == VarDeclScope.GLOBAL else self._curr_scope
+
+    def err(self, msg: str, loc: RegionUnionArgT):
+        return TypecheckError(msg, region_union(loc), self.src)
+
+    def expect_type(self, actual: TypeInfo, exp: TypeInfo, loc: RegionUnionArgT):
+        if exp != actual:
+            raise self.err(f"Expected type {exp}, got type {actual}", loc)

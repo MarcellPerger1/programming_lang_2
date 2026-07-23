@@ -2,22 +2,29 @@
 used in all projects should go in utils.py"""
 from __future__ import annotations
 
+import contextlib
 from enum import IntFlag, Enum
-from typing import Sequence, TypeVar
+from typing import Sequence, TypeVar, Any
 
 from parser.astgen.ast_node import AstNode
 from parser.astgen.astgen import AstGen
 from parser.astgen.errors import LocatedAstError
+from parser.astgen.filtered_walker import FilteredWalker
+from parser.common import BaseLocatedError
 from parser.common.error import BaseParseError
+from parser.common.str_region import StrRegion
 from parser.common.tree_print import tformat
 from parser.cst.base_node import Leaf, AnyNode, Node
 from parser.cst.cstgen import CstGen, LocatedCstError
 from parser.lexer import Tokenizer
 from parser.lexer.tokens import Token, OpToken
-from parser.typecheck.typecheck import Scope, NameResolver, NameResolutionError
-from test.common.snapshottest import SnapshotTestCase
-from test.common.utils import TestCaseUtils
+from parser.typecheck.name_resolver import NameResolutionError, NameResolver
+from parser.typecheck.scope import Scope
+from parser.typecheck.typecheck import Typechecker, TypecheckError
+from parser.typecheck.types import TypeInfo, TypeMetadata
 from util.pformat import pformat
+from .snapshottest import SnapshotTestCase
+from .utils import TestCaseUtils
 
 
 def _strict_boundary_kwargs():
@@ -34,6 +41,7 @@ class TokenStreamFlag(IntFlag, **_strict_boundary_kwargs()):
     BOTH = CONTENT | FULL
 
 
+T = TypeVar('T')
 EnumTV = TypeVar('EnumTV', bound=Enum)
 
 
@@ -62,7 +70,7 @@ class CommonTestCase(SnapshotTestCase, TestCaseUtils):
     def _token_as_tuple_no_region(cls, t: Token):
         if isinstance(t, OpToken):
             return t.name, t.op_str
-        return (t.name, )
+        return (t.name,)
 
     def assertTokenStreamEquals(
             self, actual: Sequence[Token], expected: Sequence[Token],
@@ -102,14 +110,19 @@ class CommonTestCase(SnapshotTestCase, TestCaseUtils):
         self.assertTrue(True)
 
     @classmethod
-    def raiseInternalErrorsOnlyCST(cls, src: str):
+    @contextlib.contextmanager
+    def raiseInternalErrorsOnly(cls):
         try:
-            CstGen(Tokenizer(src)).parse()
+            yield
         except BaseParseError:
-            return None
+            pass
         except Exception:
             raise
-        return None
+
+    @classmethod
+    def raiseInternalErrorsOnlyCST(cls, src: str):
+        with cls.raiseInternalErrorsOnly():
+            CstGen(Tokenizer(src)).parse()
 
     def assertCstMatchesSnapshot(self, src: str):
         t = CstGen(Tokenizer(src))
@@ -129,11 +142,57 @@ class CommonTestCase(SnapshotTestCase, TestCaseUtils):
         return ctx.exception
 
     # noinspection PyMethodMayBeStatic
+    def getAstGen(self, src: str):
+        return AstGen(CstGen(Tokenizer(src)))
+
     def getNameResolver(self, src: str):
-        return NameResolver(AstGen(CstGen(Tokenizer(src))))
+        return NameResolver(self.getAstGen(src))
 
     def assertNameResolveError(self, src: str):
         nr = self.getNameResolver(src)
         with self.assertRaises(NameResolutionError) as ctx:
             nr.run()
         return ctx.exception
+
+    def getTypechecker(self, src: str):
+        return Typechecker(self.getNameResolver(src))
+
+    def assertTypecheckedTo(self, node: AstNode[TypeMetadata] | None, expected: TypeInfo):
+        node = self.assertAsNotNone(node, "Expected a node with metadata, got None")
+        self.assertIsNotNone(node.meta, "Expected type metadata")
+        self.assertEqual(expected, node.meta.type)
+
+    def assertTypecheckError(self, src: str):
+        tc = self.getTypechecker(src)
+        with self.assertRaises(TypecheckError) as ctx:
+            tc.run()
+        return ctx.exception
+
+    assertDoesntCrash = raiseInternalErrorsOnly
+
+    def assertAllMetadata(self, n: AstNode[Any], expected_type: type[T]) -> AstNode[T]:
+        def on_exit_node(nd: AstNode[Any]):
+            msg_extra = f"root={tformat(n)}\nnode={tformat(nd)}"
+            self.assertIsNotNone(
+                nd.meta, f"Expected node to have metadata:\n{msg_extra}")
+            self.assertIsInstance(
+                nd.meta, expected_type,
+                f"Bad metadata type for node:\n{msg_extra}")
+
+        # Report error with deepest one so on_exit
+        FilteredWalker().register_exit(AstNode, on_exit_node).walk(n)
+        return n
+
+    def assertRegionEquals(self, expected: StrRegion, actual: StrRegion, src: str | None):
+        if expected == actual:
+            return
+        if src:
+            # Newlines added so that <lhs> != <rhs> output by unittest looks reasonable
+            self.assertEqual(f'\n{expected.display(src)}\n',
+                             f'\n{actual.display(src)}\n ',
+                             "Expected regions to be equal (showing displayed)")
+        self.assertEqual(expected, actual,  # Fallback in case display equal
+                         "Expected regions to be equal (displayed as same)")
+
+    def assertErrorRegion(self, expected: StrRegion, err: BaseLocatedError):
+        self.assertRegionEquals(expected, err.region, err._src_text)
