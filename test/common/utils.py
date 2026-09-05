@@ -5,15 +5,15 @@ from __future__ import annotations
 import os
 import unittest
 from collections.abc import Sized
-from functools import partial
 from pathlib import Path
-from typing import overload, TYPE_CHECKING, TypeVar, Protocol, Iterable, Container, Any
+from typing import TYPE_CHECKING, TypeVar, Protocol, Iterable, Container, Any
 from unittest.mock import Mock
 
 from unittest.util import safe_repr
 
 T = TypeVar('T')
 T_contra = TypeVar('T_contra', contravariant=True)
+T_co = TypeVar('T_co', covariant=True)
 U = TypeVar('U')
 U_contra = TypeVar('U_contra', contravariant=True)
 SizedT = TypeVar('SizedT', bound=Sized)
@@ -26,32 +26,13 @@ if TYPE_CHECKING:
                           Protocol[T_contra, U_contra]):
         pass  # All from inheritance
 
-    class ExtendsAndGE(T, SupportsDunderGE[U], Protocol[T, U]):
-        ...
-
-    class ExtendsAndLE(T, SupportsDunderLE[U], Protocol[T, U]):
-        ...
-
 
 class TestCaseUtils(unittest.TestCase):
-    @overload  # b:GE & b:LE
+    # Type annotations not perfect but Python's type system is insufficiently
+    #  expressive due to its lack of intersection type, inflexible
+    #  declaration-site variance, and underused immature Protocol system.
     def assertBetweenIncl(self, lo: T, hi: U, value: SupportsLeAndGe[U, T],
-                          msg: str | None = None): ...
-
-    @overload  # a:LE & c:GE
-    def assertBetweenIncl(self, lo: SupportsDunderLE[T], hi: SupportsDunderGE[T], value: T,
-                          msg: str | None = None): ...
-
-    @overload  # b:GE & c:GE  # Does this work? Who knows?
-    def assertBetweenIncl(self, lo: T, hi: SupportsDunderGE[U], value: ExtendsAndGE[U, T],
-                          msg: str | None = None): ...
-
-    @overload  # a:LE & b:LE  # Does this work? Who knows?
-    def assertBetweenIncl(self, lo: SupportsDunderLE[T], hi: U, value: ExtendsAndLE[T, U],
-                          msg: str | None = None): ...
-
-    def assertBetweenIncl(self, lo: SupportsDunderLE, hi: SupportsLeAndGe,
-                          value: SupportsDunderGE, msg=None):
+                          msg: str | None = None):
         """Just like self.assertTrue(lo <= value <= hi), but with a nicer default message."""
         if lo <= value <= hi:
             return
