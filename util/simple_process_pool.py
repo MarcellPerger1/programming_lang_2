@@ -9,13 +9,13 @@ import sys
 import time
 import weakref
 from dataclasses import dataclass, field
-from typing import Callable
+from typing import Callable, Any
 
 
 @dataclass
 class _Task:
-    inputs: tuple[int, Callable, tuple, dict[str, ...]]
-    output: tuple[int, bool, object | Exception] = None
+    inputs: tuple[int, Callable, tuple, dict[str, Any]]
+    output: tuple[int, bool, object | Exception] | Any = None  # MaybeNone
 
 
 @dataclass
@@ -33,6 +33,7 @@ class _TimeoutMgr:
         if self.is_timed_out(has_task_started):
             raise TimeoutError(self.get_timeout_msg(has_task_started))
 
+    # noinspection method-may-be-static
     def get_timeout_msg(self, has_task_started: bool):
         return ("While running task" if has_task_started
                 else "While waiting for empty process in pool")
@@ -43,7 +44,7 @@ class _TimeoutMgr:
 
 
 class SimpleProcessPool:
-    def __init__(self, processes: int = None):
+    def __init__(self, processes: int | None = None):
         self.n_processes = processes or os.cpu_count() or 4
         self.processes: list[_ProcessWrapper] = self._create_processes()
         self.key = 0
@@ -88,7 +89,7 @@ class SimpleProcessPool:
     # just because something else timed out, etc.
     # so easier to support cancelling, on timeout or otherwise.
     # Also, a worker can only do one thing at a time so no loss of efficiency.
-    async def apply(self, fn, args=None, kwargs=None, timeout: float = None,
+    async def apply(self, fn, args=None, kwargs=None, timeout: float | None = None,
                     interval: float = 0, timeout_includes_waiting=False):
         key, task = self._create_task(fn, args or (), kwargs or {})
         timeout_ctx = _TimeoutMgr(timeout, timeout_includes_waiting)

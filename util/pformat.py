@@ -22,7 +22,8 @@ def pformat(o: object, indent: int = 2, max_simple_len: int = 64):
     return PrettyFormatter(indent, max_simple_len).format(o)
 
 
-def pprint(o: object, stream: IO[str] = None, indent: int = 2, max_simple_len: int = 64):
+def pprint(o: object, stream: IO[str] | None = None, indent: int = 2,
+           max_simple_len: int = 64):
     return PrettyFormatter(indent, max_simple_len).print(o, stream)
 
 
@@ -36,7 +37,7 @@ class PrettyFormatter:
         self.indent = indent
         self.max_simple_len = max_simple_len
 
-    def print(self, o: object, stream: IO[str] = None):
+    def print(self, o: object, stream: IO[str] | None = None):
         # TODO: this could be optimised by just passing a custom StreamDest
         #  that just delegates .write() to underlying stream
         stream = stream or sys.stdout
