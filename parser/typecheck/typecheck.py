@@ -3,7 +3,7 @@ from __future__ import annotations
 import contextlib
 import functools
 from collections.abc import Callable
-from typing import TypeAlias, TypeVar, ParamSpec
+from typing import TypeAlias, TypeVar, ParamSpec, Concatenate
 
 from util import assert_not_none, checked_cast
 from .name_resolver import NameResolver
@@ -60,17 +60,20 @@ class Typechecker:
 
     @_TypecheckerInitVars.method('and_set_type_metadata')  # Such Java vibes
     def _and_set_type_metadata(
-            self: Callable[[Typechecker, AstNode, P], TypeInfo | None],
-            fn: Callable[[Typechecker, AstNode, P], TypeInfo | None] | None = None
+            self: Callable[Concatenate[Typechecker, AstNode, P], TypeInfo | None],
+            fn: Callable[Concatenate[Typechecker, AstNode, P], TypeInfo | None] | None = None
     ) -> Callable[[Typechecker, AstNode, P], TypeInfo]:
         if fn is None:
             assert callable(self)
             fn = self  # Called as decor in this class
 
         @functools.wraps(fn)
-        def new_fn(self_inner: Typechecker, n: AstNode, *args, **kwargs) -> TypeInfo:
-            n_type: TypeInfo = fn(self_inner, n, *args, **kwargs) or VoidType()
-            n.meta = TypeMetadata(n_type)  # ^^ checker return None = void type
+        def new_fn(self_inner: Typechecker, n: AstNode, *args: P.args,
+                   **kwargs: P.kwargs) -> TypeInfo:
+            # checker return None = void type
+            n_type = fn(self_inner, n, *args, **kwargs) or VoidType()
+            n: AstNode[TypeMetadata]  # This is now the new type
+            n.meta = TypeMetadata(n_type)
             return n_type
         return new_fn
 
