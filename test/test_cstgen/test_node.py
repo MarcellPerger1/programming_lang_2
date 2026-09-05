@@ -9,10 +9,11 @@ from parser.cst.nodes import NumberNode, IdentNode
 
 class Test(TestCase):
     def test_node_from_token(self):
+        null_region = StrRegion(0, 0)
         self.assertIsInstance(node_from_token(NumberToken()), NumberNode)
-        self.assertEqual(NumberNode(None, None), node_from_token(NumberToken()))
+        self.assertEqual(NumberNode(null_region), node_from_token(NumberToken()))
         self.assertIsInstance(node_from_token(IdentNameToken()), IdentNode)
-        self.assertEqual(IdentNode(None, None), node_from_token(IdentNameToken()))
+        self.assertEqual(IdentNode(null_region), node_from_token(IdentNameToken()))
         self.assertEqual(IdentNode(StrRegion(5, 7), None),
                          node_from_token(IdentNameToken(StrRegion(5, 7))))
 

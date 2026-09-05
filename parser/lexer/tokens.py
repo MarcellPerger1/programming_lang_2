@@ -18,12 +18,12 @@ __all__ = [
 @dataclass
 class Token(HasRegion):
     name: str
-    region: StrRegion = None
+    region: StrRegion = field(default_factory=lambda: StrRegion(0, 0))
     # not a field but a class var:
     is_whitespace = False  # type: bool
 
     def isinst(self, cls: type[Token]):
-        if type(self) == Token:
+        if type(self) is Token:
             # self is a general Token class so can't compare classes
             # so compare names but doesn't work for subclasses
             # Also check for isinstance for Token().isinst(Token) == True
@@ -82,15 +82,13 @@ class DotToken(NamedTokenCls):
 @dataclass
 class OpToken(NamedTokenCls):
     name = 'op'
-    op_str: str = None
+    op_str: str = '<unknown-op>'  # Type-safe default at expense of pushing error later
 
 
-@dataclass
-class ParenToken(NamedTokenCls):
-    # base class for LPar, RPar
-    side = None  # type: ParenSide
-    paren_type = None  # type: ParenType
-    paren_str = None  # type: str
+class ParenToken(NamedTokenCls):   # base class for LPar, RPar, etc
+    side: ParenSide
+    paren_type: ParenType
+    paren_str: str
 
 
 def register_paren_cls(char: str):

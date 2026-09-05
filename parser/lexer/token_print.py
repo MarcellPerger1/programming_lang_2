@@ -7,13 +7,14 @@ from typing import IO
 from .tokens import Token
 
 
-def print_tokens(src: str, tokens: list[Token], stream: IO[str] = None, do_ws=False):
+def print_tokens(src: str, tokens: list[Token], stream: IO[str] | None = None,
+                 do_whitespace: bool = False):
     if stream is None:
         stream = sys.stdout
     table = []
     for tok in tokens:
         if tok.is_whitespace:
-            if do_ws:
+            if do_whitespace:
                 table.append(['(WS) ' + repr(tok.region.resolve(src)), tok.name])
         else:
             table.append([str(tok.region.resolve(src)), tok.name])
@@ -23,7 +24,7 @@ def print_tokens(src: str, tokens: list[Token], stream: IO[str] = None, do_ws=Fa
         print(f'{s0:>{max0}} | {s1:>{max1}}', file=stream)
 
 
-def format_tokens(src: str, tokens: list[Token], do_ws=False):
+def format_tokens(src: str, tokens: list[Token], do_whitespace: bool = False):
     out = StringIO()
-    print_tokens(src, tokens, out, do_ws)
+    print_tokens(src, tokens, out, do_whitespace)
     return out.getvalue()

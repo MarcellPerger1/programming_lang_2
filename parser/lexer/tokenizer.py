@@ -40,7 +40,7 @@ class Tokenizer(UsesSrc):
         return type(self.content_tokens[-1])
 
     def tokenize(self):
-        idx = 0
+        idx: int = 0
         last_idx = -1
         while idx < len(self.src):
             if idx == last_idx:
@@ -103,9 +103,7 @@ class Tokenizer(UsesSrc):
         self.is_done = True
         return self
 
-    def add_token(self, *tokens: Token, whitespace=None) -> int | None:
-        if not tokens:
-            return None
+    def add_token(self, *tokens: Token, whitespace: bool | None = None) -> int:
         self.tokens += tokens
         if whitespace is None:
             self.content_tokens += (t for t in tokens if not t.is_whitespace)
