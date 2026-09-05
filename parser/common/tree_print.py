@@ -183,7 +183,7 @@ class TreePrinter:
 
     def _fmt_node_header(self, obj: AnyNode, has_more_args=True):
         args: list[str] = []
-        if type(obj) == Leaf or type(obj) == Node:
+        if type(obj) is Leaf or type(obj) is Node:
             args.append(repr(obj.name))
         if self.verbose:
             args.append(self._fmt_region(obj.region))

@@ -150,13 +150,17 @@ class Matcher:
     def _match(self):
         if (isinstance(self.pattern, type)
                 and issubclass(self.pattern, Token)
-                and self.pattern != Token):
+                and self.pattern is not Token):
             # optimize the common case of `matches(..., <TokenCls>)`
+            # (Pycharm cannot narrow properly with `and`/`or`)
+            # noinspection bad-argument-type
             self.pattern = _FastTokenClsMatcher(self.pattern)
         elif isinstance(self.pattern, Token) or _issubclass(self.pattern, Token):
+            # (Pycharm once again cannot narrow properly with `and`/`or`)
+            # noinspection bad-argument-type
             self.pattern = TokenMatcher(self.pattern)
         elif isiterable(self.pattern):
-            self.pattern = SeqMatcher(*cast(Iterable[BaseMatcher], self.pattern))
+            self.pattern = SeqMatcher(*self.pattern)
         assert isinstance(self.pattern, BaseMatcher)
         self.result = self.pattern.matches(self.tokens, self.start, self.src)
 
