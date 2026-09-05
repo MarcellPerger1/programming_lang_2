@@ -16,7 +16,6 @@ __all__ = [
 
 @dataclass
 class AstProgramNode(AstNode[MetadataT]):
-    name = 'program'
     statements: list[AstNode[MetadataT]]
 
     def _walk_members(self, fn: WalkerFnT):
@@ -36,7 +35,6 @@ class VarDeclType(Enum):
 
 @dataclass
 class AstDeclNode(AstNode[MetadataT]):
-    name = 'var_decl'
     scope: VarDeclScope
     type: VarDeclType
     ident: AstIdent[MetadataT]
@@ -48,7 +46,6 @@ class AstDeclNode(AstNode[MetadataT]):
 
 @dataclass
 class AstRepeat(AstNode[MetadataT]):
-    name = 'repeat'
     count: AstNode[MetadataT]
     body: list[AstNode[MetadataT]]
 
@@ -58,7 +55,6 @@ class AstRepeat(AstNode[MetadataT]):
 
 @dataclass
 class AstIf(AstNode[MetadataT]):
-    name = 'if'
     cond: AstNode[MetadataT]
     if_body: list[AstNode[MetadataT]]
     # elseif = else{if
@@ -72,7 +68,6 @@ class AstIf(AstNode[MetadataT]):
 
 @dataclass
 class AstWhile(AstNode[MetadataT]):
-    name = 'while'
     cond: AstNode[MetadataT]
     body: list[AstNode[MetadataT]]
 
@@ -82,7 +77,6 @@ class AstWhile(AstNode[MetadataT]):
 
 @dataclass
 class AstAssign(AstNode[MetadataT]):
-    name = '='
     target: AstNode[MetadataT]
     source: AstNode[MetadataT]
 
@@ -106,8 +100,6 @@ class AstAugAssign(AstNode[MetadataT]):
 
 @dataclass
 class AstDefine(AstNode[MetadataT]):
-    name = 'def'
-
     ident: AstIdent[MetadataT]
     # TODO: this should be list[AstDefineParam] where AstParam is an AstNode
     params: list[tuple[AstIdent[MetadataT], AstIdent[MetadataT]]]  # type, ident
@@ -135,23 +127,22 @@ class AstAnyName(AstNode[MetadataT]):
     id: str
 
     def __post_init__(self):
-        if type(self) == AstAnyName:
+        if type(self) is AstAnyName:
             raise TypeError("AstAnyName must not be instantiated directly.")
 
 
 @dataclass
 class AstIdent(AstAnyName[MetadataT]):
-    name = 'ident'
+    pass
 
 
 @dataclass
 class AstAttrName(AstAnyName[MetadataT]):
-    name = 'attr'
+    pass
 
 
 @dataclass
 class AstListLiteral(AstNode[MetadataT]):
-    name = 'list'
     items: list[AstNode[MetadataT]]
 
     def _walk_members(self, fn: WalkerFnT):
@@ -160,7 +151,6 @@ class AstListLiteral(AstNode[MetadataT]):
 
 @dataclass
 class AstAttribute(AstNode[MetadataT]):
-    name = '.'
     obj: AstNode[MetadataT]
     attr: AstAttrName[MetadataT]
 
@@ -170,7 +160,6 @@ class AstAttribute(AstNode[MetadataT]):
 
 @dataclass
 class AstItem(AstNode[MetadataT]):
-    name = 'item'
     obj: AstNode[MetadataT]
     index: AstNode[MetadataT]
 
@@ -180,7 +169,6 @@ class AstItem(AstNode[MetadataT]):
 
 @dataclass
 class AstCall(AstNode[MetadataT]):
-    name = 'call'
     obj: AstNode[MetadataT]
     args: list[AstNode[MetadataT]]
 

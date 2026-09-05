@@ -48,8 +48,8 @@ class WalkerFilterRegistry(Generic[Unpack[Ps], WT]):
     def copy(self):
         return type(self)(self.enter_cbs, self.exit_cbs, self.both_cbs)
 
-    def instantiate(self, *args: Unpack[Ps]):
-        return BasicFilteredWalker[WT](
+    def instantiate(self, *args: Unpack[Ps]) -> BasicFilteredWalker[WT]:
+        return BasicFilteredWalker(
             self._instantiate_dict(self.enter_cbs, args),
             self._instantiate_dict(self.exit_cbs, args),
             self._instantiate_dict(self.both_cbs, args),

@@ -32,8 +32,6 @@ class WalkerCallType(Enum):
 @dataclass
 class AstNode(HasRegion, Generic[MetadataT]):
     region: StrRegion
-    name = None  # type: str
-    del name  # So we get better error msg if we forget to add it to a class
     meta: MetadataT = field(kw_only=True, default=None)
 
     def walk(self, fn: WalkerFnT):
