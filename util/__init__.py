@@ -56,6 +56,10 @@ def assert_not_none(x: T | None) -> T:
     return x
 
 
+def get_mro(t: type) -> tuple[type, ...]:  # T -> tuple[? super T, ...]
+    return t.__mro__
+
+
 @overload
 def pack_if_single_item(iter_or_item: Iterable[T] | T,
                         ctor: Callable[[Iterable[T]], U]) -> U: ...
