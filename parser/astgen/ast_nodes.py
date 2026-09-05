@@ -90,10 +90,6 @@ class AstAugAssign(AstNode[MetadataT]):
     target: AstNode[MetadataT]
     source: AstNode[MetadataT]
 
-    @property
-    def name(self):
-        return self.op
-
     def _walk_members(self, fn: WalkerFnT):
         self.walk_multiple_objects(fn, (self.target, self.source))
 
@@ -193,10 +189,6 @@ class AstBinOp(AstOp[MetadataT]):
     def __post_init__(self):
         assert self.op in self.valid_ops
 
-    @property
-    def name(self):
-        return self.op
-
     def _walk_members(self, fn: WalkerFnT):
         self.walk_multiple_objects(fn, (self.left, self.right))
 
@@ -209,10 +201,6 @@ class AstUnaryOp(AstOp[MetadataT]):
 
     def __post_init__(self):
         assert self.op in self.valid_ops
-
-    @property
-    def name(self):
-        return self.op
 
     def _walk_members(self, fn: WalkerFnT):
         self.walk_multiple_objects(fn, (self.operand,))
