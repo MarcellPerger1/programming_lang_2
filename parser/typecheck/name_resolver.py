@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import ClassVar
+from typing import ClassVar, Any
 
 from util import assert_not_none
 from .scope import NameInfo, FuncInfo, ParamInfo, Scope
@@ -26,7 +26,7 @@ class NameResolutionError(BaseLocatedError):
 # To minimise accidental errors, option 1.2 is best
 #  (errors shouldn't pass silently, and that method requires no special runtime)
 class NameResolver:
-    top_scope: Scope = None
+    top_scope: Scope | Any = None  # MaybeNone
 
     def __init__(self, astgen: AstGen):
         self.astgen = astgen
@@ -34,12 +34,12 @@ class NameResolver:
 
     def _init(self):
         self.ast = self.astgen.parse()
-        return Scope()
+        self.top_scope = Scope()
 
     def run(self) -> Scope:
         if self.top_scope:
             return self.top_scope
-        self.top_scope = self._init()
+        self._init()
         ScopeNameResolver.resolve(self, block=self.ast.statements,
                                   curr_scope=self.top_scope, parent_scopes=[])
         return self.top_scope
@@ -109,12 +109,12 @@ class ScopeNameResolver(FilteredWalker):
             raise self.err("Function already declared", fn.ident)
         subscope = Scope()
         params: list[ParamInfo] = []
-        for tp_node, name_node in fn.params:
-            if tp_node.id not in PARAM_TYPES:
-                raise self.err("Unknown parameter type", tp_node)
-            if (name := name_node.id) in subscope.declared:
-                raise self.err("There is already a parameter of this name", name_node)
-            tp = BoolType() if tp_node.id == 'bool' else ValType()
+        for param in fn.params:
+            if param.type.id not in PARAM_TYPES:
+                raise self.err("Unknown parameter type", param.type)
+            if (name := param.ident.id) in subscope.declared:
+                raise self.err("There is already a parameter of this name", param.ident)
+            tp = BoolType() if param.type.id == 'bool' else ValType()
             subscope.declared[name] = NameInfo(subscope, name, tp, is_param=True)
             params.append(ParamInfo(name, tp))
         self.curr_scope.declared[ident] = info = FuncInfo.from_param_info(

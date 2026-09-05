@@ -10,7 +10,7 @@ __all__ = [
     "AstRepeat", "AstIf", "AstWhile", "AstAssign", "AstAugAssign", "AstDefine",
     "AstNumber", "AstString", "AstAnyName", "AstIdent", "AstAttrName",
     "AstListLiteral", "AstAttribute", "AstItem", "AstCall", "AstOp", "AstBinOp",
-    "AstUnaryOp",
+    "AstUnaryOp", "AstDefineParam",
 ]
 
 
@@ -97,12 +97,17 @@ class AstAugAssign(AstNode[MetadataT]):
 @dataclass
 class AstDefine(AstNode[MetadataT]):
     ident: AstIdent[MetadataT]
-    # TODO: this should be list[AstDefineParam] where AstParam is an AstNode
-    params: list[tuple[AstIdent[MetadataT], AstIdent[MetadataT]]]  # type, ident
+    params: list[AstDefineParam[MetadataT]]
     body: list[AstNode[MetadataT]]
 
     def _walk_members(self, fn: WalkerFnT):
         self.walk_multiple_objects(fn, (self.ident, self.params, self.body))
+
+
+@dataclass
+class AstDefineParam(AstNode[MetadataT]):
+    type: AstIdent[MetadataT]
+    ident: AstIdent[MetadataT]
 # endregion ---- </Statements> ----
 
 

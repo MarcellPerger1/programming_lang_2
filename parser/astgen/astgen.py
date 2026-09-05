@@ -4,7 +4,7 @@ import inspect
 import sys
 from typing import Callable, overload, TypeVar, TypeAlias
 
-from util import flatten_force, is_strict_subclass
+from util import flatten_force, is_strict_subclass, get_mro
 from .ast_nodes import *
 from .eval_literal import eval_number, eval_string
 from .errors import LocatedAstError
@@ -39,11 +39,12 @@ _AUTOWALK_EXPR_DICT: dict[type[AnyNode], AutowalkerT] = {}
 
 @overload
 def _register_autowalk_expr(node_type: type[AnyNode], /) -> Callable[[CT], CT]: ...
-@overload
+# noinspection overloads
+@overload  # (Pycharm's compatibility detection is not working properly)
 def _register_autowalk_expr(cls: CT, /) -> CT: ...
 
 
-def _register_autowalk_expr(node_type: type[AnyNode] = None, /):
+def _register_autowalk_expr(node_type: type[AnyNode] | None = None, /):
     def decor(fn):
         _AUTOWALK_EXPR_DICT[
             node_type if node_type is not None
@@ -120,11 +121,11 @@ class AstGen:
                 smt.region, smt.name, self._walk_assign_left(smt.target),
                 self._walk_expr(smt.source))]
         elif isinstance(smt, DefineNode):
-            # Check arg types during name resolution
-            decls = [(self._walk_ident(d.type), self._walk_ident(d.ident))
-                     for d in smt.args_decl.decls]
-            return [AstDefine(smt.region, self._walk_ident(smt.ident),
-                              decls, self._walk_block(smt.block))]
+            # (Check arg types later during name resolution)
+            return [AstDefine(
+                smt.region, self._walk_ident(smt.ident),
+                [self._walk_arg_decl(a) for a in smt.args_decl.decls],
+                self._walk_block(smt.block))]
         elif isinstance(smt, CallNode):
             # Check that it transforms into smt-intrinsic and
             # not expr-intrinsic in codegen/typecheck
@@ -134,6 +135,9 @@ class AstGen:
                 f"Expected statement, not {smt.name!r} expression. Hint: "
                 f"expressions have no side-effect so are not allowed at "
                 f"the root level.", smt.region)
+
+    def _walk_arg_decl(self, a: ArgDeclNode):
+        return AstDefineParam(a.region, self._walk_ident(a.type), self._walk_ident(a.ident))
 
     def _walk_var_decl(self, smt: DeclNode):
         scope = (VarDeclScope.LET if isinstance(smt.decl_scope, DeclScope_Let)
@@ -259,10 +263,10 @@ class AstGen:
 
     @classmethod
     def _lookup_autowalk_fn(cls, t: type[AnyNode]):
-        assert t != Leaf and t != Node and issubclass(t, AnyNode)
+        assert t is not Leaf and t is not Node and issubclass(t, AnyNode)
         if value := _AUTOWALK_EXPR_DICT.get(t):
             return value
-        for supertype in t.mro():  # See if any supertypes have the autowalker
+        for supertype in get_mro(t):  # See if any supertypes have the autowalker
             if not issubclass(supertype, AnyNode):
                 continue  # Skip - could be a mixin
             if value := _AUTOWALK_EXPR_DICT.get(supertype):
