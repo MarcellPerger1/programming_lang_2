@@ -11,7 +11,8 @@ class TypeMetadata:
 @dataclass
 class TypeInfo:
     def __post_init__(self):
-        assert type(self) != TypeInfo, "Cannot instantiate TypeInfo directly, use a subclass"
+        assert type(self) is not TypeInfo, (
+            "Cannot instantiate TypeInfo directly, use a subclass")
 
 
 @dataclass

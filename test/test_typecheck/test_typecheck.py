@@ -27,9 +27,10 @@ class TestGivenTypes(CommonTestCase):
         f = self.assertAsInstance(self.assertHasSingleItem(prog.statements), AstDefine)
         expected_types = [ValType(), BoolType(), ValType(), ValType()]
         self.assertEqual(len(expected_types), len(f.params))
-        for expect_t, (type_ident, name_ident) in zip(expected_types, f.params):
-            self.assertTypecheckedTo(name_ident, expect_t)
-            self.assertTypecheckedTo(type_ident, TypeType(expect_t))
+        for expect_t, param in zip(expected_types, f.params):
+            self.assertTypecheckedTo(param, VoidType())
+            self.assertTypecheckedTo(param.ident, expect_t)
+            self.assertTypecheckedTo(param.type, TypeType(expect_t))
 
     def test_operators(self):
         prog = self.getTypechecker("let a = (1 + 1) * 2.2;").run()

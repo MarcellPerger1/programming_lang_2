@@ -107,7 +107,7 @@ NAME_REGISTRY: dict[str | tuple[str, int], type[AnyNamedNode]] = {}
 
 
 @overload
-def register_corresponding_token(cls: type[AnyNamedNode],
+def register_corresponding_token(cls: type[AnyNamedNode], /, *,
                                  arity: int | Literal['auto'] | None = None): ...
 
 

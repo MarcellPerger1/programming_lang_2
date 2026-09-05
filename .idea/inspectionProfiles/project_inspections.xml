@@ -32,7 +32,7 @@
         </list>
       </option>
     </inspection_tool>
-    <inspection_tool class="PyStringConversionWithoutDunderMethodInspection" enabled="true" level="WEAK WARNING" enabled_by_default="true">
+    <inspection_tool class="PyStringConversionWithoutDunderMethodInspection" enabled="true" level="INFORMATION" enabled_by_default="true" editorAttributes="INFORMATION_ATTRIBUTES">
       <option name="ignoredTypes">
         <list>
           <option value="types.NoneType" />
@@ -67,9 +67,11 @@
         </list>
       </option>
     </inspection_tool>
+    <inspection_tool class="PyUnusedFunctionInspectionMerged" />
     <inspection_tool class="PyUnusedLocalInspection" enabled="true" level="WEAK WARNING" enabled_by_default="true">
       <option name="ignoreTupleUnpacking" value="false" />
     </inspection_tool>
+    <inspection_tool class="PyUnusedParameterInspectionMerged" />
     <inspection_tool class="SpellCheckingInspection" enabled="true" level="TYPO" enabled_by_default="true">
       <scope name="license-scope" level="TYPO" enabled="false">
         <option name="processCode" value="true" />

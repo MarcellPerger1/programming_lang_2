@@ -9,7 +9,7 @@ import sys
 import unittest
 from dataclasses import dataclass
 from pathlib import Path
-from typing import IO, Literal, NewType, TYPE_CHECKING, cast
+from typing import IO, Literal, NewType, TYPE_CHECKING, cast, Callable, Any
 
 if TYPE_CHECKING:
     from typing import TypeIs
@@ -78,12 +78,12 @@ def _is_sentinel(o: object) -> TypeIs[_SentinelT]:
 
 
 class SnapshotTestCase(unittest.TestCase):
-    snap_filename: str = None
-    snaps_dir: Path = None
-    snap_file: str = None
-    cls_name: str = None
+    snap_filename: str | Any = None
+    snaps_dir: Path | Any = None
+    snap_file: str | Any = None
+    cls_name: str | Any = None
 
-    update_snapshots: bool = None
+    update_snapshots: bool | Any = None
     unused_handling: Literal['ignore', 'error', 'print', 'prune'] | None = None
 
     _files_cache: dict[str, dict[str, str]]
@@ -91,7 +91,7 @@ class SnapshotTestCase(unittest.TestCase):
     _referenced_snaps: dict[str, set[str]]
     _subtest = None
 
-    format_dispatch = {}
+    format_dispatch: dict[type, Callable[[object], str]] = {}
 
     @classmethod
     def _lookup_in_dispatch(cls, t: type):

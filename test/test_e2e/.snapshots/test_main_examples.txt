@@ -3137,7 +3137,7 @@ AstProgramNode(StrRegion(0, 3169),
     AstDefine(StrRegion(62, 87),
       AstIdent(StrRegion(66, 69), 'len'),
       [
-        (
+        AstDefineParam(StrRegion(78, 83),
           AstIdent(StrRegion(78, 81), 'val'),
           AstIdent(StrRegion(82, 83), 'a')
         )
@@ -3147,11 +3147,11 @@ AstProgramNode(StrRegion(0, 3169),
     AstDefine(StrRegion(101, 142),
       AstIdent(StrRegion(105, 112), 'delitem'),
       [
-        (
+        AstDefineParam(StrRegion(121, 126),
           AstIdent(StrRegion(121, 124), 'val'),
           AstIdent(StrRegion(125, 126), 'a')
         ),
-        (
+        AstDefineParam(StrRegion(128, 138),
           AstIdent(StrRegion(128, 134), 'number'),
           AstIdent(StrRegion(135, 138), 'idx')
         )
@@ -3177,7 +3177,7 @@ AstProgramNode(StrRegion(0, 3169),
     AstDefine(StrRegion(199, 294),
       AstIdent(StrRegion(203, 222), '_PsHeap_FinalizeObj'),
       [
-        (
+        AstDefineParam(StrRegion(223, 233),
           AstIdent(StrRegion(223, 229), 'number'),
           AstIdent(StrRegion(230, 233), 'ptr')
         )
@@ -3273,7 +3273,7 @@ AstProgramNode(StrRegion(0, 3169),
     AstDefine(StrRegion(786, 971),
       AstIdent(StrRegion(790, 805), 'PsHeap_FreeWord'),
       [
-        (
+        AstDefineParam(StrRegion(806, 816),
           AstIdent(StrRegion(806, 812), 'number'),
           AstIdent(StrRegion(813, 816), 'ptr')
         )
@@ -3312,7 +3312,7 @@ AstProgramNode(StrRegion(0, 3169),
     AstDefine(StrRegion(972, 1065),
       AstIdent(StrRegion(976, 993), 'PsHeap_DeleteWord'),
       [
-        (
+        AstDefineParam(StrRegion(994, 1004),
           AstIdent(StrRegion(994, 1000), 'number'),
           AstIdent(StrRegion(1001, 1004), 'ptr')
         )
@@ -3343,7 +3343,7 @@ AstProgramNode(StrRegion(0, 3169),
     AstDefine(StrRegion(1091, 1306),
       AstIdent(StrRegion(1095, 1101), 'decref'),
       [
-        (
+        AstDefineParam(StrRegion(1102, 1112),
           AstIdent(StrRegion(1102, 1108), 'number'),
           AstIdent(StrRegion(1109, 1112), 'ptr')
         )
@@ -3392,7 +3392,7 @@ AstProgramNode(StrRegion(0, 3169),
     AstDefine(StrRegion(1307, 1444),
       AstIdent(StrRegion(1311, 1317), 'incref'),
       [
-        (
+        AstDefineParam(StrRegion(1318, 1328),
           AstIdent(StrRegion(1318, 1324), 'number'),
           AstIdent(StrRegion(1325, 1328), 'ptr')
         )
@@ -7051,7 +7051,7 @@ AstProgramNode(StrRegion(0, 3864),
     AstDefine(StrRegion(62, 87),
       AstIdent(StrRegion(66, 69), 'len'),
       [
-        (
+        AstDefineParam(StrRegion(78, 83),
           AstIdent(StrRegion(78, 81), 'val'),
           AstIdent(StrRegion(82, 83), 'a')
         )
@@ -7061,11 +7061,11 @@ AstProgramNode(StrRegion(0, 3864),
     AstDefine(StrRegion(101, 142),
       AstIdent(StrRegion(105, 112), 'delitem'),
       [
-        (
+        AstDefineParam(StrRegion(121, 126),
           AstIdent(StrRegion(121, 124), 'val'),
           AstIdent(StrRegion(125, 126), 'a')
         ),
-        (
+        AstDefineParam(StrRegion(128, 138),
           AstIdent(StrRegion(128, 134), 'number'),
           AstIdent(StrRegion(135, 138), 'idx')
         )
@@ -7091,7 +7091,7 @@ AstProgramNode(StrRegion(0, 3864),
     AstDefine(StrRegion(199, 294),
       AstIdent(StrRegion(203, 222), '_PsHeap_FinalizeObj'),
       [
-        (
+        AstDefineParam(StrRegion(223, 233),
           AstIdent(StrRegion(223, 229), 'number'),
           AstIdent(StrRegion(230, 233), 'ptr')
         )
@@ -7182,7 +7182,7 @@ AstProgramNode(StrRegion(0, 3864),
     AstDefine(StrRegion(825, 1016),
       AstIdent(StrRegion(829, 844), 'PsHeap_FreeWord'),
       [
-        (
+        AstDefineParam(StrRegion(845, 855),
           AstIdent(StrRegion(845, 851), 'number'),
           AstIdent(StrRegion(852, 855), 'ptr')
         )
@@ -7222,7 +7222,7 @@ AstProgramNode(StrRegion(0, 3864),
     AstDefine(StrRegion(1017, 1110),
       AstIdent(StrRegion(1021, 1038), 'PsHeap_DeleteWord'),
       [
-        (
+        AstDefineParam(StrRegion(1039, 1049),
           AstIdent(StrRegion(1039, 1045), 'number'),
           AstIdent(StrRegion(1046, 1049), 'ptr')
         )
@@ -7253,7 +7253,7 @@ AstProgramNode(StrRegion(0, 3864),
     AstDefine(StrRegion(1156, 1186),
       AstIdent(StrRegion(1160, 1176), 'refStack__append'),
       [
-        (
+        AstDefineParam(StrRegion(1177, 1182),
           AstIdent(StrRegion(1177, 1180), 'val'),
           AstIdent(StrRegion(1181, 1182), 'x')
         )
@@ -7263,7 +7263,7 @@ AstProgramNode(StrRegion(0, 3864),
     AstDefine(StrRegion(1207, 1234),
       AstIdent(StrRegion(1211, 1224), 'stack__append'),
       [
-        (
+        AstDefineParam(StrRegion(1225, 1230),
           AstIdent(StrRegion(1225, 1228), 'val'),
           AstIdent(StrRegion(1229, 1230), 'x')
         )
@@ -7278,7 +7278,7 @@ AstProgramNode(StrRegion(0, 3864),
     AstDefine(StrRegion(1293, 1319),
       AstIdent(StrRegion(1297, 1309), 'stackDelitem'),
       [
-        (
+        AstDefineParam(StrRegion(1310, 1315),
           AstIdent(StrRegion(1310, 1313), 'val'),
           AstIdent(StrRegion(1314, 1315), 'x')
         )
@@ -7288,7 +7288,7 @@ AstProgramNode(StrRegion(0, 3864),
     AstDefine(StrRegion(1340, 1368),
       AstIdent(StrRegion(1344, 1358), 'psHeap__append'),
       [
-        (
+        AstDefineParam(StrRegion(1359, 1364),
           AstIdent(StrRegion(1359, 1362), 'val'),
           AstIdent(StrRegion(1363, 1364), 'x')
         )
@@ -7298,7 +7298,7 @@ AstProgramNode(StrRegion(0, 3864),
     AstDefine(StrRegion(1389, 1427),
       AstIdent(StrRegion(1393, 1417), '_psHeap_freelist__append'),
       [
-        (
+        AstDefineParam(StrRegion(1418, 1423),
           AstIdent(StrRegion(1418, 1421), 'val'),
           AstIdent(StrRegion(1422, 1423), 'x')
         )
@@ -7308,7 +7308,7 @@ AstProgramNode(StrRegion(0, 3864),
     AstDefine(StrRegion(1448, 1487),
       AstIdent(StrRegion(1452, 1477), '_psHeap_freelist__delitem'),
       [
-        (
+        AstDefineParam(StrRegion(1478, 1483),
           AstIdent(StrRegion(1478, 1481), 'val'),
           AstIdent(StrRegion(1482, 1483), 'x')
         )
@@ -7328,7 +7328,7 @@ AstProgramNode(StrRegion(0, 3864),
     AstDefine(StrRegion(1581, 1811),
       AstIdent(StrRegion(1585, 1591), 'decref'),
       [
-        (
+        AstDefineParam(StrRegion(1592, 1602),
           AstIdent(StrRegion(1592, 1598), 'number'),
           AstIdent(StrRegion(1599, 1602), 'ptr')
         )
@@ -7383,7 +7383,7 @@ AstProgramNode(StrRegion(0, 3864),
     AstDefine(StrRegion(1812, 2002),
       AstIdent(StrRegion(1816, 1822), 'incref'),
       [
-        (
+        AstDefineParam(StrRegion(1823, 1833),
           AstIdent(StrRegion(1823, 1829), 'number'),
           AstIdent(StrRegion(1830, 1833), 'ptr')
         )
@@ -9539,9 +9539,10 @@ AstProgramNode(StrRegion(0, 3864),
     AstDefine(StrRegion(62, 87),
       AstIdent(StrRegion(66, 69), 'len', meta=TypeMetadata(type=FunctionType(arg_types=[ValType()], ret_type=VoidType()))),
       [
-        (
+        AstDefineParam(StrRegion(78, 83),
           AstIdent(StrRegion(78, 81), 'val', meta=TypeMetadata(type=TypeType(tp=ValType()))),
-          AstIdent(StrRegion(82, 83), 'a', meta=TypeMetadata(type=ValType()))
+          AstIdent(StrRegion(82, 83), 'a', meta=TypeMetadata(type=ValType())),
+          meta=TypeMetadata(type=VoidType())
         )
       ],
       [],
@@ -9550,13 +9551,15 @@ AstProgramNode(StrRegion(0, 3864),
     AstDefine(StrRegion(101, 142),
       AstIdent(StrRegion(105, 112), 'delitem', meta=TypeMetadata(type=FunctionType(arg_types=[ValType(), ValType()], ret_type=VoidType()))),
       [
-        (
+        AstDefineParam(StrRegion(121, 126),
           AstIdent(StrRegion(121, 124), 'val', meta=TypeMetadata(type=TypeType(tp=ValType()))),
-          AstIdent(StrRegion(125, 126), 'a', meta=TypeMetadata(type=ValType()))
+          AstIdent(StrRegion(125, 126), 'a', meta=TypeMetadata(type=ValType())),
+          meta=TypeMetadata(type=VoidType())
         ),
-        (
+        AstDefineParam(StrRegion(128, 138),
           AstIdent(StrRegion(128, 134), 'number', meta=TypeMetadata(type=TypeType(tp=ValType()))),
-          AstIdent(StrRegion(135, 138), 'idx', meta=TypeMetadata(type=ValType()))
+          AstIdent(StrRegion(135, 138), 'idx', meta=TypeMetadata(type=ValType())),
+          meta=TypeMetadata(type=VoidType())
         )
       ],
       [],
@@ -9585,9 +9588,10 @@ AstProgramNode(StrRegion(0, 3864),
     AstDefine(StrRegion(199, 294),
       AstIdent(StrRegion(203, 222), '_PsHeap_FinalizeObj', meta=TypeMetadata(type=FunctionType(arg_types=[ValType()], ret_type=VoidType()))),
       [
-        (
+        AstDefineParam(StrRegion(223, 233),
           AstIdent(StrRegion(223, 229), 'number', meta=TypeMetadata(type=TypeType(tp=ValType()))),
-          AstIdent(StrRegion(230, 233), 'ptr', meta=TypeMetadata(type=ValType()))
+          AstIdent(StrRegion(230, 233), 'ptr', meta=TypeMetadata(type=ValType())),
+          meta=TypeMetadata(type=VoidType())
         )
       ],
       [],
@@ -9694,9 +9698,10 @@ AstProgramNode(StrRegion(0, 3864),
     AstDefine(StrRegion(825, 1016),
       AstIdent(StrRegion(829, 844), 'PsHeap_FreeWord', meta=TypeMetadata(type=FunctionType(arg_types=[ValType()], ret_type=VoidType()))),
       [
-        (
+        AstDefineParam(StrRegion(845, 855),
           AstIdent(StrRegion(845, 851), 'number', meta=TypeMetadata(type=TypeType(tp=ValType()))),
-          AstIdent(StrRegion(852, 855), 'ptr', meta=TypeMetadata(type=ValType()))
+          AstIdent(StrRegion(852, 855), 'ptr', meta=TypeMetadata(type=ValType())),
+          meta=TypeMetadata(type=VoidType())
         )
       ],
       [
@@ -9742,9 +9747,10 @@ AstProgramNode(StrRegion(0, 3864),
     AstDefine(StrRegion(1017, 1110),
       AstIdent(StrRegion(1021, 1038), 'PsHeap_DeleteWord', meta=TypeMetadata(type=FunctionType(arg_types=[ValType()], ret_type=VoidType()))),
       [
-        (
+        AstDefineParam(StrRegion(1039, 1049),
           AstIdent(StrRegion(1039, 1045), 'number', meta=TypeMetadata(type=TypeType(tp=ValType()))),
-          AstIdent(StrRegion(1046, 1049), 'ptr', meta=TypeMetadata(type=ValType()))
+          AstIdent(StrRegion(1046, 1049), 'ptr', meta=TypeMetadata(type=ValType())),
+          meta=TypeMetadata(type=VoidType())
         )
       ],
       [
@@ -9778,9 +9784,10 @@ AstProgramNode(StrRegion(0, 3864),
     AstDefine(StrRegion(1156, 1186),
       AstIdent(StrRegion(1160, 1176), 'refStack__append', meta=TypeMetadata(type=FunctionType(arg_types=[ValType()], ret_type=VoidType()))),
       [
-        (
+        AstDefineParam(StrRegion(1177, 1182),
           AstIdent(StrRegion(1177, 1180), 'val', meta=TypeMetadata(type=TypeType(tp=ValType()))),
-          AstIdent(StrRegion(1181, 1182), 'x', meta=TypeMetadata(type=ValType()))
+          AstIdent(StrRegion(1181, 1182), 'x', meta=TypeMetadata(type=ValType())),
+          meta=TypeMetadata(type=VoidType())
         )
       ],
       [],
@@ -9789,9 +9796,10 @@ AstProgramNode(StrRegion(0, 3864),
     AstDefine(StrRegion(1207, 1234),
       AstIdent(StrRegion(1211, 1224), 'stack__append', meta=TypeMetadata(type=FunctionType(arg_types=[ValType()], ret_type=VoidType()))),
       [
-        (
+        AstDefineParam(StrRegion(1225, 1230),
           AstIdent(StrRegion(1225, 1228), 'val', meta=TypeMetadata(type=TypeType(tp=ValType()))),
-          AstIdent(StrRegion(1229, 1230), 'x', meta=TypeMetadata(type=ValType()))
+          AstIdent(StrRegion(1229, 1230), 'x', meta=TypeMetadata(type=ValType())),
+          meta=TypeMetadata(type=VoidType())
         )
       ],
       [],
@@ -9806,9 +9814,10 @@ AstProgramNode(StrRegion(0, 3864),
     AstDefine(StrRegion(1293, 1319),
       AstIdent(StrRegion(1297, 1309), 'stackDelitem', meta=TypeMetadata(type=FunctionType(arg_types=[ValType()], ret_type=VoidType()))),
       [
-        (
+        AstDefineParam(StrRegion(1310, 1315),
           AstIdent(StrRegion(1310, 1313), 'val', meta=TypeMetadata(type=TypeType(tp=ValType()))),
-          AstIdent(StrRegion(1314, 1315), 'x', meta=TypeMetadata(type=ValType()))
+          AstIdent(StrRegion(1314, 1315), 'x', meta=TypeMetadata(type=ValType())),
+          meta=TypeMetadata(type=VoidType())
         )
       ],
       [],
@@ -9817,9 +9826,10 @@ AstProgramNode(StrRegion(0, 3864),
     AstDefine(StrRegion(1340, 1368),
       AstIdent(StrRegion(1344, 1358), 'psHeap__append', meta=TypeMetadata(type=FunctionType(arg_types=[ValType()], ret_type=VoidType()))),
       [
-        (
+        AstDefineParam(StrRegion(1359, 1364),
           AstIdent(StrRegion(1359, 1362), 'val', meta=TypeMetadata(type=TypeType(tp=ValType()))),
-          AstIdent(StrRegion(1363, 1364), 'x', meta=TypeMetadata(type=ValType()))
+          AstIdent(StrRegion(1363, 1364), 'x', meta=TypeMetadata(type=ValType())),
+          meta=TypeMetadata(type=VoidType())
         )
       ],
       [],
@@ -9828,9 +9838,10 @@ AstProgramNode(StrRegion(0, 3864),
     AstDefine(StrRegion(1389, 1427),
       AstIdent(StrRegion(1393, 1417), '_psHeap_freelist__append', meta=TypeMetadata(type=FunctionType(arg_types=[ValType()], ret_type=VoidType()))),
       [
-        (
+        AstDefineParam(StrRegion(1418, 1423),
           AstIdent(StrRegion(1418, 1421), 'val', meta=TypeMetadata(type=TypeType(tp=ValType()))),
-          AstIdent(StrRegion(1422, 1423), 'x', meta=TypeMetadata(type=ValType()))
+          AstIdent(StrRegion(1422, 1423), 'x', meta=TypeMetadata(type=ValType())),
+          meta=TypeMetadata(type=VoidType())
         )
       ],
       [],
@@ -9839,9 +9850,10 @@ AstProgramNode(StrRegion(0, 3864),
     AstDefine(StrRegion(1448, 1487),
       AstIdent(StrRegion(1452, 1477), '_psHeap_freelist__delitem', meta=TypeMetadata(type=FunctionType(arg_types=[ValType()], ret_type=VoidType()))),
       [
-        (
+        AstDefineParam(StrRegion(1478, 1483),
           AstIdent(StrRegion(1478, 1481), 'val', meta=TypeMetadata(type=TypeType(tp=ValType()))),
-          AstIdent(StrRegion(1482, 1483), 'x', meta=TypeMetadata(type=ValType()))
+          AstIdent(StrRegion(1482, 1483), 'x', meta=TypeMetadata(type=ValType())),
+          meta=TypeMetadata(type=VoidType())
         )
       ],
       [],
@@ -9862,9 +9874,10 @@ AstProgramNode(StrRegion(0, 3864),
     AstDefine(StrRegion(1581, 1811),
       AstIdent(StrRegion(1585, 1591), 'decref', meta=TypeMetadata(type=FunctionType(arg_types=[ValType()], ret_type=VoidType()))),
       [
-        (
+        AstDefineParam(StrRegion(1592, 1602),
           AstIdent(StrRegion(1592, 1598), 'number', meta=TypeMetadata(type=TypeType(tp=ValType()))),
-          AstIdent(StrRegion(1599, 1602), 'ptr', meta=TypeMetadata(type=ValType()))
+          AstIdent(StrRegion(1599, 1602), 'ptr', meta=TypeMetadata(type=ValType())),
+          meta=TypeMetadata(type=VoidType())
         )
       ],
       [
@@ -9929,9 +9942,10 @@ AstProgramNode(StrRegion(0, 3864),
     AstDefine(StrRegion(1812, 2002),
       AstIdent(StrRegion(1816, 1822), 'incref', meta=TypeMetadata(type=FunctionType(arg_types=[ValType()], ret_type=VoidType()))),
       [
-        (
+        AstDefineParam(StrRegion(1823, 1833),
           AstIdent(StrRegion(1823, 1829), 'number', meta=TypeMetadata(type=TypeType(tp=ValType()))),
-          AstIdent(StrRegion(1830, 1833), 'ptr', meta=TypeMetadata(type=ValType()))
+          AstIdent(StrRegion(1830, 1833), 'ptr', meta=TypeMetadata(type=ValType())),
+          meta=TypeMetadata(type=VoidType())
         )
       ],
       [

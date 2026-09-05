@@ -101,9 +101,9 @@ async def _run_with_timeout_async_process(timeout: float, fn, args, kwargs,
     return dest.get()
 
 
-async def run_with_timeout_async(timeout: float, fn, args, kwargs,
-                                 debug=0, interval=0,
-                                 pool: bool | int | SimpleProcessPool = None):
+async def run_with_timeout_async(
+        timeout: float, fn, args, kwargs, debug=0, interval=0,
+        pool: bool | int | SimpleProcessPool | None = None):
     """fn must be pickleable and a regular function **not** coroutine!
 
     debug:
@@ -127,10 +127,11 @@ async def run_with_timeout_async(timeout: float, fn, args, kwargs,
     if not pool:
         return await _run_with_timeout_async_process(
             timeout, fn, args, kwargs, debug, interval)
-    if pool is True or isinstance(pool, int):
+    if isinstance(pool, (int, bool)):
         minsize = 0 if pool is True else pool
-        pool = run_with_timeout_async.default_pool
+        pool: SimpleProcessPool | None = run_with_timeout_async.default_pool
         if pool is None:
+            pool: SimpleProcessPool
             pool = run_with_timeout_async.default_pool = SimpleProcessPool(4)
         pool.grow_processes(minsize=minsize)
     return await _run_with_timeout_async_pool(pool, timeout, fn, args, kwargs, debug)

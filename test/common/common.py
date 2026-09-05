@@ -64,7 +64,8 @@ class CommonTestCase(SnapshotTestCase, TestCaseUtils):
         cls.format_dispatch.setdefault(Node, cls._tree_format)
         cls.format_dispatch.setdefault(AstNode, cls._tree_format)
         cls.format_dispatch.setdefault(Scope, pformat)
-        super().setUpClass()
+        # noinspection PyTypeChecker
+        super().setUpClass()  # Pycharm doesn't understand classmethod super
 
     @classmethod
     def _token_as_tuple_no_region(cls, t: Token):

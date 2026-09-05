@@ -4,7 +4,7 @@ import functools
 from collections.abc import Callable
 from typing import TypeVar, Generic
 
-from util import flatten_force
+from util import flatten_force, get_mro
 from .ast_node import WalkerCallType, WalkableT, walk_ast
 
 try:
@@ -48,8 +48,8 @@ class WalkerFilterRegistry(Generic[Unpack[Ps], WT]):
     def copy(self):
         return type(self)(self.enter_cbs, self.exit_cbs, self.both_cbs)
 
-    def instantiate(self, *args: Unpack[Ps]):
-        return BasicFilteredWalker[WT](
+    def instantiate(self, *args: Unpack[Ps]) -> BasicFilteredWalker[WT]:
+        return BasicFilteredWalker(
             self._instantiate_dict(self.enter_cbs, args),
             self._instantiate_dict(self.exit_cbs, args),
             self._instantiate_dict(self.both_cbs, args),
@@ -124,7 +124,7 @@ class BasicFilteredWalker(WalkerFilterRegistry[WT], Generic[WT]):
     @classmethod
     def _get_funcs(cls, mapping: dict[type[WT] | type, list[VT]], tp: type[WT]) -> list[VT]:
         """Also looks at superclasses/MRO"""
-        return flatten_force([mapping.get(sub, []) for sub in _get_mro(tp)])
+        return flatten_force([mapping.get(sub, []) for sub in get_mro(tp)])
 
 
 class FilteredWalker(BasicFilteredWalker[WT], Generic[WT]):
@@ -173,7 +173,3 @@ class FilteredWalker(BasicFilteredWalker[WT], Generic[WT]):
         if (parent := fn(cls)) is None:
             return WalkerFilterRegistry()
         return WalkerFilterRegistry.copy(parent)
-
-
-def _get_mro(tp: type) -> tuple[type, ...]:  # tp.__mro__ but with proper types
-    return tp.__mro__  # .mro() recalculates it every time, hence is slow

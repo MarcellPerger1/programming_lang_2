@@ -3,9 +3,9 @@ from __future__ import annotations
 import contextlib
 import functools
 from collections.abc import Callable
-from typing import TypeAlias, TypeVar, ParamSpec
+from typing import TypeAlias, TypeVar, ParamSpec, Concatenate
 
-from util import assert_not_none
+from util import assert_not_none, checked_cast
 from .name_resolver import NameResolver
 from .scope import FuncInfo, Scope
 from .types import (TypeInfo, ValType, BoolType, ListType, VoidType,
@@ -60,17 +60,20 @@ class Typechecker:
 
     @_TypecheckerInitVars.method('and_set_type_metadata')  # Such Java vibes
     def _and_set_type_metadata(
-            self: Callable[[Typechecker, AstNode, P], TypeInfo | None],
-            fn: Callable[[Typechecker, AstNode, P], TypeInfo | None] | None = None
+            self: Callable[Concatenate[Typechecker, AstNode, P], TypeInfo | None],
+            fn: Callable[Concatenate[Typechecker, AstNode, P], TypeInfo | None] | None = None
     ) -> Callable[[Typechecker, AstNode, P], TypeInfo]:
         if fn is None:
             assert callable(self)
             fn = self  # Called as decor in this class
 
         @functools.wraps(fn)
-        def new_fn(self_inner: Typechecker, n: AstNode, *args, **kwargs) -> TypeInfo:
-            n_type: TypeInfo = fn(self_inner, n, *args, **kwargs) or VoidType()
-            n.meta = TypeMetadata(n_type)  # ^^ checker return None = void type
+        def new_fn(self_inner: Typechecker, n: AstNode, *args: P.args,
+                   **kwargs: P.kwargs) -> TypeInfo:
+            # checker return None = void type
+            n_type = fn(self_inner, n, *args, **kwargs) or VoidType()
+            n: AstNode[TypeMetadata]  # This is now the new type
+            n.meta = TypeMetadata(n_type)
             return n_type
         return new_fn
 
@@ -159,16 +162,18 @@ class Typechecker:
 
     @_node_typechecker(AstDefine)
     def _typecheck_define(self, n: AstDefine):
-        func_info = self._curr_scope.declared[n.ident.id]
-        assert isinstance(func_info, FuncInfo)
-        f_type = func_info.tp_info
-        n.ident.meta = TypeMetadata(f_type)
+        func_info = checked_cast(FuncInfo, self._curr_scope.declared[n.ident.id])
+        n.ident.meta = TypeMetadata(f_type := func_info.tp_info)
         # Could also use .param_info here - should be same either way
-        for (type_nd, name_nd), param_type in zip(n.params, f_type.arg_types, strict=True):
-            name_nd.meta = TypeMetadata(param_type)
-            type_nd.meta = TypeMetadata(TypeType(param_type))
+        for param_nd, param_type in zip(n.params, f_type.arg_types, strict=True):
+            self._typecheck_single_param(param_nd, param_type)
         with self._enter_scope(func_info.subscope):
             self._typecheck_block(n.body)
+
+    @_and_set_type_metadata
+    def _typecheck_single_param(self, n: AstDefineParam, param_type: TypeInfo):
+        n.ident.meta = TypeMetadata(param_type)
+        n.type.meta = TypeMetadata(TypeType(param_type))
 
     @contextlib.contextmanager
     def _enter_scope(self, scope: Scope):

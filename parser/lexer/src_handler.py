@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import Sequence, cast
+from typing import Sequence
 
 from util import pack_if_single_item
 from .errors import LocatedTokenizerError

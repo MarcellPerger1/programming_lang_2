@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import dataclasses
 from os import PathLike
-from typing import TypeVar, Any, overload, Iterable, Literal, TYPE_CHECKING
+from typing import TypeVar, overload, Iterable, Literal, TYPE_CHECKING
 
 from .recursive_eq import recursive_eq
 from .simple_process_pool import *
@@ -54,6 +54,10 @@ def dcls_field_default(f: dataclasses.Field[T]) -> T | DataclassesMissingT:
 def assert_not_none(x: T | None) -> T:
     assert x is not None, "Expected non-None value, got None"
     return x
+
+
+def get_mro(t: type) -> tuple[type, ...]:  # T -> tuple[? super T, ...]
+    return t.__mro__
 
 
 @overload
