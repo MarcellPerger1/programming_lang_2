@@ -3,8 +3,9 @@ from __future__ import annotations
 import inspect
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
-from typing import cast, Iterable, Any, TypeGuard, TypeAlias
+from typing import cast, Iterable, TypeAlias
 
+from util import is_iterable
 from ..tokens import Token, OpToken, IdentNameToken
 
 
@@ -41,18 +42,10 @@ class TokenMatcher(BaseMatcher):
     # AnyParenToken matches LPar(...) => True
     def _is_cls_matched(self, token: Token) -> bool:
         assert inspect.isclass(self.pattern)
-        if self.pattern == Token:
-            return True
-        elif type(token) == Token:
-            # created using general Token ctor so just check name
-            return self.pattern.name == token.name
         return isinstance(token, self.pattern)
 
     def _is_inst_matched(self, token: Token) -> bool:
         assert not inspect.isclass(self.pattern)
-        if type(self.pattern) == Token or type(token) == Token:
-            # one of them is not a concrete type so compare names
-            return token.name == self.pattern.name
         return isinstance(token, type(self.pattern))
 
     def matches(self, tokens: list[Token], start: int, src: str) -> MatchResult:
@@ -159,7 +152,7 @@ class Matcher:
             # (Pycharm once again cannot narrow properly with `and`/`or`)
             # noinspection bad-argument-type
             self.pattern = TokenMatcher(self.pattern)
-        elif isiterable(self.pattern):
+        elif is_iterable(self.pattern):
             self.pattern = SeqMatcher(*self.pattern)
         assert isinstance(self.pattern, BaseMatcher)
         self.result = self.pattern.matches(self.tokens, self.start, self.src)
@@ -175,14 +168,6 @@ def match(pattern: Iterable[BaseMatcher] | type[Token] | Token | BaseMatcher,
           tokens: list[Token], start: int, src: str,
           want_complete: bool = False) -> MatchResult:
     return Matcher(pattern, tokens, start, src).match(want_complete).result
-
-
-def isiterable(o: Any) -> TypeGuard[Iterable]:
-    try:
-        iter(o)
-    except TypeError:
-        return False
-    return True
 
 
 PatternT: TypeAlias = Iterable['PatternT'] | type[Token] | Token | BaseMatcher

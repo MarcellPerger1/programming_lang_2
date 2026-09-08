@@ -11,6 +11,7 @@ from .simple_process_pool import SimpleProcessPool
 from .timeouts import *
 
 if TYPE_CHECKING:
+    from typing import TypeIs
     # (Note: dataclasses._MISSING_TYPE isn't actually a runtime thing, it's just
     # for type checkers to recognise dataclasses.MISSING)
     DataclassesMissingT = Literal[dataclasses._MISSING_TYPE.MISSING]
@@ -79,3 +80,11 @@ def pack_if_single_item(iter_or_item: Iterable[T] | T,
     except (TypeError, NotImplementedError):
         it = (iter_or_item, )
     return ctor(it) if ctor is not None else it
+
+
+def is_iterable(x: object) -> TypeIs[Iterable]:
+    try:
+        iter(x)  # noqa
+    except (TypeError, NotADirectoryError):
+        return False
+    return True
