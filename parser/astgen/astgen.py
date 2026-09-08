@@ -9,8 +9,8 @@ from .ast_nodes import *
 from .eval_literal import eval_number, eval_string
 from .errors import LocatedAstError
 from ..common import region_union, RegionUnionArgT, HasRegion, StrRegion
-from ..cst.base_node import AnyNode, Node, Leaf, SizedNode
-from ..cst.nodes import *
+from ..cst.cst_node import AnyNode, Node, Leaf, SizedNode
+from ..cst.cst_nodes import *
 from ..cst.cstgen import CstGen
 
 

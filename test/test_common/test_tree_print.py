@@ -3,7 +3,7 @@ from unittest import TestCase
 
 from parser.common import StrRegion
 from parser.common.tree_print import tformat
-from parser.cst import nodes as cst_nodes
+from parser.cst import cst_nodes as cst_nodes
 from parser.astgen import ast_nodes
 from parser.typecheck.types import ValType, ListType, VoidType, FunctionType
 

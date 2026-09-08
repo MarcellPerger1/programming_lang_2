@@ -4,7 +4,7 @@ from dataclasses import dataclass
 from typing import cast
 
 from util import checked_cast
-from .base_node import Leaf, Node, SizedNode, register_corresponding_token
+from .cst_node import Leaf, Node, SizedNode, register_corresponding_token
 
 __all__ = [  # Keep these sorted by category
     "ProgramNode", "AnyNullNode",

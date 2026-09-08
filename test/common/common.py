@@ -14,7 +14,7 @@ from parser.common import BaseLocatedError
 from parser.common.error import BaseParseError
 from parser.common.str_region import StrRegion
 from parser.common.tree_print import tformat
-from parser.cst.base_node import Leaf, AnyNode, Node
+from parser.cst.cst_node import Leaf, AnyNode, Node
 from parser.cst.cstgen import CstGen, LocatedCstError
 from parser.lexer import Tokenizer
 from parser.lexer.tokens import Token, OpToken
