@@ -1,8 +1,8 @@
-from parser.astgen.ast_node import AstNode
-from parser.astgen.ast_nodes import AstDeclNode, AstDefine, AstAugAssign, AstWhile, \
+from compiler.astgen.ast_node import AstNode
+from compiler.astgen.ast_nodes import AstDeclNode, AstDefine, AstAugAssign, AstWhile, \
     VarDeclType, VarDeclScope, AstRepeat, AstItem
-from parser.common import StrRegion
-from parser.typecheck.types import ValType, VoidType, BoolType, TypeType, TypeMetadata, \
+from compiler.common import StrRegion
+from compiler.typecheck.types import ValType, VoidType, BoolType, TypeType, TypeMetadata, \
     ListType
 from test.common import CommonTestCase
 

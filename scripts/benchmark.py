@@ -3,16 +3,16 @@ import contextlib
 import time
 from pathlib import Path
 
-from parser.astgen.ast_nodes import AstProgramNode
-from parser.astgen.astgen import AstGen
-from parser.common.tree_print import tformat
-from parser.cst.cst_nodes import ProgramNode
-from parser.cst.cstgen import CstGen
-from parser.lexer import Tokenizer, format_tokens
-from parser.typecheck.name_resolver import NameResolver
-from parser.typecheck.scope import Scope
-from parser.typecheck.typecheck import Typechecker
-from parser.typecheck.types import TypeMetadata
+from compiler.astgen.ast_nodes import AstProgramNode
+from compiler.astgen.astgen import AstGen
+from compiler.common.tree_print import tformat
+from compiler.cst.cst_nodes import ProgramNode
+from compiler.cst.cstgen import CstGen
+from compiler.lexer import Tokenizer, format_tokens
+from compiler.typecheck.name_resolver import NameResolver
+from compiler.typecheck.scope import Scope
+from compiler.typecheck.typecheck import Typechecker
+from compiler.typecheck.types import TypeMetadata
 from util import readfile
 from util.pformat import pformat
 

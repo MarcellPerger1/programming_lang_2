@@ -1,11 +1,11 @@
 import enum
 from unittest import TestCase
 
-from parser.common import StrRegion
-from parser.common.tree_print import tformat
-from parser.cst import cst_nodes as cst_nodes
-from parser.astgen import ast_nodes
-from parser.typecheck.types import ValType, ListType, VoidType, FunctionType
+from compiler.common import StrRegion
+from compiler.common.tree_print import tformat
+from compiler.cst import cst_nodes as cst_nodes
+from compiler.astgen import ast_nodes
+from compiler.typecheck.types import ValType, ListType, VoidType, FunctionType
 
 
 class _DummyEnum(enum.Enum):

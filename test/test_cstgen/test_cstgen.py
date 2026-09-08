@@ -1,9 +1,9 @@
 import unittest
 
-from parser.lexer.tokenizer import Tokenizer
-from parser.cst.cstgen import CstGen
+from compiler.lexer.tokenizer import Tokenizer
+from compiler.cst.cstgen import CstGen
 from cst.errors import CstParseError
-from parser.common import StrRegion
+from compiler.common import StrRegion
 from test.common import CommonTestCase
 
 

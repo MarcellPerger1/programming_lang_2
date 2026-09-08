@@ -2,8 +2,8 @@ import asyncio
 import unittest
 from pathlib import Path
 
-from parser.cst.cstgen import CstGen
-from parser.lexer.tokenizer import Tokenizer
+from compiler.cst.cstgen import CstGen
+from compiler.lexer.tokenizer import Tokenizer
 from test.common import CommonTestCase, TestCaseUtils
 from test.fuzz import fuzz_target
 from util import timeout_decor, timeout_decor_async

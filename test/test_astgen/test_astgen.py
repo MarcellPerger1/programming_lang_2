@@ -1,5 +1,5 @@
-from parser.astgen.ast_nodes import AstProgramNode, AstIf, AstNumber
-from parser.common import StrRegion
+from compiler.astgen.ast_nodes import AstProgramNode, AstIf, AstNumber
+from compiler.common import StrRegion
 from test.common import CommonTestCase
 
 

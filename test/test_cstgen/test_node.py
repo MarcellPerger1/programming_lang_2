@@ -1,9 +1,9 @@
 from unittest import TestCase
 
-from parser.common import StrRegion
-from parser.cst.cst_node import Node, Leaf, node_from_token
-from parser.cst.cst_nodes import NumberNode, IdentNode
-from parser.tokens import NumberToken, IdentNameToken
+from compiler.common import StrRegion
+from compiler.cst.cst_node import Node, Leaf, node_from_token
+from compiler.cst.cst_nodes import NumberNode, IdentNode
+from compiler.tokens import NumberToken, IdentNameToken
 
 
 class Test(TestCase):

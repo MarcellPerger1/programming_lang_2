@@ -1,8 +1,8 @@
 import unittest
 from unittest.mock import patch
 
-from parser.common import StrRegion
-from parser.common.error import BaseLocatedError
+from compiler.common import StrRegion
+from compiler.common.error import BaseLocatedError
 from test.common import MethodMock
 
 
