@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from typing import (TypeVar, cast, Sequence, overload, Iterable, Callable)
 
+from util import checked_cast, checked_cast_class
 from .base_node import AnyNode, Node
 from .named_node import node_from_token, node_cls_from_name
 from .nodes import *
@@ -47,9 +48,10 @@ class CstGen:
     def __getitem__(self, item: slice) -> list[Token]: ...
 
     def __getitem__(self, item: int | slice):
-        return self.tokens[item]
+        # noinspection bad-index
+        return self.tokens[item]  # Pycharm cannot do unions with @overload
 
-    def get(self, item: int | slice, default: DT = MISSING) -> Token | DT:
+    def get(self, item: int, default: DT = MISSING) -> Token | DT:
         try:
             return self[item]
         except IndexError:
@@ -61,7 +63,7 @@ class CstGen:
         return item >= len(self.tokens)
 
     def matches(self, start: int, pattern: PatternT,
-                default: bool = None, want_full=False):
+                default: bool | None = None, want_full=False):
         if default is None or 0 <= start < len(self.tokens):
             return self.match(start, pattern, want_full).success
         return default
@@ -271,7 +273,7 @@ class CstGen:
         return BlockNode(self.tok_region(start, idx), None, smts), idx
 
     def _parse_block_with_header(self, start: int, cls: type[Node],
-                                 name: str = None) -> tuple[AnyNode, int]:
+                                 name: str | None = None) -> tuple[AnyNode, int]:
         name = name or cls.name
         idx = start
         assert self.matches(idx, KwdM(name))
@@ -292,7 +294,7 @@ class CstGen:
     def _parse_if(self, start: int) -> tuple[AnyNode, int]:
         idx = start
         if_part, idx = self._parse_if_cond(idx)
-        elseif_parts = []
+        elseif_parts: list[AnyNode] = []
         else_part: AnyNode | None = None
         while self.matches(idx, KwdM('else')):
             if self.matches(idx + 1, KwdM('if')):
@@ -304,9 +306,8 @@ class CstGen:
             else:
                 raise self.err(f"Expected '{{' or 'if' after 'else', "
                                f"got {self[idx + 1].name}", self[idx + 1])
-        if else_part is None:
-            # Need to give it a location, so just do the '}' (prev token)
-            else_part = NullElseBlock(self.tok_region(idx - 1, idx))
+        # Need to give NullElseBlock a location, so just do the '}' (prev token)
+        else_part: AnyNode = else_part or NullElseBlock(self.tok_region(idx - 1, idx))
         return ConditionalBlock(self.tok_region(start, idx), None,
                                 [if_part, *elseif_parts, else_part]), idx
 
@@ -364,12 +365,10 @@ class CstGen:
         expr, idx = self._parse_or_bool(start)
         return expr, idx
 
-    def _token_str(self, idx: int):
-        return self[idx].get_str(self.src)
-
     def _expect_cls_consume(
             self, idx: int, cls_or_list: type | tuple[type, ...],
-            msg: Exception | str = None, reason: Exception = None) -> int:  # [[nodiscard]]
+            msg: Exception | str | None = None, reason: Exception | None = None
+    ) -> int:  # [[nodiscard]]
         if isinstance(self[idx], cls_or_list):
             return idx + 1
         if msg is None:
@@ -529,21 +528,24 @@ class CstGen:
         return self._parse_ltr_operator_level(idx, ('..',), self._parse_add_sub)
 
     def _parse_comp(self, idx: int) -> tuple[AnyNode, int]:
-        first, idx = self._parse_cat(idx)
-        parts: list[AnyNode | OpToken] = [first]
+        arg, idx = self._parse_cat(idx)
+        args: list[AnyNode] = [arg]  # ops[i] is the op after args[i], so
+        ops: list[OpToken] = []      # len(ops) == len(args) - 1
         while self.match_ops(idx, COMPARISONS):
-            op_tok = cast(OpToken, self[idx])
+            op_tok = checked_cast(OpToken, self[idx])
             idx += 1
-            curr, idx = self._parse_cat(idx)
-            parts += [op_tok, curr]
-        if len(parts) == 1:
-            return parts[0], idx
-        assert len(parts) % 2 == 1
-        if len(parts) > 3:
-            # TODO: chained comparisons
-            raise self.err("Chaining comparisons is not yet supported", parts[3])
-        left, op_tok, right = parts
-        return self.node_from_children(op_tok.op_str, [left, right]), idx
+            arg, idx = self._parse_cat(idx)
+            ops.append(op_tok)
+            args.append(arg)
+        assert len(args) == len(ops) + 1
+        if len(ops) == 0:
+            return args[0], idx  # No comparison op
+        if len(ops) == 1:
+            left, right = args
+            (op_tok,) = ops
+            return self.node_from_children(op_tok.op_str, [left, right]), idx
+        # TODO: chained comparisons
+        raise self.err("Chaining comparisons is not yet supported", ops[1])
 
     def _parse_and_bool(self, idx: int):
         return self._parse_ltr_operator_level(idx, ('&&',), self._parse_comp)
@@ -558,13 +560,13 @@ class CstGen:
     def node_from_children(cls, name_or_type: str | type[Node],
                            children: list[AnyNode],
                            region: RegionUnionArgT = None,
-                           parent: Node = None, arity: int = None):
-        region = region_union(region if region is not None else children)
+                           parent: Node | None = None, arity: int | None = None):
+        region = region_union(region or children)
         if isinstance(name_or_type, str):
             klass = node_cls_from_name(name_or_type, children, arity)
         else:
             klass = name_or_type
-        return klass(region, parent, children)
+        return checked_cast_class(Node, klass)(region, parent, children)
 
 
 # operator precedence (most to least binding):
