@@ -1,11 +1,13 @@
 from __future__ import annotations
 
 import dataclasses
+from collections.abc import Iterable, Callable
 from os import PathLike
-from typing import TypeVar, overload, Iterable, Literal, TYPE_CHECKING
+from typing import TypeVar, overload, Literal, TYPE_CHECKING, Any
 
+# re-export these
 from .recursive_eq import recursive_eq
-from .simple_process_pool import *
+from .simple_process_pool import SimpleProcessPool
 from .timeouts import *
 
 if TYPE_CHECKING:
@@ -38,7 +40,7 @@ def flatten_force(seq: Iterable[Iterable[T]]) -> list[T]:
     return [item for sub in seq for item in sub]
 
 
-def is_strict_subclass(o: object, type_or_types: tuple[type, ...]):
+def is_strict_subclass(o: object, type_or_types: tuple[type, ...] | type) -> bool:
     types = tuple(pack_if_single_item(type_or_types))
     return isinstance(o, type) and issubclass(o, types) and o not in types
 
