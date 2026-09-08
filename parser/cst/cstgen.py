@@ -3,8 +3,7 @@ from __future__ import annotations
 from typing import (TypeVar, cast, Sequence, overload, Iterable, Callable)
 
 from util import checked_cast, checked_cast_class
-from .base_node import AnyNode, Node
-from .named_node import node_from_token, node_cls_from_name
+from .base_node import AnyNode, Node, node_from_token, node_cls_from_name
 from .nodes import *
 from .token_matcher import OpM, KwdM, Matcher, PatternT
 from ..common import StrRegion, region_union, RegionUnionArgT
@@ -82,7 +81,7 @@ class CstGen:
         while not self.eof(idx) and not self.matches(idx, EofToken):
             smt, idx = self._parse_smt(idx)
             smts.append(smt)
-        node = ProgramNode(self.tok_region(0, idx), None, smts)
+        node = ProgramNode(self.tok_region(0, idx), smts)
         self.result = node
         return node
 
@@ -189,7 +188,7 @@ class CstGen:
                 raise self.err(f"Expected ';' or ',' after decl_item,"
                                f" got {self[idx].name}", self[idx])
             children.append(value)
-        return DeclItemNode(self.tok_region(start, idx), None, children), idx
+        return DeclItemNode(self.tok_region(start, idx), children), idx
 
     def _parse_define(self, start: int) -> tuple[AnyNode, int]:
         idx = start
@@ -202,7 +201,7 @@ class CstGen:
         # def f(t1 arg1, t2 arg2) { <a block> }
         #                         ^
         block, idx = self._parse_block(idx)
-        return DefineNode(self.tok_region(start, idx), None, [name, args_decl, block]), idx
+        return DefineNode(self.tok_region(start, idx), [name, args_decl, block]), idx
 
     def _parse_args_decl(self, start: int) -> tuple[AnyNode, int]:
         idx = start
@@ -233,7 +232,7 @@ class CstGen:
         #                       ^
         assert self.matches(idx, RParToken)
         idx += 1
-        return ArgsDeclNode(self.tok_region(start, idx), None, arg_declares), idx
+        return ArgsDeclNode(self.tok_region(start, idx), arg_declares), idx
 
     def _parse_arg_decl(self, start: int) -> tuple[AnyNode, int]:
         idx = start
@@ -247,7 +246,7 @@ class CstGen:
                            f"Did you forget the type name?", self[idx])
         arg_name = node_from_token(self[idx])
         idx += 1
-        arg_decl = ArgDeclNode(self.tok_region(start, idx), None, [tp_name, arg_name])
+        arg_decl = ArgDeclNode(self.tok_region(start, idx), [tp_name, arg_name])
         return arg_decl, idx
 
     def tok_region(self, start: int, end: int) -> StrRegion:
@@ -270,7 +269,7 @@ class CstGen:
             raise self.err(f"Expected '}}' to close block, "
                            f"got {self[idx].name}", self[idx])
         idx += 1
-        return BlockNode(self.tok_region(start, idx), None, smts), idx
+        return BlockNode(self.tok_region(start, idx), smts), idx
 
     def _parse_block_with_header(self, start: int, cls: type[Node],
                                  name: str | None = None) -> tuple[AnyNode, int]:
@@ -283,7 +282,7 @@ class CstGen:
             raise self.err(f"Expected '{{' after expr in {name}, "
                            f"got {self[idx].name}", self[idx])
         block, idx = self._parse_block(idx)
-        return cls(self.tok_region(start, idx), None, [expr, block]), idx
+        return cls(self.tok_region(start, idx), [expr, block]), idx
 
     def _parse_while(self, start: int) -> tuple[AnyNode, int]:
         return self._parse_block_with_header(start, WhileBlock)
@@ -308,7 +307,7 @@ class CstGen:
                                f"got {self[idx + 1].name}", self[idx + 1])
         # Need to give NullElseBlock a location, so just do the '}' (prev token)
         else_part: AnyNode = else_part or NullElseBlock(self.tok_region(idx - 1, idx))
-        return ConditionalBlock(self.tok_region(start, idx), None,
+        return ConditionalBlock(self.tok_region(start, idx),
                                 [if_part, *elseif_parts, else_part]), idx
 
     def _parse_if_cond(self, start: int) -> tuple[AnyNode, int]:
@@ -323,14 +322,14 @@ class CstGen:
             raise self.err(f"Expected '{{' after expr in else if, "
                            f"got {self[idx].name}", self[idx])
         block, idx = self._parse_block(idx)
-        return ElseIfBlock(self.tok_region(start, idx), None, [cond, block]), idx
+        return ElseIfBlock(self.tok_region(start, idx), [cond, block]), idx
 
     def _parse_else(self, start: int) -> tuple[AnyNode, int]:
         idx = start
         assert self.matches(idx, (KwdM('else'), LBrace))
         idx += 1  # don't advance past '{'; it's needed for _parse_block
         block, idx = self._parse_block(idx)
-        return ElseBlock(self.tok_region(start, idx), None, [block]), idx
+        return ElseBlock(self.tok_region(start, idx), [block]), idx
 
     def _parse_call_args(self, start: int) -> tuple[AnyNode, int]:
         idx = start
@@ -359,7 +358,7 @@ class CstGen:
         #         ^
         assert self.matches(idx, RParToken)
         idx += 1
-        return CallArgs(self.tok_region(start, idx), None, args), idx
+        return CallArgs(self.tok_region(start, idx), args), idx
 
     def _parse_expr(self, start: int) -> tuple[AnyNode, int]:
         expr, idx = self._parse_or_bool(start)
@@ -394,7 +393,7 @@ class CstGen:
         assert strings, "_parse_autocat_or_string requires current token to be string"
         if len(strings) == 1:
             return strings[0], idx
-        return AutocatNode(self.tok_region(start, idx), None, strings), idx
+        return AutocatNode(self.tok_region(start, idx), strings), idx
 
     def _parse_atom_or_autocat(self, idx: int) -> tuple[AnyNode, int]:
         tok = self[idx]
@@ -410,7 +409,7 @@ class CstGen:
             inner, idx = self._parse_expr(idx + 1)
             idx = self._expect_cls_consume(
                 idx, RParToken, f"Expected ')' at end of expr, got {self[idx].name}")
-            return ParenNode(self.tok_region(start, idx), None, [inner]), idx
+            return ParenNode(self.tok_region(start, idx), [inner]), idx
         elif isinstance(self[idx], LSqBracket):
             return self._parse_list_literal(idx)
         return self._parse_atom_or_autocat(idx)
@@ -435,7 +434,7 @@ class CstGen:
             args.append(arg)
         assert self.matches(idx, RSqBracket)
         idx += 1
-        return ListNode(self.tok_region(start, idx), None, args), idx
+        return ListNode(self.tok_region(start, idx), args), idx
 
     def _parse_basic_item(self, idx: int):
         left, new_idx = self._parse_parens_or(idx)
@@ -560,13 +559,13 @@ class CstGen:
     def node_from_children(cls, name_or_type: str | type[Node],
                            children: list[AnyNode],
                            region: RegionUnionArgT = None,
-                           parent: Node | None = None, arity: int | None = None):
+                           arity: int | None = None):
         region = region_union(region or children)
         if isinstance(name_or_type, str):
             klass = node_cls_from_name(name_or_type, children, arity)
         else:
             klass = name_or_type
-        return checked_cast_class(Node, klass)(region, parent, children)
+        return checked_cast_class(Node, klass)(region, children)
 
 
 # operator precedence (most to least binding):

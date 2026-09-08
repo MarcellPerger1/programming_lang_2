@@ -1,9 +1,10 @@
 from __future__ import annotations
 
+from dataclasses import dataclass
 from typing import cast
 
 from util import checked_cast
-from .named_node import register_corresponding_token, Node, Leaf, SizedNode
+from .base_node import Leaf, Node, SizedNode, register_corresponding_token
 
 __all__ = [  # Keep these sorted by category
     "ProgramNode", "AnyNullNode",
@@ -40,6 +41,9 @@ __all__ = [  # Keep these sorted by category
     "PowEqNode", "ConcatEqNode", "AndEqNode", "OrEqNode",
 ]
 
+# NOTE: in this file, @dataclass on the classes is mostly redundant, the only
+#  reason it's there on some of them is to make Pycharm behave
+
 
 class ProgramNode(Node):
     name = 'program'  # Varargs
@@ -56,11 +60,13 @@ class AnyNullNode(Leaf):
 
 # region ---- Expressions ----
 @register_corresponding_token
+@dataclass
 class NumberNode(Leaf):
     name = 'number'
 
 
 @register_corresponding_token
+@dataclass
 class StringNode(Leaf):
     name = 'string'
 
@@ -70,11 +76,13 @@ class AnyNameLeaf(Leaf):
 
 
 @register_corresponding_token('ident_name')
+@dataclass
 class IdentNode(AnyNameLeaf):
     name = 'ident'
 
 
 @register_corresponding_token('attr_name')
+@dataclass
 class AttrNameNode(AnyNameLeaf):
     name = 'attr'
 
@@ -165,17 +173,20 @@ class UnaryOpNode(SizedNode, OperatorNode):
 
 @register_corresponding_token('+', arity=1)
 @register_corresponding_token()
+@dataclass
 class UPlusNode(UnaryOpNode):
     name = '+(unary)'
 
 
 @register_corresponding_token('-', arity=1)
 @register_corresponding_token()
+@dataclass
 class UMinusNode(UnaryOpNode):
     name = '-(unary)'
 
 
 @register_corresponding_token
+@dataclass
 class NotNode(UnaryOpNode):
     name = '!'
 
@@ -193,46 +204,55 @@ class BinOpNode(SizedNode, OperatorNode):
 
 
 @register_corresponding_token
+@dataclass
 class AddNode(BinOpNode):
     name = '+'
 
 
 @register_corresponding_token
+@dataclass
 class SubNode(BinOpNode):
     name = '-'
 
 
 @register_corresponding_token
+@dataclass
 class MulNode(BinOpNode):
     name = '*'
 
 
 @register_corresponding_token
+@dataclass
 class DivNode(BinOpNode):
     name = '/'
 
 
 @register_corresponding_token
+@dataclass
 class ModNode(BinOpNode):
     name = '%'
 
 
 @register_corresponding_token
+@dataclass
 class PowNode(BinOpNode):
     name = '**'
 
 
 @register_corresponding_token
+@dataclass
 class ConcatNode(BinOpNode):
     name = '..'
 
 
 @register_corresponding_token
+@dataclass
 class AndNode(BinOpNode):
     name = '&&'
 
 
 @register_corresponding_token
+@dataclass
 class OrNode(BinOpNode):
     name = '||'
 
@@ -242,31 +262,37 @@ class ComparisonNode(BinOpNode):
 
 
 @register_corresponding_token
+@dataclass
 class EqNode(ComparisonNode):
     name = '=='
 
 
 @register_corresponding_token
+@dataclass
 class NeqNode(ComparisonNode):
     name = '!='
 
 
 @register_corresponding_token
+@dataclass
 class LtNode(ComparisonNode):
     name = '<'
 
 
 @register_corresponding_token
+@dataclass
 class LeNode(ComparisonNode):
     name = '<='
 
 
 @register_corresponding_token
+@dataclass
 class GtNode(ComparisonNode):
     name = '>'
 
 
 @register_corresponding_token
+@dataclass
 class GeNode(ComparisonNode):
     name = '>='
 # endregion
@@ -487,51 +513,61 @@ class AssignOpNode(BinOpNode):
 
 
 @register_corresponding_token
+@dataclass
 class AssignNode(AssignOpNode):
     name = '='
 
 
 @register_corresponding_token
+@dataclass
 class AddEqNode(AssignOpNode):
     name = '+='
 
 
 @register_corresponding_token
+@dataclass
 class SubEqNode(AssignOpNode):
     name = '-='
 
 
 @register_corresponding_token
+@dataclass
 class MulEqNode(AssignOpNode):
     name = '*='
 
 
 @register_corresponding_token
+@dataclass
 class DivEqNode(AssignOpNode):
     name = '/='
 
 
 @register_corresponding_token
+@dataclass
 class ModEqNode(AssignOpNode):
     name = '%='
 
 
 @register_corresponding_token
+@dataclass
 class PowEqNode(AssignOpNode):
     name = '**='
 
 
 @register_corresponding_token
+@dataclass
 class ConcatEqNode(AssignOpNode):
     name = '..='
 
 
 @register_corresponding_token
+@dataclass
 class AndEqNode(AssignOpNode):
     name = '&&='
 
 
 @register_corresponding_token
+@dataclass
 class OrEqNode(AssignOpNode):
     name = '||='
 # endregion

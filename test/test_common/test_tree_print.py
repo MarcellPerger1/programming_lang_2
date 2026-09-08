@@ -34,11 +34,11 @@ class TestTreePrinter(TestCase):
                              "[\n  2,\n  'aa',\n  StrRegion(3, 5)\n]")
 
     def test_cst_nodes(self):
-        ae = cst_nodes.AddEqNode(StrRegion(0, 10), None, [
+        ae = cst_nodes.AddEqNode(StrRegion(0, 10), [
             cst_nodes.IdentNode(StrRegion(0, 2)),
-            cst_nodes.SubNode(StrRegion(4, 10), None, [
+            cst_nodes.SubNode(StrRegion(4, 10), [
                 cst_nodes.IdentNode(StrRegion(4, 5)),
-                cst_nodes.UMinusNode(StrRegion(6, 10), None, [
+                cst_nodes.UMinusNode(StrRegion(6, 10), [
                     cst_nodes.NumberNode(StrRegion(7, 10))
                 ])
             ])

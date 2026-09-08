@@ -9,26 +9,9 @@ from .ast_nodes import *
 from .eval_literal import eval_number, eval_string
 from .errors import LocatedAstError
 from ..common import region_union, RegionUnionArgT, HasRegion, StrRegion
-from ..cst.base_node import AnyNode, Node, Leaf
-from ..cst.named_node import SizedNode
+from ..cst.base_node import AnyNode, Node, Leaf, SizedNode
 from ..cst.nodes import *
 from ..cst.cstgen import CstGen
-
-# Final syntax lowering/codegen: (???)
-# AST -> blocks, intrinsics, functions -> blocks & intrinsics -> intrinsics
-#     |                                 |
-#  ops to intrinsics             resolve idents
-
-ALLOWED_IN_SMT = (  # Note: use with isinstance
-    CallNode,
-    NopNode,
-    ConditionalBlock,
-    WhileBlock,
-    RepeatBlock,
-    DefineNode,
-    DeclNode,
-    AssignOpNode,
-)
 
 
 AutowalkerT: TypeAlias = Callable[['AstGen', AnyNode], AstNode]
