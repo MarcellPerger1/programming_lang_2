@@ -10,7 +10,7 @@ from .eval_literal import eval_number, eval_string
 from .errors import LocatedAstError
 from ..common import region_union, RegionUnionArgT, HasRegion, StrRegion
 from ..cst.base_node import AnyNode, Node, Leaf
-from ..cst.named_node import NamedLeafCls, NamedNodeCls, NamedSizedNodeCls
+from ..cst.named_node import SizedNode
 from ..cst.nodes import *
 from ..cst.cstgen import CstGen
 
@@ -74,8 +74,7 @@ def _detect_autowalk_type_from_annot(fn):
     if param.kind not in (param.POSITIONAL_ONLY,
                           param.POSITIONAL_OR_KEYWORD):  # pragma: no cover
         raise TypeError("Unable to detect node_type (cannot find second positional arg)")
-    if not is_strict_subclass(param.annotation, (
-            NamedLeafCls, NamedNodeCls, NamedSizedNodeCls)):  # pragma: no cover
+    if not is_strict_subclass(param.annotation, (Node, Leaf, SizedNode)):  # pragma: no cover
         raise TypeError("Unable to detect node_type (annotation is not a node type)")
     return param.annotation
 

@@ -18,18 +18,18 @@ class Test(TestCase):
                          node_from_token(IdentNameToken(StrRegion(5, 7))))
 
     def test_node_add(self):
-        nd = Node('parent', StrRegion(0, 6))
-        lf1 = Leaf('leaf1', StrRegion(0, 2))
-        lf2 = Leaf('leaf2', StrRegion(3, 5))
+        nd = Node(StrRegion(0, 6))
+        lf1 = Leaf(StrRegion(0, 2))
+        lf2 = Leaf(StrRegion(3, 5))
         nd.add(lf1, lf2)
         self.assertEqual(nd.children, [lf1, lf2])
         self.assertIs(lf1.parent, nd)
         self.assertIs(lf2.parent, nd)
 
     def test_node_init_with_children(self):
-        lf1 = Leaf('leaf1', StrRegion(0, 2))
-        lf2 = Leaf('leaf2', StrRegion(3, 5))
-        nd = Node.new('parent', StrRegion(0, 6), [lf1, lf2])
+        lf1 = Leaf(StrRegion(0, 2))
+        lf2 = Leaf(StrRegion(3, 5))
+        nd = Node(StrRegion(0, 6), None, [lf1, lf2])
         self.assertEqual(nd.children, [lf1, lf2])
         self.assertIs(lf1.parent, nd)
         self.assertIs(lf2.parent, nd)
