@@ -2,7 +2,7 @@ import unittest
 
 from compiler.lexer.tokenizer import Tokenizer
 from compiler.cst.cstgen import CstGen
-from cst.errors import CstParseError
+from compiler.cst.errors import CstParseError
 from compiler.common import StrRegion
 from test.common import CommonTestCase
 
