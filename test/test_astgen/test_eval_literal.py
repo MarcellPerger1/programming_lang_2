@@ -1,9 +1,9 @@
 import ast
 import sys
 
-from parser.astgen.eval_literal import eval_string, eval_number
-from parser.astgen.errors import AstStringParseError
-from parser.common import StrRegion
+from compiler.astgen.eval_literal import eval_string, eval_number
+from compiler.astgen.errors import AstStringParseError
+from compiler.common import StrRegion
 from test.common import CommonTestCase
 
 

@@ -1,9 +1,9 @@
 from unittest.mock import patch
 
-from parser.common import StrRegion
-from parser.typecheck.name_resolver import NameResolver
-from parser.typecheck.scope import NameInfo, FuncInfo, ParamInfo, Scope
-from parser.typecheck.types import ValType, BoolType, VoidType
+from compiler.common import StrRegion
+from compiler.typecheck.name_resolver import NameResolver
+from compiler.typecheck.scope import NameInfo, FuncInfo, ParamInfo, Scope
+from compiler.typecheck.types import ValType, BoolType, VoidType
 from test.common import CommonTestCase, MethodMock
 
 

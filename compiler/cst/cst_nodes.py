@@ -1,10 +1,10 @@
 from __future__ import annotations
 
+from dataclasses import dataclass
 from typing import cast
 
 from util import checked_cast
-from .named_node import (NamedLeafCls, NamedNodeCls, NamedSizedNodeCls,
-                         register_corresponding_token)
+from .cst_node import Leaf, Node, SizedNode, register_corresponding_token
 
 __all__ = [  # Keep these sorted by category
     "ProgramNode", "AnyNullNode",
@@ -41,8 +41,11 @@ __all__ = [  # Keep these sorted by category
     "PowEqNode", "ConcatEqNode", "AndEqNode", "OrEqNode",
 ]
 
+# NOTE: in this file, @dataclass on the classes is mostly redundant, the only
+#  reason it's there on some of them is to make Pycharm behave
 
-class ProgramNode(NamedNodeCls):
+
+class ProgramNode(Node):
     name = 'program'  # Varargs
 
     @property
@@ -50,37 +53,41 @@ class ProgramNode(NamedNodeCls):
         return self.children
 
 
-class AnyNullNode(NamedLeafCls):
+class AnyNullNode(Leaf):
     """For nodes whose presence denotes an absence of something in the syntax"""
     size = 0  # Name should be set by subclasses
 
 
 # region ---- Expressions ----
 @register_corresponding_token
-class NumberNode(NamedLeafCls):
+@dataclass
+class NumberNode(Leaf):
     name = 'number'
 
 
 @register_corresponding_token
-class StringNode(NamedLeafCls):
+@dataclass
+class StringNode(Leaf):
     name = 'string'
 
 
-class AnyNameLeaf(NamedLeafCls):
+class AnyNameLeaf(Leaf):
     pass
 
 
 @register_corresponding_token('ident_name')
+@dataclass
 class IdentNode(AnyNameLeaf):
     name = 'ident'
 
 
 @register_corresponding_token('attr_name')
+@dataclass
 class AttrNameNode(AnyNameLeaf):
     name = 'attr'
 
 
-class AutocatNode(NamedNodeCls):
+class AutocatNode(Node):
     name = 'autocat'  # Note: this is varargs, unlike regular concat
 
     @property
@@ -88,7 +95,7 @@ class AutocatNode(NamedNodeCls):
         return cast(list[StringNode], self.children)
 
 
-class GetattrNode(NamedSizedNodeCls):
+class GetattrNode(SizedNode):
     name = 'getattr'
     size = 2
 
@@ -101,7 +108,7 @@ class GetattrNode(NamedSizedNodeCls):
         return checked_cast(AttrNameNode, self.children[1])
 
 
-class GetitemNode(NamedSizedNodeCls):
+class GetitemNode(SizedNode):
     name = 'getitem'
     size = 2
 
@@ -114,7 +121,7 @@ class GetitemNode(NamedSizedNodeCls):
         return self.children[1]
 
 
-class ParenNode(NamedSizedNodeCls):
+class ParenNode(SizedNode):
     name = 'paren'
     size = 1
 
@@ -123,7 +130,7 @@ class ParenNode(NamedSizedNodeCls):
         return self.children[0]
 
 
-class ListNode(NamedNodeCls):
+class ListNode(Node):
     name = 'list'  # List literal, varargs
 
     @property
@@ -131,7 +138,7 @@ class ListNode(NamedNodeCls):
         return self.children
 
 
-class CallNode(NamedSizedNodeCls):
+class CallNode(SizedNode):
     name = 'call'
     size = 2
 
@@ -144,7 +151,7 @@ class CallNode(NamedSizedNodeCls):
         return checked_cast(CallArgs, self.children[1])
 
 
-class CallArgs(NamedNodeCls):
+class CallArgs(Node):
     name = 'call_args'  # Varargs
 
     @property
@@ -152,11 +159,11 @@ class CallArgs(NamedNodeCls):
         return self.children
 
 
-class OperatorNode(NamedNodeCls):
+class OperatorNode(Node):
     pass
 
 
-class UnaryOpNode(NamedSizedNodeCls, OperatorNode):
+class UnaryOpNode(SizedNode, OperatorNode):
     size = 1
 
     @property
@@ -166,22 +173,25 @@ class UnaryOpNode(NamedSizedNodeCls, OperatorNode):
 
 @register_corresponding_token('+', arity=1)
 @register_corresponding_token()
+@dataclass
 class UPlusNode(UnaryOpNode):
     name = '+(unary)'
 
 
 @register_corresponding_token('-', arity=1)
 @register_corresponding_token()
+@dataclass
 class UMinusNode(UnaryOpNode):
     name = '-(unary)'
 
 
 @register_corresponding_token
+@dataclass
 class NotNode(UnaryOpNode):
     name = '!'
 
 
-class BinOpNode(NamedSizedNodeCls, OperatorNode):
+class BinOpNode(SizedNode, OperatorNode):
     size = 2
 
     @property
@@ -194,46 +204,55 @@ class BinOpNode(NamedSizedNodeCls, OperatorNode):
 
 
 @register_corresponding_token
+@dataclass
 class AddNode(BinOpNode):
     name = '+'
 
 
 @register_corresponding_token
+@dataclass
 class SubNode(BinOpNode):
     name = '-'
 
 
 @register_corresponding_token
+@dataclass
 class MulNode(BinOpNode):
     name = '*'
 
 
 @register_corresponding_token
+@dataclass
 class DivNode(BinOpNode):
     name = '/'
 
 
 @register_corresponding_token
+@dataclass
 class ModNode(BinOpNode):
     name = '%'
 
 
 @register_corresponding_token
+@dataclass
 class PowNode(BinOpNode):
     name = '**'
 
 
 @register_corresponding_token
+@dataclass
 class ConcatNode(BinOpNode):
     name = '..'
 
 
 @register_corresponding_token
+@dataclass
 class AndNode(BinOpNode):
     name = '&&'
 
 
 @register_corresponding_token
+@dataclass
 class OrNode(BinOpNode):
     name = '||'
 
@@ -243,43 +262,49 @@ class ComparisonNode(BinOpNode):
 
 
 @register_corresponding_token
+@dataclass
 class EqNode(ComparisonNode):
     name = '=='
 
 
 @register_corresponding_token
+@dataclass
 class NeqNode(ComparisonNode):
     name = '!='
 
 
 @register_corresponding_token
+@dataclass
 class LtNode(ComparisonNode):
     name = '<'
 
 
 @register_corresponding_token
+@dataclass
 class LeNode(ComparisonNode):
     name = '<='
 
 
 @register_corresponding_token
+@dataclass
 class GtNode(ComparisonNode):
     name = '>'
 
 
 @register_corresponding_token
+@dataclass
 class GeNode(ComparisonNode):
     name = '>='
 # endregion
 
 
 # region ---- Statements ----
-class NopNode(NamedLeafCls):
+class NopNode(Leaf):
     name = 'nop'
 
 
 # region ---- Blocks ----
-class BlockNode(NamedNodeCls):
+class BlockNode(Node):
     name = 'block'  # Varargs
 
     @property
@@ -287,7 +312,7 @@ class BlockNode(NamedNodeCls):
         return self.children
 
 
-class ConditionalBlock(NamedNodeCls):  # Varargs: if, *elseif, else
+class ConditionalBlock(Node):  # Varargs: if, *elseif, else
     name = 'conditional'
 
     @property
@@ -303,7 +328,7 @@ class ConditionalBlock(NamedNodeCls):  # Varargs: if, *elseif, else
         return checked_cast(ElseBlock | NullElseBlock, self.children[-1])
 
 
-class IfBlock(NamedSizedNodeCls):
+class IfBlock(SizedNode):
     name = 'if'
     size = 2  # condition, block
 
@@ -316,7 +341,7 @@ class IfBlock(NamedSizedNodeCls):
         return checked_cast(BlockNode, self.children[1])
 
 
-class ElseIfBlock(NamedSizedNodeCls):
+class ElseIfBlock(SizedNode):
     name = 'elseif'
     size = 2
 
@@ -329,7 +354,7 @@ class ElseIfBlock(NamedSizedNodeCls):
         return checked_cast(BlockNode, self.children[1])
 
 
-class ElseBlock(NamedSizedNodeCls):
+class ElseBlock(SizedNode):
     name = 'else'
     size = 1  # just the BlockNode
 
@@ -342,7 +367,7 @@ class NullElseBlock(AnyNullNode):
     name = 'else_null'
 
 
-class WhileBlock(NamedSizedNodeCls):
+class WhileBlock(SizedNode):
     name = 'while'
     size = 2
 
@@ -355,7 +380,7 @@ class WhileBlock(NamedSizedNodeCls):
         return checked_cast(BlockNode, self.children[1])
 
 
-class RepeatBlock(NamedSizedNodeCls):
+class RepeatBlock(SizedNode):
     name = 'repeat'
     size = 2
 
@@ -368,7 +393,7 @@ class RepeatBlock(NamedSizedNodeCls):
         return checked_cast(BlockNode, self.children[1])
 
 
-class DefineNode(NamedSizedNodeCls):
+class DefineNode(SizedNode):
     name = 'def'
     size = 3  # name, args_decl, block
 
@@ -385,7 +410,7 @@ class DefineNode(NamedSizedNodeCls):
         return checked_cast(BlockNode, self.children[2])
 
 
-class ArgsDeclNode(NamedNodeCls):
+class ArgsDeclNode(Node):
     name = 'args_decl'  # Varargs
 
     @property
@@ -393,7 +418,7 @@ class ArgsDeclNode(NamedNodeCls):
         return cast(list[ArgDeclNode], self.children)
 
 
-class ArgDeclNode(NamedSizedNodeCls):
+class ArgDeclNode(SizedNode):
     name = 'arg_decl'
     size = 2  # type and name
 
@@ -408,7 +433,7 @@ class ArgDeclNode(NamedSizedNodeCls):
 
 
 # region ---- Variable Decls ----
-class DeclItemNode(NamedNodeCls):
+class DeclItemNode(Node):
     name = 'decl_item'  # 1 or 2 (name and optional value)
 
     @property
@@ -450,7 +475,7 @@ class DeclType_List(DeclTypeNode):
     name = 'decl_type__list'
 
 
-class DeclNode(NamedSizedNodeCls):
+class DeclNode(SizedNode):
     name = 'var_decl'
     size = 3  # scope, type (value/list), decl_list
 
@@ -467,7 +492,7 @@ class DeclNode(NamedSizedNodeCls):
         return cast(DeclItemsList, self.children[2])
 
 
-class DeclItemsList(NamedNodeCls):
+class DeclItemsList(Node):
     name = 'decl_list'
 
     @property
@@ -488,51 +513,61 @@ class AssignOpNode(BinOpNode):
 
 
 @register_corresponding_token
+@dataclass
 class AssignNode(AssignOpNode):
     name = '='
 
 
 @register_corresponding_token
+@dataclass
 class AddEqNode(AssignOpNode):
     name = '+='
 
 
 @register_corresponding_token
+@dataclass
 class SubEqNode(AssignOpNode):
     name = '-='
 
 
 @register_corresponding_token
+@dataclass
 class MulEqNode(AssignOpNode):
     name = '*='
 
 
 @register_corresponding_token
+@dataclass
 class DivEqNode(AssignOpNode):
     name = '/='
 
 
 @register_corresponding_token
+@dataclass
 class ModEqNode(AssignOpNode):
     name = '%='
 
 
 @register_corresponding_token
+@dataclass
 class PowEqNode(AssignOpNode):
     name = '**='
 
 
 @register_corresponding_token
+@dataclass
 class ConcatEqNode(AssignOpNode):
     name = '..='
 
 
 @register_corresponding_token
+@dataclass
 class AndEqNode(AssignOpNode):
     name = '&&='
 
 
 @register_corresponding_token
+@dataclass
 class OrEqNode(AssignOpNode):
     name = '||='
 # endregion

@@ -1,10 +1,10 @@
 import unittest
 
-from parser.astgen.astgen import AstGen
-from parser.cst.cstgen import CstGen
-from parser.lexer import Tokenizer
-from parser.typecheck.name_resolver import NameResolver
-from parser.typecheck.typecheck import Typechecker
+from compiler.astgen.astgen import AstGen
+from compiler.cst.cstgen import CstGen
+from compiler.lexer import Tokenizer
+from compiler.typecheck.name_resolver import NameResolver
+from compiler.typecheck.typecheck import Typechecker
 from test.common import CommonTestCase
 from util import readfile
 

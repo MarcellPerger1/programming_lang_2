@@ -1,4 +1,4 @@
-from parser.operators import BINARY_OPS
+from compiler.operators import BINARY_OPS
 from test.common import CommonTestCase
 
 

@@ -10,7 +10,7 @@ from typing import IO, Sequence
 
 from util import dcls_field_default
 from ..astgen.ast_node import AstNode
-from ..cst.base_node import Leaf, AnyNode, Node
+from ..cst.cst_node import Leaf, AnyNode, Node
 from .str_region import StrRegion
 
 __all__ = [

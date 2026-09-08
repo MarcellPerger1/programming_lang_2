@@ -11,6 +11,8 @@ import weakref
 from dataclasses import dataclass, field
 from typing import Callable, Any
 
+__all__ = ['SimpleProcessPool']
+
 
 @dataclass
 class _Task:

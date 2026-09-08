@@ -1,10 +1,10 @@
 import unittest
 
-from parser.lexer import Tokenizer
-from parser.lexer.tokens import (
+from compiler.lexer import Tokenizer
+from compiler.lexer.tokens import (
     WhitespaceToken, StringToken, EofToken, NumberToken, SemicolonToken)
-from parser.common import StrRegion
-from parser.tokens import IdentNameToken, DotToken, AttrNameToken, OpToken
+from compiler.common import StrRegion
+from compiler.tokens import IdentNameToken, DotToken, AttrNameToken, OpToken
 from test.common import CommonTestCase, TokenStreamFlag
 
 

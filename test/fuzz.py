@@ -1,15 +1,15 @@
 import random
 import string
 
-from parser.astgen.ast_node import AstNode
-from parser.astgen.astgen import AstGen
-from parser.astgen.filtered_walker import FilteredWalker
-from parser.common.error import BaseParseError
-from parser.cst.cstgen import CstGen
-from parser.lexer.tokenizer import Tokenizer
-from parser.typecheck.name_resolver import NameResolver
-from parser.typecheck.typecheck import Typechecker
-from parser.typecheck.types import TypeMetadata
+from compiler.astgen.ast_node import AstNode
+from compiler.astgen.astgen import AstGen
+from compiler.astgen.filtered_walker import FilteredWalker
+from compiler.common.error import BaseParseError
+from compiler.cst.cstgen import CstGen
+from compiler.lexer.tokenizer import Tokenizer
+from compiler.typecheck.name_resolver import NameResolver
+from compiler.typecheck.typecheck import Typechecker
+from compiler.typecheck.types import TypeMetadata
 
 __all__ = ['fuzz_target', 'fuzz_target_string']
 

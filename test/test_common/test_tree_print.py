@@ -1,11 +1,11 @@
 import enum
 from unittest import TestCase
 
-from parser.common import StrRegion
-from parser.common.tree_print import tformat
-from parser.cst import nodes as cst_nodes
-from parser.astgen import ast_nodes
-from parser.typecheck.types import ValType, ListType, VoidType, FunctionType
+from compiler.common import StrRegion
+from compiler.common.tree_print import tformat
+from compiler.cst import cst_nodes as cst_nodes
+from compiler.astgen import ast_nodes
+from compiler.typecheck.types import ValType, ListType, VoidType, FunctionType
 
 
 class _DummyEnum(enum.Enum):
@@ -34,11 +34,11 @@ class TestTreePrinter(TestCase):
                              "[\n  2,\n  'aa',\n  StrRegion(3, 5)\n]")
 
     def test_cst_nodes(self):
-        ae = cst_nodes.AddEqNode(StrRegion(0, 10), None, [
+        ae = cst_nodes.AddEqNode(StrRegion(0, 10), [
             cst_nodes.IdentNode(StrRegion(0, 2)),
-            cst_nodes.SubNode(StrRegion(4, 10), None, [
+            cst_nodes.SubNode(StrRegion(4, 10), [
                 cst_nodes.IdentNode(StrRegion(4, 5)),
-                cst_nodes.UMinusNode(StrRegion(6, 10), None, [
+                cst_nodes.UMinusNode(StrRegion(6, 10), [
                     cst_nodes.NumberNode(StrRegion(7, 10))
                 ])
             ])
