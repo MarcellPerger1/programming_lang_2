@@ -5,9 +5,9 @@ from typing import (TypeVar, cast, Sequence, overload, Iterable, Callable)
 from util import checked_cast, checked_cast_class
 from .cst_node import AnyNode, Node, node_from_token, node_cls_from_name
 from .cst_nodes import *
+from .errors import CstParseError
 from .token_matcher import OpM, KwdM, Matcher, PatternT
 from ..common import StrRegion, region_union, RegionUnionArgT
-from ..common.error import BaseParseError, BaseLocatedError
 from ..lexer import Tokenizer
 from ..operators import UNARY_OPS, COMPARISONS, ASSIGN_OPS
 from ..tokens import *
@@ -15,16 +15,6 @@ from ..tokens import *
 DT = TypeVar('DT')
 
 MISSING = object()
-
-KEYWORDS = ['def', 'if', 'else', 'while', 'repeat', 'global', 'let']
-
-
-class CstParseError(BaseParseError):
-    pass
-
-
-class LocatedCstError(BaseLocatedError, CstParseError):
-    pass
 
 
 class CstGen:
@@ -553,7 +543,7 @@ class CstGen:
         return self._parse_ltr_operator_level(idx, ('||',), self._parse_and_bool)
 
     def err(self, msg: str, loc: RegionUnionArgT):
-        return LocatedCstError(msg, region_union(loc), self.src)
+        return CstParseError(msg, region_union(loc), self.src)
 
     @classmethod
     def node_from_children(cls, name_or_type: str | type[Node],

@@ -8,14 +8,15 @@ from typing import Sequence, TypeVar, Any
 
 from parser.astgen.ast_node import AstNode
 from parser.astgen.astgen import AstGen
-from parser.astgen.errors import LocatedAstError
+from parser.astgen.errors import AstParseError
 from parser.astgen.filtered_walker import FilteredWalker
 from parser.common import BaseLocatedError
 from parser.common.error import BaseParseError
 from parser.common.str_region import StrRegion
 from parser.common.tree_print import tformat
 from parser.cst.cst_node import Leaf, AnyNode, Node
-from parser.cst.cstgen import CstGen, LocatedCstError
+from parser.cst.cstgen import CstGen
+from cst.errors import CstParseError
 from parser.lexer import Tokenizer
 from parser.lexer.tokens import Token, OpToken
 from parser.typecheck.name_resolver import NameResolutionError, NameResolver
@@ -99,7 +100,7 @@ class CommonTestCase(SnapshotTestCase, TestCaseUtils):
 
     def assertFailsGracefullyCST(self, src: str):
         t = CstGen(Tokenizer(src))
-        with self.assertRaises(LocatedCstError) as ctx:
+        with self.assertRaises(CstParseError) as ctx:
             t.parse()
         return ctx.exception
 
@@ -138,7 +139,7 @@ class CommonTestCase(SnapshotTestCase, TestCaseUtils):
 
     def assertFailsGracefullyAST(self, src: str):
         a = AstGen(CstGen(Tokenizer(src)))
-        with self.assertRaises(LocatedAstError) as ctx:
+        with self.assertRaises(AstParseError) as ctx:
             a.parse()
         return ctx.exception
 

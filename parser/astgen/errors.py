@@ -1,15 +1,11 @@
 from __future__ import annotations
 
-from ..common import BaseParseError, BaseLocatedError
+from ..common import BaseLocatedError
 
 
-class AstParseError(BaseParseError):
+class AstParseError(BaseLocatedError):
     pass
 
 
-class LocatedAstError(BaseLocatedError, AstParseError):
-    pass
-
-
-class AstStringParseError(LocatedAstError):
+class AstStringParseError(AstParseError):
     pass

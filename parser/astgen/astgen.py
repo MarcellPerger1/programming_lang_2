@@ -7,7 +7,7 @@ from typing import Callable, overload, TypeVar, TypeAlias
 from util import flatten_force, is_strict_subclass, get_mro
 from .ast_nodes import *
 from .eval_literal import eval_number, eval_string
-from .errors import LocatedAstError
+from .errors import AstParseError
 from ..common import region_union, RegionUnionArgT, HasRegion, StrRegion
 from ..cst.cst_node import AnyNode, Node, Leaf, SizedNode
 from ..cst.cst_nodes import *
@@ -238,7 +238,7 @@ class AstGen:
         return s
 
     def err(self, msg: str, loc: RegionUnionArgT):
-        return LocatedAstError(msg, region_union(loc), self.src)
+        return AstParseError(msg, region_union(loc), self.src)
 
     def autowalk_expr(self, node: AnyNode):
         return self._lookup_autowalk_fn(type(node))(self, node)

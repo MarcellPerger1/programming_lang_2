@@ -1,7 +1,8 @@
 import unittest
 
 from parser.lexer.tokenizer import Tokenizer
-from parser.cst.cstgen import CstGen, LocatedCstError
+from parser.cst.cstgen import CstGen
+from cst.errors import CstParseError
 from parser.common import StrRegion
 from test.common import CommonTestCase
 
@@ -26,7 +27,7 @@ class TestItemChain(CommonTestCase):
         self.assertCstMatchesSnapshot('a(7).b.0.fn()["c" .. 2] = fn(9).k[7 + r](3,);')
 
     def test_empty_sqb_error(self):
-        with self.assertRaises(LocatedCstError) as err:
+        with self.assertRaises(CstParseError) as err:
             CstGen(Tokenizer('v=a[]+b;')).parse()
         exc = err.exception
         self.assertBetweenIncl(3, 4, exc.region.start)
@@ -91,7 +92,7 @@ class TestSmt(CommonTestCase):
 class TestDecl(CommonTestCase):
     def test_empty_assign_source_error(self):
         t = Tokenizer('let a= ;').tokenize()
-        with self.assertRaises(LocatedCstError) as err:
+        with self.assertRaises(CstParseError) as err:
             CstGen(t).parse()
         self.assertBetweenIncl(5, 7, err.exception.region.start)
         self.assertBetweenIncl(7, 8, err.exception.region.end)
@@ -132,7 +133,7 @@ class TestBlocks(CommonTestCase):
 
     def test_empty_condition_error(self):
         t = Tokenizer('if {x();}').tokenize()
-        with self.assertRaises(LocatedCstError) as err:
+        with self.assertRaises(CstParseError) as err:
             CstGen(t).parse()
         self.assertBetweenIncl(0, 3, err.exception.region.start)
         self.assertBetweenIncl(2, 4, err.exception.region.end)
